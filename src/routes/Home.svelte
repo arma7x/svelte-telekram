@@ -319,7 +319,7 @@
     });
   }
 
-  async function sign_in_2_fa(password) {
+  async function sign_in_2fa(password) {
     const { srp_id, current_algo, srp_B } = await api.call('account.getPassword');
     const { g, p, salt1, salt2 } = current_algo;
     const { A, M1 } = await api.mtproto.crypto.getSRPParams({ g, p, salt1, salt2, gB: srp_B, password });
@@ -379,7 +379,7 @@
         console.log('error:', err);
         return;
       }
-      sign_in_2_fa(prompt('password'))
+      sign_in_2fa(prompt('password'))
       .then((result) => {
         console.log(result);
         get_user();
