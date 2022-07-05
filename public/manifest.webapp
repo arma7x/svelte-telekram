@@ -1,6 +1,6 @@
 {
   "name": "TeleKram",
-  "description": "Telegram x Svelte",
+  "description": "A Telegram client for KaiOS using Svelte and TypeScript.",
   "version": "1.0.0",
   "launch_path": "/index.html",
   "theme": "#ff3e00",
@@ -28,8 +28,8 @@
   "locales": {
     "en-US": {
       "name": "TeleKram",
-      "subtitle": "Telegram x Svelte",
-      "description": "Telegram x Svelte"
+      "subtitle": "A Telegram client for KaiOS using Svelte and TypeScript.",
+      "description": "A Telegram client for KaiOS using Svelte and TypeScript."
     }
   },
   "default_locale": "en"

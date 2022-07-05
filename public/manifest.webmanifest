@@ -1,6 +1,6 @@
 {
-  "name": "Svelte App",
-  "description": "A starter template for Svelte and TypeScript.",
+  "name": "TeleKram",
+  "description": "A Telegram client for KaiOS using Svelte and TypeScript.",
   "start_url": "/index.html",
   "theme": "#ff3e00",
   "theme_color": "#ff3e00",
@@ -29,19 +29,19 @@
     "default_locale": "en-US",
     "developer": {
       "name": "arma7x",
-      "url": "https://github.com/arma7x/kaios-svelte-starter"
+      "url": "https://github.com/arma7x/svelte-telekram"
     },
     "chrome": {
       "statusbar": "overlap"
     },
-    "origin": "svelte-app",
+    "origin": "svelte-telekram",
     "permissions": {},
     "dependencies": {},
     "locales": {
       "en-US": {
-        "name": "Svelte App",
-        "subtitle": "A starter template for Svelte and TypeScript.",
-        "description": "A starter template for Svelte and TypeScript."
+        "name": "TeleKram",
+        "subtitle": "A Telegram client for KaiOS using Svelte and TypeScript.",
+        "description": "A Telegram client for KaiOS using Svelte and TypeScript."
       }
     }
   }

@@ -1,6 +1,6 @@
 # svelte-telekram
 
-A Telegram client for building a KaiOS app using Svelte and TypeScript.
+A Telegram client for KaiOS using Svelte and TypeScript.
 
 ### Development and testing
 
