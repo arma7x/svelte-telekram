@@ -1,5 +1,6 @@
 import MTProto from '@mtproto/core/envs/browser';
 import { sleep } from '@mtproto/core/src/utils/common';
+import bigInt from 'big-integer';
 
 class MTProtoClient {
 
@@ -56,4 +57,5 @@ const api = new MTProtoClient();
 
 export {
   api,
+  bigInt
 }

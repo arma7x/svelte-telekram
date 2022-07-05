@@ -4,8 +4,7 @@
   import { Dialog, OptionMenu, ListView, Separator, LoadingBar, Button, TextInputField, Toast, Toaster, SoftwareKey } from '../components';
   import { onMount, onDestroy } from 'svelte';
 
-  import bigInt from 'big-integer';
-  import { api } from '../utils/mtproto_client';
+  import { api, bigInt } from '../utils/mtproto_client';
   import { concatBytes, bigIntToBytes, bytesToBigInt } from '@mtproto/core/src/utils/common';
 
   const navClass: string = 'homeNav';
@@ -427,12 +426,6 @@
 
   function logout() {
     api.call('auth.logOut')
-    .then(result => {
-      console.log(result);
-    })
-    .catch(err => {
-      console.log(err);
-    })
     .finally(() => {
       getuser();
     });
