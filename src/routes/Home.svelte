@@ -331,15 +331,10 @@
     const V = bigIntToBytes(vBigInt);
 
     const passwordInputSettings = { _: 'account.passwordInputSettings', new_algo, new_password_hash: V, hint: 'who i am' };
-    console.log({
-      password: inputCheckPasswordSRP,
-      new_settings: passwordInputSettings,
-    });
-    const bool = await api.call('account.updatePasswordSettings', {
-      password: inputCheckPasswordSRP,
-      new_settings: passwordInputSettings,
-    });
-    console.log('setPassword', bool);
+
+    // console.log({ password: inputCheckPasswordSRP, new_settings: passwordInputSettings });
+
+    return await api.call('account.updatePasswordSettings', { password: inputCheckPasswordSRP, new_settings: passwordInputSettings });
   };
 
   function checkPassword({ srp_id, A, M1 }) {
