@@ -14,6 +14,8 @@
   export let navigate: any;
   export let getAppProp: Function;
 
+  let _status: boolean = false;
+
   let name: string = 'Home';
   let dialog: Dialog;
   let optionMenu: OptionMenu;
@@ -430,6 +432,9 @@
     })
     .catch(err => {
       console.log(err);
+    })
+    .finally(() => {
+      getuser();
     });
   }
 
@@ -440,10 +445,12 @@
       },
     })
     .then(user => {
-        console.log(user);
+      console.log(user);
+      _status = true;
     })
     .catch(err => {
-        console.log(err);
+      console.log(err);
+      _status = false;
     });
   }
 
@@ -475,10 +482,12 @@
 </script>
 
 <main id="home-screen" data-pad-top="28" data-pad-bottom="30">
+  {#if _status === false }
   <Button className="{navClass}" text="Login" onClick={sendcode}>
     <span slot="leftWidget" class="kai-icon-arrow" style="margin:0px 5px;-moz-transform: scale(-1, 1);-webkit-transform: scale(-1, 1);-o-transform: scale(-1, 1);-ms-transform: scale(-1, 1);transform: scale(-1, 1);"></span>
     <span slot="rightWidget" class="kai-icon-arrow" style="margin:0px 5px;"></span>
   </Button>
+  {:else}
   <Button className="{navClass}" text="Set Password" onClick={setpassword}>
     <span slot="leftWidget" class="kai-icon-arrow" style="margin:0px 5px;-moz-transform: scale(-1, 1);-webkit-transform: scale(-1, 1);-o-transform: scale(-1, 1);-ms-transform: scale(-1, 1);transform: scale(-1, 1);"></span>
     <span slot="rightWidget" class="kai-icon-arrow" style="margin:0px 5px;"></span>
@@ -487,6 +496,7 @@
     <span slot="leftWidget" class="kai-icon-arrow" style="margin:0px 5px;-moz-transform: scale(-1, 1);-webkit-transform: scale(-1, 1);-o-transform: scale(-1, 1);-ms-transform: scale(-1, 1);transform: scale(-1, 1);"></span>
     <span slot="rightWidget" class="kai-icon-arrow" style="margin:0px 5px;"></span>
   </Button>
+  {/if}
   <ListView className="{navClass}" title="{getAppProp().localization.langByLocale('hello', locale, 'Svelte')}" subtitle="Goto room screen" onClick={() => onClickHandler('room')}/>
   <ListView className="{navClass}" title="{getAppProp().localization.langByLocale('change_locale', locale)}" subtitle="{getAppProp().localization.langByLocale('change_locale_subtitle', locale)}" onClick={changeLocale}/>
   <Separator title="Progress" />
