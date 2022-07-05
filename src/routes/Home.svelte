@@ -262,19 +262,17 @@
   const test_phone = '+9996611077';
 
   // https://github.com/alik0211/mtproto-core/issues/180
-  const setpassword = async () => {
+  async function set_password() {
 
     let oldPass = prompt('oldPass')
     let newPass = prompt('newPass')
 
-    if (oldPass === newPass) {
+    if (oldPass === newPass)
       return;
-    }
 
     const psetting = await api.call('account.getPassword');
-    if (psetting.has_password && !oldPass) {
+    if (psetting.has_password && !oldPass)
       return;
-    }
 
     const { new_algo, srp_id, srp_B, current_algo } = psetting;
 
@@ -310,7 +308,7 @@
     return await api.call('account.updatePasswordSettings', { password: inputCheckPasswordSRP, new_settings: passwordInputSettings });
   };
 
-  function checkPassword({ srp_id, A, M1 }) {
+  function check_password({ srp_id, A, M1 }) {
     return api.call('auth.checkPassword', {
       password: {
         _: 'inputCheckPasswordSRP',
@@ -321,14 +319,14 @@
     });
   }
 
-  async function signIn2FA(password) {
+  async function sign_in_2_fa(password) {
     const { srp_id, current_algo, srp_B } = await api.call('account.getPassword');
     const { g, p, salt1, salt2 } = current_algo;
     const { A, M1 } = await api.mtproto.crypto.getSRPParams({ g, p, salt1, salt2, gB: srp_B, password });
-    return await checkPassword({ srp_id, A, M1 });
+    return await check_password({ srp_id, A, M1 });
   }
 
-  function signup(phone_code_hash) {
+  function sign_up(phone_code_hash) {
     api.call('auth.signUp', {
       phone_number: test_phone,
       phone_code_hash: phone_code_hash,
@@ -336,14 +334,14 @@
       last_name: 'Core',
     })
     .then(result => {
-      sendcode();
+      send_code();
     })
     .catch(err => {
       console.log(err);
     });
   }
 
-  function signin(phone_code_hash) {
+  function sign_in(phone_code_hash) {
     return api.call('auth.signIn', {
       phone_code: '11111',
       phone_number: test_phone,
@@ -351,7 +349,7 @@
     });
   }
 
-  function sendcode() {
+  function send_code() {
     let _phone_code_hash;
     api.call('auth.sendCode', {
       phone_number: test_phone,
@@ -365,11 +363,11 @@
     })
     .then(phone_code_hash => {
       _phone_code_hash = phone_code_hash;
-      return signin(phone_code_hash);
+      return sign_in(phone_code_hash);
     })
     .then(result => {
       if (result._ === 'auth.authorizationSignUpRequired') {
-        signup(_phone_code_hash)
+        sign_up(_phone_code_hash)
       } else if (result._ === 'auth.authorization' && result.setup_password_required) {
         console.log(result);
       } else {
@@ -381,10 +379,10 @@
         console.log('error:', err);
         return;
       }
-      signIn2FA(prompt('password'))
+      sign_in_2_fa(prompt('password'))
       .then((result) => {
         console.log(result);
-        getuser();
+        get_user();
       })
       .catch(err => {
         console.log(err);
@@ -392,14 +390,14 @@
     });
   }
 
-  function logout() {
+  function sign_out() {
     api.call('auth.logOut')
     .finally(() => {
-      getuser();
+      get_user();
     });
   }
 
-  function getuser() {
+  function get_user() {
     api.call('users.getFullUser', {
       id: {
         _: 'inputUserSelf',
@@ -431,7 +429,7 @@
       console.log(err);
     });
 
-    getuser();
+    get_user();
 
   });
 
@@ -444,16 +442,16 @@
 
 <main id="home-screen" data-pad-top="28" data-pad-bottom="30">
   {#if _status === false }
-  <Button className="{navClass}" text="Login" onClick={sendcode}>
+  <Button className="{navClass}" text="Login" onClick={send_code}>
     <span slot="leftWidget" class="kai-icon-arrow" style="margin:0px 5px;-moz-transform: scale(-1, 1);-webkit-transform: scale(-1, 1);-o-transform: scale(-1, 1);-ms-transform: scale(-1, 1);transform: scale(-1, 1);"></span>
     <span slot="rightWidget" class="kai-icon-arrow" style="margin:0px 5px;"></span>
   </Button>
   {:else}
-  <Button className="{navClass}" text="Set Password" onClick={setpassword}>
+  <Button className="{navClass}" text="Set Password" onClick={set_password}>
     <span slot="leftWidget" class="kai-icon-arrow" style="margin:0px 5px;-moz-transform: scale(-1, 1);-webkit-transform: scale(-1, 1);-o-transform: scale(-1, 1);-ms-transform: scale(-1, 1);transform: scale(-1, 1);"></span>
     <span slot="rightWidget" class="kai-icon-arrow" style="margin:0px 5px;"></span>
   </Button>
-  <Button className="{navClass}" text="Logout" onClick={logout}>
+  <Button className="{navClass}" text="Logout" onClick={sign_out}>
     <span slot="leftWidget" class="kai-icon-arrow" style="margin:0px 5px;-moz-transform: scale(-1, 1);-webkit-transform: scale(-1, 1);-o-transform: scale(-1, 1);-ms-transform: scale(-1, 1);transform: scale(-1, 1);"></span>
     <span slot="rightWidget" class="kai-icon-arrow" style="margin:0px 5px;"></span>
   </Button>
