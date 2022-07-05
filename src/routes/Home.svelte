@@ -6,6 +6,7 @@
 
   import { api, bigInt } from '../utils/mtproto_client';
   import { concatBytes, bigIntToBytes, bytesToBigInt } from '@mtproto/core/src/utils/common';
+  import QRCode from 'QRCode';
 
   const navClass: string = 'homeNav';
 
@@ -29,6 +30,7 @@
   let phoneNumber = '+9996611077';
   let phoneCode = '11111';
   let phoneCodeHash = null;
+  let qrCode = null;
   let authStatus: boolean = false;
 
   let navOptions = {
@@ -441,7 +443,7 @@
   }
 
   onMount(() => {
-    // console.log('onMount', name);
+    console.log('onMount', name, QRCode);
     locale = getAppProp().localization.defaultLocale;
     const { appBar, softwareKey } = getAppProp();
     appBar.setTitleText(name);
