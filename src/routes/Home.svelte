@@ -264,6 +264,26 @@
     });
   }
 
+  function get_user() {
+    api.call('users.getFullUser', {
+      id: {
+        _: 'inputUserSelf',
+      },
+    })
+    .then(user => {
+      console.log(user);
+      authStatus = true;
+    })
+    .catch(err => {
+      console.log(err);
+      authStatus = false;
+    })
+    .finally(() => {
+      phoneCodeHash = null;
+      reset_cursor();
+    });
+  }
+
   // https://github.com/alik0211/mtproto-core/issues/180
   async function set_password() {
 
@@ -395,11 +415,27 @@
     .then(result => {
       console.log('auth.sendCode:', result);
       phoneCodeHash = result.phone_code_hash;
-      reset_cursor('send_code');
+      reset_cursor();
     })
     .catch(err => {
       console.log(err);
     });
+  }
+
+  function login_via_qr() {
+    // show modal
+    return
+    //api.call('auth.exportLoginToken', {
+      //api_id: '1403915',
+      //api_hash: '1291d66d65b509ed6d5fce437185a8cc',
+      //except_ids: [],
+    //})
+    //.then(result => {
+      //console.log('auth.exportLoginToken:', `tg://login?token=${btoa(String.fromCharCode.apply(null, result.token))}`);
+    //})
+    //.catch(err => {
+      //console.log(err);
+    //});
   }
 
   function sign_out() {
@@ -409,27 +445,7 @@
     });
   }
 
-  function get_user() {
-    api.call('users.getFullUser', {
-      id: {
-        _: 'inputUserSelf',
-      },
-    })
-    .then(user => {
-      console.log(user);
-      authStatus = true;
-    })
-    .catch(err => {
-      console.log(err);
-      authStatus = false;
-    })
-    .finally(() => {
-      phoneCodeHash = null;
-      reset_cursor('get_user');
-    });
-  }
-
-  function reset_cursor(from) {
+  function reset_cursor() {
     navInstance.verticalNavIndex = 0;
     setTimeout(() => {
       navInstance.navigateListNav(0);
@@ -443,7 +459,7 @@
   }
 
   onMount(() => {
-    console.log('onMount', name, QRCode);
+    console.log('onMount', name);
     locale = getAppProp().localization.defaultLocale;
     const { appBar, softwareKey } = getAppProp();
     appBar.setTitleText(name);
@@ -460,6 +476,10 @@
 
     get_user();
 
+    api.mtproto.updates.on('updateLoginToken', (updateInfo) => {
+      console.log('updateLoginToken:', updateInfo);
+    });
+
   });
 
   onDestroy(() => {
@@ -474,6 +494,10 @@
   {#if phoneCodeHash === null}
   <TextInputField className="{navClass}" label="Phone Number" placeholder="Phone Number" value={phoneNumber} type="tel" {onInput} {onFocus} {onBlur} />
   <Button className="{navClass}" text="Send Code" onClick={send_code}>
+    <span slot="leftWidget" class="kai-icon-arrow" style="margin:0px 5px;-moz-transform: scale(-1, 1);-webkit-transform: scale(-1, 1);-o-transform: scale(-1, 1);-ms-transform: scale(-1, 1);transform: scale(-1, 1);"></span>
+    <span slot="rightWidget" class="kai-icon-arrow" style="margin:0px 5px;"></span>
+  </Button>
+  <Button className="{navClass}" text="Log by QR Code" onClick={login_via_qr}>
     <span slot="leftWidget" class="kai-icon-arrow" style="margin:0px 5px;-moz-transform: scale(-1, 1);-webkit-transform: scale(-1, 1);-o-transform: scale(-1, 1);-ms-transform: scale(-1, 1);transform: scale(-1, 1);"></span>
     <span slot="rightWidget" class="kai-icon-arrow" style="margin:0px 5px;"></span>
   </Button>
