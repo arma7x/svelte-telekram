@@ -358,7 +358,7 @@
       },
     })
     .then(result => {
-      console.log('uth.sendCode:', result);
+      console.log('auth.sendCode:', result);
       return Promise.resolve(result.phone_code_hash);
     })
     .then(phone_code_hash => {
