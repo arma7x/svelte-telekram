@@ -1,8 +1,5 @@
-import * as _MTProto from '@mtproto/core/envs/browser';
-import * as _utils from '@mtproto/core/src/utils/common';
-
-const MTProto   = _MTProto.default;
-const { sleep } = _utils.default;
+import MTProto from '@mtproto/core/envs/browser';
+import { sleep } from '@mtproto/core/src/utils/common';
 
 class MTProtoClient {
 
