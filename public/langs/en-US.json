@@ -1,0 +1,6 @@
+{
+  "hello": "Hello %s",
+  "change_locale": "Change Locale",
+  "change_locale_subtitle": "Click to change app locale",
+  "select_locale": "Select Locale"
+}

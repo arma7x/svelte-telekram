@@ -1,0 +1,36 @@
+{
+  "name": "TeleKram",
+  "description": "Telegram x Svelte",
+  "version": "1.0.0",
+  "launch_path": "/index.html",
+  "theme": "#ff3e00",
+  "theme_color": "#ff3e00",
+  "background_color": "#ff3e00",
+  "fullscreen": "true",
+  "chrome": {
+    "statusbar": "overlap"
+  },
+  "orientation": "default",
+  "icons": {
+    "56": "/icons/icon56x56.png",
+    "112": "/icons/icon112x112.png"
+  },
+  "categories": [
+    "utilities"
+  ],
+  "developer": {
+    "name": "arma7x",
+    "url": "https://github.com/arma7x/svelte-telekram"
+  },
+  "origin": "app://svelte-telekram.arma7x.com",
+  "type": "privileged",
+  "permissions": {},
+  "locales": {
+    "en-US": {
+      "name": "TeleKram",
+      "subtitle": "Telegram x Svelte",
+      "description": "Telegram x Svelte"
+    }
+  },
+  "default_locale": "en"
+}

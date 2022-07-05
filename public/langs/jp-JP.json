@@ -1,0 +1,6 @@
+{
+  "hello": "こんにちは %s",
+  "change_locale": "ロケールを選択",
+  "change_locale_subtitle": "クリックしてアプリのロケールを変更します",
+  "select_locale": "ロケールを選択"
+}

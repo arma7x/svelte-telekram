@@ -1,0 +1,189 @@
+:root {
+  --themeColor: #ff3e00;
+  --toastContainerTop: 26px;
+  --toastContainerRight: 0;
+  --toastWidth: 100vw;
+  --toastBarHeight: 0px;
+  --toastMinHeight: 30px;
+  --toastBackground: #2f2f2f;
+  --toastColor: #ffffff;
+  --toastBorderRadius: 0;
+  --toastBarBackground: var(--themeColor);
+}
+
+@font-face {
+  font-family: 'kai-icons';
+  src:  url('fonts/kai-icons.ttf') format('truetype');
+  font-weight: normal;
+  font-style: normal;
+}
+
+[class^="kai-icon-"], [class*=" kai-icon-"] {
+  /* use !important to prevent issues with browser extensions that change fonts */
+  font-family: 'kai-icons' !important;
+  speak: none;
+  font-style: normal;
+  font-weight: normal;
+  font-variant: normal;
+  text-transform: none;
+  line-height: 1;
+
+  /* Better Font Rendering =========== */
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
+
+.kai-icon-arrow:before {
+  content: "\e900";
+}
+
+.kai-icon-checkbox-checked:before {
+  content: "\e901";
+}
+
+.kai-icon-checkbox-unchecked:before {
+  content: "\e902";
+}
+
+.kai-icon-radio-button-selected:before {
+  content: "\e906";
+}
+
+.kai-icon-radio-button-unselected:before {
+  content: "\e90f";
+}
+
+.kai-icon-bluetooth:before {
+  content: "\e903";
+}
+
+.kai-icon-calendar:before {
+  content: "\e904";
+}
+
+.kai-icon-camera:before {
+  content: "\e905";
+}
+
+.kai-icon-contacts:before {
+  content: "\e907";
+}
+
+.kai-icon-download:before {
+  content: "\e908";
+}
+
+.kai-icon-email:before {
+  content: "\e909";
+}
+
+.kai-icon-favorite-off:before {
+  content: "\e90a";
+}
+
+.kai-icon-favorite-on:before {
+  content: "\e90b";
+}
+
+.kai-icon-message:before {
+  content: "\e90c";
+}
+
+.kai-icon-mic:before {
+  content: "\e90d";
+}
+
+.kai-icon-phone:before {
+  content: "\e90e";
+}
+
+.kai-icon-search:before {
+  content: "\e910";
+}
+
+.kai-icon-settings:before {
+  content: "\e911";
+}
+
+.kai-icon-video:before {
+  content: "\e912";
+}
+
+.kai-icon-wifi:before {
+  content: "\e913";
+}
+
+html,
+body {
+  position: relative;
+  width: 100%;
+  height: 100%;
+  background-color: #ffffff;
+}
+
+div {
+  padding: 0;
+  margin: 0;
+  box-sizing: border-box;
+}
+
+body {
+  color: #333;
+  margin: 0;
+  padding: 0px;
+  box-sizing: border-box;
+  font-family: 'Open Sans';
+}
+
+a {
+  color: rgb(0, 100, 200);
+  text-decoration: none;
+}
+
+a:hover {
+  text-decoration: underline;
+}
+
+a:visited {
+  color: rgb(0, 80, 160);
+}
+
+label {
+  display: block;
+}
+
+input,
+button,
+select,
+textarea {
+  font-family: inherit;
+  font-size: inherit;
+  -webkit-padding: 0.4em 0;
+  padding: 0.4em;
+  margin: 0 0 0.5em 0;
+  box-sizing: border-box;
+  border: 1px solid #ccc;
+  border-radius: 2px;
+}
+
+input:disabled {
+  color: #ccc;
+}
+
+button {
+  color: #333;
+  background-color: #f4f4f4;
+  outline: none;
+}
+
+button:disabled {
+  color: #999;
+}
+
+button:not(:disabled):active {
+  background-color: #ddd;
+}
+
+button:focus {
+  border-color: #666;
+}

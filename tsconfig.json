@@ -1,0 +1,7 @@
+{
+  "target": "es5",
+  "extends": "@tsconfig/svelte/tsconfig.json",
+  "compilerOptions": { "resolveJsonModule": true },
+  "include": ["src/**/*"],
+  "exclude": ["node_modules/*", "__sapper__/*", "public/*"]
+}

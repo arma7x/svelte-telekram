@@ -1,0 +1,48 @@
+{
+  "name": "Svelte App",
+  "description": "A starter template for Svelte and TypeScript.",
+  "start_url": "/index.html",
+  "theme": "#ff3e00",
+  "theme_color": "#ff3e00",
+  "background_color": "#ff3e00",
+  "display": "fullscreen",
+  "orientation": "default",
+  "categories": [
+    "utilities"
+  ],
+  "icons": [
+    {
+      "src": "/icons/icon56x56.png",
+      "type": "image/png",
+      "sizes": "56x56"
+    },
+    {
+      "src": "/icons/icon112x112.png",
+      "type": "image/png",
+      "sizes": "112x112"
+    }
+  ],
+  "b2g_features": {
+    "version": "3.0.0",
+    "type": "privileged",
+    "core": true,
+    "default_locale": "en-US",
+    "developer": {
+      "name": "arma7x",
+      "url": "https://github.com/arma7x/kaios-svelte-starter"
+    },
+    "chrome": {
+      "statusbar": "overlap"
+    },
+    "origin": "svelte-app",
+    "permissions": {},
+    "dependencies": {},
+    "locales": {
+      "en-US": {
+        "name": "Svelte App",
+        "subtitle": "A starter template for Svelte and TypeScript.",
+        "description": "A starter template for Svelte and TypeScript."
+      }
+    }
+  }
+}
