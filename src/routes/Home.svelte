@@ -21,12 +21,15 @@
   let localeMenu: OptionMenu;
 
   let locale: string;
-  let _status: boolean = false;
   let name: string = 'Home';
   let locales:any = [
     { title: 'English - United State', subtitle: 'en-US' },
     { title: 'Japanese', subtitle: 'jp-JP' },
   ];
+  let phoneNumber = '+9996611077';
+  let phoneCode = '11111';
+  let phoneCodeHash = null;
+  let authStatus: boolean = false;
 
   let navOptions = {
     verticalNavClass: navClass,
@@ -34,13 +37,13 @@
       if (inputSoftwareKey)
         return;
       openDialog();
-      console.log('softkeyLeftListener', name, this.verticalNavIndex);
+      // console.log('softkeyLeftListener', name, this.verticalNavIndex);
     },
     softkeyRightListener: function(evt) {
       if (inputSoftwareKey)
         return;
       toastMessage();
-      console.log('softkeyRightListener', name, this.verticalNavIndex);
+      // console.log('softkeyRightListener', name, this.verticalNavIndex);
     },
     enterListener: function(evt) {
       if (inputSoftwareKey)
@@ -49,16 +52,16 @@
       if (navClasses[this.verticalNavIndex] != null) {
         navClasses[this.verticalNavIndex].click();
       }
-      console.log('enterListener', name);
+      // console.log('enterListener', name);
     },
     backspaceListener: function(evt) {
-      console.log('backspaceListener', name);
+      // console.log('backspaceListener', name);
     },
     arrowLeftListener: function(evt) {
-      console.log('arrowLeftListener', name);
+      // console.log('arrowLeftListener', name);
     },
     arrowRightListener: function(evt) {
-      console.log('arrowRightListener', name);
+      // console.log('arrowRightListener', name);
     },
   };
 
@@ -93,9 +96,9 @@
       props: {
         onOpened: () => {
           navInstance.detachListener();
-          setTimeout(() => {
-            loadingBar.$destroy();
-          }, 3000);
+          //setTimeout(() => {
+          //  loadingBar.$destroy();
+          //}, 3000);
         },
         onClosed: () => {
           navInstance.attachListener();
@@ -113,17 +116,17 @@
         body: `Svelte is a radical new approach to building user interfaces. Whereas traditional frameworks like React and Vue do the bulk of their work in the browser, Svelte shifts that work into a compile step that happens when you build your app. Instead of using techniques like virtual DOM diffing, Svelte writes code that surgically updates the DOM when the state of your app changes. We're proud that Svelte was recently voted the most loved web framework with the most satisfied developers in a pair of industry surveys. We think you'll love it too. Read the introductory blog post to learn more.`,
         softKeyCenterText: 'hide',
         onSoftkeyLeft: (evt) => {
-          console.log('onSoftkeyLeft');
+          // console.log('onSoftkeyLeft');
         },
         onSoftkeyRight: (evt) => {
-          console.log('onSoftkeyRight');
+          // console.log('onSoftkeyRight');
         },
         onEnter: (evt) => {
-          console.log('onEnter');
+          // console.log('onEnter');
           dialog.$destroy();
         },
         onBackspace: (evt) => {
-          console.log('onBackspace');
+          // console.log('onBackspace');
           evt.preventDefault();
           evt.stopPropagation();
           dialog.$destroy();
@@ -154,18 +157,18 @@
         ],
         softKeyCenterText: 'select',
         onSoftkeyRight: (evt, scope) => {
-          console.log('onSoftkeyRight', scope);
+          // console.log('onSoftkeyRight', scope);
         },
         onSoftkeyLeft: (evt, scope) => {
-          console.log('onSoftkeyRight', scope);
+          // console.log('onSoftkeyRight', scope);
         },
         onEnter: (evt, scope) => {
-          console.log('onEnter', scope);
+          // console.log('onEnter', scope);
           optionMenuIndex = scope.index;
           optionMenu.$destroy();
         },
         onBackspace: (evt, scope) => {
-          console.log('onBackspace', scope);
+          // console.log('onBackspace', scope);
           evt.preventDefault();
           evt.stopPropagation();
           optionMenu.$destroy();
@@ -174,7 +177,7 @@
           navInstance.detachListener();
         },
         onClosed: (scope) => {
-          console.log(scope);
+          // console.log(scope);
           navInstance.attachListener();
           optionMenu = null;
         }
@@ -187,24 +190,24 @@
   }
 
   function onInput(evt) {
-    console.log('onInput');
+    // console.log('onInput');
   }
 
   function onFocus(evt) {
-    console.log('onFocus');
+    // console.log('onFocus');
     inputSoftwareKey = new SoftwareKey({
       target: document.body,
       props: {
         isInvert: true,
-        leftText: 'X Dialog',
-        centerText: 'X Enter',
-        rightText: 'X Toast'
+        leftText: '',
+        centerText: 'Enter',
+        rightText: ''
       }
     });
   }
 
   function onBlur(evt) {
-    console.log('onBlur');
+    // console.log('onBlur');
     if (inputSoftwareKey) {
       inputSoftwareKey.$destroy();
       inputSoftwareKey = null;
@@ -230,19 +233,19 @@
         options: locales,
         softKeyCenterText: 'select',
         onSoftkeyRight: (evt, scope) => {
-          console.log('onSoftkeyRight', scope);
+          // console.log('onSoftkeyRight', scope);
         },
         onSoftkeyLeft: (evt, scope) => {
-          console.log('onSoftkeyRight', scope);
+          // console.log('onSoftkeyRight', scope);
         },
         onEnter: (evt, scope) => {
-          console.log('onEnter', scope);
+          // console.log('onEnter', scope);
           getAppProp().localization.loadLocale(scope.selected.subtitle);
           locale = getAppProp().localization.defaultLocale;
           localeMenu.$destroy();
         },
         onBackspace: (evt, scope) => {
-          console.log('onBackspace', scope);
+          // console.log('onBackspace', scope);
           evt.preventDefault();
           evt.stopPropagation();
           localeMenu.$destroy();
@@ -251,15 +254,13 @@
           navInstance.detachListener();
         },
         onClosed: (scope) => {
-          console.log(scope);
+          // console.log(scope);
           navInstance.attachListener();
           localeMenu = null;
         }
       }
     });
   }
-
-  const test_phone = '+9996611077';
 
   // https://github.com/alik0211/mtproto-core/issues/180
   async function set_password() {
@@ -326,10 +327,12 @@
     return await check_password({ srp_id, A, M1 });
   }
 
-  function sign_up(phone_code_hash) {
+  // redirect sign_up page
+  function sign_up() {
+    return
     api.call('auth.signUp', {
-      phone_number: test_phone,
-      phone_code_hash: phone_code_hash,
+      phone_number: phoneNumber,
+      phone_code_hash: phoneCodeHash,
       first_name: 'MTProto',
       last_name: 'Core',
     })
@@ -341,44 +344,29 @@
     });
   }
 
-  function sign_in(phone_code_hash) {
-    return api.call('auth.signIn', {
-      phone_code: '11111',
-      phone_number: test_phone,
-      phone_code_hash: phone_code_hash,
-    });
-  }
-
-  function send_code() {
-    let _phone_code_hash;
-    api.call('auth.sendCode', {
-      phone_number: test_phone,
-      settings: {
-        _: 'codeSettings',
-      },
-    })
-    .then(result => {
-      console.log('auth.sendCode:', result);
-      return Promise.resolve(result.phone_code_hash);
-    })
-    .then(phone_code_hash => {
-      _phone_code_hash = phone_code_hash;
-      return sign_in(phone_code_hash);
+  function sign_in() {
+    api.call('auth.signIn', {
+      phone_code: phoneCode,
+      phone_number: phoneNumber,
+      phone_code_hash: phoneCodeHash,
     })
     .then(result => {
       if (result._ === 'auth.authorizationSignUpRequired') {
-        sign_up(_phone_code_hash)
+        sign_up();
+        return
       } else if (result._ === 'auth.authorization' && result.setup_password_required) {
         console.log(result);
       } else {
         console.log(result.user);
       }
+      get_user();
     })
     .catch(err => {
       if (err.error_message !== 'SESSION_PASSWORD_NEEDED') {
         console.log('error:', err);
         return;
       }
+      showLoadingBar();
       sign_in_2fa(prompt('password'))
       .then((result) => {
         console.log(result);
@@ -386,7 +374,29 @@
       })
       .catch(err => {
         console.log(err);
-      });
+      })
+      .finally(() => {
+        if (loadingBar) {
+          loadingBar.$destroy();
+        }
+      })
+    });
+  }
+
+  function send_code() {
+    api.call('auth.sendCode', {
+      phone_number: phoneNumber,
+      settings: {
+        _: 'codeSettings',
+      },
+    })
+    .then(result => {
+      console.log('auth.sendCode:', result);
+      phoneCodeHash = result.phone_code_hash;
+      reset_cursor('send_code');
+    })
+    .catch(err => {
+      console.log(err);
     });
   }
 
@@ -405,16 +415,33 @@
     })
     .then(user => {
       console.log(user);
-      _status = true;
+      authStatus = true;
     })
     .catch(err => {
       console.log(err);
-      _status = false;
+      authStatus = false;
+    })
+    .finally(() => {
+      phoneCodeHash = null;
+      reset_cursor('get_user');
     });
   }
 
+  function reset_cursor(from) {
+    navInstance.verticalNavIndex = 0;
+    setTimeout(() => {
+      navInstance.navigateListNav(0);
+      setTimeout(() => {
+        const cursor = document.getElementsByClassName(navClass)[navInstance.verticalNavIndex];
+        if (cursor) {
+          cursor.classList.add('focus');
+        }
+      }, 150)
+    }, 150);
+  }
+
   onMount(() => {
-    console.log('onMount', name);
+    // console.log('onMount', name);
     locale = getAppProp().localization.defaultLocale;
     const { appBar, softwareKey } = getAppProp();
     appBar.setTitleText(name);
@@ -434,18 +461,27 @@
   });
 
   onDestroy(() => {
-    console.log('onDestroy', name);
+    // console.log('onDestroy', name);
     navInstance.detachListener();
   });
 
 </script>
 
 <main id="home-screen" data-pad-top="28" data-pad-bottom="30">
-  {#if _status === false }
-  <Button className="{navClass}" text="Login" onClick={send_code}>
+  {#if authStatus === false }
+  {#if phoneCodeHash === null}
+  <TextInputField className="{navClass}" label="Phone Number" placeholder="Phone Number" value={phoneNumber} type="tel" {onInput} {onFocus} {onBlur} />
+  <Button className="{navClass}" text="Send Code" onClick={send_code}>
     <span slot="leftWidget" class="kai-icon-arrow" style="margin:0px 5px;-moz-transform: scale(-1, 1);-webkit-transform: scale(-1, 1);-o-transform: scale(-1, 1);-ms-transform: scale(-1, 1);transform: scale(-1, 1);"></span>
     <span slot="rightWidget" class="kai-icon-arrow" style="margin:0px 5px;"></span>
   </Button>
+  {:else}
+  <TextInputField className="{navClass}" label="Login Code" placeholder="Login Code" value={phoneCode} type="tel" {onInput} {onFocus} {onBlur} />
+  <Button className="{navClass}" text="Sign In" onClick={sign_in}>
+    <span slot="leftWidget" class="kai-icon-arrow" style="margin:0px 5px;-moz-transform: scale(-1, 1);-webkit-transform: scale(-1, 1);-o-transform: scale(-1, 1);-ms-transform: scale(-1, 1);transform: scale(-1, 1);"></span>
+    <span slot="rightWidget" class="kai-icon-arrow" style="margin:0px 5px;"></span>
+  </Button>
+  {/if}
   {:else}
   <Button className="{navClass}" text="Set Password" onClick={set_password}>
     <span slot="leftWidget" class="kai-icon-arrow" style="margin:0px 5px;-moz-transform: scale(-1, 1);-webkit-transform: scale(-1, 1);-o-transform: scale(-1, 1);-ms-transform: scale(-1, 1);transform: scale(-1, 1);"></span>
@@ -458,12 +494,8 @@
   {/if}
   <ListView className="{navClass}" title="{getAppProp().localization.langByLocale('hello', locale, 'Svelte')}" subtitle="Goto room screen" onClick={() => onClickHandler('room')}/>
   <ListView className="{navClass}" title="{getAppProp().localization.langByLocale('change_locale', locale)}" subtitle="{getAppProp().localization.langByLocale('change_locale_subtitle', locale)}" onClick={changeLocale}/>
-  <Separator title="Progress" />
-  <ListView className="{navClass}" title="Loading Bar" subtitle="Display loading bar & freeze keydown for 3 seconds" onClick={showLoadingBar} />
   <Separator title="Dialog" />
   <ListView className="{navClass}" title="Option Menu" subtitle="Click to open option menu & focus on index {optionMenuIndex}" onClick={openOptionMenu}/>
-  <Separator title="Input" />
-  <TextInputField className="{navClass}" label="TextInput" placeholder="Placeholder" value="Value" type="text" {onInput} {onFocus} {onBlur} />
   <Button className="{navClass}" text="Exit" onClick={onButtonClick}>
     <span slot="leftWidget" class="kai-icon-arrow" style="margin:0px 5px;-moz-transform: scale(-1, 1);-webkit-transform: scale(-1, 1);-o-transform: scale(-1, 1);-ms-transform: scale(-1, 1);transform: scale(-1, 1);"></span>
     <span slot="rightWidget" class="kai-icon-arrow" style="margin:0px 5px;"></span>
