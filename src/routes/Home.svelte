@@ -1,9 +1,12 @@
 <script lang="ts">
   import { Route, navigate as goto } from "svelte-navigator";
   import { createKaiNavigator } from '../utils/navigation';
-  import { Dialog, OptionMenu, SingleSelector, MultiSelector, ListView, Separator, Radio, Checkbox, LoadingBar, LinearProgress, RangeSlider, Button, TextInputField, TextAreaField, TextInputDialog, TextAreaDialog, Radio, Checkbox, DatePicker, TimePicker, Toast, Toaster, SoftwareKey } from '../components';
+  import { Dialog, OptionMenu, ListView, Separator, LoadingBar, Button, TextInputField, Toast, Toaster, SoftwareKey } from '../components';
   import { onMount, onDestroy } from 'svelte';
+
+  import bigInt from 'big-integer';
   import { api } from '../utils/mtproto_client';
+  import { concatBytes, bigIntToBytes, bytesToBigInt } from '@mtproto/core/src/utils/common';
 
   const navClass: string = 'homeNav';
   let locale: string;
@@ -15,29 +18,8 @@
   let dialog: Dialog;
   let optionMenu: OptionMenu;
   let optionMenuIndex:number = 0;
-  let singleSelector: SingleSelector;
-  let singleSelectorOptions:any = [
-    { title: 'Single Selector 0', subtitle: 'Single selector 0 subtitle', selected: true },
-    { title: 'Single Selector 1', subtitle: 'Single selector 1 subtitle', selected: false },
-    { title: 'Single Selector 2', subtitle: 'Single selector 2 subtitle', selected: false },
-    { title: 'Single Selector 3', subtitle: 'Single selector 3 subtitle', selected: false },
-    { title: 'Single Selector 4', subtitle: 'Single selector 4 subtitle', selected: false },
-  ];
-  let multiSelector: MultiSelector;
-  let multiSelectorOptions:any = [
-    { title: 'Multi Selector 0', subtitle: 'Multi selector 0 subtitle', checked: true },
-    { title: 'Multi Selector 1', subtitle: 'Multi selector 1 subtitle', checked: false },
-    { title: 'Multi Selector 2', subtitle: 'Multi selector 2 subtitle', checked: false },
-    { title: 'Multi Selector 3', subtitle: 'Multi selector 3 subtitle', checked: false },
-    { title: 'Multi Selector 4', subtitle: 'Multi selector 4 subtitle', checked: false },
-  ];
   let loadingBar: LoadingBar;
   let inputSoftwareKey: SoftwareKey;
-  let datePicker: DatePicker;
-  let datePickerValue: Date = new Date(1582227193963);
-  let timePicker: DatePicker;
-  let textInputDialog: TextInputDialog;
-  let textAreaDialog: TextAreaDialog;
   let progressValue: number = 0;
   let sliderValue: number = 20;
   let locales:any = [
@@ -226,232 +208,6 @@
     });
   }
 
-  function openSingleSelector() {
-    const idx = singleSelectorOptions.findIndex((o) => {
-      return o.selected;
-    })
-    singleSelector = new SingleSelector({
-      target: document.body,
-      props: {
-        title: 'Single Selector',
-        focusIndex: idx,
-        options: singleSelectorOptions,
-        softKeyCenterText: 'select',
-        onEnter: (evt, scope) => {
-          console.log('onEnter', scope);
-          singleSelectorOptions = scope.options;
-          evt.preventDefault();
-          evt.stopPropagation();
-          singleSelector.$destroy();
-        },
-        onBackspace: (evt, scope) => {
-          console.log('onBackspace', scope);
-          evt.preventDefault();
-          evt.stopPropagation();
-          singleSelector.$destroy();
-        },
-        onOpened: () => {
-          navInstance.detachListener();
-        },
-        onClosed: (scope) => {
-          console.log(scope);
-          navInstance.attachListener();
-          singleSelector = null;
-        }
-      }
-    });
-  }
-
-  function openMultiSelector() {
-    multiSelector = new MultiSelector({
-      target: document.body,
-      props: {
-        title: 'Multi Selector',
-        focusIndex: optionMenuIndex,
-        options: JSON.parse(JSON.stringify(multiSelectorOptions)),
-        softKeyLeftText: 'Cancel',
-        softKeyRightText: 'Done',
-        softKeyCenterTextSelect: 'select',
-        softKeyCenterTextDeselect: 'deselect',
-        onSoftkeyLeft: (evt, scope) => {
-          console.log('onSoftkeyLeft', scope);
-          evt.preventDefault();
-          evt.stopPropagation();
-          multiSelector.$destroy();
-        },
-        onSoftkeyRight: (evt, scope) => {
-          console.log('onSoftkeyRight', scope);
-          multiSelectorOptions = scope.options;
-          evt.preventDefault();
-          evt.stopPropagation();
-          multiSelector.$destroy();
-        },
-        onBackspace: (evt, scope) => {
-          console.log('onBackspace', scope);
-          evt.preventDefault();
-          evt.stopPropagation();
-          multiSelector.$destroy();
-        },
-        onOpened: () => {
-          navInstance.detachListener();
-        },
-        onClosed: (scope) => {
-          console.log(scope);
-          navInstance.attachListener();
-          multiSelector = null;
-        }
-      }
-    });
-  }
-
-  function openDatePicker() {
-    datePicker = new DatePicker({
-      target: document.body,
-      props: {
-        title: 'Date Picker',
-        date: datePickerValue,
-        softKeyLeftText: 'Cancel',
-        softKeyCenterText: 'save',
-        onSoftkeyLeft: (evt, date) => {
-          console.log('onSoftkeyLeft', date);
-          datePicker.$destroy();
-        },
-        onSoftkeyRight: (evt, date) => {
-          console.log('onSoftkeyRight', date);
-        },
-        onEnter: (evt, date) => {
-          console.log('onEnter', date);
-          datePickerValue = date;
-          datePicker.$destroy();
-        },
-        onBackspace: (evt, date) => {
-          console.log('onBackspace', date);
-          evt.preventDefault();
-          evt.stopPropagation();
-          datePicker.$destroy();
-        },
-        onOpened: () => {
-          navInstance.detachListener();
-        },
-        onClosed: (date) => {
-          console.log('onClosed', date);
-          navInstance.attachListener();
-          datePicker = null;
-        }
-      }
-    });
-  }
-
-  function openTimePicker() {
-    timePicker = new TimePicker({
-      target: document.body,
-      props: {
-        title: 'Time Picker',
-        date: datePickerValue,
-        is12HourSystem: true,
-        softKeyLeftText: 'Cancel',
-        softKeyCenterText: 'save',
-        onSoftkeyLeft: (evt, date) => {
-          console.log('onSoftkeyLeft', date);
-          timePicker.$destroy();
-        },
-        onSoftkeyRight: (evt, date) => {
-          console.log('onSoftkeyRight', date);
-        },
-        onEnter: (evt, date) => {
-          console.log('onEnter', date);
-          datePickerValue = date;
-          timePicker.$destroy();
-        },
-        onBackspace: (evt, date) => {
-          console.log('onBackspace', date);
-          evt.preventDefault();
-          evt.stopPropagation();
-          timePicker.$destroy();
-        },
-        onOpened: () => {
-          navInstance.detachListener();
-        },
-        onClosed: (date) => {
-          console.log('onClosed', date);
-          navInstance.attachListener();
-          timePicker = null;
-        }
-      }
-    });
-  }
-
-  function openTextInputDialog() {
-    textInputDialog = new TextInputDialog({
-      target: document.body,
-      props: {
-        title: 'TextInputDialog',
-        softKeyCenterText: 'ok',
-        value: 'Value',
-        placeholder: 'Placeholder',
-        type: 'text',
-        onSoftkeyLeft: (evt, value) => {
-          console.log('onSoftkeyLeft', value);
-        },
-        onSoftkeyRight: (evt, value) => {
-          console.log('onSoftkeyRight', value);
-        },
-        onEnter: (evt, value) => {
-          console.log('onEnter', value);
-          textInputDialog.$destroy();
-        },
-        onBackspace: (evt, value) => {
-          console.log('onBackspace', value);
-          evt.stopPropagation();
-        },
-        onOpened: () => {
-          navInstance.detachListener();
-        },
-        onClosed: (value) => {
-          console.log('onClosed', value)
-          navInstance.attachListener();
-          textInputDialog = null;
-        }
-      }
-    });
-  }
-
-  function openTextAreaDialog() {
-    textAreaDialog = new TextAreaDialog({
-      target: document.body,
-      props: {
-        title: 'TextAreaDialog',
-        softKeyCenterText: 'ok',
-        value: 'Value',
-        placeholder: 'Placeholder',
-        type: 'text',
-        rows: 3,
-        onSoftkeyLeft: (evt, value) => {
-          console.log('onSoftkeyLeft', value);
-        },
-        onSoftkeyRight: (evt, value) => {
-          console.log('onSoftkeyRight', value);
-        },
-        onEnter: (evt, value) => {
-          console.log('onEnter', value);
-          textAreaDialog.$destroy();
-        },
-        onBackspace: (evt, value) => {
-          console.log('onBackspace', value);
-          evt.stopPropagation();
-        },
-        onOpened: () => {
-          navInstance.detachListener();
-        },
-        onClosed: (value) => {
-          console.log('onClosed', value)
-          navInstance.attachListener();
-          textAreaDialog = null;
-        }
-      }
-    });
-  }
-
   function onButtonClick(evt) {
     window.close();
   }
@@ -486,10 +242,6 @@
     for (var k in keys) {
       evt.target.children[k].click();
     }
-  }
-
-  function onRadioCheckboxChange(scope) {
-    console.log(scope);
   }
 
   function changeLocale() {
@@ -533,6 +285,168 @@
     });
   }
 
+  const test_phone = '+9996611077';
+
+  // https://github.com/alik0211/mtproto-core/issues/180
+  const setpassword = async () => {
+
+    let oldPass = prompt('oldPass')
+    let newPass = prompt('newPass')
+
+    if (oldPass === newPass) {
+      return;
+    }
+
+    const psetting = await api.call('account.getPassword');
+    if (psetting.has_password && !oldPass) {
+      return;
+    }
+
+    const { new_algo, srp_id, srp_B, current_algo } = psetting;
+
+    let inputCheckPasswordSRP = { _: 'inputCheckPasswordEmpty' };
+
+    if (psetting.has_password) {
+      const { A, M1 } = await api.mtproto.crypto.getSRPParams({ ...current_algo, gB: srp_B, password: oldPass });
+      inputCheckPasswordSRP = { _: 'inputCheckPasswordSRP', srp_id, A, M1 };
+    }
+
+    new_algo.salt1 = concatBytes(new_algo.salt1, api.mtproto.envMethods.getRandomBytes(24));
+
+    const { SHA256, PBKDF2 } = api.mtproto.crypto;
+    const SH = (data, salt) => SHA256(concatBytes(salt, data, salt));
+    const PH1 = async (password, salt1, salt2) => SH(await SH(password, salt1), salt2);
+    const PH2 = async (password, salt1, salt2) => SH(await PBKDF2(await PH1(password, salt1, salt2), salt1, 100000), salt2);
+
+    const encoder = new TextEncoder();
+
+    const gBigInt = bigInt(new_algo.g);
+    const pBigInt = bytesToBigInt(new_algo.p);
+
+    const x = await PH2(encoder.encode(newPass), new_algo.salt1, new_algo.salt2);
+    const xBigInt = bytesToBigInt(x);
+    const vBigInt = gBigInt.modPow(xBigInt, pBigInt);
+
+    const V = bigIntToBytes(vBigInt);
+
+    const passwordInputSettings = { _: 'account.passwordInputSettings', new_algo, new_password_hash: V, hint: 'who i am' };
+    console.log({
+      password: inputCheckPasswordSRP,
+      new_settings: passwordInputSettings,
+    });
+    const bool = await api.call('account.updatePasswordSettings', {
+      password: inputCheckPasswordSRP,
+      new_settings: passwordInputSettings,
+    });
+    console.log('setPassword', bool);
+  };
+
+  function checkPassword({ srp_id, A, M1 }) {
+    return api.call('auth.checkPassword', {
+      password: {
+        _: 'inputCheckPasswordSRP',
+        srp_id,
+        A,
+        M1,
+      },
+    });
+  }
+
+  async function signIn2FA(password) {
+    const { srp_id, current_algo, srp_B } = await api.call('account.getPassword');
+    const { g, p, salt1, salt2 } = current_algo;
+    const { A, M1 } = await api.mtproto.crypto.getSRPParams({ g, p, salt1, salt2, gB: srp_B, password });
+    return await checkPassword({ srp_id, A, M1 });
+  }
+
+  function signup(phone_code_hash) {
+    api.call('auth.signUp', {
+      phone_number: test_phone,
+      phone_code_hash: phone_code_hash,
+      first_name: 'MTProto',
+      last_name: 'Core',
+    })
+    .then(result => {
+      sendcode();
+    })
+    .catch(err => {
+      console.log(err);
+    });
+  }
+
+  function signin(phone_code_hash) {
+    return api.call('auth.signIn', {
+      phone_code: '11111',
+      phone_number: test_phone,
+      phone_code_hash: phone_code_hash,
+    });
+  }
+
+  function sendcode() {
+    let _phone_code_hash;
+    api.call('auth.sendCode', {
+      phone_number: test_phone,
+      settings: {
+        _: 'codeSettings',
+      },
+    })
+    .then(result => {
+      console.log('uth.sendCode:', result);
+      return Promise.resolve(result.phone_code_hash);
+    })
+    .then(phone_code_hash => {
+      _phone_code_hash = phone_code_hash;
+      return signin(phone_code_hash);
+    })
+    .then(result => {
+      if (result._ === 'auth.authorizationSignUpRequired') {
+        signup(_phone_code_hash)
+      } else if (result._ === 'auth.authorization' && result.setup_password_required) {
+        console.log(result);
+      } else {
+        console.log(result.user);
+      }
+    })
+    .catch(err => {
+      if (err.error_message !== 'SESSION_PASSWORD_NEEDED') {
+        console.log('error:', err);
+        return;
+      }
+      signIn2FA(prompt('password'))
+      .then((result) => {
+        console.log(result);
+        getuser();
+      })
+      .catch(err => {
+        console.log(err);
+      });
+    });
+  }
+
+  function logout() {
+    api.call('auth.logOut')
+    .then(result => {
+      console.log(result);
+    })
+    .catch(err => {
+      console.log(err);
+    });
+  }
+
+  function getuser() {
+    api.call('users.getFullUser', {
+      id: {
+        _: 'inputUserSelf',
+      },
+    })
+    .then(user => {
+        console.log(user);
+    })
+    .catch(err => {
+        console.log(err);
+    });
+  }
+
   onMount(() => {
     console.log('onMount', name);
     locale = getAppProp().localization.defaultLocale;
@@ -541,9 +455,15 @@
     softwareKey.setText({ left: `Dialog L`, center: `${name} C`, right: `Toast R` });
     navInstance.attachListener();
 
-    api.call('help.getNearestDc').then(result => {
-        console.log('country:', result.country);
+    api.call('help.getNearestDc')
+    .then(result => {
+      console.log('country:', result.country);
+    })
+    .catch(err => {
+      console.log(err);
     });
+
+    getuser();
 
   });
 
@@ -555,47 +475,26 @@
 </script>
 
 <main id="home-screen" data-pad-top="28" data-pad-bottom="30">
+  <Button className="{navClass}" text="Login" onClick={sendcode}>
+    <span slot="leftWidget" class="kai-icon-arrow" style="margin:0px 5px;-moz-transform: scale(-1, 1);-webkit-transform: scale(-1, 1);-o-transform: scale(-1, 1);-ms-transform: scale(-1, 1);transform: scale(-1, 1);"></span>
+    <span slot="rightWidget" class="kai-icon-arrow" style="margin:0px 5px;"></span>
+  </Button>
+  <Button className="{navClass}" text="Set Password" onClick={setpassword}>
+    <span slot="leftWidget" class="kai-icon-arrow" style="margin:0px 5px;-moz-transform: scale(-1, 1);-webkit-transform: scale(-1, 1);-o-transform: scale(-1, 1);-ms-transform: scale(-1, 1);transform: scale(-1, 1);"></span>
+    <span slot="rightWidget" class="kai-icon-arrow" style="margin:0px 5px;"></span>
+  </Button>
+  <Button className="{navClass}" text="Logout" onClick={logout}>
+    <span slot="leftWidget" class="kai-icon-arrow" style="margin:0px 5px;-moz-transform: scale(-1, 1);-webkit-transform: scale(-1, 1);-o-transform: scale(-1, 1);-ms-transform: scale(-1, 1);transform: scale(-1, 1);"></span>
+    <span slot="rightWidget" class="kai-icon-arrow" style="margin:0px 5px;"></span>
+  </Button>
   <ListView className="{navClass}" title="{getAppProp().localization.langByLocale('hello', locale, 'Svelte')}" subtitle="Goto room screen" onClick={() => onClickHandler('room')}/>
   <ListView className="{navClass}" title="{getAppProp().localization.langByLocale('change_locale', locale)}" subtitle="{getAppProp().localization.langByLocale('change_locale_subtitle', locale)}" onClick={changeLocale}/>
   <Separator title="Progress" />
   <ListView className="{navClass}" title="Loading Bar" subtitle="Display loading bar & freeze keydown for 3 seconds" onClick={showLoadingBar} />
-  <ListView key="linear-progress" className="{navClass}">
-    <slot>
-      <LinearProgress label="Linear Progress" value={progressValue} min={0} max={100} progressType={1}/>
-    </slot>
-    <span slot="rightWidget"></span>
-  </ListView>
-  <ListView key="range-slider" className="{navClass}">
-    <slot>
-      <RangeSlider label="Range Slider" value={sliderValue} min={0} max={100} progressType={2}/>
-    </slot>
-    <span slot="rightWidget"></span>
-  </ListView>
   <Separator title="Dialog" />
   <ListView className="{navClass}" title="Option Menu" subtitle="Click to open option menu & focus on index {optionMenuIndex}" onClick={openOptionMenu}/>
-  <ListView className="{navClass}" title="Single Selector" subtitle="Click to open single selector & focus on current" onClick={openSingleSelector}/>
-  <ListView className="{navClass}" title="Multi Selector" subtitle="Click to open multi selector & focus on index {optionMenuIndex}" onClick={openMultiSelector}/>
   <Separator title="Input" />
   <TextInputField className="{navClass}" label="TextInput" placeholder="Placeholder" value="Value" type="text" {onInput} {onFocus} {onBlur} />
-  <TextAreaField className="{navClass}" label="TextArea" placeholder="Placeholder" value="Value" type="text" rows={4} {onInput} {onFocus} {onBlur}/>
-  <ListView className="{navClass}" title="Checkbox" subtitle="Please click me" onClick={propagateClick}>
-    <Checkbox slot="rightWidget" key="checkbox" checked="{true}" onChange={onRadioCheckboxChange} />
-  </ListView>
-  <ListView className="{navClass}" title="Radio" subtitle="Please click me" onClick={propagateClick}>
-    <Radio slot="rightWidget" key="radio" selected="{true}" onChange={onRadioCheckboxChange} />
-  </ListView>
-  <ListView className="{navClass}" title="Date Picker" subtitle="Click to open date picker, {datePickerValue.toDateString()}" onClick={openDatePicker}>
-    <span slot="rightWidget" class="kai-icon-calendar" style="font-size:20px;"></span>
-  </ListView>
-  <ListView className="{navClass}" title="Time Picker" subtitle="Click to open time picker, {datePickerValue.toLocaleTimeString()}" onClick={openTimePicker}>
-    <span slot="rightWidget" class="kai-icon-favorite-on" style="font-size:20px;"></span>
-  </ListView>
-  <ListView className="{navClass}" title="Text Input Dialog" subtitle="Open text input dialog" onClick={openTextInputDialog}>
-    <span slot="rightWidget" class="kai-icon-search" style="font-size:20px;"></span>
-  </ListView>
-  <ListView className="{navClass}" title="Text Area Dialog" subtitle="Open text area dialog" onClick={openTextAreaDialog}>
-    <span slot="rightWidget" class="kai-icon-message" style="font-size:20px;"></span>
-  </ListView>
   <Button className="{navClass}" text="Exit" onClick={onButtonClick}>
     <span slot="leftWidget" class="kai-icon-arrow" style="margin:0px 5px;-moz-transform: scale(-1, 1);-webkit-transform: scale(-1, 1);-o-transform: scale(-1, 1);-ms-transform: scale(-1, 1);transform: scale(-1, 1);"></span>
     <span slot="rightWidget" class="kai-icon-arrow" style="margin:0px 5px;"></span>
