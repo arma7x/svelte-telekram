@@ -8,26 +8,25 @@
   import { concatBytes, bigIntToBytes, bytesToBigInt } from '@mtproto/core/src/utils/common';
 
   const navClass: string = 'homeNav';
-  let locale: string;
+
   export let location: any;
   export let navigate: any;
   export let getAppProp: Function;
 
-  let _status: boolean = false;
-
-  let name: string = 'Home';
   let dialog: Dialog;
   let optionMenu: OptionMenu;
-  let optionMenuIndex:number = 0;
+  let optionMenuIndex: number = 0;
   let loadingBar: LoadingBar;
   let inputSoftwareKey: SoftwareKey;
-  let progressValue: number = 0;
-  let sliderValue: number = 20;
+  let localeMenu: OptionMenu;
+
+  let locale: string;
+  let _status: boolean = false;
+  let name: string = 'Home';
   let locales:any = [
     { title: 'English - United State', subtitle: 'en-US' },
     { title: 'Japanese', subtitle: 'jp-JP' },
   ];
-  let localeMenu: OptionMenu;
 
   let navOptions = {
     verticalNavClass: navClass,
@@ -57,35 +56,9 @@
     },
     arrowLeftListener: function(evt) {
       console.log('arrowLeftListener', name);
-      const navClasses = document.getElementsByClassName(navClass);
-      if (navClasses[this.verticalNavIndex] != null) {
-        const dataKey = navClasses[this.verticalNavIndex].getAttribute('data-key');
-        if (dataKey === 'linear-progress') {
-          if (progressValue === 0)
-            return;
-          progressValue -= 10;
-        } else if (dataKey === 'range-slider') {
-          if (sliderValue === 0)
-            return;
-          sliderValue -= 10;
-        }
-      }
     },
     arrowRightListener: function(evt) {
       console.log('arrowRightListener', name);
-      const navClasses = document.getElementsByClassName(navClass);
-      if (navClasses[this.verticalNavIndex] != null) {
-        const dataKey = navClasses[this.verticalNavIndex].getAttribute('data-key');
-        if (dataKey === 'linear-progress') {
-          if (progressValue === 100)
-            return;
-          progressValue += 10;
-        } else if (dataKey === 'range-slider') {
-          if (sliderValue === 100)
-            return;
-          sliderValue += 10;
-        }
-      }
     },
   };
 
