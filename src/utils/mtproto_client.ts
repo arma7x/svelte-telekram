@@ -19,7 +19,6 @@ class MTProtoClient {
 
       return result;
     } catch (error) {
-      console.log(`${method} error:`, error);
 
       const { error_code, error_message } = error;
 
