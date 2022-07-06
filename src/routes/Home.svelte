@@ -226,17 +226,6 @@
     return await api.call('account.updatePasswordSettings', { password: inputCheckPasswordSRP, new_settings: passwordInputSettings });
   };
 
-  function check_password({ srp_id, A, M1 }) {
-    return api.call('auth.checkPassword', {
-      password: {
-        _: 'inputCheckPasswordSRP',
-        srp_id,
-        A,
-        M1,
-      },
-    });
-  }
-
   function sign_in_2fa() {
     password2FA = new TextInputDialog({
       target: document.body,
@@ -257,7 +246,7 @@
             const { srp_id, current_algo, srp_B } = await api.call('account.getPassword');
             const { g, p, salt1, salt2 } = current_algo;
             const { A, M1 } = await api.mtproto.crypto.getSRPParams({ g, p, salt1, salt2, gB: srp_B, password });
-            await check_password({ srp_id, A, M1 });
+            await api.call('auth.checkPassword', { password: { _: 'inputCheckPasswordSRP', srp_id, A, M1 } });
             get_user();
             if (loadingBar) {
               loadingBar.$destroy();
