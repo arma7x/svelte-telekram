@@ -8,7 +8,7 @@ class MTProtoClient {
 
   constructor() {
     this.mtproto = new MTProto({
-      // test: true,
+      test: true,
       api_id: '1403915',
       api_hash: '1291d66d65b509ed6d5fce437185a8cc',
     });

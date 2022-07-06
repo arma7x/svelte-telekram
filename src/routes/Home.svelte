@@ -387,6 +387,11 @@
     });
   }
 
+  function reset_sign_in() {
+    phoneCodeHash = null;
+    reset_cursor();
+  }
+
   function sign_out() {
     api.call('auth.logOut')
     .finally(() => {
@@ -459,6 +464,10 @@
   {:else}
   <TextInputField className="{navClass}" label="Login Code" placeholder="Login Code" value={phoneCode} type="tel" onInput="{onInputPhoneCode}" {onFocus} {onBlur} />
   <Button className="{navClass}" text="Sign In" onClick={sign_in}>
+    <span slot="leftWidget" class="kai-icon-arrow" style="margin:0px 5px;-moz-transform: scale(-1, 1);-webkit-transform: scale(-1, 1);-o-transform: scale(-1, 1);-ms-transform: scale(-1, 1);transform: scale(-1, 1);"></span>
+    <span slot="rightWidget" class="kai-icon-arrow" style="margin:0px 5px;"></span>
+  </Button>
+  <Button className="{navClass}" text="Return" onClick={reset_sign_in}>
     <span slot="leftWidget" class="kai-icon-arrow" style="margin:0px 5px;-moz-transform: scale(-1, 1);-webkit-transform: scale(-1, 1);-o-transform: scale(-1, 1);-ms-transform: scale(-1, 1);transform: scale(-1, 1);"></span>
     <span slot="rightWidget" class="kai-icon-arrow" style="margin:0px 5px;"></span>
   </Button>
