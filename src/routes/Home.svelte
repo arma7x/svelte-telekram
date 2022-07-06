@@ -1,7 +1,7 @@
 <script lang="ts">
   import { Route, navigate as goto } from "svelte-navigator";
   import { createKaiNavigator } from '../utils/navigation';
-  import { Dialog, ListView, LoadingBar, Button, TextInputField, Toast, Toaster, SoftwareKey, TextInputDialog } from '../components';
+  import { ListView, LoadingBar, Button, TextInputField, Toast, Toaster, SoftwareKey, TextInputDialog } from '../components';
   import { onMount, onDestroy } from 'svelte';
 
   import { api, bigInt } from '../utils/mtproto_client';
@@ -14,7 +14,6 @@
   export let navigate: any;
   export let getAppProp: Function;
 
-  let dialog: Dialog;
   let loadingBar: LoadingBar;
   let inputSoftwareKey: SoftwareKey;
   let qrModal: QRModal;
@@ -30,17 +29,15 @@
   let navOptions = {
     verticalNavClass: navClass,
     softkeyLeftListener: function(evt) {
-      if (inputSoftwareKey)
+      if (inputSoftwareKey || qrModal|| password2FA)
         return;
-      openDialog();
     },
     softkeyRightListener: function(evt) {
-      if (inputSoftwareKey)
+      if (inputSoftwareKey || qrModal|| password2FA)
         return;
-      toastMessage();
     },
     enterListener: function(evt) {
-      if (inputSoftwareKey)
+      if (inputSoftwareKey || qrModal|| password2FA)
         return;
       const navClasses = document.getElementsByClassName(navClass);
       if (navClasses[this.verticalNavIndex] != null) {
@@ -86,34 +83,6 @@
         onClosed: () => {
           navInstance.attachListener();
           loadingBar = null;
-        }
-      }
-    });
-  }
-
-  function openDialog() {
-    dialog = new Dialog({
-      target: document.body,
-      props: {
-        title: 'Intro',
-        body: `Svelte is a radical new approach to building user interfaces. Whereas traditional frameworks like React and Vue do the bulk of their work in the browser, Svelte shifts that work into a compile step that happens when you build your app. Instead of using techniques like virtual DOM diffing, Svelte writes code that surgically updates the DOM when the state of your app changes. We're proud that Svelte was recently voted the most loved web framework with the most satisfied developers in a pair of industry surveys. We think you'll love it too. Read the introductory blog post to learn more.`,
-        softKeyCenterText: 'hide',
-        onSoftkeyLeft: (evt) => {},
-        onSoftkeyRight: (evt) => {},
-        onEnter: (evt) => {
-          dialog.$destroy();
-        },
-        onBackspace: (evt) => {
-          evt.preventDefault();
-          evt.stopPropagation();
-          dialog.$destroy();
-        },
-        onOpened: () => {
-          navInstance.detachListener();
-        },
-        onClosed: () => {
-          navInstance.attachListener();
-          dialog = null;
         }
       }
     });
@@ -168,6 +137,10 @@
     .then(user => {
       console.log(user);
       authStatus = true;
+      if (inputSoftwareKey) {
+        inputSoftwareKey.$destroy();
+        inputSoftwareKey = null;
+      }
     })
     .catch(err => {
       console.log(err);
