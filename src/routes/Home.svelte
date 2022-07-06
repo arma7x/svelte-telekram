@@ -1,7 +1,7 @@
 <script lang="ts">
   import { Route, navigate as goto } from "svelte-navigator";
   import { createKaiNavigator } from '../utils/navigation';
-  import { Dialog, ListView, LoadingBar, Button, TextInputField, Toast, Toaster, SoftwareKey } from '../components';
+  import { Dialog, ListView, LoadingBar, Button, TextInputField, Toast, Toaster, SoftwareKey, TextInputDialog } from '../components';
   import { onMount, onDestroy } from 'svelte';
 
   import { api, bigInt } from '../utils/mtproto_client';
@@ -18,6 +18,7 @@
   let loadingBar: LoadingBar;
   let inputSoftwareKey: SoftwareKey;
   let qrModal: QRModal;
+  let password2FA: TextInputDialog;
 
   let locale: string;
   let name: string = 'Home';
@@ -132,7 +133,7 @@
   }
 
   function onFocus(evt) {
-    if (qrModal != null)
+    if (qrModal != null || password2FA != null)
       return
     inputSoftwareKey = new SoftwareKey({
       target: document.body,
@@ -236,11 +237,52 @@
     });
   }
 
-  async function sign_in_2fa(password) {
-    const { srp_id, current_algo, srp_B } = await api.call('account.getPassword');
-    const { g, p, salt1, salt2 } = current_algo;
-    const { A, M1 } = await api.mtproto.crypto.getSRPParams({ g, p, salt1, salt2, gB: srp_B, password });
-    return await check_password({ srp_id, A, M1 });
+  function sign_in_2fa() {
+    password2FA = new TextInputDialog({
+      target: document.body,
+      props: {
+        title: '2FA Password',
+        softKeyCenterText: 'ok',
+        softKeyRightText: 'Cancel',
+        value: '',
+        placeholder: 'Password',
+        type: 'text',
+        onSoftkeyLeft: (evt, value) => {},
+        onSoftkeyRight: (evt, value) => {
+          password2FA.$destroy();
+        },
+        onEnter: async (evt, password) => {
+          try {
+            showLoadingBar();
+            const { srp_id, current_algo, srp_B } = await api.call('account.getPassword');
+            const { g, p, salt1, salt2 } = current_algo;
+            const { A, M1 } = await api.mtproto.crypto.getSRPParams({ g, p, salt1, salt2, gB: srp_B, password });
+            await check_password({ srp_id, A, M1 });
+            get_user();
+            if (loadingBar) {
+              loadingBar.$destroy();
+            }
+            password2FA.$destroy();
+          } catch (e) {
+            if (loadingBar) {
+              loadingBar.$destroy();
+            }
+            console.log(err);
+          }
+        },
+        onBackspace: (evt, value) => {
+          evt.stopPropagation();
+        },
+        onOpened: () => {
+          navInstance.detachListener();
+        },
+        onClosed: (value) => {
+          navInstance.attachListener();
+          password2FA = null;
+        }
+      }
+    });
+
   }
 
   // redirect sign_up page
@@ -282,20 +324,7 @@
         console.log('error:', err);
         return;
       }
-      showLoadingBar();
-      sign_in_2fa(prompt('password'))
-      .then((result) => {
-        console.log(result);
-        get_user();
-      })
-      .catch(err => {
-        console.log(err);
-      })
-      .finally(() => {
-        if (loadingBar) {
-          loadingBar.$destroy();
-        }
-      })
+      sign_in_2fa();
     });
   }
 
@@ -369,20 +398,7 @@
         console.log('error:', err);
         return;
       }
-      showLoadingBar();
-      sign_in_2fa(prompt('password'))
-      .then((result) => {
-        console.log(result);
-        get_user();
-      })
-      .catch(err => {
-        console.log(err);
-      })
-      .finally(() => {
-        if (loadingBar) {
-          loadingBar.$destroy();
-        }
-      })
+      sign_in_2fa();
     });
   }
 
@@ -399,7 +415,7 @@
   }
 
   function reset_cursor() {
-    if (qrModal != null)
+    if (qrModal != null || password2FA != null)
       return
     navInstance.verticalNavIndex = 0;
     setTimeout(() => {
