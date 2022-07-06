@@ -197,6 +197,8 @@
   }
 
   function onFocus(evt) {
+    if (qrModal != null)
+      return
     // console.log('onFocus');
     inputSoftwareKey = new SoftwareKey({
       target: document.body,
@@ -446,6 +448,17 @@
     }, 100);
   }
 
+  function import_login_token(token) {
+    api.call('auth.importLoginToken', { token: token })
+    .then(result => {
+      console.log(result);
+      get_user();
+    })
+    .catch(err => {
+      console.log(err);
+    });
+  }
+
   function export_login_token() {
     api.call('auth.exportLoginToken', {
       api_id: '1403915',
@@ -453,8 +466,12 @@
       except_ids: [],
     })
     .then(result => {
-      console.log('auth.loginToken', result._ === 'auth.loginToken');
-      console.log('auth.loginTokenSuccess', result._ === 'auth.loginTokenSuccess');
+      console.log(result);
+      if (result._ === 'auth.loginTokenSuccess') {
+        get_user();
+      } else if (result._ === 'auth.loginTokenMigrateTo') {
+        import_login_token(result.token);
+      }
     })
     .catch(err => {
       console.log(err);
@@ -501,8 +518,11 @@
 
     get_user();
 
-    api.mtproto.updates.on('updateLoginToken', (updateInfo) => {
-      console.log('updateLoginToken:', updateInfo);
+    api.mtproto.updates.on('updateShort', (updateInfo) => {
+      if (updateInfo.update && updateInfo.update._ === "updateLoginToken") {
+        console.log(updateInfo.update);
+        export_login_token();
+      }
     });
 
   });

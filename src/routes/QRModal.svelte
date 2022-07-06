@@ -50,6 +50,8 @@
           colorLight : "#ffffff",
           correctLevel : QRCode.CorrectLevel.H
         });
+      } else {
+        console.log(result);
       }
     })
     .catch(err => {
