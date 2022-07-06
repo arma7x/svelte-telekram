@@ -13,7 +13,7 @@
   {#if label}
   <label for={label.split(' ').join('-')}>{label}</label>
   {/if}
-  <input id={label.split(' ').join('-')} name={label} type={type} value={value} placeholder={placeholder} on:input={onInput} on:focus={onFocus} on:blur={onBlur}/>
+  <input id={label && label.split(' ').join('-')} name={label} type={type} value={value} placeholder={placeholder} on:input={onInput} on:focus={onFocus} on:blur={onBlur}/>
 </div>
 
 <style>

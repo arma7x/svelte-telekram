@@ -14,7 +14,7 @@
   {#if label}
   <label for={label.split(' ').join('-')}>{label}</label>
   {/if}
-  <textarea id={label.split(' ').join('-')} name={label} type={type} value={value} placeholder={placeholder} rows={rows} on:input={onInput} on:focus={onFocus} on:blur={onBlur}></textarea>
+  <textarea id={label && label.split(' ').join('-')} name={label} type={type} value={value} placeholder={placeholder} rows={rows} on:input={onInput} on:focus={onFocus} on:blur={onBlur}></textarea>
 </div>
 
 <style>
