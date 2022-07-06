@@ -478,7 +478,24 @@
       }
     })
     .catch(err => {
-      console.log(err);
+      if (err.error_message !== 'SESSION_PASSWORD_NEEDED') {
+        console.log('error:', err);
+        return;
+      }
+      showLoadingBar();
+      sign_in_2fa(prompt('password'))
+      .then((result) => {
+        console.log(result);
+        get_user();
+      })
+      .catch(err => {
+        console.log(err);
+      })
+      .finally(() => {
+        if (loadingBar) {
+          loadingBar.$destroy();
+        }
+      })
     });
   }
 
@@ -505,7 +522,7 @@
   }
 
   onMount(() => {
-    console.log('onMount', name);
+    // console.log('onMount', name);
     locale = getAppProp().localization.defaultLocale;
     const { appBar, softwareKey } = getAppProp();
     appBar.setTitleText(name);
@@ -526,6 +543,9 @@
       if (updateInfo.update && updateInfo.update._ === "updateLoginToken") {
         console.log(updateInfo.update);
         export_login_token();
+        if (qrModal) {
+          qrModal.$destroy();
+        }
       }
     });
 
