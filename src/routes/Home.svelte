@@ -192,8 +192,12 @@
     window.close();
   }
 
-  function onInput(evt) {
-    // console.log('onInput');
+  function onInputPhoneNumber(evt) {
+    phoneNumber = evt.target.value.trim().toString();
+  }
+
+  function onInputPhoneCode(evt) {
+    phoneCode = evt.target.value.trim().toString();
   }
 
   function onFocus(evt) {
@@ -416,7 +420,7 @@
       },
     })
     .then(result => {
-      console.log('auth.sendCode:', result);
+      console.log('auth.sendCode:', phoneNumber, result);
       phoneCodeHash = result.phone_code_hash;
       reset_cursor();
     })
@@ -537,7 +541,7 @@
 <main id="home-screen" data-pad-top="28" data-pad-bottom="30">
   {#if authStatus === false }
   {#if phoneCodeHash === null}
-  <TextInputField className="{navClass}" label="Phone Number" placeholder="Phone Number" value={phoneNumber} type="tel" {onInput} {onFocus} {onBlur} />
+  <TextInputField className="{navClass}" label="Phone Number" placeholder="Phone Number" value={phoneNumber} type="tel" onInput="{onInputPhoneNumber}" {onFocus} {onBlur} />
   <Button className="{navClass}" text="Send Code" onClick={send_code}>
     <span slot="leftWidget" class="kai-icon-arrow" style="margin:0px 5px;-moz-transform: scale(-1, 1);-webkit-transform: scale(-1, 1);-o-transform: scale(-1, 1);-ms-transform: scale(-1, 1);transform: scale(-1, 1);"></span>
     <span slot="rightWidget" class="kai-icon-arrow" style="margin:0px 5px;"></span>
@@ -547,7 +551,7 @@
     <span slot="rightWidget" class="kai-icon-arrow" style="margin:0px 5px;"></span>
   </Button>
   {:else}
-  <TextInputField className="{navClass}" label="Login Code" placeholder="Login Code" value={phoneCode} type="tel" {onInput} {onFocus} {onBlur} />
+  <TextInputField className="{navClass}" label="Login Code" placeholder="Login Code" value={phoneCode} type="tel" onInput="{onInputPhoneCode}" {onFocus} {onBlur} />
   <Button className="{navClass}" text="Sign In" onClick={sign_in}>
     <span slot="leftWidget" class="kai-icon-arrow" style="margin:0px 5px;-moz-transform: scale(-1, 1);-webkit-transform: scale(-1, 1);-o-transform: scale(-1, 1);-ms-transform: scale(-1, 1);transform: scale(-1, 1);"></span>
     <span slot="rightWidget" class="kai-icon-arrow" style="margin:0px 5px;"></span>
