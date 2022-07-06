@@ -33,8 +33,10 @@
     "typescript": "^4.0.0"
   },
   "dependencies": {
+    "@babel/runtime": "^7.18.6",
     "@mtproto/core": "6.2.0",
     "@zerodevx/svelte-toast": "^0.6.3",
+    "big-integer": "^1.6.51",
     "sirv-cli": "^1.0.0",
     "sprintf-js": "^1.1.2",
     "svelte-navigator": "^3.1.5"
