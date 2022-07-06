@@ -287,19 +287,18 @@
 
   // redirect sign_up page
   function sign_up() {
-    return
-    api.call('auth.signUp', {
-      phone_number: phoneNumber,
-      phone_code_hash: phoneCodeHash,
-      first_name: 'MTProto',
-      last_name: 'Core',
-    })
-    .then(result => {
-      send_code();
-    })
-    .catch(err => {
-      console.log(err);
-    });
+    //api.call('auth.signUp', {
+      //phone_number: phoneNumber,
+      //phone_code_hash: phoneCodeHash,
+      //first_name: 'MTProto',
+      //last_name: 'Core',
+    //})
+    //.then(result => {
+      //send_code();
+    //})
+    //.catch(err => {
+      //console.log(err);
+    //});
   }
 
   function sign_in() {
