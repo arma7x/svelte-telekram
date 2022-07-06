@@ -424,18 +424,20 @@
 
   function login_via_qr() {
     // show modal
-    return
-    //api.call('auth.exportLoginToken', {
-      //api_id: '1403915',
-      //api_hash: '1291d66d65b509ed6d5fce437185a8cc',
-      //except_ids: [],
-    //})
-    //.then(result => {
-      //console.log('auth.exportLoginToken:', `tg://login?token=${btoa(String.fromCharCode.apply(null, result.token))}`);
-    //})
-    //.catch(err => {
-      //console.log(err);
-    //});
+    // return
+    api.call('auth.exportLoginToken', {
+      api_id: '1403915',
+      api_hash: '1291d66d65b509ed6d5fce437185a8cc',
+      except_ids: [],
+    })
+    .then(result => {
+      console.log(result._ === 'auth.loginToken');
+      // console.log('auth.exportLoginToken:', `tg://login?token=${btoa(String.fromCharCode.apply(null, result.token))}`);
+      console.log(result._ === 'auth.loginTokenSuccess');
+    })
+    .catch(err => {
+      console.log(err);
+    });
   }
 
   function sign_out() {
