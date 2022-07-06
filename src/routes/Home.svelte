@@ -6,7 +6,7 @@
 
   import { api, bigInt } from '../utils/mtproto_client';
   import { concatBytes, bigIntToBytes, bytesToBigInt } from '@mtproto/core/src/utils/common';
-  import QRCode from 'QRCode';
+  import QRModal from './QRModal.svelte';
 
   const navClass: string = 'homeNav';
 
@@ -20,6 +20,7 @@
   let loadingBar: LoadingBar;
   let inputSoftwareKey: SoftwareKey;
   let localeMenu: OptionMenu;
+  let qrModal: QRModal;
 
   let locale: string;
   let name: string = 'Home';
@@ -422,18 +423,38 @@
     });
   }
 
-  function login_via_qr() {
-    // show modal
-    // return
+  function sign_in_qr() {
+    setTimeout(() => {
+      qrModal = new QRModal({
+        target: document.body,
+        props: {
+          title: 'Log-In via QR Code',
+          onBackspace: (evt) => {
+            evt.preventDefault();
+            evt.stopPropagation();
+            qrModal.$destroy();
+          },
+          onOpened: () => {
+            navInstance.detachListener();
+          },
+          onClosed: () => {
+            navInstance.attachListener();
+            qrModal = null;
+          }
+        }
+      });
+    }, 100);
+  }
+
+  function export_login_token() {
     api.call('auth.exportLoginToken', {
       api_id: '1403915',
       api_hash: '1291d66d65b509ed6d5fce437185a8cc',
       except_ids: [],
     })
     .then(result => {
-      console.log(result._ === 'auth.loginToken');
-      // console.log('auth.exportLoginToken:', `tg://login?token=${btoa(String.fromCharCode.apply(null, result.token))}`);
-      console.log(result._ === 'auth.loginTokenSuccess');
+      console.log('auth.loginToken', result._ === 'auth.loginToken');
+      console.log('auth.loginTokenSuccess', result._ === 'auth.loginTokenSuccess');
     })
     .catch(err => {
       console.log(err);
@@ -448,6 +469,8 @@
   }
 
   function reset_cursor() {
+    if (qrModal != null)
+      return
     navInstance.verticalNavIndex = 0;
     setTimeout(() => {
       navInstance.navigateListNav(0);
@@ -499,7 +522,7 @@
     <span slot="leftWidget" class="kai-icon-arrow" style="margin:0px 5px;-moz-transform: scale(-1, 1);-webkit-transform: scale(-1, 1);-o-transform: scale(-1, 1);-ms-transform: scale(-1, 1);transform: scale(-1, 1);"></span>
     <span slot="rightWidget" class="kai-icon-arrow" style="margin:0px 5px;"></span>
   </Button>
-  <Button className="{navClass}" text="Log by QR Code" onClick={login_via_qr}>
+  <Button className="{navClass}" text="Log-In via QR Code" onClick={sign_in_qr}>
     <span slot="leftWidget" class="kai-icon-arrow" style="margin:0px 5px;-moz-transform: scale(-1, 1);-webkit-transform: scale(-1, 1);-o-transform: scale(-1, 1);-ms-transform: scale(-1, 1);transform: scale(-1, 1);"></span>
     <span slot="rightWidget" class="kai-icon-arrow" style="margin:0px 5px;"></span>
   </Button>
