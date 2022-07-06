@@ -17,7 +17,6 @@
   let dialog: Dialog;
   let loadingBar: LoadingBar;
   let inputSoftwareKey: SoftwareKey;
-  let localeMenu: OptionMenu;
   let qrModal: QRModal;
 
   let locale: string;
