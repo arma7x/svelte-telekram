@@ -33,8 +33,8 @@
     const container = document.getElementById('qr-container');
     container.textContent = '';
     api.call('auth.exportLoginToken', {
-      api_id: '1403915',
-      api_hash: '1291d66d65b509ed6d5fce437185a8cc',
+      api_id: api.mtproto.api_id,
+      api_hash: api.mtproto.api_hash,
       except_ids: [],
     })
     .then(result => {

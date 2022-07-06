@@ -20,7 +20,6 @@
   let qrModal: QRModal;
   let password2FA: TextInputDialog;
 
-  let locale: string;
   let name: string = 'Home';
   let phoneNumber = '+9996611077';
   let phoneCode = '11111';
@@ -274,8 +273,8 @@
 
   }
 
-  // redirect sign_up page
   function sign_up() {
+  // redirect sign_up page
     //api.call('auth.signUp', {
       //phone_number: phoneNumber,
       //phone_code_hash: phoneCodeHash,
@@ -301,9 +300,7 @@
         sign_up();
         return
       } else if (result._ === 'auth.authorization' && result.setup_password_required) {
-        console.log(result);
-      } else {
-        console.log(result.user);
+        // toast setup 2fa;
       }
       get_user();
     })
@@ -324,7 +321,7 @@
       },
     })
     .then(result => {
-      console.log('auth.sendCode:', phoneNumber, result);
+      // console.log('auth.sendCode:', phoneNumber, result);
       phoneCodeHash = result.phone_code_hash;
       reset_cursor();
     })
@@ -359,7 +356,7 @@
   function import_login_token(token) {
     api.call('auth.importLoginToken', { token: token })
     .then(result => {
-      console.log(result);
+      // console.log(result);
       get_user();
     })
     .catch(err => {
@@ -369,12 +366,12 @@
 
   function export_login_token() {
     api.call('auth.exportLoginToken', {
-      api_id: '1403915',
-      api_hash: '1291d66d65b509ed6d5fce437185a8cc',
+      api_id: api.mtproto.api_id,
+      api_hash: api.mtproto.api_hash,
       except_ids: [],
     })
     .then(result => {
-      console.log(result);
+      // console.log(result);
       if (result._ === 'auth.loginTokenSuccess') {
         get_user();
       } else if (result._ === 'auth.loginTokenMigrateTo') {
@@ -417,13 +414,24 @@
     }, 150);
   }
 
+  function onUpdateShort(updateInfo) {
+    if (updateInfo.update && updateInfo.update._ === "updateLoginToken") {
+      // console.log(updateInfo.update);
+      export_login_token();
+      if (qrModal) {
+        qrModal.$destroy();
+      }
+    }
+  }
+
   onMount(() => {
-    locale = getAppProp().localization.defaultLocale;
     const { appBar, softwareKey } = getAppProp();
     appBar.setTitleText(name);
     softwareKey.setText({ left: `Dialog L`, center: `${name} C`, right: `Toast R` });
     navInstance.attachListener();
 
+    get_user();
+    api.mtproto.updates.addListener('updateShort', onUpdateShort);
     api.call('help.getNearestDc')
     .then(result => {
       console.log('country:', result.country);
@@ -431,22 +439,10 @@
     .catch(err => {
       console.log(err);
     });
-
-    get_user();
-
-    api.mtproto.updates.on('updateShort', (updateInfo) => {
-      if (updateInfo.update && updateInfo.update._ === "updateLoginToken") {
-        console.log(updateInfo.update);
-        export_login_token();
-        if (qrModal) {
-          qrModal.$destroy();
-        }
-      }
-    });
-
   });
 
   onDestroy(() => {
+    api.mtproto.updates.removeListener('updateShort', onUpdateShort);
     navInstance.detachListener();
   });
 
