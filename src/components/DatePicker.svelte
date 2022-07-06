@@ -141,25 +141,21 @@
     softkeyLeftListener: function(evt) {
       if (onSoftkeyLeft == null)
         return;
-      console.log('softkeyLeftListener', title);
       onSoftkeyLeft(evt, date);
     },
     softkeyRightListener: function(evt) {
       if (onSoftkeyRight == null)
         return;
-      console.log('softkeyRightListener', title);
       onSoftkeyRight(evt, date);
     },
     enterListener: function(evt) {
       if (onEnter == null)
         return;
-      console.log('enterListener', title);
       onEnter(evt, date);
     },
     backspaceListener: function(evt) {
       if (onBackspace == null)
         return;
-      console.log('backspaceListener', title);
       onBackspace(evt, date);
     }
   };
@@ -167,7 +163,6 @@
   let navInstance = createKaiNavigator(navOptions);
 
   onMount(() => {
-    console.log('onMount', title);
     navInstance.attachListener();
     softwareKey = new SoftwareKey({
       target: document.body,
@@ -191,7 +186,6 @@
   })
 
   onDestroy(() => {
-    console.log('onDestroy', title);
     navInstance.detachListener();
     softwareKey.$destroy();
     onClosed(date);

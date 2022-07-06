@@ -1,9 +1,7 @@
 <script lang="ts">
   export let key:any;
   export let selected: boolean = false;
-  export let onChange: Function = (params: { key: any, selected: boolean }) => {
-    console.log(params);
-  };
+  export let onChange: Function = (params: { key: any, selected: boolean }) => {};
   const onClick: Function = (evt) => {
     selected = !selected;
     onChange({key, selected});

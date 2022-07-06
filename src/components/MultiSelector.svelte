@@ -30,17 +30,14 @@
     softkeyLeftListener: function(evt) {
       if (onSoftkeyLeft == null)
         return;
-      console.log('softkeyLeftListener', title);
       onSoftkeyLeft(evt, {options});
     },
     softkeyRightListener: function(evt) {
       if (onSoftkeyRight == null)
         return;
-      console.log('softkeyRightListener', title);
       onSoftkeyRight(evt, {options});
     },
     enterListener: function(evt) {
-      console.log('enterListener', title);
       const navClasses = document.getElementsByClassName(navClass);
       if (navClasses[this.verticalNavIndex] != null) {
         const children = navClasses[this.verticalNavIndex].children
@@ -53,7 +50,6 @@
     backspaceListener: function(evt) {
       if (onBackspace == null)
         return;
-      console.log('backspaceListener', title);
       onBackspace(evt, {options});
     },
     arrowUpListener: function(evt) {
@@ -84,7 +80,6 @@
   }
 
   onMount(() => {
-    console.log('onMount', title);
     navInstance.attachListener(focusIndex + 1);
     softwareKey = new SoftwareKey({
       target: document.body,
@@ -100,7 +95,6 @@
   })
 
   onDestroy(() => {
-    console.log('onDestroy', title);
     navInstance.detachListener();
     softwareKey.$destroy();
     onClosed({options});

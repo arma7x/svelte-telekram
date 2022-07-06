@@ -5,12 +5,10 @@
   export let onClosed: Function = () => {};
 
   onMount(() => {
-    console.log('onMount ProgressBar');
     onOpened();
   })
 
   onDestroy(() => {
-    console.log('onDestroy ProgressBar');
     onClosed();
   })
 </script>

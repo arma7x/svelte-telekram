@@ -30,25 +30,21 @@
     softkeyLeftListener: function(evt) {
       if (onSoftkeyLeft == null)
         return;
-      console.log('softkeyLeftListener', title);
       onSoftkeyLeft(evt, {index: this.verticalNavIndex, selected: options[this.verticalNavIndex]});
     },
     softkeyRightListener: function(evt) {
       if (onSoftkeyRight == null)
         return;
-      console.log('softkeyRightListener', title);
       onSoftkeyRight(evt, {index: this.verticalNavIndex, selected: options[this.verticalNavIndex]});
     },
     enterListener: function(evt) {
       if (onEnter == null)
         return;
-      console.log('enterListener', title);
       onEnter(evt, {index: this.verticalNavIndex, selected: options[this.verticalNavIndex]});
     },
     backspaceListener: function(evt) {
       if (onBackspace == null)
         return;
-      console.log('backspaceListener', title);
       onBackspace(evt, {index: this.verticalNavIndex, selected: options[this.verticalNavIndex]});
     }
   };
@@ -56,7 +52,6 @@
   let navInstance = createKaiNavigator(navOptions);
 
   onMount(() => {
-    console.log('onMount', title);
     navInstance.attachListener(focusIndex + 1);
     softwareKey = new SoftwareKey({
       target: document.body,
@@ -71,7 +66,6 @@
   })
 
   onDestroy(() => {
-    console.log('onDestroy', title);
     navInstance.detachListener();
     softwareKey.$destroy();
     onClosed({index: navInstance.verticalNavIndex, selected: options[navInstance.verticalNavIndex]});

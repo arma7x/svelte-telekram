@@ -47,25 +47,21 @@
     softkeyLeftListener: function(evt) {
       if (onSoftkeyLeft == null)
         return;
-      console.log('softkeyLeftListener', title);
       onSoftkeyLeft(evt, returnValue);
     },
     softkeyRightListener: function(evt) {
       if (onSoftkeyRight == null)
         return;
-      console.log('softkeyRightListener', title);
       onSoftkeyRight(evt, returnValue);
     },
     enterListener: function(evt) {
       if (onEnter == null)
         return;
-      console.log('enterListener', title);
       onEnter(evt, returnValue);
     },
     backspaceListener: function(evt) {
       if (onBackspace == null)
         return;
-      console.log('backspaceListener', title);
       onBackspace(evt, returnValue);
     }
   };
@@ -82,7 +78,6 @@
   }
 
   onMount(() => {
-    console.log('onMount', title);
     navInstance.attachListener();
     softwareKey = new SoftwareKey({
       target: document.body,
@@ -100,7 +95,6 @@
   })
 
   onDestroy(() => {
-    console.log('onDestroy', title);
     inputDOM.blur();
     navInstance.detachListener();
     softwareKey.$destroy();

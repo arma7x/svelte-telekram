@@ -1,9 +1,7 @@
 <script lang="ts">
   export let key:any;
   export let checked: boolean = false;
-  export let onChange: Function = (params: { key: any, checked: boolean }) => {
-    console.log(params);
-  };
+  export let onChange: Function = (params: { key: any, checked: boolean }) => {};
   const onClick: Function = (evt) => {
     checked = !checked;
     onChange({key, checked});

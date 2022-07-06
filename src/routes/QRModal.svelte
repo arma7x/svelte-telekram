@@ -38,10 +38,8 @@
       except_ids: [],
     })
     .then(result => {
-      // console.log(result._ === 'auth.loginTokenSuccess');
       if (result._ === 'auth.loginToken') {
         const data = `tg://login?token=${btoa(String.fromCharCode.apply(null, result.token))}`;
-        console.log(data);
         qrcode = new QRCode(container, {
           text: data,
           width: 200,
@@ -50,8 +48,6 @@
           colorLight : "#ffffff",
           correctLevel : QRCode.CorrectLevel.H
         });
-      } else {
-        console.log(result);
       }
     })
     .catch(err => {
