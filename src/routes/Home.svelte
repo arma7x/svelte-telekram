@@ -34,13 +34,11 @@
       if (inputSoftwareKey)
         return;
       openDialog();
-      // console.log('softkeyLeftListener', name, this.verticalNavIndex);
     },
     softkeyRightListener: function(evt) {
       if (inputSoftwareKey)
         return;
       toastMessage();
-      // console.log('softkeyRightListener', name, this.verticalNavIndex);
     },
     enterListener: function(evt) {
       if (inputSoftwareKey)
@@ -49,17 +47,10 @@
       if (navClasses[this.verticalNavIndex] != null) {
         navClasses[this.verticalNavIndex].click();
       }
-      // console.log('enterListener', name);
     },
-    backspaceListener: function(evt) {
-      // console.log('backspaceListener', name);
-    },
-    arrowLeftListener: function(evt) {
-      // console.log('arrowLeftListener', name);
-    },
-    arrowRightListener: function(evt) {
-      // console.log('arrowRightListener', name);
-    },
+    backspaceListener: function(evt) {},
+    arrowLeftListener: function(evt) {},
+    arrowRightListener: function(evt) {},
   };
 
   let navInstance = createKaiNavigator(navOptions);
@@ -108,18 +99,12 @@
         title: 'Intro',
         body: `Svelte is a radical new approach to building user interfaces. Whereas traditional frameworks like React and Vue do the bulk of their work in the browser, Svelte shifts that work into a compile step that happens when you build your app. Instead of using techniques like virtual DOM diffing, Svelte writes code that surgically updates the DOM when the state of your app changes. We're proud that Svelte was recently voted the most loved web framework with the most satisfied developers in a pair of industry surveys. We think you'll love it too. Read the introductory blog post to learn more.`,
         softKeyCenterText: 'hide',
-        onSoftkeyLeft: (evt) => {
-          // console.log('onSoftkeyLeft');
-        },
-        onSoftkeyRight: (evt) => {
-          // console.log('onSoftkeyRight');
-        },
+        onSoftkeyLeft: (evt) => {},
+        onSoftkeyRight: (evt) => {},
         onEnter: (evt) => {
-          // console.log('onEnter');
           dialog.$destroy();
         },
         onBackspace: (evt) => {
-          // console.log('onBackspace');
           evt.preventDefault();
           evt.stopPropagation();
           dialog.$destroy();
@@ -150,7 +135,6 @@
   function onFocus(evt) {
     if (qrModal != null)
       return
-    // console.log('onFocus');
     inputSoftwareKey = new SoftwareKey({
       target: document.body,
       props: {
@@ -163,7 +147,6 @@
   }
 
   function onBlur(evt) {
-    // console.log('onBlur');
     if (inputSoftwareKey) {
       inputSoftwareKey.$destroy();
       inputSoftwareKey = null;
@@ -200,8 +183,9 @@
   // https://github.com/alik0211/mtproto-core/issues/180
   async function set_password() {
 
-    let oldPass = prompt('oldPass')
-    let newPass = prompt('newPass')
+    let oldPass = prompt('oldPass');
+    let newPass = prompt('newPass');
+    let hint = 'who i am';
 
     if (oldPass === newPass)
       return;
@@ -237,9 +221,7 @@
 
     const V = bigIntToBytes(vBigInt);
 
-    const passwordInputSettings = { _: 'account.passwordInputSettings', new_algo, new_password_hash: V, hint: 'who i am' };
-
-    // console.log({ password: inputCheckPasswordSRP, new_settings: passwordInputSettings });
+    const passwordInputSettings = { _: 'account.passwordInputSettings', new_algo, new_password_hash: V, hint: hint };
 
     return await api.call('account.updatePasswordSettings', { password: inputCheckPasswordSRP, new_settings: passwordInputSettings });
   };
@@ -428,7 +410,6 @@
   }
 
   onMount(() => {
-    // console.log('onMount', name);
     locale = getAppProp().localization.defaultLocale;
     const { appBar, softwareKey } = getAppProp();
     appBar.setTitleText(name);
@@ -458,7 +439,6 @@
   });
 
   onDestroy(() => {
-    // console.log('onDestroy', name);
     navInstance.detachListener();
   });
 
