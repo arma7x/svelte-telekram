@@ -1,7 +1,7 @@
 <script lang="ts">
   import { Route, navigate as goto } from "svelte-navigator";
   import { createKaiNavigator } from '../utils/navigation';
-  import { Dialog, OptionMenu, ListView, Separator, LoadingBar, Button, TextInputField, Toast, Toaster, SoftwareKey } from '../components';
+  import { Dialog, ListView, LoadingBar, Button, TextInputField, Toast, Toaster, SoftwareKey } from '../components';
   import { onMount, onDestroy } from 'svelte';
 
   import { api, bigInt } from '../utils/mtproto_client';
@@ -15,8 +15,6 @@
   export let getAppProp: Function;
 
   let dialog: Dialog;
-  let optionMenu: OptionMenu;
-  let optionMenuIndex: number = 0;
   let loadingBar: LoadingBar;
   let inputSoftwareKey: SoftwareKey;
   let localeMenu: OptionMenu;
@@ -24,10 +22,6 @@
 
   let locale: string;
   let name: string = 'Home';
-  let locales:any = [
-    { title: 'English - United State', subtitle: 'en-US' },
-    { title: 'Japanese', subtitle: 'jp-JP' },
-  ];
   let phoneNumber = '+9996611077';
   let phoneCode = '11111';
   let phoneCodeHash = null;
@@ -69,10 +63,6 @@
   };
 
   let navInstance = createKaiNavigator(navOptions);
-
-  function onClickHandler(value) {
-    goto(value);
-  }
 
   function toastMessage(text = 'I\'m out after 2 second') {
     const t = new Toast({
@@ -145,49 +135,6 @@
     });
   }
 
-  function openOptionMenu() {
-    optionMenu = new OptionMenu({
-      target: document.body,
-      props: {
-        title: 'Option Menu',
-        focusIndex: optionMenuIndex,
-        options: [
-          { title: 'Option Menu 0', subtitle: 'Option menu 0 subtitle' },
-          { title: 'Option Menu 1', subtitle: 'Option menu 1 subtitle' },
-          { title: 'Option Menu 2', subtitle: 'Option menu 2 subtitle' },
-          { title: 'Option Menu 3', subtitle: 'Option menu 3 subtitle' },
-          { title: 'Option Menu 4', subtitle: 'Option menu 4 subtitle' },
-        ],
-        softKeyCenterText: 'select',
-        onSoftkeyRight: (evt, scope) => {
-          // console.log('onSoftkeyRight', scope);
-        },
-        onSoftkeyLeft: (evt, scope) => {
-          // console.log('onSoftkeyRight', scope);
-        },
-        onEnter: (evt, scope) => {
-          // console.log('onEnter', scope);
-          optionMenuIndex = scope.index;
-          optionMenu.$destroy();
-        },
-        onBackspace: (evt, scope) => {
-          // console.log('onBackspace', scope);
-          evt.preventDefault();
-          evt.stopPropagation();
-          optionMenu.$destroy();
-        },
-        onOpened: () => {
-          navInstance.detachListener();
-        },
-        onClosed: (scope) => {
-          // console.log(scope);
-          navInstance.attachListener();
-          optionMenu = null;
-        }
-      }
-    });
-  }
-
   function onButtonClick(evt) {
     window.close();
   }
@@ -228,47 +175,6 @@
     for (var k in keys) {
       evt.target.children[k].click();
     }
-  }
-
-  function changeLocale() {
-    const idx = locales.findIndex((o) => {
-      return o.subtitle === locale || 0;
-    })
-    localeMenu = new OptionMenu({
-      target: document.body,
-      props: {
-        title: getAppProp().localization.lang('select_locale'),
-        focusIndex: idx,
-        options: locales,
-        softKeyCenterText: 'select',
-        onSoftkeyRight: (evt, scope) => {
-          // console.log('onSoftkeyRight', scope);
-        },
-        onSoftkeyLeft: (evt, scope) => {
-          // console.log('onSoftkeyRight', scope);
-        },
-        onEnter: (evt, scope) => {
-          // console.log('onEnter', scope);
-          getAppProp().localization.loadLocale(scope.selected.subtitle);
-          locale = getAppProp().localization.defaultLocale;
-          localeMenu.$destroy();
-        },
-        onBackspace: (evt, scope) => {
-          // console.log('onBackspace', scope);
-          evt.preventDefault();
-          evt.stopPropagation();
-          localeMenu.$destroy();
-        },
-        onOpened: () => {
-          navInstance.detachListener();
-        },
-        onClosed: (scope) => {
-          // console.log(scope);
-          navInstance.attachListener();
-          localeMenu = null;
-        }
-      }
-    });
   }
 
   function get_user() {
@@ -587,10 +493,6 @@
     <span slot="rightWidget" class="kai-icon-arrow" style="margin:0px 5px;"></span>
   </Button>
   {/if}
-  <ListView className="{navClass}" title="{getAppProp().localization.langByLocale('hello', locale, 'Svelte')}" subtitle="Goto room screen" onClick={() => onClickHandler('room')}/>
-  <ListView className="{navClass}" title="{getAppProp().localization.langByLocale('change_locale', locale)}" subtitle="{getAppProp().localization.langByLocale('change_locale_subtitle', locale)}" onClick={changeLocale}/>
-  <Separator title="Dialog" />
-  <ListView className="{navClass}" title="Option Menu" subtitle="Click to open option menu & focus on index {optionMenuIndex}" onClick={openOptionMenu}/>
   <Button className="{navClass}" text="Exit" onClick={onButtonClick}>
     <span slot="leftWidget" class="kai-icon-arrow" style="margin:0px 5px;-moz-transform: scale(-1, 1);-webkit-transform: scale(-1, 1);-o-transform: scale(-1, 1);-ms-transform: scale(-1, 1);transform: scale(-1, 1);"></span>
     <span slot="rightWidget" class="kai-icon-arrow" style="margin:0px 5px;"></span>
