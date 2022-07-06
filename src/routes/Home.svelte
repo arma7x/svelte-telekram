@@ -461,7 +461,7 @@
   }
 
   onMount(() => {
-    console.log('onMount', name, QRCode);
+    console.log('onMount', name);
     locale = getAppProp().localization.defaultLocale;
     const { appBar, softwareKey } = getAppProp();
     appBar.setTitleText(name);
