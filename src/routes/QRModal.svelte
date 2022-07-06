@@ -40,7 +40,6 @@
     .then(result => {
       if (result._ === 'auth.loginToken') {
         const data = `tg://login?token=${btoa(String.fromCharCode.apply(null, result.token))}`;
-        console.log(data);
         qrcode = new QRCode(container, {
           text: data,
           width: 200,
