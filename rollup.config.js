@@ -40,7 +40,10 @@ export default {
     sourcemap: !production,
     format: 'iife',
     name: 'app',
-    file: 'public/build/bundle.js'
+    file: 'public/build/bundle.js',
+    globals: {
+      QRCode: 'window.QRCode'
+    }
   },
   external: ['QRCode'],
   context: 'window',
