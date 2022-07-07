@@ -1,12 +1,11 @@
 importScripts('/build/crypto_worker.js');
 
 onmessage = function(e) {
-  console.log('Worker: Message received from main script');
-  const result = e.data[0] * e.data[1];
-  if (isNaN(result)) {
-    postMessage('Please write two numbers');
-  } else {
-    console.log('Worker: Posting message back to main script');
-    postMessage(result);
-  }
+  getSRPParams(e.data)
+  .then((result) => {
+    postMessage({ status: 1, result: result });
+  })
+  .catch((err) => {
+    postMessage({ status: 0, result: err });
+  });
 }

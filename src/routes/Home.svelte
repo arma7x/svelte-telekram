@@ -215,16 +215,26 @@
         onEnter: async (evt, password) => {
           try {
             showLoadingBar();
+            const crypto_worker = new Worker("worker.js");
+
             const { srp_id, current_algo, srp_B } = await api.call('account.getPassword');
             const { g, p, salt1, salt2 } = current_algo;
-            const { A, M1 } = await api.mtproto.crypto.getSRPParams({ g, p, salt1, salt2, gB: srp_B, password });
-            await api.call('auth.checkPassword', { password: { _: 'inputCheckPasswordSRP', srp_id, A, M1 } });
-            get_user();
-            if (loadingBar) {
-              loadingBar.$destroy();
+            crypto_worker.postMessage({ g, p, salt1, salt2, gB: srp_B, password });
+
+            crypto_worker.onmessage = async (e) => {
+              if (e.data.status === 1) {
+                const { A, M1 } = e.data.result;
+                await api.call('auth.checkPassword', { password: { _: 'inputCheckPasswordSRP', srp_id, A, M1 } });
+                get_user();
+                if (loadingBar) {
+                  loadingBar.$destroy();
+                }
+                password2FA.$destroy();
+              } else {
+                throw e.data.result;
+              }
             }
-            password2FA.$destroy();
-          } catch (e) {
+          } catch (err) {
             if (loadingBar) {
               loadingBar.$destroy();
             }
