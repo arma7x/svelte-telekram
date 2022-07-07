@@ -2,5 +2,6 @@
 /public/build/*.css
 /public/build/*.js
 /public/build/*.map
+/src/telegram_key.ts
 
 .DS_Store

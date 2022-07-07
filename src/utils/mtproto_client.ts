@@ -1,6 +1,7 @@
 import MTProto from '@mtproto/core/envs/browser';
 import { sleep } from '@mtproto/core/src/utils/common';
 import bigInt from 'big-integer';
+import TelegramKeyHash from '../telegram_key';
 
 class MTProtoClient {
 
@@ -9,8 +10,8 @@ class MTProtoClient {
   constructor() {
     this.mtproto = new MTProto({
       // test: true,
-      api_id: '1403915',
-      api_hash: '1291d66d65b509ed6d5fce437185a8cc',
+      api_id: TelegramKeyHash.api_id,
+      api_hash: TelegramKeyHash.api_hash,
     });
   }
 
