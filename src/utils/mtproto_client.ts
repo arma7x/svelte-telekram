@@ -24,7 +24,7 @@ class MTProtoClient {
       const { error_code, error_message } = error;
 
       if (error_code === 420) {
-        // console.log(error_message);
+        console.log(error_message);
         const seconds = Number(error_message.split('FLOOD_WAIT_')[1]);
         const ms = seconds * 1000;
 
