@@ -15,7 +15,7 @@
   let regenerate: any = null;
 
   let navOptions = {
-    softkeyLeftListener: function(evt) {
+    softkeyRightListener: function(evt) {
       onBackspace(evt);
     },
     backspaceListener: function(evt) {
