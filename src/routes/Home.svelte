@@ -51,6 +51,21 @@
 
   let navInstance = createKaiNavigator(navOptions);
 
+  function reset_cursor() {
+    if (qrModal != null || password2FA != null)
+      return
+    navInstance.verticalNavIndex = 0;
+    setTimeout(() => {
+      navInstance.navigateListNav(0);
+      setTimeout(() => {
+        const cursor = document.getElementsByClassName(navClass)[navInstance.verticalNavIndex];
+        if (cursor) {
+          cursor.classList.add('focus');
+        }
+      }, 150)
+    }, 150);
+  }
+
   function toastMessage(text = 'I\'m out after 2 second') {
     const t = new Toast({
       target: document.body,
@@ -128,30 +143,6 @@
     }
   }
 
-  function get_user() {
-    api.call('users.getFullUser', {
-      id: {
-        _: 'inputUserSelf',
-      },
-    })
-    .then(user => {
-      console.log(user);
-      authStatus = true;
-      if (inputSoftwareKey) {
-        inputSoftwareKey.$destroy();
-        inputSoftwareKey = null;
-      }
-    })
-    .catch(err => {
-      console.log(err);
-      authStatus = false;
-    })
-    .finally(() => {
-      phoneCodeHash = null;
-      reset_cursor();
-    });
-  }
-
   // https://github.com/alik0211/mtproto-core/issues/180
   async function set_password() {
 
@@ -215,7 +206,7 @@
         onEnter: async (evt, password) => {
           try {
             showLoadingBar();
-            const crypto_worker = new Worker("worker.js");
+            const crypto_worker = new Worker("/js/worker.js");
 
             const { srp_id, current_algo, srp_B } = await api.call('account.getPassword');
             const { g, p, salt1, salt2 } = current_algo;
@@ -382,19 +373,65 @@
     });
   }
 
-  function reset_cursor() {
-    if (qrModal != null || password2FA != null)
-      return
-    navInstance.verticalNavIndex = 0;
-    setTimeout(() => {
-      navInstance.navigateListNav(0);
-      setTimeout(() => {
-        const cursor = document.getElementsByClassName(navClass)[navInstance.verticalNavIndex];
-        if (cursor) {
-          cursor.classList.add('focus');
-        }
-      }, 150)
-    }, 150);
+  function get_user() {
+    const { softwareKey } = getAppProp();
+    api.call('users.getFullUser', {
+      id: {
+        _: 'inputUserSelf',
+      },
+    })
+    .then(user => {
+      console.log(user);
+      authStatus = true;
+      if (inputSoftwareKey) {
+        inputSoftwareKey.$destroy();
+        inputSoftwareKey = null;
+      }
+      softwareKey.setLeftText('Menu');
+      softwareKey.setRightText('Search');
+    })
+    .catch(err => {
+      console.log(err);
+      authStatus = false;
+      softwareKey.setLeftText('');
+      softwareKey.setRightText('');
+    })
+    .finally(() => {
+      phoneCodeHash = null;
+      reset_cursor();
+    });
+  }
+
+  async function get_chats() {
+    try {
+      const response = await api.call('messages.getDialogs', {
+        folder_id: 0,
+        limit: 100,
+        exclude_pinned: true,
+        offset_peer: { _: "inputUserSelf", }
+      });
+      let except_ids = [];
+      response.chats.forEach((chat, index) => {
+        console.log(index, chat);
+        except_ids.push(chat.id);
+      });
+      console.log('---------');
+      const history = await api.call('messages.getAllChats', {
+        except_ids: except_ids
+      });
+      console.log(history);
+      //console.log('---------');
+      //const contact = await api.call('contacts.getContacts');
+      //contact.users.forEach((contact, index) => {
+        //if (contact.username) {
+          //console.log(index, contact.username);
+        //} else {
+          //console.log(index, JSON.stringify(contact));
+        //}
+      //});
+    } catch (err) {
+      console.log(err);
+    }
   }
 
   function onUpdateShort(updateInfo) {
@@ -410,7 +447,7 @@
   onMount(() => {
     const { appBar, softwareKey } = getAppProp();
     appBar.setTitleText(name);
-    softwareKey.setText({ left: `Dialog L`, center: `${name} C`, right: `Toast R` });
+    softwareKey.setText({ left: '', center: 'SELECT', right: '' });
     navInstance.attachListener();
 
     get_user();
@@ -455,6 +492,10 @@
   </Button>
   {/if}
   {:else}
+  <Button className="{navClass}" text="Get Chats" onClick={get_chats}>
+    <span slot="leftWidget" class="kai-icon-arrow" style="margin:0px 5px;-moz-transform: scale(-1, 1);-webkit-transform: scale(-1, 1);-o-transform: scale(-1, 1);-ms-transform: scale(-1, 1);transform: scale(-1, 1);"></span>
+    <span slot="rightWidget" class="kai-icon-arrow" style="margin:0px 5px;"></span>
+  </Button>
   <Button className="{navClass}" text="Set Password" onClick={set_password}>
     <span slot="leftWidget" class="kai-icon-arrow" style="margin:0px 5px;-moz-transform: scale(-1, 1);-webkit-transform: scale(-1, 1);-o-transform: scale(-1, 1);-ms-transform: scale(-1, 1);transform: scale(-1, 1);"></span>
     <span slot="rightWidget" class="kai-icon-arrow" style="margin:0px 5px;"></span>
