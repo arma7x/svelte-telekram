@@ -407,8 +407,9 @@
       const response = await api.call('messages.getDialogs', {
         folder_id: 0,
         limit: 100,
+        hash: 0,
         exclude_pinned: true,
-        offset_peer: { _: "inputUserSelf", }
+        offset_peer: { _: "inputPeerSelf", }
       });
       let except_ids = [];
       response.chats.forEach((chat, index) => {
