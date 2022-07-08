@@ -420,15 +420,6 @@
         except_ids: except_ids
       });
       console.log(history);
-      //console.log('---------');
-      //const contact = await api.call('contacts.getContacts');
-      //contact.users.forEach((contact, index) => {
-        //if (contact.username) {
-          //console.log(index, contact.username);
-        //} else {
-          //console.log(index, JSON.stringify(contact));
-        //}
-      //});
     } catch (err) {
       console.log(err);
     }
