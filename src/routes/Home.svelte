@@ -5,7 +5,7 @@
   import { onMount, onDestroy } from 'svelte';
 
   import { TelegramKeyHash, Api, client } from '../utils/mtproto_client';
-  import QRModal from './QRModal.svelte';
+  import QRModal from '../widgets/QRModal.svelte';
 
   const navClass: string = 'homeNav';
 
@@ -19,7 +19,7 @@
   let password2FA: TextInputDialog;
   let optionMenu: OptionMenu;
 
-  let name: string = 'Home';
+  let name: string = 'Telekram';
   let phoneNumber = '+9996611077';
   let phoneCode = '11111';
   let phoneCodeHash = null;
@@ -226,6 +226,7 @@
               loadingBar.$destroy();
             }
             is_user_authorized();
+            reset_cursor();
             phoneCodeHash = null;
             password2FA.$destroy();
           } catch (err) {
@@ -263,6 +264,7 @@
       );
       console.log(result);
       is_user_authorized();
+      reset_cursor();
       phoneCodeHash = null;
     } catch (err) {
       if (err.errorMessage !== 'SESSION_PASSWORD_NEEDED') {
@@ -426,6 +428,7 @@
         excludePinned: true,
         folderId: 0,
       });
+      chatList = [];
       chats.forEach(chat => {
         if (chat.archived) {
           archivedList.push(chat);
@@ -433,10 +436,11 @@
           chatList.push(chat);
         }
       });
-      console.log(chatList);
+      //console.log(chatList);
       console.log(archivedList);
       const savedMessages = await client.getMessages("me");
       console.log(savedMessages);
+      reset_cursor();
     } catch(err) {
       console.log(err);
     }
@@ -506,6 +510,10 @@
     <span slot="leftWidget" class="kai-icon-arrow" style="margin:0px 5px;-moz-transform: scale(-1, 1);-webkit-transform: scale(-1, 1);-o-transform: scale(-1, 1);-ms-transform: scale(-1, 1);transform: scale(-1, 1);"></span>
     <span slot="rightWidget" class="kai-icon-arrow" style="margin:0px 5px;"></span>
   </Button>
+  {:else}
+  {#each chatList as chat}
+    <ListView className="{navClass}" title="{chat.name}" subtitle="{chat.message.message.substring(0, 70)}" onClick={() => console.log(chat)}/>
+  {/each}
   {/if}
 </main>
 
