@@ -324,13 +324,23 @@
   function sign_out() {}
 
   async function get_user() {
-
+    try {
+      const result = await client.invoke(
+        new Api.users.GetUsers({
+          id: [new Api.InputPeerSelf()],
+        })
+      );
+      return result;
+    } catch (err) {
+      console.log(err);
+    }
   }
 
   async function get_chats() {
     try {
+      const user = await get_user();
       const chats = await client.getDialogs({
-        offsetPeer: "arma7x",
+        offsetPeer: user[0].username,
         limit: 100,
         excludePinned: true,
         folderId: 0,
