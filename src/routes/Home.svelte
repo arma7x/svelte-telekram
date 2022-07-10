@@ -26,6 +26,7 @@
   let qrCode = null;
   let authStatus: boolean = false;
   let archivedList = [];
+  let archivedListName = [];
   let chatList = [];
 
   let navOptions = {
@@ -428,6 +429,8 @@
         excludePinned: true,
         folderId: 0,
       });
+      archivedList = [];
+      archivedListName = [];
       chatList = [];
       chats.forEach(chat => {
         if (chat.id.value === user[0].id.value) {
@@ -435,14 +438,15 @@
         }
         if (chat.archived) {
           archivedList.push(chat);
+          archivedListName.push(chat.name);
         } else {
           chatList.push(chat);
         }
       });
-      console.log(chatList);
-      console.log(archivedList);
-      //const savedMessages = await client.getMessages("me");
-      //console.log(savedMessages);
+      // console.log(chatList);
+      // console.log(archivedList);
+      // const savedMessages = await client.getMessages("me");
+      // console.log(savedMessages);
       reset_cursor();
     } catch(err) {
       console.log(err);
@@ -455,6 +459,8 @@
       if (qrModal) {
         qrModal.$destroy();
       }
+    } else {
+      console.log(evt);
     }
   }
 
@@ -515,7 +521,10 @@
   </Button>
   {:else}
   {#each chatList as chat}
-    <ListView className="{navClass}" title="{chat.name + (chat.unreadCount ? '(' + chat.unreadCount + ')' : '')}" subtitle="{chat.message.message.substring(0, 40)}" onClick={() => console.log(chat)}/>
+    {#if archivedList.length > 0 }
+      <ListView className="{navClass}" title="Archived Chats" subtitle="{archivedListName.join(', ').substring(0, 50)}" onClick={() => console.log(archivedList)}/>
+    {/if}
+    <ListView className="{navClass}" title="{chat.name + (chat.unreadCount ? '(' + chat.unreadCount + ')' : '')}" subtitle="{chat.message.message.substring(0, 50)}" onClick={() => console.log(chat)}/>
   {/each}
   {/if}
 </main>
