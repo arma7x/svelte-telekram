@@ -142,9 +142,6 @@
     }
   }
 
-  // https://github.com/alik0211/mtproto-core/issues/180
-  async function set_password() {};
-
   function sign_in_2fa() {
     password2FA = new TextInputDialog({
       target: document.body,
@@ -190,6 +187,7 @@
             }
             password2FA.$destroy();
             phoneCodeHash = null;
+            get_chats();
           } catch (err) {
             if (loadingBar) {
               loadingBar.$destroy();
@@ -230,6 +228,7 @@
         authStatus = authorized;
       }
       phoneCodeHash = null;
+      get_chats();
     } catch (err) {
       if (err.errorMessage !== 'SESSION_PASSWORD_NEEDED') {
         console.log(err);
@@ -297,6 +296,7 @@
         authStatus = authorized;
       }
       phoneCodeHash = null;
+      get_chats();
     } catch (err) {
       console.log(err);
     }
@@ -313,7 +313,13 @@
       );
       console.log(result);
       //if (result._ === 'auth.loginTokenSuccess') {
-        //get_user();
+        //const authorized = await client.isUserAuthorized();
+        //authStatus = false;
+        //if (authorized) {
+          //authStatus = authorized;
+        //}
+        //phoneCodeHash = null;
+        //get_chats();
       //} else if (result._ === 'auth.loginTokenMigrateTo') {
         //import_login_token(result.token);
       //}
@@ -394,6 +400,7 @@
       return client.isUserAuthorized();
     })
     .then((authorized) => {
+      get_chats();
       authStatus = authorized;
       console.log(authStatus);
       reset_sign_in();
@@ -435,14 +442,6 @@
   </Button>
   {/if}
   {:else}
-  <Button className="{navClass}" text="Get Chats" onClick={get_chats}>
-    <span slot="leftWidget" class="kai-icon-arrow" style="margin:0px 5px;-moz-transform: scale(-1, 1);-webkit-transform: scale(-1, 1);-o-transform: scale(-1, 1);-ms-transform: scale(-1, 1);transform: scale(-1, 1);"></span>
-    <span slot="rightWidget" class="kai-icon-arrow" style="margin:0px 5px;"></span>
-  </Button>
-  <Button className="{navClass}" text="Set Password" onClick={set_password}>
-    <span slot="leftWidget" class="kai-icon-arrow" style="margin:0px 5px;-moz-transform: scale(-1, 1);-webkit-transform: scale(-1, 1);-o-transform: scale(-1, 1);-ms-transform: scale(-1, 1);transform: scale(-1, 1);"></span>
-    <span slot="rightWidget" class="kai-icon-arrow" style="margin:0px 5px;"></span>
-  </Button>
   <Button className="{navClass}" text="Logout" onClick={sign_out}>
     <span slot="leftWidget" class="kai-icon-arrow" style="margin:0px 5px;-moz-transform: scale(-1, 1);-webkit-transform: scale(-1, 1);-o-transform: scale(-1, 1);-ms-transform: scale(-1, 1);transform: scale(-1, 1);"></span>
     <span slot="rightWidget" class="kai-icon-arrow" style="margin:0px 5px;"></span>
