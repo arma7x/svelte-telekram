@@ -18,6 +18,7 @@
   let qrModal: QRModal;
   let password2FA: TextInputDialog;
   let authorizedMenu: OptionMenu;
+  let archivedListMenu: OptionMenu;
 
   let name: string = 'Telekram';
   let phoneNumber = '+9996611077';
@@ -55,6 +56,40 @@
   };
 
   let navInstance = createKaiNavigator(navOptions);
+
+  function openArchivedListMenu() {
+    archivedListMenu = new OptionMenu({
+      target: document.body,
+      props: {
+        title: 'Menu',
+        focusIndex: 0,
+        options: archivedList,
+        softKeyLeftText: 'Select',
+        softKeyCenterText: '',
+        softKeyRightText: 'Unarchived',
+        onSoftkeyRight: (evt, scope) => {
+          archivedListMenu.$destroy();
+        },
+        onSoftkeyLeft: (evt, scope) => {
+          archivedListMenu.$destroy();
+        },
+        onEnter: (evt, scope) => {},
+        onBackspace: (evt, scope) => {
+          evt.preventDefault();
+          evt.stopPropagation();
+          archivedListMenu.$destroy();
+        },
+        onOpened: () => {
+          navInstance.detachListener();
+        },
+        onClosed: (scope) => {
+          console.log(scope);
+          navInstance.attachListener();
+          archivedListMenu = null;
+        }
+      }
+    });
+  }
 
   function openOptionMenu() {
     authorizedMenu = new OptionMenu({
@@ -437,6 +472,8 @@
           chat.name = 'Saved Messages';
         }
         if (chat.archived) {
+          if (chat.message && chat.message.message)
+            chat.subtitle = chat.message.message.substring(0, 50);
           archivedList.push(chat);
           archivedListName.push(chat.name);
         } else {
@@ -522,7 +559,7 @@
   {:else}
   {#each chatList as chat}
     {#if archivedList.length > 0 }
-      <ListView className="{navClass}" title="Archived Chats" subtitle="{archivedListName.join(', ').substring(0, 50)}" onClick={() => console.log(archivedList)}/>
+      <ListView className="{navClass}" title="Archived Chats" subtitle="{archivedListName.join(', ').substring(0, 50)}" onClick={openArchivedListMenu}/>
     {/if}
     <ListView className="{navClass}" title="{chat.name + (chat.unreadCount ? '(' + chat.unreadCount + ')' : '')}" subtitle="{chat.message.message.substring(0, 50)}" onClick={() => console.log(chat)}/>
   {/each}
