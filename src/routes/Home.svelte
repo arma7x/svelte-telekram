@@ -25,6 +25,8 @@
   let phoneCodeHash = null;
   let qrCode = null;
   let authStatus: boolean = false;
+  let archivedList = [];
+  let chatList = [];
 
   let navOptions = {
     verticalNavClass: navClass,
@@ -424,7 +426,15 @@
         excludePinned: true,
         folderId: 0,
       });
-      console.log(chats);
+      chats.forEach(chat => {
+        if (chat.archived) {
+          archivedList.push(chat);
+        } else {
+          chatList.push(chat);
+        }
+      });
+      console.log(chatList);
+      console.log(archivedList);
       const savedMessages = await client.getMessages("me");
       console.log(savedMessages);
     } catch(err) {
