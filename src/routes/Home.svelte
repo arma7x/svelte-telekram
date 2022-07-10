@@ -8,6 +8,13 @@
   import { concatBytes, bigIntToBytes, bytesToBigInt } from '@mtproto/core/src/utils/common';
   import QRModal from './QRModal.svelte';
 
+  import TelegramKeyHash from '../telegram_key';
+
+  const { Api, TelegramClient } = telegram;
+  const { StoreSession } = telegram.sessions;
+  const session = new StoreSession("gramjs");
+  let client: typeof TelegramClient;
+
   const navClass: string = 'homeNav';
 
   export let location: any;
@@ -144,50 +151,7 @@
   }
 
   // https://github.com/alik0211/mtproto-core/issues/180
-  async function set_password() {
-
-    let oldPass = prompt('oldPass');
-    let newPass = prompt('newPass');
-    let hint = 'who i am';
-
-    if (oldPass === newPass)
-      return;
-
-    const psetting = await api.call('account.getPassword');
-    if (psetting.has_password && !oldPass)
-      return;
-
-    const { new_algo, srp_id, srp_B, current_algo } = psetting;
-
-    let inputCheckPasswordSRP = { _: 'inputCheckPasswordEmpty' };
-
-    if (psetting.has_password) {
-      const { A, M1 } = await api.mtproto.crypto.getSRPParams({ ...current_algo, gB: srp_B, password: oldPass });
-      inputCheckPasswordSRP = { _: 'inputCheckPasswordSRP', srp_id, A, M1 };
-    }
-
-    new_algo.salt1 = concatBytes(new_algo.salt1, api.mtproto.envMethods.getRandomBytes(24));
-
-    const { SHA256, PBKDF2 } = api.mtproto.crypto;
-    const SH = (data, salt) => SHA256(concatBytes(salt, data, salt));
-    const PH1 = async (password, salt1, salt2) => SH(await SH(password, salt1), salt2);
-    const PH2 = async (password, salt1, salt2) => SH(await PBKDF2(await PH1(password, salt1, salt2), salt1, 100000), salt2);
-
-    const encoder = new TextEncoder();
-
-    const gBigInt = bigInt(new_algo.g);
-    const pBigInt = bytesToBigInt(new_algo.p);
-
-    const x = await PH2(encoder.encode(newPass), new_algo.salt1, new_algo.salt2);
-    const xBigInt = bytesToBigInt(x);
-    const vBigInt = gBigInt.modPow(xBigInt, pBigInt);
-
-    const V = bigIntToBytes(vBigInt);
-
-    const passwordInputSettings = { _: 'account.passwordInputSettings', new_algo, new_password_hash: V, hint: hint };
-
-    return await api.call('account.updatePasswordSettings', { password: inputCheckPasswordSRP, new_settings: passwordInputSettings });
-  };
+  async function set_password() {};
 
   function sign_in_2fa() {
     password2FA = new TextInputDialog({
@@ -206,25 +170,29 @@
         onEnter: async (evt, password) => {
           try {
             showLoadingBar();
-            const crypto_worker = new Worker("/js/worker.js");
-
-            const { srp_id, current_algo, srp_B } = await api.call('account.getPassword');
-            const { g, p, salt1, salt2 } = current_algo;
-            crypto_worker.postMessage({ g, p, salt1, salt2, gB: srp_B, password });
-
-            crypto_worker.onmessage = async (e) => {
-              if (e.data.status === 1) {
-                const { A, M1 } = e.data.result;
-                await api.call('auth.checkPassword', { password: { _: 'inputCheckPasswordSRP', srp_id, A, M1 } });
-                get_user();
-                if (loadingBar) {
-                  loadingBar.$destroy();
+            const result = client.signInWithPassword(
+              {
+                apiId: parseInt(TelegramKeyHash.api_id),
+                apiHash: TelegramKeyHash.api_hash,
+              },
+              {
+                password: (hint) => {
+                  return Promise.resolve(password);
+                },
+                onError: (err) => {
+                  if (loadingBar) {
+                    loadingBar.$destroy();
+                  }
+                  console.log(err);
                 }
-                password2FA.$destroy();
-              } else {
-                throw e.data.result;
               }
+            );
+            console.log(result);
+            if (loadingBar) {
+              loadingBar.$destroy();
             }
+            if (result)
+              password2FA.$destroy();
           } catch (err) {
             if (loadingBar) {
               loadingBar.$destroy();
@@ -247,61 +215,46 @@
 
   }
 
-  function sign_up() {
-  // redirect sign_up page
-    //api.call('auth.signUp', {
-      //phone_number: phoneNumber,
-      //phone_code_hash: phoneCodeHash,
-      //first_name: 'MTProto',
-      //last_name: 'Core',
-    //})
-    //.then(result => {
-      //send_code();
-    //})
-    //.catch(err => {
-      //console.log(err);
-    //});
-  }
+  function sign_up() {}
 
-  function sign_in() {
-    api.call('auth.signIn', {
-      phone_code: phoneCode,
-      phone_number: phoneNumber,
-      phone_code_hash: phoneCodeHash,
-    })
-    .then(result => {
-      if (result._ === 'auth.authorizationSignUpRequired') {
-        sign_up();
-        return
-      } else if (result._ === 'auth.authorization' && result.setup_password_required) {
-        // toast setup 2fa;
-      }
-      get_user();
-    })
-    .catch(err => {
-      if (err.error_message !== 'SESSION_PASSWORD_NEEDED') {
+  async function sign_in() {
+    try {
+      const result = await client.invoke(
+        new Api.auth.SignIn({
+          phoneNumber: phoneNumber,
+          phoneCodeHash: phoneCodeHash,
+          phoneCode: phoneCode,
+        })
+      );
+      console.log(result); // prints the result
+    } catch (err) {
+      if (err.errorMessage !== 'SESSION_PASSWORD_NEEDED') {
         console.log('error:', err);
         return;
       }
       sign_in_2fa();
-    });
+    }
   }
 
-  function send_code() {
-    api.call('auth.sendCode', {
-      phone_number: phoneNumber,
-      settings: {
-        _: 'codeSettings',
-      },
-    })
-    .then(result => {
-      // console.log('auth.sendCode:', phoneNumber, result);
-      phoneCodeHash = result.phone_code_hash;
+  async function send_code() {
+    try {
+      const result = await client.invoke(
+        new Api.auth.SendCode({
+          phoneNumber: phoneNumber,
+          apiId: parseInt(TelegramKeyHash.api_id),
+          apiHash: TelegramKeyHash.api_hash,
+          settings: new Api.CodeSettings({
+            allowFlashcall: true,
+            currentNumber: true,
+            allowAppHash: true,
+          }),
+        })
+      );
+      phoneCodeHash = result.phoneCodeHash;
       reset_cursor();
-    })
-    .catch(err => {
+    } catch (err) {
       console.log(err);
-    });
+    }
   }
 
   function sign_in_qr() {
@@ -366,75 +319,11 @@
     reset_cursor();
   }
 
-  function sign_out() {
-    api.call('auth.logOut')
-    .finally(() => {
-      get_user();
-    });
-  }
+  function sign_out() {}
 
-  function get_user() {
-    const { softwareKey } = getAppProp();
-    api.call('users.getFullUser', {
-      id: {
-        _: 'inputUserSelf',
-      },
-    })
-    .then(user => {
-      console.log(user);
-      authStatus = true;
-      if (inputSoftwareKey) {
-        inputSoftwareKey.$destroy();
-        inputSoftwareKey = null;
-      }
-      softwareKey.setLeftText('Menu');
-      softwareKey.setRightText('Search');
-    })
-    .catch(err => {
-      console.log(err);
-      authStatus = false;
-      softwareKey.setLeftText('');
-      softwareKey.setRightText('');
-    })
-    .finally(() => {
-      phoneCodeHash = null;
-      reset_cursor();
-    });
-  }
+  function get_user() {}
 
-  async function get_chats() {
-    try {
-      const response = await api.call('messages.getDialogs', {
-        offset_id: 0,
-        limit: 100,
-        hash: 0,
-        exclude_pinned: false,
-        offset_peer: { _: "inputPeerSelf", }
-      });
-      let except_ids = [];
-      response.chats.forEach((chat, index) => {
-        console.log(index, chat);
-        except_ids.push(chat.id);
-      });
-      console.log('---------');
-      const history = await api.call('messages.getAllChats', {
-        except_ids: except_ids
-      });
-      console.log(history);
-    } catch (err) {
-      console.log(err);
-    }
-  }
-
-  function onUpdateShort(updateInfo) {
-    if (updateInfo.update && updateInfo.update._ === "updateLoginToken") {
-      // console.log(updateInfo.update);
-      export_login_token();
-      if (qrModal) {
-        qrModal.$destroy();
-      }
-    }
-  }
+  async function get_chats() {}
 
   onMount(() => {
     const { appBar, softwareKey } = getAppProp();
@@ -442,19 +331,13 @@
     softwareKey.setText({ left: '', center: 'SELECT', right: '' });
     navInstance.attachListener();
 
-    get_user();
-    api.mtproto.updates.addListener('updateShort', onUpdateShort);
-    api.call('help.getNearestDc')
-    .then(result => {
-      console.log('country:', result.country);
-    })
-    .catch(err => {
-      console.log(err);
-    });
+    //........
+    client = new TelegramClient(session, parseInt(TelegramKeyHash.api_id), TelegramKeyHash.api_hash);
+    client.connect();
+
   });
 
   onDestroy(() => {
-    api.mtproto.updates.removeListener('updateShort', onUpdateShort);
     navInstance.detachListener();
   });
 
