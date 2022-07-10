@@ -4,16 +4,8 @@
   import { ListView, LoadingBar, Button, TextInputField, Toast, Toaster, SoftwareKey, TextInputDialog } from '../components';
   import { onMount, onDestroy } from 'svelte';
 
-  import { api, bigInt } from '../utils/mtproto_client';
-  import { concatBytes, bigIntToBytes, bytesToBigInt } from '@mtproto/core/src/utils/common';
+  import { TelegramKeyHash, Api, client } from '../utils/mtproto_client';
   import QRModal from './QRModal.svelte';
-
-  import TelegramKeyHash from '../telegram_key';
-
-  const { Api, TelegramClient } = telegram;
-  const { StoreSession } = telegram.sessions;
-  const session = new StoreSession("gramjs");
-  let client: typeof TelegramClient;
 
   const navClass: string = 'homeNav';
 
@@ -231,10 +223,16 @@
           phoneCode: phoneCode,
         })
       );
-      console.log(result); // prints the result
+      console.log(result);
+      const authorized = await client.isUserAuthorized();
+      authStatus = false;
+      if (authorized) {
+        authStatus = authorized;
+      }
+      phoneCodeHash = null;
     } catch (err) {
       if (err.errorMessage !== 'SESSION_PASSWORD_NEEDED') {
-        console.log('error:', err);
+        console.log(err);
         return;
       }
       sign_in_2fa();
@@ -285,38 +283,47 @@
     }, 100);
   }
 
-  function import_login_token(token) {
-    api.call('auth.importLoginToken', { token: token })
-    .then(result => {
-      // console.log(result);
-      get_user();
-    })
-    .catch(err => {
+  async function import_login_token(token) {
+    try {
+      const result = await client.invoke(
+        new Api.auth.ImportLoginToken({
+          token: token, //Buffer.from("arbitrary data here"),
+        })
+      );
+      console.log(result);
+      const authorized = await client.isUserAuthorized();
+      authStatus = false;
+      if (authorized) {
+        authStatus = authorized;
+      }
+      phoneCodeHash = null;
+    } catch (err) {
       console.log(err);
-    });
+    }
   }
 
-  function export_login_token() {
-    api.call('auth.exportLoginToken', {
-      api_id: api.mtproto.api_id,
-      api_hash: api.mtproto.api_hash,
-      except_ids: [],
-    })
-    .then(result => {
-      // console.log(result);
-      if (result._ === 'auth.loginTokenSuccess') {
-        get_user();
-      } else if (result._ === 'auth.loginTokenMigrateTo') {
-        import_login_token(result.token);
-      }
-    })
-    .catch(err => {
-      if (err.error_message !== 'SESSION_PASSWORD_NEEDED') {
-        console.log('error:', err);
+  async function export_login_token() {
+    try {
+      const result = await client.invoke(
+        new Api.auth.ExportLoginToken({
+          apiId: parseInt(TelegramKeyHash.api_id),
+          apiHash: TelegramKeyHash.api_hash,
+          exceptIds: [],
+        })
+      );
+      console.log(result);
+      //if (result._ === 'auth.loginTokenSuccess') {
+        //get_user();
+      //} else if (result._ === 'auth.loginTokenMigrateTo') {
+        //import_login_token(result.token);
+      //}
+    } catch (err) {
+      if (err.errorMessage !== 'SESSION_PASSWORD_NEEDED') {
+        console.log(err);
         return;
       }
       sign_in_2fa();
-    });
+    }
   }
 
   function reset_sign_in() {
@@ -358,12 +365,20 @@
         excludePinned: true,
         folderId: 0,
       });
-      console.log(chats); // prints the result
-
-      const me = await client.getMessages("me");
-      console.log(me); // prints the result
+      console.log(chats);
+      const savedMessages = await client.getMessages("me");
+      console.log(savedMessages);
     } catch(err) {
       console.log(err);
+    }
+  }
+
+  function eventHandler(evt) {
+    if (evt.className === "UpdateLoginToken") {
+      export_login_token();
+      if (qrModal) {
+        qrModal.$destroy();
+      }
     }
   }
 
@@ -373,7 +388,7 @@
     softwareKey.setText({ left: '', center: 'SELECT', right: '' });
     navInstance.attachListener();
 
-    client = new TelegramClient(session, parseInt(TelegramKeyHash.api_id), TelegramKeyHash.api_hash);
+    client.addEventHandler(eventHandler);
     client.connect()
     .then(() => {
       return client.isUserAuthorized();
@@ -390,6 +405,7 @@
   });
 
   onDestroy(() => {
+    client.removeEventHandler(eventHandler);
     navInstance.detachListener();
   });
 

@@ -2,7 +2,7 @@
   import { onMount, onDestroy } from 'svelte';
   import { createKaiNavigator } from '../utils/navigation';
   import { SoftwareKey, Separator } from '../components';
-  import { api } from '../utils/mtproto_client';
+  import { TelegramKeyHash, Api, client } from '../utils/mtproto_client';
   import QRCode from 'QRCode';
 
   export let title: string = 'Log-In via QR Code';
@@ -25,7 +25,7 @@
 
   let navInstance = createKaiNavigator(navOptions);
 
-  function export_login_token() {
+  async function export_login_token() {
     if (regenerate != null) {
       clearTimeout(regenerate);
       regenerate = null;
@@ -35,32 +35,32 @@
     }
     const container = document.getElementById('qr-container');
     container.textContent = '';
-    api.call('auth.exportLoginToken', {
-      api_id: api.mtproto.api_id,
-      api_hash: api.mtproto.api_hash,
-      except_ids: [],
-    })
-    .then(result => {
-      if (result._ === 'auth.loginToken') {
-        const data = `tg://login?token=${btoa(String.fromCharCode.apply(null, result.token))}`;
-        qrcode = new QRCode(container, {
-          text: data,
-          width: 200,
-          height: 200,
-          colorDark : "#000000",
-          colorLight : "#ffffff",
-          correctLevel : QRCode.CorrectLevel.H
-        });
-      }
-    })
-    .catch(err => {
+
+    try {
+      const result = await client.invoke(
+        new Api.auth.ExportLoginToken({
+          apiId: parseInt(TelegramKeyHash.api_id),
+          apiHash: TelegramKeyHash.api_hash,
+          exceptIds: [],
+        })
+      );
+      console.log(result); // prints the result
+      const data = `tg://login?token=${btoa(String.fromCharCode.apply(null, result.token))}`;
+      qrcode = new QRCode(container, {
+        text: data,
+        width: 200,
+        height: 200,
+        colorDark : "#000000",
+        colorLight : "#ffffff",
+        correctLevel : QRCode.CorrectLevel.H
+      });
+    } catch (err) {
       console.log(err);
-    })
-    .finally(() => {
-      regenerate = setTimeout(() => {
-        export_login_token();
-      }, 31000);
-    });
+    }
+    regenerate = setTimeout(() => {
+      export_login_token();
+    }, 31000);
+
   }
 
   onMount(() => {
