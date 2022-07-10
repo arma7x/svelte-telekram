@@ -191,8 +191,10 @@
             if (loadingBar) {
               loadingBar.$destroy();
             }
-            if (result)
+            if (result) {
               password2FA.$destroy();
+              phoneCodeHash = null;
+            }
           } catch (err) {
             if (loadingBar) {
               loadingBar.$destroy();
@@ -321,9 +323,26 @@
 
   function sign_out() {}
 
-  function get_user() {}
+  async function get_user() {
 
-  async function get_chats() {}
+  }
+
+  async function get_chats() {
+    try {
+      const chats = await client.getDialogs({
+        offsetPeer: "arma7x",
+        limit: 100,
+        excludePinned: true,
+        folderId: 0,
+      });
+      console.log(chats); // prints the result
+
+      const me = await client.getMessages("me");
+      console.log(me); // prints the result
+    } catch(err) {
+      console.log(err);
+    }
+  }
 
   onMount(() => {
     const { appBar, softwareKey } = getAppProp();
@@ -331,9 +350,18 @@
     softwareKey.setText({ left: '', center: 'SELECT', right: '' });
     navInstance.attachListener();
 
-    //........
     client = new TelegramClient(session, parseInt(TelegramKeyHash.api_id), TelegramKeyHash.api_hash);
-    client.connect();
+    client.connect()
+    .then(() => {
+      return client.isUserAuthorized();
+    })
+    .then((authorized) => {
+      authStatus = authorized;
+      console.log(authStatus);
+    })
+    .catch((err) => {
+      console.log(err);
+    });
 
   });
 
