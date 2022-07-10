@@ -44,7 +44,7 @@
           exceptIds: [],
         })
       );
-      console.log(result); // prints the result
+      console.log(result);
       const data = `tg://login?token=${btoa(String.fromCharCode.apply(null, result.token))}`;
       qrcode = new QRCode(container, {
         text: data,
