@@ -515,7 +515,7 @@
   </Button>
   {:else}
   {#each chatList as chat}
-    <ListView className="{navClass}" title="{chat.name}" subtitle="{chat.message.message.substring(0, 40)}" onClick={() => console.log(chat)}/>
+    <ListView className="{navClass}" title="{chat.name + (chat.unreadCount ? '(' + chat.unreadCount + ')' : '')}" subtitle="{chat.message.message.substring(0, 40)}" onClick={() => console.log(chat)}/>
   {/each}
   {/if}
 </main>
