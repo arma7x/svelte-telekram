@@ -180,14 +180,9 @@
             if (loadingBar) {
               loadingBar.$destroy();
             }
-            const authorized = await client.isUserAuthorized();
-            authStatus = false;
-            if (authorized) {
-              authStatus = authorized;
-            }
-            password2FA.$destroy();
+            is_user_authorized();
             phoneCodeHash = null;
-            get_chats();
+            password2FA.$destroy();
           } catch (err) {
             if (loadingBar) {
               loadingBar.$destroy();
@@ -222,13 +217,8 @@
         })
       );
       console.log(result);
-      const authorized = await client.isUserAuthorized();
-      authStatus = false;
-      if (authorized) {
-        authStatus = authorized;
-      }
+      is_user_authorized();
       phoneCodeHash = null;
-      get_chats();
     } catch (err) {
       if (err.errorMessage !== 'SESSION_PASSWORD_NEEDED') {
         console.log(err);
@@ -290,13 +280,8 @@
         })
       );
       console.log(result);
-      const authorized = await client.isUserAuthorized();
-      authStatus = false;
-      if (authorized) {
-        authStatus = authorized;
-      }
+      is_user_authorized();
       phoneCodeHash = null;
-      get_chats();
     } catch (err) {
       console.log(err);
     }
@@ -313,13 +298,8 @@
       );
       console.log(result);
       //if (result._ === 'auth.loginTokenSuccess') {
-        //const authorized = await client.isUserAuthorized();
-        //authStatus = false;
-        //if (authorized) {
-          //authStatus = authorized;
-        //}
+        //is_user_authorized();
         //phoneCodeHash = null;
-        //get_chats();
       //} else if (result._ === 'auth.loginTokenMigrateTo') {
         //import_login_token(result.token);
       //}
@@ -341,9 +321,21 @@
     try {
       const result = await client.invoke(new Api.auth.LogOut({}));
       console.log(result);
+      is_user_authorized();
+      phoneCodeHash = null;
+    } catch (err) {
+      console.log(err);
+    }
+  }
+
+  async function is_user_authorized() {
+    try {
       const authorized = await client.isUserAuthorized();
-      authStatus = authorized;
-      reset_sign_in();
+      authStatus = false;
+      if (authorized) {
+        authStatus = authorized;
+        get_chats();
+      }
     } catch (err) {
       console.log(err);
     }
@@ -400,9 +392,7 @@
       return client.isUserAuthorized();
     })
     .then((authorized) => {
-      get_chats();
-      authStatus = authorized;
-      console.log(authStatus);
+      is_user_authorized();
       reset_sign_in();
     })
     .catch((err) => {
