@@ -458,9 +458,9 @@
         excludePinned: true,
         folderId: 0,
       });
-      archivedChatList = [];
       archivedChatListName = [];
-      chatList = [];
+      let _archivedChatList = [];
+      let _chatList = [];
       chats.forEach(chat => {
         if (chat.id.value === user[0].id.value) {
           chat.name = 'Saved Messages';
@@ -468,13 +468,15 @@
         if (chat.archived) {
           if (chat.message && chat.message.message)
             chat.subtitle = chat.message.message.substring(0, 50);
-          archivedChatList.push(chat);
           archivedChatListName.push(chat.name);
+          _archivedChatList.push(chat);
         } else {
-          chatList.push(chat);
+          _chatList.push(chat);
         }
       });
-      console.log(chatList);
+      chatList = _chatList
+      archivedChatList = _archivedChatList
+      // console.log(chatList);
       // console.log(archivedChatList);
       // const savedMessages = await client.getMessages("me");
       // console.log(savedMessages);
