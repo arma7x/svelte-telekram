@@ -17,7 +17,7 @@
   let inputSoftwareKey: SoftwareKey;
   let qrModal: QRModal;
   let password2FA: TextInputDialog;
-  let optionMenu: OptionMenu;
+  let authorizedMenu: OptionMenu;
 
   let name: string = 'Telekram';
   let phoneNumber = '+9996611077';
@@ -57,7 +57,7 @@
   let navInstance = createKaiNavigator(navOptions);
 
   function openOptionMenu() {
-    optionMenu = new OptionMenu({
+    authorizedMenu = new OptionMenu({
       target: document.body,
       props: {
         title: 'Menu',
@@ -75,14 +75,14 @@
         },
         onEnter: (evt, scope) => {
           console.log('onEnter', scope);
-          optionMenuIndex = scope.index;
-          optionMenu.$destroy();
+          authorizedMenuIndex = scope.index;
+          authorizedMenu.$destroy();
         },
         onBackspace: (evt, scope) => {
           console.log('onBackspace', scope);
           evt.preventDefault();
           evt.stopPropagation();
-          optionMenu.$destroy();
+          authorizedMenu.$destroy();
         },
         onOpened: () => {
           navInstance.detachListener();
@@ -90,7 +90,7 @@
         onClosed: (scope) => {
           console.log(scope);
           navInstance.attachListener();
-          optionMenu = null;
+          authorizedMenu = null;
         }
       }
     });
