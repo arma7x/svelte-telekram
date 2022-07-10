@@ -236,7 +236,7 @@
             showLoadingBar();
             const result = await client.signInWithPassword(
               {
-                apiId: parseInt(TelegramKeyHash.api_id),
+                apiId: TelegramKeyHash.api_id,
                 apiHash: TelegramKeyHash.api_hash,
               },
               {
@@ -310,7 +310,7 @@
       const result = await client.invoke(
         new Api.auth.SendCode({
           phoneNumber: phoneNumber,
-          apiId: parseInt(TelegramKeyHash.api_id),
+          apiId: TelegramKeyHash.api_id,
           apiHash: TelegramKeyHash.api_hash,
           settings: new Api.CodeSettings({
             allowFlashcall: true,
@@ -368,7 +368,7 @@
     try {
       const result = await client.invoke(
         new Api.auth.ExportLoginToken({
-          apiId: parseInt(TelegramKeyHash.api_id),
+          apiId: TelegramKeyHash.api_id,
           apiHash: TelegramKeyHash.api_hash,
           exceptIds: [],
         })
@@ -474,7 +474,7 @@
           chatList.push(chat);
         }
       });
-      // console.log(chatList);
+      console.log(chatList);
       // console.log(archivedChatList);
       // const savedMessages = await client.getMessages("me");
       // console.log(savedMessages);
