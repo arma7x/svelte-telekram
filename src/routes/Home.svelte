@@ -18,7 +18,7 @@
   let qrModal: QRModal;
   let password2FA: TextInputDialog;
   let authorizedMenu: OptionMenu;
-  let archivedListMenu: OptionMenu;
+  let archivedChatListMenu: OptionMenu;
 
   let name: string = 'Telekram';
   let phoneNumber = '+9996611077';
@@ -26,8 +26,8 @@
   let phoneCodeHash = null;
   let qrCode = null;
   let authStatus: boolean = false;
-  let archivedList = [];
-  let archivedListName = [];
+  let archivedChatList = [];
+  let archivedChatListName = [];
   let chatList = [];
 
   let navOptions = {
@@ -36,7 +36,7 @@
       if (inputSoftwareKey || qrModal|| password2FA)
         return;
       if (authStatus)
-        openOptionMenu();
+        openAuthorizedMenu();
     },
     softkeyRightListener: function(evt) {
       if (inputSoftwareKey || qrModal|| password2FA)
@@ -57,41 +57,40 @@
 
   let navInstance = createKaiNavigator(navOptions);
 
-  function openArchivedListMenu() {
-    archivedListMenu = new OptionMenu({
+  function openArchivedChatListMenu() {
+    archivedChatListMenu = new OptionMenu({
       target: document.body,
       props: {
-        title: 'Menu',
+        title: 'Archived Chats',
         focusIndex: 0,
-        options: archivedList,
+        options: archivedChatList,
         softKeyLeftText: 'Select',
         softKeyCenterText: '',
         softKeyRightText: 'Unarchived',
         onSoftkeyRight: (evt, scope) => {
-          archivedListMenu.$destroy();
+          archivedChatListMenu.$destroy();
         },
         onSoftkeyLeft: (evt, scope) => {
-          archivedListMenu.$destroy();
+          archivedChatListMenu.$destroy();
         },
         onEnter: (evt, scope) => {},
         onBackspace: (evt, scope) => {
           evt.preventDefault();
           evt.stopPropagation();
-          archivedListMenu.$destroy();
+          archivedChatListMenu.$destroy();
         },
         onOpened: () => {
           navInstance.detachListener();
         },
         onClosed: (scope) => {
-          console.log(scope);
           navInstance.attachListener();
-          archivedListMenu = null;
+          archivedChatListMenu = null;
         }
       }
     });
   }
 
-  function openOptionMenu() {
+  function openAuthorizedMenu() {
     authorizedMenu = new OptionMenu({
       target: document.body,
       props: {
@@ -102,19 +101,15 @@
           { title: 'Exit' },
         ],
         softKeyCenterText: 'select',
-        onSoftkeyRight: (evt, scope) => {
-          console.log('onSoftkeyRight', scope);
-        },
-        onSoftkeyLeft: (evt, scope) => {
-          console.log('onSoftkeyRight', scope);
-        },
+        onSoftkeyRight: (evt, scope) => {},
+        onSoftkeyLeft: (evt, scope) => {},
         onEnter: (evt, scope) => {
-          console.log('onEnter', scope);
-          authorizedMenuIndex = scope.index;
+          if (scope.selected.title === 'Exit') {
+            window.close();
+          }
           authorizedMenu.$destroy();
         },
         onBackspace: (evt, scope) => {
-          console.log('onBackspace', scope);
           evt.preventDefault();
           evt.stopPropagation();
           authorizedMenu.$destroy();
@@ -123,7 +118,6 @@
           navInstance.detachListener();
         },
         onClosed: (scope) => {
-          console.log(scope);
           navInstance.attachListener();
           authorizedMenu = null;
         }
@@ -464,8 +458,8 @@
         excludePinned: true,
         folderId: 0,
       });
-      archivedList = [];
-      archivedListName = [];
+      archivedChatList = [];
+      archivedChatListName = [];
       chatList = [];
       chats.forEach(chat => {
         if (chat.id.value === user[0].id.value) {
@@ -474,14 +468,14 @@
         if (chat.archived) {
           if (chat.message && chat.message.message)
             chat.subtitle = chat.message.message.substring(0, 50);
-          archivedList.push(chat);
-          archivedListName.push(chat.name);
+          archivedChatList.push(chat);
+          archivedChatListName.push(chat.name);
         } else {
           chatList.push(chat);
         }
       });
       // console.log(chatList);
-      // console.log(archivedList);
+      // console.log(archivedChatList);
       // const savedMessages = await client.getMessages("me");
       // console.log(savedMessages);
       reset_cursor();
@@ -558,8 +552,8 @@
   </Button>
   {:else}
   {#each chatList as chat}
-    {#if archivedList.length > 0 }
-      <ListView className="{navClass}" title="Archived Chats" subtitle="{archivedListName.join(', ').substring(0, 50)}" onClick={openArchivedListMenu}/>
+    {#if archivedChatList.length > 0 }
+      <ListView className="{navClass}" title="Archived Chats" subtitle="{archivedChatListName.join(', ').substring(0, 50)}" onClick={openArchivedChatListMenu}/>
     {/if}
     <ListView className="{navClass}" title="{chat.name + (chat.unreadCount ? '(' + chat.unreadCount + ')' : '')}" subtitle="{chat.message.message.substring(0, 50)}" onClick={() => console.log(chat)}/>
   {/each}
