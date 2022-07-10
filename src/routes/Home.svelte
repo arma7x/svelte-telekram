@@ -1,7 +1,7 @@
 <script lang="ts">
   import { Route, navigate as goto } from "svelte-navigator";
   import { createKaiNavigator } from '../utils/navigation';
-  import { ListView, LoadingBar, Button, TextInputField, Toast, Toaster, SoftwareKey, TextInputDialog } from '../components';
+  import { ListView, LoadingBar, Button, TextInputField, Toast, Toaster, SoftwareKey, TextInputDialog, OptionMenu } from '../components';
   import { onMount, onDestroy } from 'svelte';
 
   import { TelegramKeyHash, Api, client } from '../utils/mtproto_client';
@@ -17,6 +17,7 @@
   let inputSoftwareKey: SoftwareKey;
   let qrModal: QRModal;
   let password2FA: TextInputDialog;
+  let optionMenu: OptionMenu;
 
   let name: string = 'Home';
   let phoneNumber = '+9996611077';
@@ -30,6 +31,8 @@
     softkeyLeftListener: function(evt) {
       if (inputSoftwareKey || qrModal|| password2FA)
         return;
+      if (authStatus)
+        openOptionMenu();
     },
     softkeyRightListener: function(evt) {
       if (inputSoftwareKey || qrModal|| password2FA)
@@ -49,6 +52,46 @@
   };
 
   let navInstance = createKaiNavigator(navOptions);
+
+  function openOptionMenu() {
+    optionMenu = new OptionMenu({
+      target: document.body,
+      props: {
+        title: 'Menu',
+        focusIndex: 0,
+        options: [
+          { title: 'Logout' },
+          { title: 'Exit' },
+        ],
+        softKeyCenterText: 'select',
+        onSoftkeyRight: (evt, scope) => {
+          console.log('onSoftkeyRight', scope);
+        },
+        onSoftkeyLeft: (evt, scope) => {
+          console.log('onSoftkeyRight', scope);
+        },
+        onEnter: (evt, scope) => {
+          console.log('onEnter', scope);
+          optionMenuIndex = scope.index;
+          optionMenu.$destroy();
+        },
+        onBackspace: (evt, scope) => {
+          console.log('onBackspace', scope);
+          evt.preventDefault();
+          evt.stopPropagation();
+          optionMenu.$destroy();
+        },
+        onOpened: () => {
+          navInstance.detachListener();
+        },
+        onClosed: (scope) => {
+          console.log(scope);
+          navInstance.attachListener();
+          optionMenu = null;
+        }
+      }
+    });
+  }
 
   function reset_cursor() {
     if (qrModal != null || password2FA != null)
@@ -329,12 +372,30 @@
   }
 
   async function is_user_authorized() {
+    const { softwareKey } = getAppProp();
     try {
       const authorized = await client.isUserAuthorized();
       authStatus = false;
       if (authorized) {
         authStatus = authorized;
         get_chats();
+        softwareKey.setLeftText('Menu');
+        softwareKey.setRightText('Search');
+        if (inputSoftwareKey) {
+          inputSoftwareKey.$destroy();
+          inputSoftwareKey = null;
+        }
+        if (qrModal) {
+          qrModal.$destroy();
+          qrModal = null;
+        }
+        if (password2FA) {
+          password2FA.$destroy();
+          password2FA = null;
+        }
+      } else {
+        softwareKey.setLeftText('');
+        softwareKey.setRightText('');
       }
     } catch (err) {
       console.log(err);
@@ -431,16 +492,11 @@
     <span slot="rightWidget" class="kai-icon-arrow" style="margin:0px 5px;"></span>
   </Button>
   {/if}
-  {:else}
-  <Button className="{navClass}" text="Logout" onClick={sign_out}>
-    <span slot="leftWidget" class="kai-icon-arrow" style="margin:0px 5px;-moz-transform: scale(-1, 1);-webkit-transform: scale(-1, 1);-o-transform: scale(-1, 1);-ms-transform: scale(-1, 1);transform: scale(-1, 1);"></span>
-    <span slot="rightWidget" class="kai-icon-arrow" style="margin:0px 5px;"></span>
-  </Button>
-  {/if}
   <Button className="{navClass}" text="Exit" onClick={onButtonClick}>
     <span slot="leftWidget" class="kai-icon-arrow" style="margin:0px 5px;-moz-transform: scale(-1, 1);-webkit-transform: scale(-1, 1);-o-transform: scale(-1, 1);-ms-transform: scale(-1, 1);transform: scale(-1, 1);"></span>
     <span slot="rightWidget" class="kai-icon-arrow" style="margin:0px 5px;"></span>
   </Button>
+  {/if}
 </main>
 
 <style>
