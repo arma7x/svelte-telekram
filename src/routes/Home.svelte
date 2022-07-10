@@ -170,7 +170,7 @@
         onEnter: async (evt, password) => {
           try {
             showLoadingBar();
-            const result = client.signInWithPassword(
+            const result = await client.signInWithPassword(
               {
                 apiId: parseInt(TelegramKeyHash.api_id),
                 apiHash: TelegramKeyHash.api_hash,
@@ -191,10 +191,13 @@
             if (loadingBar) {
               loadingBar.$destroy();
             }
-            if (result) {
-              password2FA.$destroy();
-              phoneCodeHash = null;
+            const authorized = await client.isUserAuthorized();
+            authStatus = false;
+            if (authorized) {
+              authStatus = authorized;
             }
+            password2FA.$destroy();
+            phoneCodeHash = null;
           } catch (err) {
             if (loadingBar) {
               loadingBar.$destroy();
@@ -321,7 +324,17 @@
     reset_cursor();
   }
 
-  function sign_out() {}
+  async function sign_out() {
+    try {
+      const result = await client.invoke(new Api.auth.LogOut({}));
+      console.log(result);
+      const authorized = await client.isUserAuthorized();
+      authStatus = authorized;
+      reset_sign_in();
+    } catch (err) {
+      console.log(err);
+    }
+  }
 
   async function get_user() {
     try {
@@ -368,6 +381,7 @@
     .then((authorized) => {
       authStatus = authorized;
       console.log(authStatus);
+      reset_sign_in();
     })
     .catch((err) => {
       console.log(err);
