@@ -430,16 +430,19 @@
       });
       chatList = [];
       chats.forEach(chat => {
+        if (chat.id.value === user[0].id.value) {
+          chat.name = 'Saved Messages';
+        }
         if (chat.archived) {
           archivedList.push(chat);
         } else {
           chatList.push(chat);
         }
       });
-      //console.log(chatList);
+      console.log(chatList);
       console.log(archivedList);
-      const savedMessages = await client.getMessages("me");
-      console.log(savedMessages);
+      //const savedMessages = await client.getMessages("me");
+      //console.log(savedMessages);
       reset_cursor();
     } catch(err) {
       console.log(err);
@@ -512,7 +515,7 @@
   </Button>
   {:else}
   {#each chatList as chat}
-    <ListView className="{navClass}" title="{chat.name}" subtitle="{chat.message.message.substring(0, 70)}" onClick={() => console.log(chat)}/>
+    <ListView className="{navClass}" title="{chat.name}" subtitle="{chat.message.message.substring(0, 40)}" onClick={() => console.log(chat)}/>
   {/each}
   {/if}
 </main>
