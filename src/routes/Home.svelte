@@ -20,6 +20,7 @@
   let authorizedMenu: OptionMenu;
   let archivedChatListMenu: OptionMenu;
 
+  const tempThumb: string = 'data:image/jpeg;base64,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';
   let name: string = 'Telekram';
   let phoneNumber = '+9996611077';
   let phoneCode = '11111';
@@ -462,35 +463,55 @@
     })
   }
 
-  async function runFetchThumbJobs() {
-    for (let i=fetchThumbJobs.length-1;i>-1;i--) {
-      const chat = fetchThumbJobs[i];
-      if (chat.entity.photo && chat.entity.photo.photoId) {
-        try {
-          let buffer = await profilePhotoDb.getItem(chat.entity.photo.photoId.toString());
-          if (buffer == null) {
-            buffer = await client.downloadProfilePhoto(chat.entity);
-            buffer = await profilePhotoDb.setItem(chat.entity.photo.photoId.toString(), buffer);
+  function runFetchThumbJobs(user) {
+    new Promise(async () => {
+      for (let i=fetchThumbJobs.length-1;i>-1;i--) {
+        const chat = fetchThumbJobs[i];
+        if (chat.entity.photo && chat.entity.photo.photoId) {
+          try {
+            let buffer = await profilePhotoDb.getItem(chat.entity.photo.photoId.toString());
+            if (buffer == null) {
+              buffer = await client.downloadProfilePhoto(chat.entity);
+              buffer = await profilePhotoDb.setItem(chat.entity.photo.photoId.toString(), buffer);
+            }
+            const blob = new Blob([new Uint8Array(buffer, 0, buffer.length)], {type : 'image/jpeg'});
+            const result = await toBase64(blob);
+            chat.icon = `<img style="width:40px;height:40px;border-radius:50%;" src="${result}"/>`;
+          } catch (err) {
+            chat.icon = `<img style="width:40px;height:40px;border-radius:50%;" src="${tempThumb}"/>`;
+            console.log(err);
           }
-          const blob = new Blob([new Uint8Array(buffer, 0, buffer.length)], {type : 'image/jpeg'});
-          const result = await toBase64(blob);
-          console.log(chat.title);
-        } catch (err) {
-          console.log(err);
+        } else {
+          chat.icon = `<img style="width:40px;height:40px;border-radius:50%;" src="${tempThumb}"/>`;
         }
-      } else {
-        console.log('No Thumbs');
       }
-      fetchThumbJobs.pop();
-    }
-    console.log(fetchThumbJobs.length);
+      archivedChatListName = [];
+      let _archivedChatList = [];
+      let _chatList = [];
+      fetchThumbJobs.forEach((chat, index) => {
+        if (chat.id.value === user[0].id.value) {
+          chat.name = 'Saved Messages';
+        }
+        if (chat.archived) {
+          if (chat.message && chat.message.message)
+            chat.subtitle = chat.message.message.substring(0, 50);
+          archivedChatListName.push(chat.name);
+          _archivedChatList.push(chat);
+        } else {
+          _chatList.push(chat);
+        }
+      });
+      chatList = _chatList;
+      archivedChatList = _archivedChatList;
+      fetchThumbJobs = [];
+    });
   }
 
   async function get_chats() {
     try {
       const user = await get_user();
       const chats = await client.getDialogs({
-        offsetPeer: user[0].username,
+        offsetPeer: new Api.InputPeerSelf(),
         limit: 100,
         excludePinned: true,
         folderId: 0,
@@ -514,7 +535,7 @@
       });
       chatList = _chatList;
       archivedChatList = _archivedChatList;
-      runFetchThumbJobs();
+      runFetchThumbJobs(user);
       // const savedMessages = await client.getMessages("me");
       // console.log(savedMessages);
       reset_cursor();
@@ -591,10 +612,14 @@
   </Button>
   {:else}
   {#if archivedChatList.length > 0 }
-    <ListView className="{navClass}" title="Archived Chats" subtitle="{archivedChatListName.join(', ').substring(0, 50)}" onClick={openArchivedChatListMenu}/>
+    <ListView className="{navClass}" title="Archived Chats" subtitle="{archivedChatListName.join(', ').substring(0, 50)}" onClick={openArchivedChatListMenu}>
+      <span slot="leftWidget" style="padding-right: 4px;"><img style="width:40px;height:40px;border-radius:50%;" src="{tempThumb}"/></span>
+    </ListView>
   {/if}
   {#each chatList as chat}
-    <ListView className="{navClass}" title="{chat.name + (chat.unreadCount ? '(' + chat.unreadCount + ')' : '')}" subtitle="{chat.message.message.substring(0, 50)}" onClick={() => console.log(chat)}/>
+    <ListView className="{navClass}" title="{chat.name + (chat.unreadCount ? '(' + chat.unreadCount + ')' : '')}" subtitle="{chat.message.message.substring(0, 50)}" onClick={() => console.log(chat)}>
+      <span slot="leftWidget" style="padding-right: 4px;">{@html chat.icon || ''}</span>
+    </ListView>
   {/each}
   {/if}
 </main>
