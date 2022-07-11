@@ -97,6 +97,9 @@
         title: 'Menu',
         focusIndex: 0,
         options: [
+          { title: 'New Contact' },
+          { title: 'Contact' },
+          { title: 'Settings' },
           { title: 'Logout' },
           { title: 'Exit' },
         ],
