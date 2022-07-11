@@ -4,7 +4,7 @@
   import { ListView, LoadingBar, Button, TextInputField, Toast, Toaster, SoftwareKey, TextInputDialog, OptionMenu } from '../components';
   import { onMount, onDestroy } from 'svelte';
 
-  import { TelegramKeyHash, Api, client } from '../utils/mtproto_client';
+  import { TelegramKeyHash, Api, client, profilePhotoDb } from '../utils/mtproto_client';
   import QRModal from '../widgets/QRModal.svelte';
 
   const navClass: string = 'homeNav';
@@ -29,6 +29,7 @@
   let archivedChatList = [];
   let archivedChatListName = [];
   let chatList = [];
+  let fetchThumbJobs = [];
 
   let navOptions = {
     verticalNavClass: navClass,
@@ -452,6 +453,39 @@
     }
   }
 
+  function toBase64(blob) {
+    return new Promise((resolve, reject) => {
+      const reader = new FileReader();
+      reader.onloadend = () => resolve(reader.result);
+      reader.onerror = (err) => reject(err);
+      reader.readAsDataURL(blob);
+    })
+  }
+
+  async function runFetchThumbJobs() {
+    for (let i=fetchThumbJobs.length-1;i>-1;i--) {
+      const chat = fetchThumbJobs[i];
+      if (chat.entity.photo && chat.entity.photo.photoId) {
+        try {
+          let buffer = await profilePhotoDb.getItem(chat.entity.photo.photoId.toString());
+          if (buffer == null) {
+            buffer = await client.downloadProfilePhoto(chat.entity);
+            buffer = await profilePhotoDb.setItem(chat.entity.photo.photoId.toString(), buffer);
+          }
+          const blob = new Blob([new Uint8Array(buffer, 0, buffer.length)], {type : 'image/jpeg'});
+          const result = await toBase64(blob);
+          console.log(chat.title);
+        } catch (err) {
+          console.log(err);
+        }
+      } else {
+        console.log('No Thumbs');
+      }
+      fetchThumbJobs.pop();
+    }
+    console.log(fetchThumbJobs.length);
+  }
+
   async function get_chats() {
     try {
       const user = await get_user();
@@ -464,7 +498,7 @@
       archivedChatListName = [];
       let _archivedChatList = [];
       let _chatList = [];
-      chats.forEach(chat => {
+      chats.forEach((chat, index) => {
         if (chat.id.value === user[0].id.value) {
           chat.name = 'Saved Messages';
         }
@@ -476,16 +510,18 @@
         } else {
           _chatList.push(chat);
         }
+        fetchThumbJobs.push(chat);
       });
-      chatList = _chatList
-      archivedChatList = _archivedChatList
+      chatList = _chatList;
+      archivedChatList = _archivedChatList;
+      runFetchThumbJobs();
       // console.log(chatList);
       // console.log(archivedChatList);
       // const savedMessages = await client.getMessages("me");
       // console.log(savedMessages);
       reset_cursor();
     } catch(err) {
-      console.log(err);
+      console.log(err.toString());
     }
   }
 
