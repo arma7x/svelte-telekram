@@ -68,9 +68,9 @@
         title: 'Archived Chats',
         focusIndex: 0,
         options: archivedChatList,
-        softKeyLeftText: 'Select',
+        softKeyLeftText: 'Unarchived',
         softKeyCenterText: '',
-        softKeyRightText: 'Unarchived',
+        softKeyRightText: 'Select',
         onSoftkeyRight: (evt, scope) => {
           archivedChatListMenu.$destroy();
         },
