@@ -540,7 +540,8 @@
         }
         fetchThumbJobs.push(chat);
       });
-      chatList = tempChatList;
+      _chatList = tempChatList;
+      chatList = _chatList;
       // runFetchThumbJobs(user);
       // const savedMessages = await client.getMessages("me");
       // console.log(savedMessages);
@@ -595,11 +596,50 @@
           });
         })
         .then((chats) => {
-          console.log(chats);
-          client.disconnect();
+          let jobs = chats.length;
+          let cached = {};
+          chats.forEach(chat => {
+            if (chat.entity.photo && chat.entity.photo.photoId) {
+              client.downloadProfilePhoto(chat.entity)
+              .then(buffer => {
+                const reader = new FileReader();
+                reader.onloadend = () => {
+                  cached[chat.entity.photo.photoId] = reader.result;
+                  jobs--;
+                  if (jobs == 0) {
+                    self.postMessage(cached);
+                    client.disconnect();
+                  }
+                };
+                reader.onerror = (err) => {
+                  jobs--;
+                  if (jobs == 0) {
+                    self.postMessage(cached);
+                    client.disconnect();
+                  }
+                };
+                reader.readAsDataURL(new Blob([new Uint8Array(buffer, 0, buffer.length)], {type : 'image/jpeg'}));
+              })
+              .catch(err => {
+                jobs--;
+                if (jobs == 0) {
+                  self.postMessage(cached);
+                  client.disconnect();
+                }
+                console.log(err);
+              });
+            } else {
+              jobs--;
+              if (jobs == 0) {
+                self.postMessage(cached);
+                client.disconnect();
+              }
+            }
+          });
         })
         .catch(err => {
           console.log(err);
+          client.disconnect();
         });
       }`
       const blob = new Blob([script], {type: 'application/javascript'});
@@ -610,6 +650,23 @@
         port: session.port,
         authKey: session.getAuthKey(session.dcId)
       });
+      worker.onmessage = (e) => {
+        _chatList.forEach(chat => {
+          if (chat.entity.photo && chat.entity.photo.photoId) {
+            if (e.data[chat.entity.photo.photoId]) {
+              chat.icon = `<img style="width:40px;height:40px;border-radius:50%;" src="${e.data[chat.entity.photo.photoId]}"/>`;
+            }
+          }
+        });
+        archivedChatList.forEach(chat => {
+          if (chat.entity.photo && chat.entity.photo.photoId) {
+            if (e.data[chat.entity.photo.photoId]) {
+              chat.icon = `<img style="width:40px;height:40px;border-radius:50%;" src="${e.data[chat.entity.photo.photoId]}"/>`;
+            }
+          }
+        });
+        chatList = _chatList;
+      }
       is_user_authorized();
       reset_sign_in();
     })
