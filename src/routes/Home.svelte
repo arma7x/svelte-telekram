@@ -513,6 +513,60 @@
     });
   }
 
+  function runTask(chats, cached) {
+    return;
+    if (chats.length === 0) {
+      _chatList.forEach(chat => {
+        if (chat.entity.photo && chat.entity.photo.photoId) {
+          if (cached[chat.entity.photo.photoId]) {
+            chat.icon = `<img style="width:40px;height:40px;border-radius:50%;" src="${cached[chat.entity.photo.photoId]}"/>`;
+          }
+        }
+      });
+      archivedChatList.forEach(chat => {
+        if (chat.entity.photo && chat.entity.photo.photoId) {
+          if (cached[chat.entity.photo.photoId]) {
+            chat.icon = `<img style="width:40px;height:40px;border-radius:50%;" src="${cached[chat.entity.photo.photoId]}"/>`;
+          }
+        }
+      });
+      chatList = _chatList;
+      return;
+    }
+    const chat = chats[0];
+    if (chat.entity.photo && chat.entity.photo.photoId) {
+      client.downloadProfilePhoto(chat.entity)
+      .then(buffer => {
+        const reader = new FileReader();
+        reader.onloadend = () => {
+          cached[chat.entity.photo.photoId] = reader.result;
+          chats.splice(0, 1);
+          setTimeout(() => {
+            runTask(chats, cached);
+          }, 100);
+        };
+        reader.onerror = (err) => {
+          chats.splice(0, 1);
+          setTimeout(() => {
+            runTask(chats, cached);
+          }, 100);
+        };
+        reader.readAsDataURL(new Blob([new Uint8Array(buffer, 0, buffer.length)], {type : 'image/jpeg'}));
+      })
+      .catch(err => {
+        chats.splice(0, 1);
+        setTimeout(() => {
+          runTask(chats, cached);
+        }, 100);
+      });
+    } else {
+      chats.splice(0, 1);
+      setTimeout(() => {
+        runTask(chats, cached);
+      }, 100);
+    }
+  }
+
   async function get_chats() {
     try {
       const user = await get_user();
@@ -542,6 +596,7 @@
       });
       _chatList = tempChatList;
       chatList = _chatList;
+      runTask(chats, {});
       // runFetchThumbJobs(user);
       // const savedMessages = await client.getMessages("me");
       // console.log(savedMessages);
@@ -574,99 +629,99 @@
       return client.isUserAuthorized();
     })
     .then((authorized) => {
-      const script = `
-      importScripts('${window.location.origin}/js/telegram.js');
-      importScripts('${window.location.origin}/js/polyfill.min.js');
+      //const script = `
+      //importScripts('${window.location.origin}/js/telegram.js');
+      //importScripts('${window.location.origin}/js/polyfill.min.js');
 
-      self.onmessage = function(e) {
-        const session = new telegram.sessions.MemorySession();
-        session.setDC(e.data.dcId, e.data.serverAddress, e.data.port);
-        session.setAuthKey(new telegram.AuthKey(e.data.authKey._key, e.data.authKey._hash), e.data.dcId);
-        let client = new telegram.TelegramClient(session, ${TelegramKeyHash.api_id}, '${TelegramKeyHash.api_hash}', {
-          maxConcurrentDownloads: 1,
-        });
-        client.connect()
-        .then(() => {
-          console.log('Connected in worker');
-          return client.getDialogs({
-            offsetPeer: new telegram.Api.InputPeerSelf(),
-            limit: 100,
-            excludePinned: true,
-            folderId: 0,
-          });
-        })
-        .then((chats) => {
-          let jobs = chats.length;
-          let cached = {};
-          chats.forEach(chat => {
-            if (chat.entity.photo && chat.entity.photo.photoId) {
-              client.downloadProfilePhoto(chat.entity)
-              .then(buffer => {
-                const reader = new FileReader();
-                reader.onloadend = () => {
-                  cached[chat.entity.photo.photoId] = reader.result;
-                  jobs--;
-                  if (jobs == 0) {
-                    self.postMessage(cached);
-                    client.disconnect();
-                  }
-                };
-                reader.onerror = (err) => {
-                  jobs--;
-                  if (jobs == 0) {
-                    self.postMessage(cached);
-                    client.disconnect();
-                  }
-                };
-                reader.readAsDataURL(new Blob([new Uint8Array(buffer, 0, buffer.length)], {type : 'image/jpeg'}));
-              })
-              .catch(err => {
-                jobs--;
-                if (jobs == 0) {
-                  self.postMessage(cached);
-                  client.disconnect();
-                }
-                console.log(err);
-              });
-            } else {
-              jobs--;
-              if (jobs == 0) {
-                self.postMessage(cached);
-                client.disconnect();
-              }
-            }
-          });
-        })
-        .catch(err => {
-          console.log(err);
-          client.disconnect();
-        });
-      }`
-      const blob = new Blob([script], {type: 'application/javascript'});
-      const worker = new Worker(URL.createObjectURL(blob));
-      worker.postMessage({
-        dcId: session.dcId,
-        serverAddress: session.serverAddress,
-        port: session.port,
-        authKey: session.getAuthKey(session.dcId)
-      });
-      worker.onmessage = (e) => {
-        _chatList.forEach(chat => {
-          if (chat.entity.photo && chat.entity.photo.photoId) {
-            if (e.data[chat.entity.photo.photoId]) {
-              chat.icon = `<img style="width:40px;height:40px;border-radius:50%;" src="${e.data[chat.entity.photo.photoId]}"/>`;
-            }
-          }
-        });
-        archivedChatList.forEach(chat => {
-          if (chat.entity.photo && chat.entity.photo.photoId) {
-            if (e.data[chat.entity.photo.photoId]) {
-              chat.icon = `<img style="width:40px;height:40px;border-radius:50%;" src="${e.data[chat.entity.photo.photoId]}"/>`;
-            }
-          }
-        });
-        chatList = _chatList;
-      }
+      //self.onmessage = function(e) {
+        //const session = new telegram.sessions.MemorySession();
+        //session.setDC(e.data.dcId, e.data.serverAddress, e.data.port);
+        //session.setAuthKey(new telegram.AuthKey(e.data.authKey._key, e.data.authKey._hash), e.data.dcId);
+        //let client = new telegram.TelegramClient(session, ${TelegramKeyHash.api_id}, '${TelegramKeyHash.api_hash}', {
+          //maxConcurrentDownloads: 1,
+        //});
+        //client.connect()
+        //.then(() => {
+          //console.log('Connected in worker');
+          //return client.getDialogs({
+            //offsetPeer: new telegram.Api.InputPeerSelf(),
+            //limit: 100,
+            //excludePinned: true,
+            //folderId: 0,
+          //});
+        //})
+        //.then((chats) => {
+          //let jobs = chats.length;
+          //let cached = {};
+          //chats.forEach(chat => {
+            //if (chat.entity.photo && chat.entity.photo.photoId) {
+              //client.downloadProfilePhoto(chat.entity)
+              //.then(buffer => {
+                //const reader = new FileReader();
+                //reader.onloadend = () => {
+                  //cached[chat.entity.photo.photoId] = reader.result;
+                  //jobs--;
+                  //if (jobs == 0) {
+                    //self.postMessage(cached);
+                    //client.disconnect();
+                  //}
+                //};
+                //reader.onerror = (err) => {
+                  //jobs--;
+                  //if (jobs == 0) {
+                    //self.postMessage(cached);
+                    //client.disconnect();
+                  //}
+                //};
+                //reader.readAsDataURL(new Blob([new Uint8Array(buffer, 0, buffer.length)], {type : 'image/jpeg'}));
+              //})
+              //.catch(err => {
+                //jobs--;
+                //if (jobs == 0) {
+                  //self.postMessage(cached);
+                  //client.disconnect();
+                //}
+                //console.log(err);
+              //});
+            //} else {
+              //jobs--;
+              //if (jobs == 0) {
+                //self.postMessage(cached);
+                //client.disconnect();
+              //}
+            //}
+          //});
+        //})
+        //.catch(err => {
+          //console.log(err);
+          //client.disconnect();
+        //});
+      //}`
+      //const blob = new Blob([script], {type: 'application/javascript'});
+      //const worker = new Worker(URL.createObjectURL(blob));
+      //worker.postMessage({
+        //dcId: session.dcId,
+        //serverAddress: session.serverAddress,
+        //port: session.port,
+        //authKey: session.getAuthKey(session.dcId)
+      //});
+      //worker.onmessage = (e) => {
+        //_chatList.forEach(chat => {
+          //if (chat.entity.photo && chat.entity.photo.photoId) {
+            //if (e.data[chat.entity.photo.photoId]) {
+              //chat.icon = `<img style="width:40px;height:40px;border-radius:50%;" src="${e.data[chat.entity.photo.photoId]}"/>`;
+            //}
+          //}
+        //});
+        //archivedChatList.forEach(chat => {
+          //if (chat.entity.photo && chat.entity.photo.photoId) {
+            //if (e.data[chat.entity.photo.photoId]) {
+              //chat.icon = `<img style="width:40px;height:40px;border-radius:50%;" src="${e.data[chat.entity.photo.photoId]}"/>`;
+            //}
+          //}
+        //});
+        //chatList = _chatList;
+      //}
       is_user_authorized();
       reset_sign_in();
     })
