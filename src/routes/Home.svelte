@@ -29,8 +29,10 @@
   let authStatus: boolean = false;
   let archivedChatList = [];
   let archivedChatListName = [];
-  let chatList = [];
+  let _chatList = [];
   let fetchThumbJobs = [];
+
+  $: chatList = _chatList;
 
   let navOptions = {
     verticalNavClass: navClass,
@@ -490,8 +492,8 @@
         //}
       }
       archivedChatListName = [];
-      let _archivedChatList = [];
-      let _chatList = [];
+      archivedChatList = [];
+      let tempChatList = [];
       fetchThumbJobs.forEach((chat, index) => {
         if (chat.id.value === user[0].id.value) {
           chat.name = 'Saved Messages';
@@ -500,13 +502,13 @@
           if (chat.message && chat.message.message)
             chat.subtitle = chat.message.message.substring(0, 50);
           archivedChatListName.push(chat.name);
-          _archivedChatList.push(chat);
+          archivedChatList.push(chat);
         } else {
-          _chatList.push(chat);
+          tempChatList.push(chat);
         }
       });
-      chatList = _chatList;
-      archivedChatList = _archivedChatList;
+      chatList = tempChatList;
+      archivedChatList = archivedChatList;
       fetchThumbJobs = [];
     });
   }
@@ -521,9 +523,10 @@
         folderId: 0,
       });
       archivedChatListName = [];
-      let _archivedChatList = [];
-      let _chatList = [];
+      archivedChatList = [];
+      let tempChatList = [];
       chats.forEach((chat, index) => {
+        chat.icon = `<img style="width:40px;height:40px;border-radius:50%;" src="${tempThumb}"/>`;
         if (chat.id.value === user[0].id.value) {
           chat.name = 'Saved Messages';
         }
@@ -531,15 +534,14 @@
           if (chat.message && chat.message.message)
             chat.subtitle = chat.message.message.substring(0, 50);
           archivedChatListName.push(chat.name);
-          _archivedChatList.push(chat);
+          archivedChatList.push(chat);
         } else {
-          _chatList.push(chat);
+          tempChatList.push(chat);
         }
         fetchThumbJobs.push(chat);
       });
-      chatList = _chatList;
-      archivedChatList = _archivedChatList;
-      runFetchThumbJobs(user);
+      chatList = tempChatList;
+      // runFetchThumbJobs(user);
       // const savedMessages = await client.getMessages("me");
       // console.log(savedMessages);
       reset_cursor();
@@ -571,7 +573,6 @@
       return client.isUserAuthorized();
     })
     .then((authorized) => {
-      console.log(window.location.origin);
       const script = `
       importScripts('${window.location.origin}/js/telegram.js');
       importScripts('${window.location.origin}/js/polyfill.min.js');
