@@ -22,5 +22,6 @@ export {
   Api,
   client,
   TelegramKeyHash,
+  session,
   profilePhotoDb
 }

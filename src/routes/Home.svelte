@@ -4,7 +4,7 @@
   import { ListView, LoadingBar, Button, TextInputField, Toast, Toaster, SoftwareKey, TextInputDialog, OptionMenu } from '../components';
   import { onMount, onDestroy } from 'svelte';
 
-  import { TelegramKeyHash, Api, client, profilePhotoDb } from '../utils/mtproto_client';
+  import { TelegramKeyHash, Api, client, session, profilePhotoDb } from '../utils/mtproto_client';
   import QRModal from '../widgets/QRModal.svelte';
 
   const navClass: string = 'homeNav';
@@ -99,6 +99,7 @@
         title: 'Menu',
         focusIndex: 0,
         options: [
+          { title: 'Clear profilePhotoDb' },
           { title: 'New Contact' },
           { title: 'Contact' },
           { title: 'Settings' },
@@ -111,6 +112,8 @@
         onEnter: (evt, scope) => {
           if (scope.selected.title === 'Exit') {
             window.close();
+          } else if (scope.selected.title === 'Clear profilePhotoDb') {
+            profilePhotoDb.clear();
           }
           authorizedMenu.$destroy();
         },
@@ -567,6 +570,44 @@
       return client.isUserAuthorized();
     })
     .then((authorized) => {
+      console.log(window.location.origin);
+      const script = `
+      importScripts('${window.location.origin}/js/telegram.js');
+      importScripts('${window.location.origin}/js/polyfill.min.js');
+
+      self.onmessage = function(e) {
+        const session = new telegram.sessions.MemorySession();
+        session.setDC(e.data.dcId, e.data.serverAddress, e.data.port);
+        session.setAuthKey(new telegram.AuthKey(e.data.authKey._key, e.data.authKey._hash), e.data.dcId);
+        let client = new telegram.TelegramClient(session, ${TelegramKeyHash.api_id}, '${TelegramKeyHash.api_hash}', {
+          maxConcurrentDownloads: 1,
+        });
+        client.connect()
+        .then(() => {
+          console.log('Connected in worker');
+          return client.getDialogs({
+            offsetPeer: new telegram.Api.InputPeerSelf(),
+            limit: 100,
+            excludePinned: true,
+            folderId: 0,
+          });
+        })
+        .then((chats) => {
+          console.log(chats);
+          client.disconnect();
+        })
+        .catch(err => {
+          console.log(err);
+        });
+      }`
+      const blob = new Blob([script], {type: 'application/javascript'});
+      const worker = new Worker(URL.createObjectURL(blob));
+      worker.postMessage({
+        dcId: session.dcId,
+        serverAddress: session.serverAddress,
+        port: session.port,
+        authKey: session.getAuthKey(session.dcId)
+      });
       is_user_authorized();
       reset_sign_in();
     })
