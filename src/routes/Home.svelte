@@ -515,8 +515,6 @@
       chatList = _chatList;
       archivedChatList = _archivedChatList;
       runFetchThumbJobs();
-      // console.log(chatList);
-      // console.log(archivedChatList);
       // const savedMessages = await client.getMessages("me");
       // console.log(savedMessages);
       reset_cursor();
