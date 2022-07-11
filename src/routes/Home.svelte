@@ -470,23 +470,24 @@
     new Promise(async () => {
       for (let i=fetchThumbJobs.length-1;i>-1;i--) {
         const chat = fetchThumbJobs[i];
-        if (chat.entity.photo && chat.entity.photo.photoId) {
-          try {
-            let buffer = await profilePhotoDb.getItem(chat.entity.photo.photoId.toString());
-            if (buffer == null) {
-              buffer = await client.downloadProfilePhoto(chat.entity);
-              buffer = await profilePhotoDb.setItem(chat.entity.photo.photoId.toString(), buffer);
-            }
-            const blob = new Blob([new Uint8Array(buffer, 0, buffer.length)], {type : 'image/jpeg'});
-            const result = await toBase64(blob);
-            chat.icon = `<img style="width:40px;height:40px;border-radius:50%;" src="${result}"/>`;
-          } catch (err) {
-            chat.icon = `<img style="width:40px;height:40px;border-radius:50%;" src="${tempThumb}"/>`;
-            console.log(err);
-          }
-        } else {
-          chat.icon = `<img style="width:40px;height:40px;border-radius:50%;" src="${tempThumb}"/>`;
-        }
+        chat.icon = `<img style="width:40px;height:40px;border-radius:50%;" src="${tempThumb}"/>`;
+        //if (chat.entity.photo && chat.entity.photo.photoId) {
+          //try {
+            //let buffer = await profilePhotoDb.getItem(chat.entity.photo.photoId.toString());
+            //if (buffer == null) {
+              //buffer = await client.downloadProfilePhoto(chat.entity);
+              //buffer = await profilePhotoDb.setItem(chat.entity.photo.photoId.toString(), buffer);
+            //}
+            //const blob = new Blob([new Uint8Array(buffer, 0, buffer.length)], {type : 'image/jpeg'});
+            //const result = await toBase64(blob);
+            //chat.icon = `<img style="width:40px;height:40px;border-radius:50%;" src="${result}"/>`;
+          //} catch (err) {
+            //chat.icon = `<img style="width:40px;height:40px;border-radius:50%;" src="${tempThumb}"/>`;
+            //console.log(err);
+          //}
+        //} else {
+          //chat.icon = `<img style="width:40px;height:40px;border-radius:50%;" src="${tempThumb}"/>`;
+        //}
       }
       archivedChatListName = [];
       let _archivedChatList = [];
