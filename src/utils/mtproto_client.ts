@@ -1,4 +1,4 @@
-let telegram:any;
+declare var telegram:any;
 
 import localForage from "localforage";
 import TelegramKeyHash from '../telegram_key';
