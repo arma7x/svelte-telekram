@@ -8,7 +8,7 @@
 
   export let title: string = 'Option Menu';
   export let focusIndex: number = 0;
-  export let options: { title: string, subtitle: string }[];
+  export let options: { title: string, subtitle: string, icon: any }[];
   export let softKeyLeftText: string = '';
   export let softKeyCenterText: string = 'Close';
   export let softKeyRightText: string = '';
@@ -80,7 +80,10 @@
     <div class="kai-option-menu-header">{title}</div>
     <div class="kai-option-menu-body" data-pad-top="66" data-pad-bottom="30">
       {#each options as option}
-      <ListView className="{navClass}" title="{option.title}" subtitle="{option.subtitle}"><span slot="rightWidget"></span></ListView>
+      <ListView className="{navClass}" title="{option.title}" subtitle="{option.subtitle}">
+        <span slot="leftWidget" style="padding-right: 4px;">{@html (option.icon ? option.icon : '')}</span>
+        <span slot="rightWidget"></span>
+      </ListView>
       {/each}
     </div>
   </div>

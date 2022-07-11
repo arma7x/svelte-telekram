@@ -7,6 +7,9 @@
 </script>
 
 <div data-key="{key}" class="kai-list-view {className ? className : ''}" on:click={onClick}>
+  {#if $$slots.leftWidget}
+  <slot name="leftWidget"></slot>
+  {/if}
   <slot>
     <div class="kai-list-view-content">
       <p>{title}</p>
