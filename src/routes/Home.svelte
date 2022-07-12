@@ -598,12 +598,15 @@
       chatList = _chatList;
       runTask(chats, {});
       // runFetchThumbJobs(user);
-      // const savedMessages = await client.getMessages("me");
-      // console.log(savedMessages);
       reset_cursor();
     } catch(err) {
       console.log(err.toString());
     }
+  }
+
+  function getMessages(name, entity) {
+    console.log(entity.toJSON());
+    goto('room', { state: { name, entity: entity.toJSON() } });
   }
 
   function eventHandler(evt) {
@@ -772,7 +775,7 @@
     </ListView>
   {/if}
   {#each chatList as chat}
-    <ListView className="{navClass}" title="{chat.name + (chat.unreadCount ? '(' + chat.unreadCount + ')' : '')}" subtitle="{chat.message.message.substring(0, 50)}" onClick={() => console.log(chat)}>
+    <ListView className="{navClass}" title="{chat.name + (chat.unreadCount ? '(' + chat.unreadCount + ')' : '')}" subtitle="{chat.message.message.substring(0, 50)}" onClick={() => getMessages(chat.name, chat.entity)}>
       <span slot="leftWidget" style="padding-right: 4px;">{@html chat.icon || ''}</span>
     </ListView>
   {/each}
