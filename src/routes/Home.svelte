@@ -74,7 +74,7 @@
         title: 'Archived Chats',
         focusIndex: 0,
         options: archivedChatList,
-        softKeyLeftText: 'Unarchived',
+        softKeyLeftText: 'Unarchive',
         softKeyCenterText: 'Select',
         softKeyRightText: '',
         onSoftkeyRight: (evt, scope) => {
