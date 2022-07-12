@@ -5,7 +5,7 @@
 
   import { Api, client } from '../utils/mtproto_client';
 
-  import { getChatCollection } from '../stores/chats';
+  import { getChatCollection } from '../stores/telegram';
 
   export let location: any;
   export let navigate: any;

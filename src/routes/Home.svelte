@@ -7,7 +7,7 @@
   import { TelegramKeyHash, Api, client, session, profilePhotoDb } from '../utils/mtproto_client';
   import QRModal from '../widgets/QRModal.svelte';
 
-  import { chatCollections, retrieveChats } from '../stores/chats';
+  import { chatCollections, retrieveChats } from '../stores/telegram';
 
   const navClass: string = 'homeNav';
 
@@ -617,6 +617,7 @@
   }
 
   onMount(() => {
+    console.log('onMount:', name);
     const { appBar, softwareKey } = getAppProp();
     appBar.setTitleText(name);
     softwareKey.setText({ left: '', center: 'SELECT', right: '' });
