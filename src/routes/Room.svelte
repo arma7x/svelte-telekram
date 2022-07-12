@@ -26,14 +26,16 @@
 
   async function getMessages(entity) {
     const parsed = new telegram.Api[entity.className](entity);
-    console.log(entity);
-    console.log(parsed);
-    //try {
-      //const messages = await client.getMessages(parsed, { limit: 50 });
-      //console.log(messages);
-    //} catch (err) {
-      //console.log(err);
-    //}
+    // console.log(entity);
+    // console.log(parsed);
+    return
+    try {
+      await client.invoke(parsed);
+      const messages = await client.getMessages(parsed, { limit: 50 });
+      console.log(messages);
+    } catch (err) {
+      console.log(err);
+    }
   }
 
   onMount(() => {

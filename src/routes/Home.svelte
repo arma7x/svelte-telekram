@@ -7,6 +7,8 @@
   import { TelegramKeyHash, Api, client, session, profilePhotoDb } from '../utils/mtproto_client';
   import QRModal from '../widgets/QRModal.svelte';
 
+  import { chatCollections, getChats } from '..//stores/chats';
+
   const navClass: string = 'homeNav';
 
   export let location: any;
@@ -422,7 +424,7 @@
       authStatus = false;
       if (authorized) {
         authStatus = authorized;
-        get_chats();
+        getChats();
         softwareKey.setLeftText('Menu');
         softwareKey.setRightText('Search');
         if (inputSoftwareKey) {
@@ -567,15 +569,9 @@
     }
   }
 
-  async function get_chats() {
+  async function sort_chats(chats) {
     try {
       const user = await get_user();
-      const chats = await client.getDialogs({
-        offsetPeer: new Api.InputPeerSelf(),
-        limit: 100,
-        excludePinned: true,
-        folderId: 0,
-      });
       archivedChatListName = [];
       archivedChatList = [];
       let tempChatList = [];
@@ -605,7 +601,7 @@
   }
 
   function getMessages(name, entity) {
-    console.log(entity.toJSON());
+    // console.log(entity.toJSON());
     goto('room', { state: { name, entity: entity.toJSON() } });
   }
 
@@ -730,6 +726,11 @@
     })
     .catch((err) => {
       console.log(err);
+    });
+
+    chatCollections.subscribe(chats => {
+      if (client.connected)
+        sort_chats(chats);
     });
 
   });
