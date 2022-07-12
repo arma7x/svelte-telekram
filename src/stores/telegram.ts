@@ -9,8 +9,10 @@ client.addEventHandler((evt) => {
   console.log(evt);
   switch (evt.className) {
     case "UpdateFolderPeers":
-    case "UpdateNewChannelMessage";
-    case "UpdateReadChannelInbox";
+    case "UpdateNewChannelMessage":
+    case "UpdateReadChannelInbox":
+    case "UpdateEditChannelMessage":
+    case "UpdateShortMessage":
       retrieveChats();
       break
   }
