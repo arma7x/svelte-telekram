@@ -13,6 +13,7 @@ client.addEventHandler((evt) => {
     case "UpdateReadChannelInbox":
     case "UpdateEditChannelMessage":
     case "UpdateShortMessage":
+    case "UpdateReadHistoryInbox":
       retrieveChats();
       break
   }
