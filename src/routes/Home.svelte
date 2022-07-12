@@ -491,10 +491,14 @@
         if (chat.id.value === user[0].id.value) {
           chat.name = 'Saved Messages';
         }
+        if (chat.message && chat.message.message)
+          chat.subtitle = chat.message.message.substring(0, 50) + (chat.message.message.length > 50 ? '...' : '');
         if (chat.archived) {
-          if (chat.message && chat.message.message)
-            chat.subtitle = chat.message.message.substring(0, 50);
-          archivedChatListName.push(chat.name);
+          if (archivedChatListName.length !== 3) {
+            archivedChatListName.push(chat.name);
+            if (archivedChatListName.length === 2)
+              archivedChatListName.push('more...')
+          }
           archivedChatList.push(chat);
         } else {
           tempChatList.push(chat);
@@ -620,7 +624,7 @@
     </ListView>
   {/if}
   {#each chatList as chat}
-    <ListView className="{navClass}" title="{chat.name + (chat.unreadCount ? '(' + chat.unreadCount + ')' : '')}" subtitle="{chat.message.message.substring(0, 50)}" onClick={() => openRoom(chat.name, chat.entity)}>
+    <ListView className="{navClass}" title="{chat.name + (chat.unreadCount ? '(' + chat.unreadCount + ')' : '')}" subtitle="{chat.subtitle}" onClick={() => openRoom(chat.name, chat.entity)}>
       <span slot="leftWidget" style="padding-right: 4px;">{@html chat.icon || ''}</span>
     </ListView>
   {/each}
