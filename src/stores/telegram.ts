@@ -5,6 +5,30 @@ export const connectionStatus = writable(false);
 export const authorizedStatus = writable(false);
 export const chatCollections = writable([]);
 
+client.addEventHandler((evt) => {
+  console.log(evt);
+});
+
+client.connect()
+.then(() => {
+  connectionStatus.update(n => true);
+  isUserAuthorized();
+})
+.catch(err => {
+  connectionStatus.update(n => false);
+});
+
+export async function isUserAuthorized() {
+  try {
+    const authorized = await client.isUserAuthorized();
+    authorizedStatus.update(n => authorized);
+    if (authorized)
+      retrieveChats();
+  } catch (err) {
+    console.log(err);
+  }
+}
+
 export async function retrieveChats() {
   try {
     const result = await client.getDialogs({

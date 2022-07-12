@@ -7,7 +7,7 @@
   import { TelegramKeyHash, Api, client, session, profilePhotoDb } from '../utils/mtproto_client';
   import QRModal from '../widgets/QRModal.svelte';
 
-  import { chatCollections, retrieveChats } from '../stores/telegram';
+  import { connectionStatus, authorizedStatus, isUserAuthorized, chatCollections, retrieveChats } from '../stores/telegram';
 
   const navClass: string = 'homeNav';
 
@@ -21,6 +21,10 @@
   let password2FA: TextInputDialog;
   let authorizedMenu: OptionMenu;
   let archivedChatListMenu: OptionMenu;
+
+  let unchatCollections;
+  let unauthorizedStatus;
+  let unconnectionStatus;
 
   const tempThumb: string = 'data:image/jpeg;base64,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';
   let name: string = 'Telekram';
@@ -71,15 +75,20 @@
         focusIndex: 0,
         options: archivedChatList,
         softKeyLeftText: 'Unarchived',
-        softKeyCenterText: '',
-        softKeyRightText: 'Select',
+        softKeyCenterText: 'Select',
+        softKeyRightText: '',
         onSoftkeyRight: (evt, scope) => {
           archivedChatListMenu.$destroy();
         },
         onSoftkeyLeft: (evt, scope) => {
           archivedChatListMenu.$destroy();
         },
-        onEnter: (evt, scope) => {},
+        onEnter: (evt, scope) => {
+          archivedChatListMenu.$destroy();
+          setTimeout(() => {
+            goto('room', { state: { name: scope.selected.name, entity: scope.selected.entity.toJSON() } });
+          }, 100);
+        },
         onBackspace: (evt, scope) => {
           evt.preventDefault();
           evt.stopPropagation();
@@ -89,6 +98,7 @@
           navInstance.detachListener();
         },
         onClosed: (scope) => {
+          console.log(scope);
           navInstance.attachListener();
           archivedChatListMenu = null;
         }
@@ -137,7 +147,7 @@
     });
   }
 
-  function reset_cursor() {
+  function resetCursor() {
     if (qrModal != null || password2FA != null)
       return
     navInstance.verticalNavIndex = 0;
@@ -177,9 +187,6 @@
       props: {
         onOpened: () => {
           navInstance.detachListener();
-          //setTimeout(() => {
-          //  loadingBar.$destroy();
-          //}, 3000);
         },
         onClosed: () => {
           navInstance.attachListener();
@@ -187,10 +194,6 @@
         }
       }
     });
-  }
-
-  function onButtonClick(evt) {
-    window.close();
   }
 
   function onInputPhoneNumber(evt) {
@@ -222,14 +225,7 @@
     }
   }
 
-  function propagateClick(evt) {
-    const keys = Object.keys(evt.target.children);
-    for (var k in keys) {
-      evt.target.children[k].click();
-    }
-  }
-
-  function sign_in_2fa() {
+  function signIn2FA() {
     password2FA = new TextInputDialog({
       target: document.body,
       props: {
@@ -267,8 +263,8 @@
             if (loadingBar) {
               loadingBar.$destroy();
             }
-            is_user_authorized();
-            reset_cursor();
+            isUserAuthorized();
+            resetCursor();
             phoneCodeHash = null;
             password2FA.$destroy();
           } catch (err) {
@@ -295,7 +291,7 @@
 
   function sign_up() {}
 
-  async function sign_in() {
+  async function signIn() {
     try {
       const result = await client.invoke(
         new Api.auth.SignIn({
@@ -305,15 +301,15 @@
         })
       );
       console.log(result);
-      is_user_authorized();
-      reset_cursor();
+      isUserAuthorized();
+      resetCursor();
       phoneCodeHash = null;
     } catch (err) {
       if (err.errorMessage !== 'SESSION_PASSWORD_NEEDED') {
         console.log(err);
         return;
       }
-      sign_in_2fa();
+      signIn2FA();
     }
   }
 
@@ -332,13 +328,13 @@
         })
       );
       phoneCodeHash = result.phoneCodeHash;
-      reset_cursor();
+      resetCursor();
     } catch (err) {
       console.log(err);
     }
   }
 
-  function sign_in_qr() {
+  function signInQR() {
     setTimeout(() => {
       qrModal = new QRModal({
         target: document.body,
@@ -361,7 +357,7 @@
     }, 100);
   }
 
-  async function import_login_token(token) {
+  async function importLoginToken(token) {
     try {
       const result = await client.invoke(
         new Api.auth.ImportLoginToken({
@@ -369,14 +365,14 @@
         })
       );
       console.log(result);
-      is_user_authorized();
+      isUserAuthorized();
       phoneCodeHash = null;
     } catch (err) {
       console.log(err);
     }
   }
 
-  async function export_login_token() {
+  async function exportLoginToken() {
     try {
       const result = await client.invoke(
         new Api.auth.ExportLoginToken({
@@ -387,68 +383,37 @@
       );
       console.log(result);
       //if (result._ === 'auth.loginTokenSuccess') {
-        //is_user_authorized();
+        //isUserAuthorized();
         //phoneCodeHash = null;
       //} else if (result._ === 'auth.loginTokenMigrateTo') {
-        //import_login_token(result.token);
+        //importLoginToken(result.token);
       //}
     } catch (err) {
       if (err.errorMessage !== 'SESSION_PASSWORD_NEEDED') {
         console.log(err);
         return;
       }
-      sign_in_2fa();
+      signIn2FA();
     }
   }
 
-  function reset_sign_in() {
+  function resetSignIn() {
     phoneCodeHash = null;
-    reset_cursor();
+    resetCursor();
   }
 
-  async function sign_out() {
+  async function signOut() {
     try {
       const result = await client.invoke(new Api.auth.LogOut({}));
       console.log(result);
-      is_user_authorized();
+      isUserAuthorized();
       phoneCodeHash = null;
     } catch (err) {
       console.log(err);
     }
   }
 
-  async function is_user_authorized() {
-    const { softwareKey } = getAppProp();
-    try {
-      const authorized = await client.isUserAuthorized();
-      authStatus = false;
-      if (authorized) {
-        authStatus = authorized;
-        retrieveChats();
-        softwareKey.setLeftText('Menu');
-        softwareKey.setRightText('Search');
-        if (inputSoftwareKey) {
-          inputSoftwareKey.$destroy();
-          inputSoftwareKey = null;
-        }
-        if (qrModal) {
-          qrModal.$destroy();
-          qrModal = null;
-        }
-        if (password2FA) {
-          password2FA.$destroy();
-          password2FA = null;
-        }
-      } else {
-        softwareKey.setLeftText('');
-        softwareKey.setRightText('');
-      }
-    } catch (err) {
-      console.log(err);
-    }
-  }
-
-  async function get_user() {
+  async function getUser() {
     try {
       const result = await client.invoke(
         new Api.users.GetUsers({
@@ -461,74 +426,20 @@
     }
   }
 
-  function toBase64(blob) {
-    return new Promise((resolve, reject) => {
-      const reader = new FileReader();
-      reader.onloadend = () => resolve(reader.result);
-      reader.onerror = (err) => reject(err);
-      reader.readAsDataURL(blob);
-    })
-  }
-
-  function runFetchThumbJobs(user) {
-    new Promise(async () => {
-      for (let i=fetchThumbJobs.length-1;i>-1;i--) {
-        const chat = fetchThumbJobs[i];
-        chat.icon = `<img style="width:40px;height:40px;border-radius:50%;" src="${tempThumb}"/>`;
-        //if (chat.entity.photo && chat.entity.photo.photoId) {
-          //try {
-            //let buffer = await profilePhotoDb.getItem(chat.entity.photo.photoId.toString());
-            //if (buffer == null) {
-              //buffer = await client.downloadProfilePhoto(chat.entity);
-              //buffer = await profilePhotoDb.setItem(chat.entity.photo.photoId.toString(), buffer);
-            //}
-            //const blob = new Blob([new Uint8Array(buffer, 0, buffer.length)], {type : 'image/jpeg'});
-            //const result = await toBase64(blob);
-            //chat.icon = `<img style="width:40px;height:40px;border-radius:50%;" src="${result}"/>`;
-          //} catch (err) {
-            //chat.icon = `<img style="width:40px;height:40px;border-radius:50%;" src="${tempThumb}"/>`;
-            //console.log(err);
-          //}
-        //} else {
-          //chat.icon = `<img style="width:40px;height:40px;border-radius:50%;" src="${tempThumb}"/>`;
-        //}
-      }
-      archivedChatListName = [];
-      archivedChatList = [];
-      let tempChatList = [];
-      fetchThumbJobs.forEach((chat, index) => {
-        if (chat.id.value === user[0].id.value) {
-          chat.name = 'Saved Messages';
-        }
-        if (chat.archived) {
-          if (chat.message && chat.message.message)
-            chat.subtitle = chat.message.message.substring(0, 50);
-          archivedChatListName.push(chat.name);
-          archivedChatList.push(chat);
-        } else {
-          tempChatList.push(chat);
-        }
-      });
-      chatList = tempChatList;
-      archivedChatList = archivedChatList;
-      fetchThumbJobs = [];
-    });
-  }
-
   function runTask(chats, cached) {
     return;
     if (chats.length === 0) {
       _chatList.forEach(chat => {
         if (chat.entity.photo && chat.entity.photo.photoId) {
           if (cached[chat.entity.photo.photoId]) {
-            chat.icon = `<img style="width:40px;height:40px;border-radius:50%;" src="${cached[chat.entity.photo.photoId]}"/>`;
+            chat.icon = `<img alt="icon" style="width:40px;height:40px;border-radius:50%;" src="${cached[chat.entity.photo.photoId]}"/>`;
           }
         }
       });
       archivedChatList.forEach(chat => {
         if (chat.entity.photo && chat.entity.photo.photoId) {
           if (cached[chat.entity.photo.photoId]) {
-            chat.icon = `<img style="width:40px;height:40px;border-radius:50%;" src="${cached[chat.entity.photo.photoId]}"/>`;
+            chat.icon = `<img alt="icon" style="width:40px;height:40px;border-radius:50%;" src="${cached[chat.entity.photo.photoId]}"/>`;
           }
         }
       });
@@ -569,14 +480,14 @@
     }
   }
 
-  async function sort_chats(chats) {
+  async function sortChats(chats) {
     try {
-      const user = await get_user();
+      const user = await getUser();
       archivedChatListName = [];
       archivedChatList = [];
       let tempChatList = [];
       chats.forEach((chat, index) => {
-        chat.icon = `<img style="width:40px;height:40px;border-radius:50%;" src="${tempThumb}"/>`;
+        chat.icon = `<img alt="icon" style="width:40px;height:40px;border-radius:50%;" src="${tempThumb}"/>`;
         if (chat.id.value === user[0].id.value) {
           chat.name = 'Saved Messages';
         }
@@ -592,146 +503,71 @@
       });
       _chatList = tempChatList;
       chatList = _chatList;
+      setTimeout(() => {
+        navInstance.navigateListNav(1);
+        setTimeout(() => {
+          navInstance.navigateListNav(-1);
+        }, 100);
+        console.log(1);
+      }, 100);
       runTask(chats, {});
-      // runFetchThumbJobs(user);
-      reset_cursor();
     } catch(err) {
       console.log(err.toString());
     }
   }
 
-  function getMessages(name, entity) {
-    // console.log(entity.toJSON());
+  function openRoom(name, entity) {
     goto('room', { state: { name, entity: entity.toJSON() } });
   }
 
   function eventHandler(evt) {
     if (evt.className === "UpdateLoginToken") {
-      export_login_token();
+      exportLoginToken();
       if (qrModal) {
         qrModal.$destroy();
       }
-    } else {
-      console.log(evt);
     }
   }
 
   onMount(() => {
-    console.log('onMount:', name);
+
     const { appBar, softwareKey } = getAppProp();
     appBar.setTitleText(name);
     softwareKey.setText({ left: '', center: 'SELECT', right: '' });
     navInstance.attachListener();
 
     client.addEventHandler(eventHandler);
-    client.connect()
-    .then(() => {
-      return client.isUserAuthorized();
-    })
-    .then((authorized) => {
-      //const script = `
-      //importScripts('${window.location.origin}/js/telegram.js');
-      //importScripts('${window.location.origin}/js/polyfill.min.js');
 
-      //self.onmessage = function(e) {
-        //const session = new telegram.sessions.MemorySession();
-        //session.setDC(e.data.dcId, e.data.serverAddress, e.data.port);
-        //session.setAuthKey(new telegram.AuthKey(e.data.authKey._key, e.data.authKey._hash), e.data.dcId);
-        //let client = new telegram.TelegramClient(session, ${TelegramKeyHash.api_id}, '${TelegramKeyHash.api_hash}', {
-          //maxConcurrentDownloads: 1,
-        //});
-        //client.connect()
-        //.then(() => {
-          //console.log('Connected in worker');
-          //return client.getDialogs({
-            //offsetPeer: new telegram.Api.InputPeerSelf(),
-            //limit: 100,
-            //excludePinned: true,
-            //folderId: 0,
-          //});
-        //})
-        //.then((chats) => {
-          //let jobs = chats.length;
-          //let cached = {};
-          //chats.forEach(chat => {
-            //if (chat.entity.photo && chat.entity.photo.photoId) {
-              //client.downloadProfilePhoto(chat.entity)
-              //.then(buffer => {
-                //const reader = new FileReader();
-                //reader.onloadend = () => {
-                  //cached[chat.entity.photo.photoId] = reader.result;
-                  //jobs--;
-                  //if (jobs == 0) {
-                    //self.postMessage(cached);
-                    //client.disconnect();
-                  //}
-                //};
-                //reader.onerror = (err) => {
-                  //jobs--;
-                  //if (jobs == 0) {
-                    //self.postMessage(cached);
-                    //client.disconnect();
-                  //}
-                //};
-                //reader.readAsDataURL(new Blob([new Uint8Array(buffer, 0, buffer.length)], {type : 'image/jpeg'}));
-              //})
-              //.catch(err => {
-                //jobs--;
-                //if (jobs == 0) {
-                  //self.postMessage(cached);
-                  //client.disconnect();
-                //}
-                //console.log(err);
-              //});
-            //} else {
-              //jobs--;
-              //if (jobs == 0) {
-                //self.postMessage(cached);
-                //client.disconnect();
-              //}
-            //}
-          //});
-        //})
-        //.catch(err => {
-          //console.log(err);
-          //client.disconnect();
-        //});
-      //}`
-      //const blob = new Blob([script], {type: 'application/javascript'});
-      //const worker = new Worker(URL.createObjectURL(blob));
-      //worker.postMessage({
-        //dcId: session.dcId,
-        //serverAddress: session.serverAddress,
-        //port: session.port,
-        //authKey: session.getAuthKey(session.dcId)
-      //});
-      //worker.onmessage = (e) => {
-        //_chatList.forEach(chat => {
-          //if (chat.entity.photo && chat.entity.photo.photoId) {
-            //if (e.data[chat.entity.photo.photoId]) {
-              //chat.icon = `<img style="width:40px;height:40px;border-radius:50%;" src="${e.data[chat.entity.photo.photoId]}"/>`;
-            //}
-          //}
-        //});
-        //archivedChatList.forEach(chat => {
-          //if (chat.entity.photo && chat.entity.photo.photoId) {
-            //if (e.data[chat.entity.photo.photoId]) {
-              //chat.icon = `<img style="width:40px;height:40px;border-radius:50%;" src="${e.data[chat.entity.photo.photoId]}"/>`;
-            //}
-          //}
-        //});
-        //chatList = _chatList;
-      //}
-      is_user_authorized();
-      reset_sign_in();
-    })
-    .catch((err) => {
-      console.log(err);
+    unchatCollections = chatCollections.subscribe(chats => {
+      if (client.connected) {
+        sortChats(chats);
+      }
     });
 
-    chatCollections.subscribe(chats => {
-      if (client.connected) {
-        sort_chats(chats);
+    unconnectionStatus = connectionStatus.subscribe(status => {
+      console.log(status);
+    });
+
+    unauthorizedStatus = authorizedStatus.subscribe(status => {
+      authStatus = status;
+      if (status) {
+        softwareKey.setLeftText('Menu');
+        softwareKey.setRightText('Search');
+        if (inputSoftwareKey) {
+          inputSoftwareKey.$destroy();
+          inputSoftwareKey = null;
+        }
+        if (qrModal) {
+          qrModal.$destroy();
+          qrModal = null;
+        }
+        if (password2FA) {
+          password2FA.$destroy();
+          password2FA = null;
+        }
+      } else {
+        softwareKey.setLeftText('');
+        softwareKey.setRightText('');
       }
     });
 
@@ -740,6 +576,12 @@
   onDestroy(() => {
     client.removeEventHandler(eventHandler);
     navInstance.detachListener();
+    if (unchatCollections)
+      unchatCollections();
+    if (unauthorizedStatus)
+      unauthorizedStatus();
+    if (unconnectionStatus)
+      unconnectionStatus();
   });
 
 </script>
@@ -752,33 +594,33 @@
     <span slot="leftWidget" class="kai-icon-arrow" style="margin:0px 5px;-moz-transform: scale(-1, 1);-webkit-transform: scale(-1, 1);-o-transform: scale(-1, 1);-ms-transform: scale(-1, 1);transform: scale(-1, 1);"></span>
     <span slot="rightWidget" class="kai-icon-arrow" style="margin:0px 5px;"></span>
   </Button>
-  <Button className="{navClass}" text="Log-In via QR Code" onClick={sign_in_qr}>
+  <Button className="{navClass}" text="Log-In via QR Code" onClick={signInQR}>
     <span slot="leftWidget" class="kai-icon-arrow" style="margin:0px 5px;-moz-transform: scale(-1, 1);-webkit-transform: scale(-1, 1);-o-transform: scale(-1, 1);-ms-transform: scale(-1, 1);transform: scale(-1, 1);"></span>
     <span slot="rightWidget" class="kai-icon-arrow" style="margin:0px 5px;"></span>
   </Button>
   {:else}
   <TextInputField className="{navClass}" label="Login Code" placeholder="Login Code" value={phoneCode} type="tel" onInput="{onInputPhoneCode}" {onFocus} {onBlur} />
-  <Button className="{navClass}" text="Sign In" onClick={sign_in}>
+  <Button className="{navClass}" text="Sign In" onClick={signIn}>
     <span slot="leftWidget" class="kai-icon-arrow" style="margin:0px 5px;-moz-transform: scale(-1, 1);-webkit-transform: scale(-1, 1);-o-transform: scale(-1, 1);-ms-transform: scale(-1, 1);transform: scale(-1, 1);"></span>
     <span slot="rightWidget" class="kai-icon-arrow" style="margin:0px 5px;"></span>
   </Button>
-  <Button className="{navClass}" text="Return" onClick={reset_sign_in}>
+  <Button className="{navClass}" text="Return" onClick={resetSignIn}>
     <span slot="leftWidget" class="kai-icon-arrow" style="margin:0px 5px;-moz-transform: scale(-1, 1);-webkit-transform: scale(-1, 1);-o-transform: scale(-1, 1);-ms-transform: scale(-1, 1);transform: scale(-1, 1);"></span>
     <span slot="rightWidget" class="kai-icon-arrow" style="margin:0px 5px;"></span>
   </Button>
   {/if}
-  <Button className="{navClass}" text="Exit" onClick={onButtonClick}>
+  <Button className="{navClass}" text="Exit" onClick={() => window.close() }>
     <span slot="leftWidget" class="kai-icon-arrow" style="margin:0px 5px;-moz-transform: scale(-1, 1);-webkit-transform: scale(-1, 1);-o-transform: scale(-1, 1);-ms-transform: scale(-1, 1);transform: scale(-1, 1);"></span>
     <span slot="rightWidget" class="kai-icon-arrow" style="margin:0px 5px;"></span>
   </Button>
   {:else}
   {#if archivedChatList.length > 0 }
     <ListView className="{navClass}" title="Archived Chats" subtitle="{archivedChatListName.join(', ').substring(0, 50)}" onClick={openArchivedChatListMenu}>
-      <span slot="leftWidget" style="padding-right: 4px;"><img style="width:40px;height:40px;border-radius:50%;" src="{tempThumb}"/></span>
+      <span slot="leftWidget" style="padding-right: 4px;"><img alt="icon" style="width:40px;height:40px;border-radius:50%;" src="{tempThumb}"/></span>
     </ListView>
   {/if}
   {#each chatList as chat}
-    <ListView className="{navClass}" title="{chat.name + (chat.unreadCount ? '(' + chat.unreadCount + ')' : '')}" subtitle="{chat.message.message.substring(0, 50)}" onClick={() => getMessages(chat.name, chat.entity)}>
+    <ListView className="{navClass}" title="{chat.name + (chat.unreadCount ? '(' + chat.unreadCount + ')' : '')}" subtitle="{chat.message.message.substring(0, 50)}" onClick={() => openRoom(chat.name, chat.entity)}>
       <span slot="leftWidget" style="padding-right: 4px;">{@html chat.icon || ''}</span>
     </ListView>
   {/each}
