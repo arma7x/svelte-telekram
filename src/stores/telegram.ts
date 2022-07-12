@@ -7,6 +7,17 @@ export const chatCollections = writable([]);
 
 client.addEventHandler((evt) => {
   console.log(evt);
+  switch (evt.className) {
+    case "UpdateFolderPeers":
+      retrieveChats();
+      break
+  }
+  if (evt.state) {
+    if (evt.state === 1)
+      connectionStatus.update(n => true);
+    else if (evt.state === -1)
+      connectionStatus.update(n => false);
+  }
 });
 
 client.connect()

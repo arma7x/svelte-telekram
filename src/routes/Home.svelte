@@ -503,13 +503,13 @@
       });
       _chatList = tempChatList;
       chatList = _chatList;
-      setTimeout(() => {
-        navInstance.navigateListNav(1);
-        setTimeout(() => {
-          navInstance.navigateListNav(-1);
-        }, 100);
-        console.log(1);
-      }, 100);
+      //setTimeout(() => {
+        //navInstance.navigateListNav(1);
+        //setTimeout(() => {
+          //navInstance.navigateListNav(-1);
+        //}, 100);
+        //console.log(1);
+      //}, 100);
       runTask(chats, {});
     } catch(err) {
       console.log(err.toString());
