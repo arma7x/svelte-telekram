@@ -63,14 +63,9 @@
     overflow: scroll;
     width: 100%;
   }
-  #room-screen > .vertical {
+  #room-screen > .vertClass {
     display:flex;
     flex-direction:column;
-  }
-  #room-screen > .horizontal {
-    width:100%;
-    display:flex;
-    flex-direction:row;
   }
   :global(#room-screen > .vertClass) {
     background-color: #ffffff;
