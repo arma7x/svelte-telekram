@@ -10,6 +10,7 @@ client.addEventHandler((evt) => {
   switch (evt.className) {
     case "UpdateFolderPeers":
     case "UpdateNewChannelMessage";
+    case "UpdateReadChannelInbox";
       retrieveChats();
       break
   }
