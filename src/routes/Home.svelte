@@ -7,7 +7,7 @@
   import { TelegramKeyHash, Api, client, session, profilePhotoDb } from '../utils/mtproto_client';
   import QRModal from '../widgets/QRModal.svelte';
 
-  import { chatCollections, getChats } from '..//stores/chats';
+  import { chatCollections, retrieveChats } from '../stores/chats';
 
   const navClass: string = 'homeNav';
 
@@ -424,7 +424,7 @@
       authStatus = false;
       if (authorized) {
         authStatus = authorized;
-        getChats();
+        retrieveChats();
         softwareKey.setLeftText('Menu');
         softwareKey.setRightText('Search');
         if (inputSoftwareKey) {
@@ -729,8 +729,9 @@
     });
 
     chatCollections.subscribe(chats => {
-      if (client.connected)
+      if (client.connected) {
         sort_chats(chats);
+      }
     });
 
   });

@@ -5,6 +5,8 @@
 
   import { Api, client } from '../utils/mtproto_client';
 
+  import { getChatCollection } from '../stores/chats';
+
   export let location: any;
   export let navigate: any;
   export let getAppProp: Function;
@@ -25,13 +27,12 @@
   let navInstance = createKaiNavigator(navOptions);
 
   async function getMessages(entity) {
-    const parsed = new telegram.Api[entity.className](entity);
-    // console.log(entity);
-    // console.log(parsed);
-    return
     try {
-      await client.invoke(parsed);
-      const messages = await client.getMessages(parsed, { limit: 50 });
+      const chats = await getChatCollection();
+      const target = chats.find(chat => {
+        return chat.id.value == entity.id.value;
+      });
+      const messages = await client.getMessages(target, { limit: 50 });
       console.log(messages);
     } catch (err) {
       console.log(err);
