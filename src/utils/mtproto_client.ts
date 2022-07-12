@@ -15,9 +15,9 @@ localForage.setDriver(localForage.INDEXEDDB);
 const dbName = 'gramjs';
 
 const profilePhotoDb = localForage.createInstance({
-    name        : dbName,
-    storeName   : 'profilePhotoDb',
-    description : 'cached profilePhoto'
+  name        : dbName,
+  storeName   : 'profilePhotoDb',
+  description : 'cached profilePhoto'
 });
 
 export {
