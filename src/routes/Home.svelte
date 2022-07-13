@@ -577,6 +577,7 @@
 <style>
   #home-screen {
     overflow: scroll;
+    overflow-x: hidden;
     width: 100%;
   }
 </style>

@@ -3,7 +3,7 @@
   import { createKaiNavigator } from '../utils/navigation';
   import { onMount, onDestroy } from 'svelte';
 
-  import { Api, client } from '../utils/mtproto_client';
+  import { Api, client } from '../utils/bootstrap';
 
   import { getChatCollection } from '../stores/telegram';
 
