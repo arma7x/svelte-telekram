@@ -563,7 +563,7 @@
   {:else}
   {#if archivedChatList.length > 0 }
     <ListView className="{navClass}" title="Archived Chats" subtitle="{archivedChatListName.join(', ').substring(0, 50)}" onClick={openArchivedChatListMenu}>
-      <span slot="leftWidget" style="padding-right: 4px;"><img alt="icon" style="background-color:var(--themeColor);width:40px;height:40px;border-radius:50%;" src="/icons/icon112x112.png"/></span>
+      <span slot="leftWidget" style="padding-right: 4px;"><img alt="icon" style="background-color:var(--themeColor);width:40px;height:40px;box-sizing:border-box;border-radius:50%;border: 2px solid #fff;" src="/icons/archived.png"/></span>
     </ListView>
   {/if}
   {#each chatList as chat}
