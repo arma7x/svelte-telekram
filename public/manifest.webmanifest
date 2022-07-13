@@ -35,7 +35,11 @@
       "statusbar": "overlap"
     },
     "origin": "svelte-telekram",
-    "permissions": {},
+    "permissions": {
+      "systemXHR": {
+        "description": "Required to load remote content"
+      }
+    },
     "dependencies": {},
     "locales": {
       "en-US": {

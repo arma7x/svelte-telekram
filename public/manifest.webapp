@@ -24,7 +24,11 @@
   },
   "origin": "app://svelte-telekram.arma7x.com",
   "type": "privileged",
-  "permissions": {},
+  "permissions": {
+    "systemXHR": {
+      "description": "Required to load remote content"
+    }
+  },
   "locales": {
     "en-US": {
       "name": "TeleKram",
