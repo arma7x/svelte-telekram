@@ -53,14 +53,18 @@ export async function retrieveChats() {
       excludePinned: true,
       folderId: 0,
     });
-    const tasks = [];
+    const httpTasks = [];
+    const websocketTasks = [];
     chats.forEach((chat, index) => {
       if (!(chat.entity.username == null && chat.entity.phone == null) && chat.entity.photo != null) {
-        tasks.push({
+        httpTasks.push({
           chatId: chat.id.toString(),
           url: `https://api.codetabs.com/v1/proxy/?quest=https://t.me/${chat.entity.phone === "42777" ? 'telegram' : chat.entity.username}`,
-          photoId: chat.entity.photo.photoId.toString()
+          photoId: chat.entity.photo.photoId.toString(),
+          chat: chat
         });
+      } else if (chat.entity.photo != null) {
+        websocketTasks.push(chat);
       }
       const letters = chat.name.split(' ').map(text => {
         return text[0];
@@ -68,7 +72,7 @@ export async function retrieveChats() {
       chat.icon = `<div style="display:flex;flex-direction:column;justify-content:center;align-items:center;font-weight:bold;color:#fff;background-color:var(--themeColor);width:40px;height:40px;border-radius:50%;box-sizing:border-box;border: 2px solid #fff;">${letters.splice(0, 2).join('')}</div>`;
     });
     chatCollections.update(n => chats);
-    runTask(chats, tasks);
+    runTask(chats, httpTasks, websocketTasks);
   } catch (err) {
     console.log(err);
   }
@@ -78,15 +82,20 @@ export async function getChatCollection() {
   return get(chatCollections)
 }
 
-async function runTask(chats, tasks) {
-  tasks.forEach(async (task) => {
+function runTask(chats, httpTasks, websocketTasks) {
+  httpTasks.forEach(async (task, index) => {
     try {
       let cache = await profilePhotoDb.getItem(task.photoId);
       if (cache == null) {
         const response = await fetch(task.url);
         const html = new DOMParser().parseFromString(await response.text(), 'text/html');
         const images = html.getElementsByClassName('tgme_page_photo_image');
-        cache = await profilePhotoDb.setItem(task.photoId, images[0].src);
+        if (images.length === 0) {
+          const base64 = await bufferToBase64(await client.downloadProfilePhoto(task.chat));
+          cache = await profilePhotoDb.setItem(task.photoId, base64);
+        } else {
+          cache = await profilePhotoDb.setItem(task.photoId, images[0].src);
+        }
       }
       for (let x in chats) {
         const chat = chats[x];
@@ -95,9 +104,47 @@ async function runTask(chats, tasks) {
           break;
         }
       }
-      chatCollections.update(n => chats);
     } catch (err) {
-      console.log('Err:', task.url);
+      console.log('Err:', err);
     }
+  });
+  chatCollections.update(n => chats);
+  let elapsed = 0;
+  websocketTasks.forEach(async (task) => {
+    try {
+      let cache = await profilePhotoDb.getItem(task.entity.photo.photoId.toString());
+      if (cache == null) {
+        const base64 = await bufferToBase64(await client.downloadProfilePhoto(task));
+        cache = await profilePhotoDb.setItem(task.entity.photo.photoId.toString(), base64);
+      }
+      for (let x in chats) {
+        const chat = chats[x];
+        if (chat.id.toString() === task.id.toString()) {
+          chat.icon = `<img alt="icon" style="background-color:var(--themeColor);width:40px;height:40px;border-radius:50%;box-sizing:border-box;border: 2px solid #fff;"" src="${cache}"/>`;
+          break;
+        }
+      }
+    } catch (err) {
+      console.log('Err:', err);
+    } finally {
+      elapsed++;
+      if (elapsed === websocketTasks.length) {
+        chatCollections.update(n => chats);
+      }
+    }
+
+  });
+}
+
+function bufferToBase64(buffer) {
+  return new Promise((resolve, reject) => {
+    const reader = new FileReader();
+    reader.onloadend = () => {
+      resolve(reader.result);
+    };
+    reader.onerror = (err) => {
+      reject(err);
+    };
+    reader.readAsDataURL(new Blob([new Uint8Array(buffer, 0, buffer.length)], {type : 'image/jpeg'}));
   });
 }
