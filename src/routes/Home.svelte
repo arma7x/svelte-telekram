@@ -426,19 +426,71 @@
     }
   }
 
+  function runWorker(entity) {
+    const script = `
+      importScripts('${window.location.origin}/js/telegram.js');
+      importScripts('${window.location.origin}/js/polyfill.min.js');
+
+      self.onmessage = function(e) {
+        const session = new telegram.sessions.MemorySession();
+        session.setDC(e.data.connection.dcId, e.data.connection.serverAddress, e.data.connection.port);
+        session.setAuthKey(new telegram.AuthKey(e.data.connection.authKey._key, e.data.connection.authKey._hash), e.data.connection.dcId);
+        const client = new telegram.TelegramClient(session, ${TelegramKeyHash.api_id}, '${TelegramKeyHash.api_hash}', {
+          maxConcurrentDownloads: 1,
+        });
+        e.data.entity.photo = new telegram.Api[e.data.entity.photo.className](e.data.entity.photo);
+        const entity = new telegram.Api[e.data.entity.className](e.data.entity);
+        entity.accessHash = telegram.helpers.returnBigInt(entity.accessHash.value);
+        entity.id = telegram.helpers.returnBigInt(entity.id.value);
+        entity.photo.photoId = telegram.helpers.returnBigInt(entity.photo.photoId.value);
+        client.connect()
+        .then(() => {
+          return client.downloadProfilePhoto(entity);
+        })
+        .then(buffer => {
+          const reader = new FileReader();
+          reader.onloadend = () => {
+            self.postMessage({ result: { photoId: entity.photo.photoId.toString(), base64: reader.result }});
+            client.disconnect();
+          };
+          reader.onerror = (err) => {
+            self.postMessage({ error: err });
+            client.disconnect();
+          };
+          reader.readAsDataURL(new Blob([new Uint8Array(buffer, 0, buffer.length)], {type : 'image/jpeg'}));
+        })
+        .catch(err => {
+          self.postMessage({ error: err });
+        });
+      }
+    `;
+    const blob = new Blob([script], {type: 'application/javascript'});
+    const worker = new Worker(URL.createObjectURL(blob));
+    worker.postMessage({
+      connection: {
+        dcId: session.dcId,
+        serverAddress: session.serverAddress,
+        port: session.port,
+        authKey: session.getAuthKey(session.dcId)
+      },
+      entity: entity.toJSON()
+    });
+    return worker;
+  }
+
   function runTask(chats, cached) {
-    return;
+    // return;
     if (chats.length === 0) {
       _chatList.forEach(chat => {
         if (chat.entity.photo && chat.entity.photo.photoId) {
-          if (cached[chat.entity.photo.photoId]) {
+          if (cached[chat.entity.photo.photoId.toString()]) {
             chat.icon = `<img alt="icon" style="width:40px;height:40px;border-radius:50%;" src="${cached[chat.entity.photo.photoId]}"/>`;
           }
         }
       });
       archivedChatList.forEach(chat => {
         if (chat.entity.photo && chat.entity.photo.photoId) {
-          if (cached[chat.entity.photo.photoId]) {
+          if (cached[chat.entity.photo.photoId.toString()]) {
             chat.icon = `<img alt="icon" style="width:40px;height:40px;border-radius:50%;" src="${cached[chat.entity.photo.photoId]}"/>`;
           }
         }
@@ -448,30 +500,17 @@
     }
     const chat = chats[0];
     if (chat.entity.photo && chat.entity.photo.photoId) {
-      client.downloadProfilePhoto(chat.entity)
-      .then(buffer => {
-        const reader = new FileReader();
-        reader.onloadend = () => {
-          cached[chat.entity.photo.photoId] = reader.result;
-          chats.splice(0, 1);
-          setTimeout(() => {
-            runTask(chats, cached);
-          }, 100);
-        };
-        reader.onerror = (err) => {
-          chats.splice(0, 1);
-          setTimeout(() => {
-            runTask(chats, cached);
-          }, 100);
-        };
-        reader.readAsDataURL(new Blob([new Uint8Array(buffer, 0, buffer.length)], {type : 'image/jpeg'}));
-      })
-      .catch(err => {
+      const worker = runWorker(chat.entity);
+      worker.onmessage = (e) => {
+        if (e.data.result) {
+          cached[e.data.result.photoId] = e.data.result.base64;
+        }
+        worker.terminate();
         chats.splice(0, 1);
         setTimeout(() => {
           runTask(chats, cached);
         }, 100);
-      });
+      }
     } else {
       chats.splice(0, 1);
       setTimeout(() => {
