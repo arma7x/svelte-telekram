@@ -426,100 +426,6 @@
     }
   }
 
-  function runWorker() {
-    const script = `
-      importScripts('${window.location.origin}/js/telegram.js');
-      importScripts('${window.location.origin}/js/polyfill.min.js');
-
-      function run(client, chats, cached) {
-        if (chats.length > 0) {
-          const chat = chats.splice(0, 1);
-          if (chat[0].entity.photo && chat[0].entity.photo.photoId) {
-            client.downloadProfilePhoto(chat[0])
-            .then(buffer => {
-              // console.log(buffer);
-              // cached[chat[0].entity.photo.photoId.toString()] = buffer;
-              const reader = new FileReader();
-              reader.onloadend = () => {
-                cached[chat[0].entity.photo.photoId.toString()] = reader.result;
-                run(client, chats, cached);
-              };
-              reader.onerror = (err) => {
-                run(client, chats, cached);
-              };
-              reader.readAsDataURL(new Blob([new Uint8Array(buffer, 0, buffer.length)], {type : 'image/jpeg'}));
-            })
-            .catch(err => {
-              // console.log(err);
-              run(client, chats, cached);
-            });
-          } else {
-            run(client, chats, cached);
-          }
-        } else {
-          // console.log(cached);
-          self.postMessage(cached);
-        }
-      }
-
-      self.onmessage = function(e) {
-        const session = new telegram.sessions.MemorySession();
-        session.setDC(e.data.connection.dcId, e.data.connection.serverAddress, e.data.connection.port);
-        session.setAuthKey(new telegram.AuthKey(e.data.connection.authKey._key, e.data.connection.authKey._hash), e.data.connection.dcId);
-        const client = new telegram.TelegramClient(session, ${TelegramKeyHash.api_id}, '${TelegramKeyHash.api_hash}', { maxConcurrentDownloads: 1 });
-        client.connect()
-        .then(() => {
-          console.log('Connected in worker');
-          return client.getDialogs({
-            offsetPeer: new telegram.Api.InputPeerSelf(),
-            limit: 100,
-            excludePinned: true,
-            folderId: 0,
-          });
-        })
-        .then((chats) => {
-          run(client, chats, {});
-        })
-        .catch(err => {
-          console.log(err);
-        });
-      }
-    `;
-    const blob = new Blob([script], {type: 'application/javascript'});
-    const worker = new Worker(URL.createObjectURL(blob));
-    worker.postMessage({
-      connection: {
-        dcId: session.dcId,
-        serverAddress: session.serverAddress,
-        port: session.port,
-        authKey: session.getAuthKey(session.dcId)
-      },
-    });
-    return worker;
-  }
-
-  function runTask() {
-    const worker = runWorker();
-    worker.onmessage = (e) => {
-      const cached = e.data;
-      _chatList.forEach(chat => {
-        if (chat.entity.photo && chat.entity.photo.photoId) {
-          if (cached[chat.entity.photo.photoId.toString()]) {
-            chat.icon = `<img alt="icon" style="width:40px;height:40px;border-radius:50%;" src="${cached[chat.entity.photo.photoId]}"/>`;
-          }
-        }
-      });
-      archivedChatList.forEach(chat => {
-        if (chat.entity.photo && chat.entity.photo.photoId) {
-          if (cached[chat.entity.photo.photoId.toString()]) {
-            chat.icon = `<img alt="icon" style="width:40px;height:40px;border-radius:50%;" src="${cached[chat.entity.photo.photoId]}"/>`;
-          }
-        }
-      });
-      chatList = _chatList;
-    }
-  }
-
   async function sortChats(chats) {
     try {
       const user = await getUser();
@@ -527,7 +433,6 @@
       archivedChatList = [];
       let tempChatList = [];
       chats.forEach((chat, index) => {
-        chat.icon = `<img alt="icon" style="width:40px;height:40px;border-radius:50%;" src="${tempThumb}"/>`;
         if (chat.id.value === user[0].id.value) {
           chat.name = 'Saved Messages';
         }
@@ -554,7 +459,6 @@
         //}, 100);
         //console.log(1);
       //}, 100);
-      runTask();
     } catch(err) {
       console.log(err.toString());
     }

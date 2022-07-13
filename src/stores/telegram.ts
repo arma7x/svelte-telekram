@@ -47,13 +47,16 @@ export async function isUserAuthorized() {
 
 export async function retrieveChats() {
   try {
-    const result = await client.getDialogs({
+    const chats = await client.getDialogs({
       offsetPeer: new Api.InputPeerSelf(),
       limit: 100,
       excludePinned: true,
       folderId: 0,
     });
-    chatCollections.update(n => result);
+    chats.forEach((chat, index) => {
+      chat.icon = `<img alt="icon" style="width:40px;height:40px;border-radius:50%;" src="/icons/icon112x112.png"/>`;
+    });
+    chatCollections.update(n => chats);
   } catch (err) {
     console.log(err);
   }
