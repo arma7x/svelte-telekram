@@ -94,7 +94,9 @@ function runTask(chats, httpTasks, websocketTasks) {
           const base64 = await bufferToBase64(await client.downloadProfilePhoto(task.chat));
           cache = await profilePhotoDb.setItem(task.photoId, base64);
         } else {
-          cache = await profilePhotoDb.setItem(task.photoId, images[0].src);
+          const blob = await (await fetch(images[0].src)).blob()
+          const base64 = await blobToBase64(blob);
+          cache = await profilePhotoDb.setItem(task.photoId, base64);
         }
       }
       for (let x in chats) {
@@ -146,5 +148,18 @@ function bufferToBase64(buffer) {
       reject(err);
     };
     reader.readAsDataURL(new Blob([new Uint8Array(buffer, 0, buffer.length)], {type : 'image/jpeg'}));
+  });
+}
+
+function blobToBase64(blob) {
+  return new Promise((resolve, reject) => {
+    const reader = new FileReader();
+    reader.onloadend = () => {
+      resolve(reader.result);
+    };
+    reader.onerror = (err) => {
+      reject(err);
+    };
+    reader.readAsDataURL(blob);
   });
 }
