@@ -1,5 +1,5 @@
 import { get, writable } from 'svelte/store';
-import { TelegramKeyHash, Api, client } from '../utils/mtproto_client';
+import { TelegramKeyHash, Api, client } from '../utils/bootstrap';
 
 export const connectionStatus = writable(false);
 export const authorizedStatus = writable(false);
@@ -54,7 +54,7 @@ export async function retrieveChats() {
       folderId: 0,
     });
     chats.forEach((chat, index) => {
-      chat.icon = `<img alt="icon" style="width:40px;height:40px;border-radius:50%;" src="/icons/icon112x112.png"/>`;
+      chat.icon = `<img alt="icon" style="background-color:var(--themeColor);width:40px;height:40px;border-radius:50%;" src="/icons/icon112x112.png"/>`;
     });
     chatCollections.update(n => chats);
   } catch (err) {
