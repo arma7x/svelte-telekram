@@ -94,7 +94,8 @@ function runTask(chats, httpTasks, websocketTasks) {
           const base64 = await bufferToBase64(await client.downloadProfilePhoto(task.chat));
           cache = await profilePhotoDb.setItem(task.photoId, base64);
         } else {
-          const blob = await (await fetch(images[0].src)).blob()
+          const img = images[0] as HTMLImageElement;
+          const blob = await (await fetch(img.src)).blob()
           const base64 = await blobToBase64(blob);
           cache = await profilePhotoDb.setItem(task.photoId, base64);
         }
