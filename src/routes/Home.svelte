@@ -426,41 +426,62 @@
     }
   }
 
-  function runWorker(entity) {
+  function runWorker() {
     const script = `
       importScripts('${window.location.origin}/js/telegram.js');
       importScripts('${window.location.origin}/js/polyfill.min.js');
+
+      function run(client, chats, cached) {
+        if (chats.length > 0) {
+          const chat = chats.splice(0, 1);
+          if (chat[0].entity.photo && chat[0].entity.photo.photoId) {
+            client.downloadProfilePhoto(chat[0])
+            .then(buffer => {
+              // console.log(buffer);
+              // cached[chat[0].entity.photo.photoId.toString()] = buffer;
+              const reader = new FileReader();
+              reader.onloadend = () => {
+                cached[chat[0].entity.photo.photoId.toString()] = reader.result;
+                run(client, chats, cached);
+              };
+              reader.onerror = (err) => {
+                run(client, chats, cached);
+              };
+              reader.readAsDataURL(new Blob([new Uint8Array(buffer, 0, buffer.length)], {type : 'image/jpeg'}));
+            })
+            .catch(err => {
+              // console.log(err);
+              run(client, chats, cached);
+            });
+          } else {
+            run(client, chats, cached);
+          }
+        } else {
+          // console.log(cached);
+          self.postMessage(cached);
+        }
+      }
 
       self.onmessage = function(e) {
         const session = new telegram.sessions.MemorySession();
         session.setDC(e.data.connection.dcId, e.data.connection.serverAddress, e.data.connection.port);
         session.setAuthKey(new telegram.AuthKey(e.data.connection.authKey._key, e.data.connection.authKey._hash), e.data.connection.dcId);
-        const client = new telegram.TelegramClient(session, ${TelegramKeyHash.api_id}, '${TelegramKeyHash.api_hash}', {
-          maxConcurrentDownloads: 1,
-        });
-        e.data.entity.photo = new telegram.Api[e.data.entity.photo.className](e.data.entity.photo);
-        const entity = new telegram.Api[e.data.entity.className](e.data.entity);
-        entity.accessHash = telegram.helpers.returnBigInt(entity.accessHash.value);
-        entity.id = telegram.helpers.returnBigInt(entity.id.value);
-        entity.photo.photoId = telegram.helpers.returnBigInt(entity.photo.photoId.value);
+        const client = new telegram.TelegramClient(session, ${TelegramKeyHash.api_id}, '${TelegramKeyHash.api_hash}', { maxConcurrentDownloads: 1 });
         client.connect()
         .then(() => {
-          return client.downloadProfilePhoto(entity);
+          console.log('Connected in worker');
+          return client.getDialogs({
+            offsetPeer: new telegram.Api.InputPeerSelf(),
+            limit: 100,
+            excludePinned: true,
+            folderId: 0,
+          });
         })
-        .then(buffer => {
-          const reader = new FileReader();
-          reader.onloadend = () => {
-            self.postMessage({ result: { photoId: entity.photo.photoId.toString(), base64: reader.result }});
-            client.disconnect();
-          };
-          reader.onerror = (err) => {
-            self.postMessage({ error: err });
-            client.disconnect();
-          };
-          reader.readAsDataURL(new Blob([new Uint8Array(buffer, 0, buffer.length)], {type : 'image/jpeg'}));
+        .then((chats) => {
+          run(client, chats, {});
         })
         .catch(err => {
-          self.postMessage({ error: err });
+          console.log(err);
         });
       }
     `;
@@ -473,14 +494,14 @@
         port: session.port,
         authKey: session.getAuthKey(session.dcId)
       },
-      entity: entity.toJSON()
     });
     return worker;
   }
 
-  function runTask(chats, cached) {
-    // return;
-    if (chats.length === 0) {
+  function runTask() {
+    const worker = runWorker();
+    worker.onmessage = (e) => {
+      const cached = e.data;
       _chatList.forEach(chat => {
         if (chat.entity.photo && chat.entity.photo.photoId) {
           if (cached[chat.entity.photo.photoId.toString()]) {
@@ -496,26 +517,6 @@
         }
       });
       chatList = _chatList;
-      return;
-    }
-    const chat = chats[0];
-    if (chat.entity.photo && chat.entity.photo.photoId) {
-      const worker = runWorker(chat.entity);
-      worker.onmessage = (e) => {
-        if (e.data.result) {
-          cached[e.data.result.photoId] = e.data.result.base64;
-        }
-        worker.terminate();
-        chats.splice(0, 1);
-        setTimeout(() => {
-          runTask(chats, cached);
-        }, 100);
-      }
-    } else {
-      chats.splice(0, 1);
-      setTimeout(() => {
-        runTask(chats, cached);
-      }, 100);
     }
   }
 
@@ -553,7 +554,7 @@
         //}, 100);
         //console.log(1);
       //}, 100);
-      runTask(chats, {});
+      runTask();
     } catch(err) {
       console.log(err.toString());
     }
