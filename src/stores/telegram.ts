@@ -87,8 +87,7 @@ function runTask(chats, httpTasks, websocketTasks) {
     try {
       let cache = await profilePhotoDb.getItem(task.photoId);
       if (cache == null) {
-        const response = await fetch(task.url);
-        const html = new DOMParser().parseFromString(await response.text(), 'text/html');
+        const html = new DOMParser().parseFromString(await (await fetch(task.url)).text(), 'text/html');
         const images = html.getElementsByClassName('tgme_page_photo_image');
         if (images.length === 0) {
           const base64 = await bufferToBase64(await client.downloadProfilePhoto(task.chat));
