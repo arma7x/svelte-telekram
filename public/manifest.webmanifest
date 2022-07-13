@@ -2,9 +2,9 @@
   "name": "TeleKram",
   "description": "A Telegram client for KaiOS using Svelte and TypeScript.",
   "start_url": "/index.html",
-  "theme": "#ff3e00",
-  "theme_color": "#ff3e00",
-  "background_color": "#ff3e00",
+  "theme": "#431F7F",
+  "theme_color": "#431F7F",
+  "background_color": "#431F7F",
   "display": "fullscreen",
   "orientation": "default",
   "categories": [
