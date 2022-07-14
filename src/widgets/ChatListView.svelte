@@ -87,7 +87,7 @@
     background-color: #c0c0c0;
     font-weight: bold;
     border-radius: 5px;
-    padding: 3px 3px 2px 2px;
+    padding: 3px 3px 0 3px;
   }
 
   .kai-list-view > span {
