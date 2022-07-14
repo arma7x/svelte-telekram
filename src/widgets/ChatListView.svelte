@@ -12,7 +12,7 @@
     <p>
       {chat.name}
     </p>
-    <small>{chat.message.message.substring(0, 50) + (chat.message.message.length > 50 ? '...' : '')}</small>
+    <small>{chat.message.message.substring(0, 30) + (chat.message.message.length > 30 ? '...' : '')}</small>
   </div>
   <div class="kai-list-view-indicator">
     {#if chat.unreadCount}
