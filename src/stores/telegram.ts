@@ -3,6 +3,7 @@ import { TelegramKeyHash, Api, client, cachedDatabase } from '../utils/bootstrap
 
 export const connectionStatus = writable(false);
 export const authorizedStatus = writable(false);
+export const authorizedUser = writable([]);
 export const chatCollections = writable([]);
 export const cachedThumbnails = writable({});
 
@@ -35,12 +36,23 @@ client.connect()
   connectionStatus.update(n => false);
 });
 
+export async function fetchUser() {
+  const result = await client.invoke(
+    new Api.users.GetUsers({
+      id: [new Api.InputPeerSelf()],
+    })
+  );
+  authorizedUser.update(n => result);
+}
+
 export async function isUserAuthorized() {
   try {
     const authorized = await client.isUserAuthorized();
     authorizedStatus.update(n => authorized);
-    if (authorized)
+    if (authorized) {
+      await fetchUser();
       retrieveChats();
+    }
   } catch (err) {
     console.log(err);
   }
@@ -48,6 +60,7 @@ export async function isUserAuthorized() {
 
 export async function retrieveChats() {
   try {
+    const user = await getAuthorizedUser();
     const chats = await client.getDialogs({
       offsetPeer: new Api.InputPeerSelf(),
       limit: 100,
@@ -57,6 +70,9 @@ export async function retrieveChats() {
     const httpTasks = [];
     const websocketTasks = [];
     chats.forEach((chat, index) => {
+      if (chat.id.value === user[0].id.value) {
+        chat.name = 'Saved Messages';
+      }
       chat.iconRef = chat.id.toString();
       if (!(chat.entity.username == null && chat.entity.phone == null) && chat.entity.photo != null) {
         chat.iconRef = chat.entity.photo.photoId.toString();
@@ -88,6 +104,10 @@ export async function getChatCollection() {
 
 export async function getCachedThumbnails() {
   return get(cachedThumbnails)
+}
+
+export function getAuthorizedUser() {
+  return get(authorizedUser);
 }
 
 function runTask(chats, httpTasks, websocketTasks) {

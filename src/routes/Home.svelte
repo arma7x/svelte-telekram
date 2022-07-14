@@ -10,7 +10,7 @@
   import ChatListView from '../widgets/ChatListView.svelte';
   import ArchivedChats from '../widgets/ArchivedChats.svelte';
 
-  import { connectionStatus, authorizedStatus, isUserAuthorized, chatCollections, retrieveChats, cachedThumbnails } from '../stores/telegram';
+  import { connectionStatus, authorizedStatus, isUserAuthorized, authorizedUser, chatCollections, retrieveChats, cachedThumbnails } from '../stores/telegram';
 
   const navClass: string = 'homeNav';
 
@@ -29,6 +29,7 @@
   let unauthorizedStatus;
   let unconnectionStatus;
   let uncachedThumbnails;
+  let unauthorizedUser;
 
   let name: string = 'Telekram';
   let phoneNumber = '';
@@ -40,6 +41,7 @@
   let archivedChatListName = [];
   let _chatList = [];
   let _thumbs = {};
+  let user = [];
 
   $: chatList = _chatList;
   $: thumbs = _thumbs;
@@ -114,7 +116,7 @@
     authorizedMenu = new OptionMenu({
       target: document.body,
       props: {
-        title: 'Menu',
+        title: user.length > 0 ? `Hi ${user[0].username}` : 'Menu',
         focusIndex: 0,
         options: [
           { title: 'Clear profilePhotoDb' },
@@ -415,29 +417,12 @@
     }
   }
 
-  async function getUser() {
+  function sortChats(chats) {
     try {
-      const result = await client.invoke(
-        new Api.users.GetUsers({
-          id: [new Api.InputPeerSelf()],
-        })
-      );
-      return result;
-    } catch (err) {
-      console.log(err);
-    }
-  }
-
-  async function sortChats(chats) {
-    try {
-      const user = await getUser();
       archivedChatListName = [];
       archivedChatList = [];
       let tempChatList = [];
       chats.forEach((chat, index) => {
-        if (chat.id.value === user[0].id.value) {
-          chat.name = 'Saved Messages';
-        }
         if (chat.message && chat.message.message)
           chat.subtitle = chat.message.message.substring(0, 50) + (chat.message.message.length > 50 ? '...' : '');
         if (chat.archived) {
@@ -531,6 +516,10 @@
       _thumbs = data;
     });
 
+    unauthorizedUser = authorizedUser.subscribe(data => {
+      user = data;
+    });
+
   });
 
   onDestroy(() => {
@@ -544,6 +533,8 @@
       unconnectionStatus();
     if (uncachedThumbnails)
       uncachedThumbnails();
+    if (unauthorizedUser)
+      unauthorizedUser();
   });
 
 </script>
