@@ -39,12 +39,10 @@
   let authStatus: boolean = false;
   let archivedChatList = [];
   let archivedChatListName = [];
-  let _chatList = [];
-  let _thumbs = {};
   let user = [];
 
-  $: chatList = _chatList;
-  $: thumbs = _thumbs;
+  $: chatList = [];
+  $: thumbs = {};
 
   let navOptions = {
     verticalNavClass: navClass,
@@ -436,8 +434,7 @@
           tempChatList.push(chat);
         }
       });
-      _chatList = tempChatList;
-      chatList = _chatList;
+      chatList = tempChatList;
       //setTimeout(() => {
         //navInstance.navigateListNav(1);
         //setTimeout(() => {
@@ -513,7 +510,8 @@
     });
 
     uncachedThumbnails = cachedThumbnails.subscribe(data => {
-      _thumbs = data;
+      thumbs = data;
+      chatList = [...chatList];
     });
 
     unauthorizedUser = authorizedUser.subscribe(data => {
