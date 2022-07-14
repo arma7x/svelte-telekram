@@ -30,7 +30,7 @@
     try {
       const chats = await getChatCollection();
       const target = chats.find(chat => {
-        return chat.id.value == entity.id.value;
+        return chat.entity.id.value == entity.id.value;
       });
       const messages = await client.getMessages(target, { limit: 50 });
       console.log(messages);
