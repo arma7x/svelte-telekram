@@ -1,9 +1,11 @@
 <script lang="ts">
+
+  declare var QRCode:any;
+
   import { onMount, onDestroy } from 'svelte';
   import { createKaiNavigator } from '../utils/navigation';
   import { SoftwareKey, Separator } from '../components';
   import { TelegramKeyHash, Api, client } from '../utils/bootstrap';
-  import QRCode from 'QRCode';
 
   export let title: string = 'Log-In via QR Code';
   export let onBackspace: Function = (evt) => {};

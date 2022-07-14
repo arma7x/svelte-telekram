@@ -41,12 +41,8 @@ export default [
       sourcemap: !production,
       format: 'iife',
       name: 'app',
-      file: 'public/build/bundle.js',
-      globals: {
-        QRCode: 'window.QRCode'
-      }
+      file: 'public/build/bundle.js'
     },
-    external: ['QRCode'],
     context: 'window',
     plugins: [
       svelte({
