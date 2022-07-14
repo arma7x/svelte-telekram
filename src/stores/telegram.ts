@@ -86,6 +86,10 @@ export async function getChatCollection() {
   return get(chatCollections)
 }
 
+export async function getCachedThumbnails() {
+  return get(cachedThumbnails)
+}
+
 function runTask(chats, httpTasks, websocketTasks) {
   let tempRef = {};
   httpTasks.forEach(async (task, index) => {
