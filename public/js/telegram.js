@@ -1,3 +1,4 @@
+/* https://github.com/gram-js/gramjs */
 void 0!==typeof Symbol&&Symbol.asyncIterator||(Symbol.asyncIterator=Symbol.for("Symbol.asyncIterator"));
 window = self;
 globalThis = window;
