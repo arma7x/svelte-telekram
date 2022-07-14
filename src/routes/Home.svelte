@@ -8,6 +8,7 @@
 
   import QRModal from '../widgets/QRModal.svelte';
   import ChatListView from '../widgets/ChatListView.svelte';
+  import ArchivedChats from '../widgets/ArchivedChats.svelte';
 
   import { connectionStatus, authorizedStatus, isUserAuthorized, chatCollections, retrieveChats, cachedThumbnails } from '../stores/telegram';
 
@@ -22,7 +23,7 @@
   let qrModal: QRModal;
   let password2FA: TextInputDialog;
   let authorizedMenu: OptionMenu;
-  let archivedChatListMenu: OptionMenu;
+  let archivedChatListMenu: ArchivedChats;
 
   let unchatCollections;
   let unauthorizedStatus;
@@ -71,12 +72,13 @@
   let navInstance = createKaiNavigator(navOptions);
 
   function openArchivedChatListMenu() {
-    archivedChatListMenu = new OptionMenu({
+    archivedChatListMenu = new ArchivedChats({
       target: document.body,
       props: {
         title: 'Archived Chats',
         focusIndex: 0,
         options: archivedChatList,
+        thumbs: thumbs,
         softKeyLeftText: 'Unarchive',
         softKeyCenterText: 'Select',
         softKeyRightText: '',

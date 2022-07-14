@@ -1,14 +1,15 @@
 <script lang="ts">
   import { onMount, onDestroy } from 'svelte';
   import { createKaiNavigator } from '../utils/navigation';
-  import SoftwareKey from './SoftwareKey.svelte';
-  import ListView from './ListView.svelte';
+  import SoftwareKey from '../components/SoftwareKey.svelte';
+  import ChatListView from './ChatListView.svelte';
 
   const navClass: string = 'optionMenuNav';
 
   export let title: string = 'Option Menu';
   export let focusIndex: number = 0;
-  export let options: <Array>[];
+  export let options: Array<any>;
+  export let thumbs: { [key: string]: string; } = {};
   export let softKeyLeftText: string = '';
   export let softKeyCenterText: string = 'Close';
   export let softKeyRightText: string = '';
@@ -51,6 +52,13 @@
 
   let navInstance = createKaiNavigator(navOptions);
 
+  function getThumb(chat) {
+    if (thumbs[chat.iconRef]) {
+      return `<img alt="icon" style="background-color:var(--themeColor);width:40px;height:40px;border-radius:50%;box-sizing:border-box;border: 2px solid #fff;"" src="${thumbs[chat.iconRef]}"/>`;
+    }
+    return `<div style="display:flex;flex-direction:column;justify-content:center;align-items:center;font-weight:bold;color:#fff;background-color:var(--themeColor);width:40px;height:40px;border-radius:50%;box-sizing:border-box;border: 2px solid #fff;">${chat.name.split(' ').map(text => text[0]).splice(0, 2).join('')}</div>`;
+  }
+
   onMount(() => {
     navInstance.attachListener(focusIndex + 1);
     softwareKey = new SoftwareKey({
@@ -80,10 +88,7 @@
     <div class="kai-option-menu-header">{title}</div>
     <div class="kai-option-menu-body" data-pad-top="66" data-pad-bottom="30">
       {#each options as option}
-      <ListView className="{navClass}" title="{option.title}" subtitle="{option.subtitle}">
-        <span slot="leftWidget" style="padding-right: 4px;">{@html (option.icon ? option.icon : '')}</span>
-        <span slot="rightWidget"></span>
-      </ListView>
+      <ChatListView chat={option} className="{navClass}" icon={getThumb(option)} />
       {/each}
     </div>
   </div>
