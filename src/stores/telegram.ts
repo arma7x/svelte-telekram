@@ -109,13 +109,6 @@ function runTask(chats, httpTasks, websocketTasks) {
         }
       }
       updateThumbCached(task.chat.iconRef, cache);
-      //for (let x in chats) {
-        //const chat = chats[x];
-        //if (chat.id.toString() === task.chatId) {
-          //chat.icon = `<img alt="icon" style="background-color:var(--themeColor);width:40px;height:40px;border-radius:50%;box-sizing:border-box;border: 2px solid #fff;"" src="${cache}"/>`;
-          //break;
-        //}
-      //}
     } catch (err) {
       console.log('Err:', err);
     }
@@ -130,13 +123,6 @@ function runTask(chats, httpTasks, websocketTasks) {
         cache = await profilePhotoDb.setItem(task.entity.photo.photoId.toString(), base64);
       }
       updateThumbCached(task.iconRef, cache);
-      //for (let x in chats) {
-        //const chat = chats[x];
-        //if (chat.id.toString() === task.id.toString()) {
-          //chat.icon = `<img alt="icon" style="background-color:var(--themeColor);width:40px;height:40px;border-radius:50%;box-sizing:border-box;border: 2px solid #fff;"" src="${cache}"/>`;
-          //break;
-        //}
-      //}
     } catch (err) {
       console.log('Err:', err);
     } finally {

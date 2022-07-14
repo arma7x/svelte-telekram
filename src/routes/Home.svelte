@@ -103,7 +103,6 @@
           navInstance.detachListener();
         },
         onClosed: (scope) => {
-          console.log(scope);
           navInstance.attachListener();
           archivedChatListMenu = null;
         }
