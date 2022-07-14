@@ -8,7 +8,7 @@
 
   export let title: string = 'Option Menu';
   export let focusIndex: number = 0;
-  export let options: { title: string, subtitle: string, icon: any }[];
+  export let options: <Array>[];
   export let softKeyLeftText: string = '';
   export let softKeyCenterText: string = 'Close';
   export let softKeyRightText: string = '';

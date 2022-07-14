@@ -90,14 +90,9 @@
     padding: 3px 3px 0 3px;
   }
 
-  .kai-list-view > span {
-    color: #6B6B6B;
-  }
-
   .kai-list-view.focus,
   .kai-list-view.focus > .kai-list-view-content > p,
-  .kai-list-view.focus > .kai-list-view-content > small,
-  .kai-list-view.focus > span {
+  .kai-list-view.focus > .kai-list-view-content > small {
     background-color: var(--themeColor);
     color: #ffffff;
   }
