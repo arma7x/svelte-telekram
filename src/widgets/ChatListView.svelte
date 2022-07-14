@@ -1,22 +1,25 @@
 <script lang="ts">
   export let key:any = '';
-  export let title: string = '';
-  export let subtitle: string = null;
+  export let icon: string = '';
+  export let chat: any = {};
   export let className: string = null;
   export let onClick: Function = (evt) => {}
 </script>
 
 <div data-key="{key}" class="kai-list-view {className ? className : ''}" on:click={onClick}>
-  {#if $$slots.leftWidget}
-  <slot name="leftWidget"></slot>
-  {/if}
-  <slot>
-    <div class="kai-list-view-content">
-      <p>{title}</p>
-      {#if subtitle}<small>{subtitle}</small>{/if}
-    </div>
-  </slot>
-  <slot name="rightWidget"><span class="kai-icon-arrow"></span></slot>
+  <div class="kai-list-view-icon">{@html icon }</div>
+  <div class="kai-list-view-content">
+    <p>
+      {chat.name}
+    </p>
+    <small>{chat.message.message.substring(0, 50) + (chat.message.message.length > 50 ? '...' : '')}</small>
+  </div>
+  <div class="kai-list-view-indicator">
+    {#if chat.unreadCount}
+      <span class="badge">{chat.unreadCount}</span>
+    {/if}
+    <span class="kai-icon-arrow"></span>
+  </div>
 </div>
 
 <style>
@@ -31,6 +34,12 @@
     height: 60px;
     width: 100%;
     font-size: 14px;
+  }
+
+  .kai-list-view > .kai-list-view-icon {
+    width: 40px;
+    height: 40px;
+    margin-right: 2px;
   }
 
   .kai-list-view > .kai-list-view-content {
@@ -64,6 +73,21 @@
     color: #6A6A6A;
     text-align: start;
     vertical-align: middle;
+  }
+
+  .kai-list-view > .kai-list-view-indicator {
+    display: flex;
+    flex-direction: row;
+    justify-content: center;
+    align-items: center;
+  }
+
+  .kai-list-view > .kai-list-view-indicator > .badge {
+    color: #fff;
+    background-color: #c0c0c0;
+    font-weight: bold;
+    border-radius: 5px;
+    padding: 3px 3px 2px 2px;
   }
 
   .kai-list-view > span {

@@ -5,7 +5,9 @@
   import { onMount, onDestroy } from 'svelte';
 
   import { TelegramKeyHash, Api, client, session, profilePhotoDb } from '../utils/bootstrap';
+
   import QRModal from '../widgets/QRModal.svelte';
+  import ChatListView from '../widgets/ChatListView.svelte';
 
   import { connectionStatus, authorizedStatus, isUserAuthorized, chatCollections, retrieveChats, cachedThumbnails } from '../stores/telegram';
 
@@ -581,9 +583,7 @@
     </ListView>
   {/if}
   {#each chatList as chat}
-    <ListView className="{navClass}" title="{chat.name + (chat.unreadCount ? '(' + chat.unreadCount + ')' : '')}" subtitle="{chat.subtitle}" onClick={() => openRoom(chat.name, chat.entity)}>
-      <span slot="leftWidget" style="padding-right: 4px;">{@html getThumb(chat) }</span>
-    </ListView>
+    <ChatListView chat={chat} className="{navClass}" icon={getThumb(chat)} onClick={() => openRoom(chat.name, chat.entity)} />
   {/each}
   {/if}
 </main>
