@@ -4,6 +4,7 @@ import { TelegramKeyHash, Api, client, profilePhotoDb, cachedDatabase } from '..
 export const connectionStatus = writable(false);
 export const authorizedStatus = writable(false);
 export const chatCollections = writable([]);
+export const cachedThumbnails = writable({});
 
 client.addEventHandler((evt) => {
   console.log(evt);
@@ -56,7 +57,9 @@ export async function retrieveChats() {
     const httpTasks = [];
     const websocketTasks = [];
     chats.forEach((chat, index) => {
+      chat.iconRef = chat.id.toString();
       if (!(chat.entity.username == null && chat.entity.phone == null) && chat.entity.photo != null) {
+        chat.iconRef = chat.entity.photo.photoId.toString();
         httpTasks.push({
           chatId: chat.id.toString(),
           url: `https://api.codetabs.com/v1/proxy/?quest=https://t.me/${chat.entity.phone === "42777" ? 'telegram' : chat.entity.username}`,
@@ -64,6 +67,7 @@ export async function retrieveChats() {
           chat: chat
         });
       } else if (chat.entity.photo != null) {
+        chat.iconRef = chat.entity.photo.photoId.toString();
         websocketTasks.push(chat);
       }
       const letters = chat.name.split(' ').map(text => {
@@ -83,6 +87,7 @@ export async function getChatCollection() {
 }
 
 function runTask(chats, httpTasks, websocketTasks) {
+  let tempRef = {};
   httpTasks.forEach(async (task, index) => {
     try {
       let cache = await profilePhotoDb.getItem(task.photoId);
@@ -99,13 +104,14 @@ function runTask(chats, httpTasks, websocketTasks) {
           cache = await profilePhotoDb.setItem(task.photoId, base64);
         }
       }
-      for (let x in chats) {
-        const chat = chats[x];
-        if (chat.id.toString() === task.chatId) {
-          chat.icon = `<img alt="icon" style="background-color:var(--themeColor);width:40px;height:40px;border-radius:50%;box-sizing:border-box;border: 2px solid #fff;"" src="${cache}"/>`;
-          break;
-        }
-      }
+      updateThumbCached(task.chat.iconRef, cache);
+      //for (let x in chats) {
+        //const chat = chats[x];
+        //if (chat.id.toString() === task.chatId) {
+          //chat.icon = `<img alt="icon" style="background-color:var(--themeColor);width:40px;height:40px;border-radius:50%;box-sizing:border-box;border: 2px solid #fff;"" src="${cache}"/>`;
+          //break;
+        //}
+      //}
     } catch (err) {
       console.log('Err:', err);
     }
@@ -119,13 +125,14 @@ function runTask(chats, httpTasks, websocketTasks) {
         const base64 = await bufferToBase64(await client.downloadProfilePhoto(task));
         cache = await profilePhotoDb.setItem(task.entity.photo.photoId.toString(), base64);
       }
-      for (let x in chats) {
-        const chat = chats[x];
-        if (chat.id.toString() === task.id.toString()) {
-          chat.icon = `<img alt="icon" style="background-color:var(--themeColor);width:40px;height:40px;border-radius:50%;box-sizing:border-box;border: 2px solid #fff;"" src="${cache}"/>`;
-          break;
-        }
-      }
+      updateThumbCached(task.iconRef, cache);
+      //for (let x in chats) {
+        //const chat = chats[x];
+        //if (chat.id.toString() === task.id.toString()) {
+          //chat.icon = `<img alt="icon" style="background-color:var(--themeColor);width:40px;height:40px;border-radius:50%;box-sizing:border-box;border: 2px solid #fff;"" src="${cache}"/>`;
+          //break;
+        //}
+      //}
     } catch (err) {
       console.log('Err:', err);
     } finally {
@@ -136,6 +143,12 @@ function runTask(chats, httpTasks, websocketTasks) {
     }
 
   });
+}
+
+async function updateThumbCached(ref, base64) {
+  const cached = await get(cachedThumbnails);
+  cached[ref] = base64;
+  cachedThumbnails.update(n => cached);
 }
 
 function bufferToBase64(buffer) {

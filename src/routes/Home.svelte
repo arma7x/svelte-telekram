@@ -7,7 +7,7 @@
   import { TelegramKeyHash, Api, client, session, profilePhotoDb } from '../utils/bootstrap';
   import QRModal from '../widgets/QRModal.svelte';
 
-  import { connectionStatus, authorizedStatus, isUserAuthorized, chatCollections, retrieveChats } from '../stores/telegram';
+  import { connectionStatus, authorizedStatus, isUserAuthorized, chatCollections, retrieveChats, cachedThumbnails } from '../stores/telegram';
 
   const navClass: string = 'homeNav';
 
@@ -25,6 +25,7 @@
   let unchatCollections;
   let unauthorizedStatus;
   let unconnectionStatus;
+  let uncachedThumbnails;
 
   let name: string = 'Telekram';
   let phoneNumber = '';
@@ -35,9 +36,10 @@
   let archivedChatList = [];
   let archivedChatListName = [];
   let _chatList = [];
-  let fetchThumbJobs = [];
+  let _thumbs = {};
 
   $: chatList = _chatList;
+  $: thumbs = _thumbs;
 
   let navOptions = {
     verticalNavClass: navClass,
@@ -447,7 +449,6 @@
         } else {
           tempChatList.push(chat);
         }
-        fetchThumbJobs.push(chat);
       });
       _chatList = tempChatList;
       chatList = _chatList;
@@ -474,6 +475,13 @@
         qrModal.$destroy();
       }
     }
+  }
+
+  function getThumb(chat) {
+    if (thumbs[chat.iconRef]) {
+      return `<img alt="icon" style="background-color:var(--themeColor);width:40px;height:40px;border-radius:50%;box-sizing:border-box;border: 2px solid #fff;"" src="${thumbs[chat.iconRef]}"/>`;
+    }
+    return `<div style="display:flex;flex-direction:column;justify-content:center;align-items:center;font-weight:bold;color:#fff;background-color:var(--themeColor);width:40px;height:40px;border-radius:50%;box-sizing:border-box;border: 2px solid #fff;">${chat.name.split(' ').map(text => text[0]).splice(0, 2).join('')}</div>`;
   }
 
   onMount(() => {
@@ -518,6 +526,10 @@
       }
     });
 
+    uncachedThumbnails = cachedThumbnails.subscribe(data => {
+      _thumbs = data;
+    });
+
   });
 
   onDestroy(() => {
@@ -529,6 +541,8 @@
       unauthorizedStatus();
     if (unconnectionStatus)
       unconnectionStatus();
+    if (uncachedThumbnails)
+      uncachedThumbnails();
   });
 
 </script>
@@ -568,7 +582,7 @@
   {/if}
   {#each chatList as chat}
     <ListView className="{navClass}" title="{chat.name + (chat.unreadCount ? '(' + chat.unreadCount + ')' : '')}" subtitle="{chat.subtitle}" onClick={() => openRoom(chat.name, chat.entity)}>
-      <span slot="leftWidget" style="padding-right: 4px;">{@html chat.icon || ''}</span>
+      <span slot="leftWidget" style="padding-right: 4px;">{@html getThumb(chat) }</span>
     </ListView>
   {/each}
   {/if}
