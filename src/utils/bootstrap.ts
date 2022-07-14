@@ -1,4 +1,5 @@
 declare var telegram:any;
+declare var idb:any;
 
 import localForage from "localforage";
 import TelegramKeyHash from '../telegram_key';
@@ -20,10 +21,17 @@ const profilePhotoDb = localForage.createInstance({
   description : 'cached profilePhoto'
 });
 
+const cachedDatabase = idb.openDB('telekram', 1, {
+  upgrade: (db) => {
+    db.createObjectStore('profilePhotos');
+  },
+});
+
 export {
   Api,
   client,
   TelegramKeyHash,
   session,
-  profilePhotoDb
+  profilePhotoDb,
+  cachedDatabase
 }

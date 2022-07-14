@@ -1,5 +1,5 @@
 import { get, writable } from 'svelte/store';
-import { TelegramKeyHash, Api, client, profilePhotoDb } from '../utils/bootstrap';
+import { TelegramKeyHash, Api, client, profilePhotoDb, cachedDatabase } from '../utils/bootstrap';
 
 export const connectionStatus = writable(false);
 export const authorizedStatus = writable(false);
