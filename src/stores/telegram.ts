@@ -98,11 +98,11 @@ export async function retrieveChats() {
   }
 }
 
-export async function getChatCollection() {
+export function getChatCollection() {
   return get(chatCollections)
 }
 
-export async function getCachedThumbnails() {
+export function getCachedThumbnails() {
   return get(cachedThumbnails)
 }
 
