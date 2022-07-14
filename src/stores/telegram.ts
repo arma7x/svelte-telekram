@@ -1,5 +1,5 @@
 import { get, writable } from 'svelte/store';
-import { TelegramKeyHash, Api, client, profilePhotoDb, cachedDatabase } from '../utils/bootstrap';
+import { TelegramKeyHash, Api, client, cachedDatabase } from '../utils/bootstrap';
 
 export const connectionStatus = writable(false);
 export const authorizedStatus = writable(false);
@@ -94,18 +94,20 @@ function runTask(chats, httpTasks, websocketTasks) {
   let tempRef = {};
   httpTasks.forEach(async (task, index) => {
     try {
-      let cache = await profilePhotoDb.getItem(task.photoId);
+      let cache = await (await cachedDatabase).get('profilePhotos', task.photoId);
       if (cache == null) {
         const html = new DOMParser().parseFromString(await (await fetch(task.url)).text(), 'text/html');
         const images = html.getElementsByClassName('tgme_page_photo_image');
         if (images.length === 0) {
           const base64 = await bufferToBase64(await client.downloadProfilePhoto(task.chat));
-          cache = await profilePhotoDb.setItem(task.photoId, base64);
+          await (await cachedDatabase).put('profilePhotos', base64, task.photoId);
+          cache = base64;
         } else {
           const img = images[0] as HTMLImageElement;
           const blob = await (await fetch(img.src)).blob()
           const base64 = await blobToBase64(blob);
-          cache = await profilePhotoDb.setItem(task.photoId, base64);
+          await (await cachedDatabase).put('profilePhotos', base64, task.photoId);
+          cache = base64;
         }
       }
       updateThumbCached(task.chat.iconRef, cache);
@@ -117,10 +119,11 @@ function runTask(chats, httpTasks, websocketTasks) {
   let elapsed = 0;
   websocketTasks.forEach(async (task) => {
     try {
-      let cache = await profilePhotoDb.getItem(task.entity.photo.photoId.toString());
+      let cache = await (await cachedDatabase).get('profilePhotos', task.entity.photo.photoId.toString());
       if (cache == null) {
         const base64 = await bufferToBase64(await client.downloadProfilePhoto(task));
-        cache = await profilePhotoDb.setItem(task.entity.photo.photoId.toString(), base64);
+        await (await cachedDatabase).put('profilePhotos', base64, task.entity.photo.photoId.toString());
+        cache = base64;
       }
       updateThumbCached(task.iconRef, cache);
     } catch (err) {

@@ -4,7 +4,7 @@
   import { ListView, LoadingBar, Button, TextInputField, Toast, Toaster, SoftwareKey, TextInputDialog, OptionMenu } from '../components';
   import { onMount, onDestroy } from 'svelte';
 
-  import { TelegramKeyHash, Api, client, session, profilePhotoDb } from '../utils/bootstrap';
+  import { TelegramKeyHash, Api, client, session } from '../utils/bootstrap';
 
   import QRModal from '../widgets/QRModal.svelte';
   import ChatListView from '../widgets/ChatListView.svelte';
@@ -130,9 +130,7 @@
         onEnter: (evt, scope) => {
           if (scope.selected.title === 'Exit') {
             window.close();
-          } else if (scope.selected.title === 'Clear profilePhotoDb') {
-            profilePhotoDb.clear();
-          }
+          } else if (scope.selected.title === 'Clear profilePhotoDb') {}
           authorizedMenu.$destroy();
         },
         onBackspace: (evt, scope) => {
