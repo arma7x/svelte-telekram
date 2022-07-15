@@ -1,8 +1,7 @@
 <script lang="ts">
   import { Router, Route, Link } from 'svelte-navigator';
   import { AppBar, SoftwareKey } from './components';
-  import { Home } from './routes';
-  import { Bot, Channel, Group, User } from './routes/rooms';
+  import { Home, Room } from './routes';
   import { onMount, onDestroy } from 'svelte';
   import { Localization } from './utils/localization';
 
@@ -27,17 +26,8 @@
     <Route primary={false} path="index.html" let:location let:navigate>
       <svelte:component this="{Home}" {location} {navigate} {getAppProp}/>
     </Route>
-    <Route primary={false} path="bot" let:location let:navigate>
-      <svelte:component this="{Bot}" {location} {navigate} {getAppProp}/>
-    </Route>
-    <Route primary={false} path="channel" let:location let:navigate>
-      <svelte:component this="{Channel}" {location} {navigate} {getAppProp}/>
-    </Route>
-    <Route primary={false} path="group" let:location let:navigate>
-      <svelte:component this="{Group}" {location} {navigate} {getAppProp}/>
-    </Route>
-    <Route primary={false} path="user" let:location let:navigate>
-      <svelte:component this="{User}" {location} {navigate} {getAppProp}/>
+    <Route primary={false} path="room" let:location let:navigate>
+      <svelte:component this="{Room}" {location} {navigate} {getAppProp}/>
     </Route>
   </main>
   <SoftwareKey bind:this={softwareKey} />
