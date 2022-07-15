@@ -89,7 +89,7 @@
 
   .kai-list-view.focus,
   .kai-list-view.focus > .kai-list-view-content {
-    background-color: var(--themeColorTransparent)!important;
+    background-color: var(--themeColorTransparent);
     color: #ffffff;
   }
 </style>

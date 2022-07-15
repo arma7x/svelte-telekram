@@ -46,6 +46,7 @@
     width: 100%;
     font-size: 14px;
     overflow: hidden;
+    padding: 4px 0 4px 4px;
   }
 
   .kai-list-view > .kai-list-view-content {
@@ -57,7 +58,7 @@
     justify-content: space-between;
     align-items: center;
     padding: 0px 4px 0px 0px;
-    width: 100%;
+    max-width: calc(100% - 80px);
   }
 
   .kai-list-view > .kai-list-view-content > p {
@@ -79,7 +80,7 @@
 
   .kai-list-view.focus,
   .kai-list-view.focus > .kai-list-view-content {
-    background-color: var(--themeColorTransparent)!important;
+    background-color: var(--themeColorTransparent);
     color: #ffffff;
   }
 </style>
