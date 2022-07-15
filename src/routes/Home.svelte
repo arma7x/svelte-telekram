@@ -41,8 +41,8 @@
   let archivedChatListName = [];
   let user = [];
 
-  $: chatList = [];
-  $: thumbs = {};
+  let chatList = [];
+  let thumbs = {};
 
   let navOptions = {
     verticalNavClass: navClass,
