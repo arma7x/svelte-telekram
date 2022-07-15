@@ -52,9 +52,6 @@
       }
       return Dummy;
     } else if (m.className === "Message") {
-      if (m.message === "") {
-        return Dummy;
-      }
       return MessageText;
     }
     return Dummy;

@@ -23,6 +23,7 @@
   onMount(() => {
     // console.log(message);
     // todo kai-list-view-content align-items if type => group/bot/user
+    // todo render message.media if !null
     registerkeyEvent(message.id.toString(), navInstance);
   });
 
@@ -30,7 +31,7 @@
 
 <div data-key="{key}" class="kai-list-view {className ? className : ''}" on:click={onClick}>
   <div class="kai-list-view-content" style="align-items:{type === 'channel' ? 'start' : 'end'};">
-    <p>{message.message}</p>
+    <p>{message.message || 'WIP'}</p>
   </div>
 </div>
 
