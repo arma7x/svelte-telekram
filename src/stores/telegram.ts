@@ -89,7 +89,6 @@ export async function retrieveChats() {
       const letters = chat.name.split(' ').map(text => {
         return text[0];
       });
-      chat.icon = `<div style="display:flex;flex-direction:column;justify-content:center;align-items:center;font-weight:bold;color:#fff;background-color:var(--themeColor);width:40px;height:40px;border-radius:50%;box-sizing:border-box;border: 2px solid #fff;">${letters.splice(0, 2).join('')}</div>`;
     });
     chatCollections.update(n => chats);
     runTask(chats, httpTasks, websocketTasks);
