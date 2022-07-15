@@ -33,7 +33,7 @@
         return chat.entity.id.value == entity.id.value;
       });
       const messages = await client.getMessages(target, { limit: 50 });
-      console.log(messages);
+      console.log(messages.reverse());
     } catch (err) {
       console.log(err);
     }
