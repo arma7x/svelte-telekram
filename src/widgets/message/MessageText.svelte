@@ -16,7 +16,7 @@
 
 <div data-key="{key}" class="kai-list-view {className ? className : ''}" on:click={onClick}>
   <div class="kai-list-view-content" style="align-items:{type === 'channel' ? 'start' : 'end'};">
-    <p style="text-align:{type === 'channel' ? 'left' : 'right'};">{message.message}</p>
+    <p>{message.message}</p>
   </div>
 </div>
 
@@ -53,7 +53,7 @@
     font-weight: 400;
     color: #323232;
     font-size: 14px;
-    text-align: center;
+    text-align: start;
     white-space: pre-wrap!important;
     word-break: break-word!important;
     overflow: hidden;
