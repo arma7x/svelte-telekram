@@ -91,7 +91,7 @@
         onEnter: (evt, scope) => {
           archivedChatListMenu.$destroy();
           setTimeout(() => {
-            goto('room', { state: { name: scope.selected.name, entity: scope.selected.entity.toJSON() } });
+            openRoom(scope.selected.name, scope.selected.entity);
           }, 100);
         },
         onBackspace: (evt, scope) => {
@@ -448,7 +448,23 @@
   }
 
   function openRoom(name, entity) {
-    goto('room', { state: { name, entity: entity.toJSON() } });
+    const className = entity.className.toLowerCase();
+    switch (className) {
+      case 'channel':
+        if (entity.megagroup)
+          goto('group', { state: { name, entity: entity.toJSON() } });
+        else
+          goto(className, { state: { name, entity: entity.toJSON() } });
+        break;
+      case 'user':
+        if (entity.bot)
+          goto('bot', { state: { name, entity: entity.toJSON() } });
+        else
+          goto(className, { state: { name, entity: entity.toJSON() } });
+        break;
+      default:
+        console.log('Unknown:', className);
+    }
   }
 
   function eventHandler(evt) {
