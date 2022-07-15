@@ -12,14 +12,10 @@
 
   let navOptions = {
     softkeyLeftListener: function(evt) {
-      // console.log('propagated softkeyLeftListener to:', message.id.toString());
+      console.log('propagated softkeyLeftListener to:', message.id.toString());
     },
-    softkeyRightListener: function(evt) {
-      // console.log('propagated softkeyRightListener to:', message.id.toString());
-    },
-    enterListener: function(evt) {
-      // console.log('propagated enterListener to:', message.id.toString());
-    },
+    softkeyRightListener: function(evt) {},
+    enterListener: function(evt) {},
     backspaceListener: function(evt) {}
   };
 

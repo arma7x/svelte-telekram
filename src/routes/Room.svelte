@@ -22,26 +22,17 @@
     softkeyLeftListener: function(evt) {
       if (messages[this.verticalNavIndex] && messages[this.verticalNavIndex].id.toString()) {
         if (messageMetadata[messages[this.verticalNavIndex].id.toString()]) {
-          // console.log('propagate softkeyLeftListener', messages[this.verticalNavIndex].id.toString());
+          console.log('propagate softkeyLeftListener', messages[this.verticalNavIndex].id.toString());
           messageMetadata[messages[this.verticalNavIndex].id.toString()].keyEvent.softkeyLeftListener(evt);
         }
       }
     },
     softkeyRightListener: function(evt) {
-      if (messages[this.verticalNavIndex] && messages[this.verticalNavIndex].id.toString()) {
-        if (messageMetadata[messages[this.verticalNavIndex].id.toString()]) {
-          // console.log('propagate softkeyRightListener', messages[this.verticalNavIndex].id.toString());
-          messageMetadata[messages[this.verticalNavIndex].id.toString()].keyEvent.softkeyRightListener(evt);
-        }
-      }
+      // send attachment + bot command
     },
     enterListener: function(evt) {
-      if (messages[this.verticalNavIndex] && messages[this.verticalNavIndex].id.toString()) {
-        if (messageMetadata[messages[this.verticalNavIndex].id.toString()]) {
-          // console.log('propagate enterListener', messages[this.verticalNavIndex].id.toString());
-          messageMetadata[messages[this.verticalNavIndex].id.toString()].keyEvent.enterListener(evt);
-        }
-      }
+      // use TextAreaDialog
+      // send msg or broadcast(channel && admin)
     },
     backspaceListener: function(evt) {
       evt.preventDefault();
@@ -104,7 +95,7 @@
     appBar.setTitleText(location.state.name || name);
     console.log('Room:', location.state.type);
     getMessages(location.state.entity);
-    softwareKey.setText({ left: 'Menu', center: 'SEND', right: 'Attach' });
+    softwareKey.setText({ left: 'Action', center: 'S/B', right: '📎' });
     navInstance.attachListener();
   });
 
