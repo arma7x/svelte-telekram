@@ -1,15 +1,33 @@
 <script lang="ts">
   import { onMount, onDestroy } from 'svelte';
+  import { createKaiNavigator } from '../../utils/navigation';
 
   export let key: any = '';
   export let type: string = '';
   export let message: any = {};
   export let className: string = null;
   export let onClick: Function = (evt) => {}
+  export let registerkeyEvent: Function = (id, instance) => {}
+
+  let navOptions = {
+    softkeyLeftListener: function(evt) {
+      // console.log('propagated softkeyLeftListener to:', message.id.toString());
+    },
+    softkeyRightListener: function(evt) {
+      // console.log('propagated softkeyRightListener to:', message.id.toString());
+    },
+    enterListener: function(evt) {
+      // console.log('propagated enterListener to:', message.id.toString());
+    },
+    backspaceListener: function(evt) {}
+  };
+
+  let navInstance = createKaiNavigator(navOptions);
 
   onMount(() => {
     // console.log(message);
     // todo kai-list-view-content align-items if type => group/bot/user
+    registerkeyEvent(message.id.toString(), navInstance);
   });
 
 </script>

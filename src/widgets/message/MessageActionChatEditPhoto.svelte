@@ -1,18 +1,36 @@
 <script lang="ts">
   import { onMount, onDestroy } from 'svelte';
   import { getCachedThumbnails } from '../../stores/telegram';
+  import { createKaiNavigator } from '../../utils/navigation';
 
   export let key: any = '';
   export let type: string = '';
   export let message: any = {};
   export let className: string = null;
   export let onClick: Function = (evt) => {}
+  export let registerkeyEvent: Function = (id, instance) => {}
+
+  let navOptions = {
+    softkeyLeftListener: function(evt) {
+      // console.log('propagated softkeyLeftListener to:', message.id.toString());
+    },
+    softkeyRightListener: function(evt) {
+      // console.log('propagated softkeyRightListener to:', message.id.toString());
+    },
+    enterListener: function(evt) {
+      // console.log('propagated enterListener to:', message.id.toString());
+    },
+    backspaceListener: function(evt) {}
+  };
+
+  let navInstance = createKaiNavigator(navOptions);
 
   let src: string = '';
 
   onMount(async () => {
     const cached = await getCachedThumbnails()
     src = cached[message.action.photo.id.toString()];
+    registerkeyEvent(message.id.toString(), navInstance);
   });
 
 </script>

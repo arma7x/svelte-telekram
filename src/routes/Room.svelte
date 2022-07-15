@@ -1,6 +1,6 @@
 <script lang="ts">
   import { navigate as goto } from "svelte-navigator";
-  import { createKaiNavigator } from '../utils/navigation';
+  import { createKaiNavigator, KaiNavigator } from '../utils/navigation';
   import { onMount, onDestroy } from 'svelte';
 
   import { Api, client } from '../utils/bootstrap';
@@ -15,13 +15,34 @@
 
   let name: string = 'Room';
   let messages: Array<any> = [];
-  let messageMetadata: { [key: string]: { index: number, deleted: bool}; } = {};
+  let messageMetadata: { [key: string]: { index: number, deleted: bool, keyEvent: typeof KaiNavigator }; } = {};
 
   let navOptions = {
     verticalNavClass: 'roomNav',
-    softkeyLeftListener: function(evt) {},
-    softkeyRightListener: function(evt) {},
-    enterListener: function(evt) {},
+    softkeyLeftListener: function(evt) {
+      if (messages[this.verticalNavIndex] && messages[this.verticalNavIndex].id.toString()) {
+        if (messageMetadata[messages[this.verticalNavIndex].id.toString()]) {
+          // console.log('propagate softkeyLeftListener', messages[this.verticalNavIndex].id.toString());
+          messageMetadata[messages[this.verticalNavIndex].id.toString()].keyEvent.softkeyLeftListener(evt);
+        }
+      }
+    },
+    softkeyRightListener: function(evt) {
+      if (messages[this.verticalNavIndex] && messages[this.verticalNavIndex].id.toString()) {
+        if (messageMetadata[messages[this.verticalNavIndex].id.toString()]) {
+          // console.log('propagate softkeyRightListener', messages[this.verticalNavIndex].id.toString());
+          messageMetadata[messages[this.verticalNavIndex].id.toString()].keyEvent.softkeyRightListener(evt);
+        }
+      }
+    },
+    enterListener: function(evt) {
+      if (messages[this.verticalNavIndex] && messages[this.verticalNavIndex].id.toString()) {
+        if (messageMetadata[messages[this.verticalNavIndex].id.toString()]) {
+          // console.log('propagate enterListener', messages[this.verticalNavIndex].id.toString());
+          messageMetadata[messages[this.verticalNavIndex].id.toString()].keyEvent.enterListener(evt);
+        }
+      }
+    },
     backspaceListener: function(evt) {
       evt.preventDefault();
       goto(-1);
@@ -72,6 +93,12 @@
     }
   }
 
+  function registerkeyEvent(id, instance: typeof KaiNavigator) {
+    if (messageMetadata[id]) {
+      messageMetadata[id].keyEvent = instance;
+    }
+  }
+
   onMount(() => {
     const { appBar, softwareKey } = getAppProp();
     appBar.setTitleText(location.state.name || name);
@@ -89,7 +116,7 @@
 
 <main id="room-screen" data-pad-top="28" data-pad-bottom="30">
   {#each messages as message}
-    <svelte:component this={resolveMessageWidget(message)} {message} className="roomNav" type={location.state.type}/>
+    <svelte:component this={resolveMessageWidget(message)} {message} {registerkeyEvent} className="roomNav" type={location.state.type}/>
   {/each}
 </main>
 
