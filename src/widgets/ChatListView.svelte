@@ -12,7 +12,7 @@
     <p>
       {chat.name}
     </p>
-    <small>{chat.message.message.substring(0, 30) + (chat.message.message.length > 30 ? '...' : '')}</small>
+    <small>{#if chat.isGroup}<b>{chat.message._sender.username}</b>: {/if}{chat.message.message.substring(0, (chat.isGroup ? 15 : 30)) + (chat.message.message.length > (chat.isGroup ? 15 : 30) ? '...' : '')}</small>
   </div>
   <div class="kai-list-view-indicator">
     {#if chat.unreadCount}
