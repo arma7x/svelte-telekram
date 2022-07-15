@@ -1,5 +1,6 @@
 :root {
   --themeColor: #431F7F;
+  --themeColorTransparent: #431F7F1A;
   --toastContainerTop: 26px;
   --toastContainerRight: 0;
   --toastWidth: 100vw;

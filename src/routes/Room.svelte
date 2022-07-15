@@ -7,6 +7,8 @@
 
   import { getChatCollection } from '../stores/telegram';
 
+  import { Dummy, MessageText, MessageActionChannelCreate, MessageActionChatEditPhoto } from '../widgets/message';
+
   export let location: any;
   export let navigate: any;
   export let getAppProp: Function;
@@ -16,7 +18,7 @@
   let messageMetadata: { [key: string]: { index: number, deleted: bool}; } = {};
 
   let navOptions = {
-    verticalNavClass: 'vertClass',
+    verticalNavClass: 'roomNav',
     softkeyLeftListener: function(evt) {},
     softkeyRightListener: function(evt) {},
     enterListener: function(evt) {},
@@ -30,14 +32,20 @@
 
   function resolveMessageWidget(m) {
     if (m.className === "MessageService") {
-      return `${m.id.toString()}: ${m.action.className}`;
+      switch (m.action.className) {
+        case 'MessageActionChannelCreate':
+          return MessageActionChannelCreate;
+        case 'MessageActionChatEditPhoto':
+          return MessageActionChatEditPhoto;
+      }
+      return Dummy;
     } else if (m.className === "Message") {
       if (m.message === "") {
-        return `${m.id.toString()}: ${m.media.className}`;
+        return Dummy;
       }
-      return `${m.id.toString()}: ${m.message}`;
+      return MessageText;
     }
-    return `${m.id.toString()}: UNKNOWN`;
+    return Dummy;
   }
 
   function buildIndex(messages) {
@@ -67,7 +75,7 @@
   onMount(() => {
     const { appBar, softwareKey } = getAppProp();
     appBar.setTitleText(location.state.name || name);
-    console.log(location.state.type);
+    console.log('Room:', location.state.type);
     getMessages(location.state.entity);
     softwareKey.setText({ left: 'Menu', center: 'SEND', right: 'Attach' });
     navInstance.attachListener();
@@ -81,7 +89,7 @@
 
 <main id="room-screen" data-pad-top="28" data-pad-bottom="30">
   {#each messages as message}
-    <div class="vertClass">{ resolveMessageWidget(message) }</div>
+    <svelte:component this={resolveMessageWidget(message)} {message} className="roomNav" type={location.state.type}/>
   {/each}
 </main>
 
@@ -90,16 +98,12 @@
     overflow: scroll;
     width: 100%;
   }
-  #room-screen > .vertClass {
-    display:flex;
-    flex-direction:column;
-  }
-  :global(#room-screen > .vertClass) {
+  :global(#room-screen > .roomNav) {
     background-color: #ffffff;
     color: #000000;
   }
-  :global(#room-screen > .vertClass.focus) {
-    background-color: var(--themeColor)!important;
-    color: #fff!important;
+  :global(#room-screen > .roomNav.focus) {
+    background-color: transparent;
+    color: #fff;
   }
 </style>
