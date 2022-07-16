@@ -33,15 +33,12 @@
     if (['group', 'user', 'bot'].indexOf(type) > -1) {
       if (user[0] == null) {
         hasAvatar = true;
-        console.log('from sender');
       } else {
         if (message.sender.id.toString() === user[0].id.toString()) {
           hasAvatar = false;
           justifyContent = 'end';
-          console.log('from self');
         } else {
           hasAvatar = true;
-          console.log('from sender');
         }
       }
     } else {
