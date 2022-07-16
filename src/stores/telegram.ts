@@ -74,14 +74,14 @@ export async function retrieveChats() {
         chat.name = 'Saved Messages';
       }
       chat.iconRef = chat.id.toString();
-      if (!(chat.entity.username == null && chat.entity.phone == null) && chat.entity.photo != null) {
+      if (!(chat.entity.username == null && chat.entity.phone == null) && chat.entity.photo != null && chat.entity.photo.className !== 'ChatPhotoEmpty') {
         chat.iconRef = chat.entity.photo.photoId.toString();
         httpTasks.push({
           url: `https://api.codetabs.com/v1/proxy/?quest=https://t.me/${chat.entity.phone === "42777" ? 'telegram' : chat.entity.username}`,
           photoId: chat.entity.photo.photoId.toString(),
           chat: chat
         });
-      } else if (chat.entity.photo != null) {
+      } else if (chat.entity.photo != null && chat.entity.photo.className !== 'ChatPhotoEmpty') {
         chat.iconRef = chat.entity.photo.photoId.toString();
         websocketTasks.push({
           photoId: chat.entity.photo.photoId.toString(),

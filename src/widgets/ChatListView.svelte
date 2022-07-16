@@ -12,7 +12,17 @@
     <p>
       {chat.name}
     </p>
-    <small>{#if chat.isGroup}<b>{chat.message._sender.username || chat.message._sender.firstName}</b>: {/if}{chat.message.message.substring(0, (chat.isGroup ? 15 : 30)) + (chat.message.message.length > (chat.isGroup ? 15 : 30) ? '...' : '')}</small>
+    <small>
+      {#if chat.isGroup}<b>{chat.message._sender.username || chat.message._sender.firstName}</b>:
+      {/if}
+      {#if chat.message && chat.message.message}
+      {chat.message.message.substring(0, (chat.isGroup ? 15 : 30)) + (chat.message.message.length > (chat.isGroup ? 15 : 30) ? '...' : '')}
+      {:else if chat.message.action}
+      {chat.message.action.className}
+      {:else}
+      {chat.message.className}
+      {/if}
+    </small>
   </div>
   <div class="kai-list-view-indicator">
     {#if chat.unreadCount}

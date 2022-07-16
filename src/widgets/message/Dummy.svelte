@@ -29,7 +29,7 @@
 
 <div data-key="{key}" class="kai-list-view {className ? className : ''}" on:click={onClick}>
   <div class="kai-list-view-content">
-    <p>Dummy {type}</p>
+    <p>WIP: {message.action.className}</p>
   </div>
 </div>
 
