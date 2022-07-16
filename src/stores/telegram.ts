@@ -93,7 +93,7 @@ export async function retrieveChats() {
       });
     });
     chatCollections.update(n => chats);
-    runTask(chats, httpTasks, websocketTasks);
+    runTask(httpTasks, websocketTasks);
   } catch (err) {
     console.log(err);
   }
@@ -111,7 +111,7 @@ export function getAuthorizedUser() {
   return get(authorizedUser);
 }
 
-export function runTask(chats, httpTasks, websocketTasks) {
+export function runTask(httpTasks, websocketTasks) {
   let tempRef = {};
   httpTasks.forEach(async (task, index) => {
     try {
@@ -136,7 +136,6 @@ export function runTask(chats, httpTasks, websocketTasks) {
       console.log('Err:', err);
     }
   });
-  chatCollections.update(n => chats);
   let elapsed = 0;
   websocketTasks.forEach(async (task) => {
     try {
@@ -151,9 +150,6 @@ export function runTask(chats, httpTasks, websocketTasks) {
       console.log('Err:', err);
     } finally {
       elapsed++;
-      if (elapsed === websocketTasks.length) {
-        chatCollections.update(n => chats);
-      }
     }
 
   });
