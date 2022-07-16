@@ -7,5 +7,5 @@ export {
   Dummy,
   MessageText,
   MessageActionChannelCreate,
-  MessageActionChatEditPhoto
+  MessageActionChatEditPhoto,
 }

@@ -4,6 +4,14 @@
 
   import { cachedThumbnails, getAuthorizedUser } from '../../stores/telegram';
 
+  import Sticker from './media/Sticker.svelte';
+  import Video from './media/Video.svelte';
+  import Photo from './media/Photo.svelte';
+  import Text from './media/Text.svelte';
+  import Audio from './media/Audio.svelte';
+  import Poll from './media/Poll.svelte';
+  import Geo from './media/Geo.svelte';
+
   export let key: any = '';
   export let type: string = '';
   export let message: any = {};
@@ -17,6 +25,7 @@
   let justifyContent: string = 'start';
   let expandable: bool = false;
   let media: any;
+  let _wip: string = null;
 
   let navOptions = {
     softkeyLeftListener: function(evt) {
@@ -34,7 +43,38 @@
     if (message.message.length > 80)
       expandable = true;
     if (message.media) {
-
+      if (message.media.className === 'MessageMediaDocument') {
+        switch (message.media.document.mimeType) {
+          case 'application/x-tgsticker':
+            media = Sticker;
+            break;
+          case 'video/mp4':
+            media = Video;
+            break;
+          case 'image/jpeg':
+            media = Photo;
+            break;
+          case 'text/plain':
+            media = Text;
+            break;
+          case 'audio/mpeg':
+          case 'audio/ogg':
+            media = Audio;
+            break;
+          default:
+            _wip = 'WIP Media: ' + message.media.className;
+            console.log(message.media);
+        }
+      } else if (message.media.className === "MessageMediaPoll"){
+        media = Poll;
+      } else if (message.media.className === "MessageMediaPhoto"){
+        media = Photo;
+      } else if (message.media.className === "MessageMediaGeo"){
+        media = Geo;
+      } else {
+        _wip = 'WIP Media: ' + message.media.className;
+        console.log(message.media);
+      }
     }
     const user = await getAuthorizedUser();
     if (['group', 'user', 'bot'].indexOf(type) > -1) {
@@ -73,8 +113,18 @@
 <div data-key="{key}" class="kai-list-view {className ? className : ''}" on:click={onClick} style="justify-content:{type === 'channel' ? 'start' : justifyContent};min-height:{hasAvatar ? '50px' : '0px'};">
   {#if hasAvatar }{@html avatarSrc}{/if}
   <div class="kai-list-view-content" style="margin-left:{hasAvatar ? '45px' : '0px'};">
-    {#if hasAvatar }<b>{message.sender.firstName}</b>{/if}
-    <p>{message.message.length > 80 ? message.message.substring(0, 80) + '...' : (message.message || 'WIP')}</p>
+    {#if hasAvatar }
+      <b>{message.sender.firstName}</b>
+    {/if}
+    {#if media }
+      <svelte:component this={media} {message}/>
+    {/if}
+    {#if _wip }
+      { _wip }
+    {/if}
+    {#if message.message }
+      <p>{message.message.length > 80 ? message.message.substring(0, 80) + '...' : message.message}</p>
+    {/if}
   </div>
 </div>
 
@@ -102,7 +152,9 @@
     flex-direction: column;
     justify-content: space-between;
     align-items: start;
+    text-align: start;
     max-width: calc(100% - 50px);
+    overflow: hidden;
   }
 
   .kai-list-view > .kai-list-view-content > p {
@@ -116,7 +168,6 @@
     text-align: start;
     white-space: pre-wrap!important;
     word-break: break-word!important;
-    overflow: hidden;
   }
 
   .kai-list-view.focus,
