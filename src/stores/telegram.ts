@@ -77,7 +77,6 @@ export async function retrieveChats() {
       if (!(chat.entity.username == null && chat.entity.phone == null) && chat.entity.photo != null) {
         chat.iconRef = chat.entity.photo.photoId.toString();
         httpTasks.push({
-          chatId: chat.id.toString(),
           url: `https://api.codetabs.com/v1/proxy/?quest=https://t.me/${chat.entity.phone === "42777" ? 'telegram' : chat.entity.username}`,
           photoId: chat.entity.photo.photoId.toString(),
           chat: chat
@@ -109,7 +108,7 @@ export function getAuthorizedUser() {
   return get(authorizedUser);
 }
 
-function runTask(chats, httpTasks, websocketTasks) {
+export function runTask(chats, httpTasks, websocketTasks) {
   let tempRef = {};
   httpTasks.forEach(async (task, index) => {
     try {
