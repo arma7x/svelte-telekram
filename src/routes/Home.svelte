@@ -421,8 +421,6 @@
       archivedChatList = [];
       let tempChatList = [];
       chats.forEach((chat, index) => {
-        if (chat.message && chat.message.message)
-          chat.subtitle = chat.message.message.substring(0, 50) + (chat.message.message.length > 50 ? '...' : '');
         if (chat.archived) {
           if (archivedChatListName.length !== 3) {
             archivedChatListName.push(chat.name);
