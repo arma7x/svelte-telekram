@@ -155,6 +155,7 @@
     text-align: start;
     max-width: calc(100% - 50px);
     overflow: hidden;
+    border: 1px solid var(--themeColorTransparent);
   }
 
   .kai-list-view > .kai-list-view-content > p {
