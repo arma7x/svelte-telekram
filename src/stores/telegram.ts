@@ -83,7 +83,10 @@ export async function retrieveChats() {
         });
       } else if (chat.entity.photo != null) {
         chat.iconRef = chat.entity.photo.photoId.toString();
-        websocketTasks.push(chat);
+        websocketTasks.push({
+          photoId: chat.entity.photo.photoId.toString(),
+          chat: chat
+        });
       }
       const letters = chat.name.split(' ').map(text => {
         return text[0];
@@ -137,13 +140,13 @@ export function runTask(chats, httpTasks, websocketTasks) {
   let elapsed = 0;
   websocketTasks.forEach(async (task) => {
     try {
-      let cache = await (await cachedDatabase).get('profilePhotos', task.entity.photo.photoId.toString());
+      let cache = await (await cachedDatabase).get('profilePhotos', task.photoId);
       if (cache == null) {
-        const base64 = await bufferToBase64(await client.downloadProfilePhoto(task));
-        await (await cachedDatabase).put('profilePhotos', base64, task.entity.photo.photoId.toString());
+        const base64 = await bufferToBase64(await client.downloadProfilePhoto(task.chat));
+        await (await cachedDatabase).put('profilePhotos', base64, task.photoId);
         cache = base64;
       }
-      updateThumbCached(task.iconRef, cache);
+      updateThumbCached(task.chat.iconRef, cache);
     } catch (err) {
       console.log('Err:', err);
     } finally {
