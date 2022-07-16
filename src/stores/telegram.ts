@@ -131,7 +131,7 @@ export function runTask(httpTasks, websocketTasks) {
           cache = base64;
         }
       }
-      updateThumbCached(task.chat.iconRef, cache);
+      updateThumbCached(task.photoId, cache);
     } catch (err) {
       console.log('Err:', err);
     }
@@ -145,7 +145,7 @@ export function runTask(httpTasks, websocketTasks) {
         await (await cachedDatabase).put('profilePhotos', base64, task.photoId);
         cache = base64;
       }
-      updateThumbCached(task.chat.iconRef, cache);
+      updateThumbCached(task.photoId, cache);
     } catch (err) {
       console.log('Err:', err);
     } finally {
