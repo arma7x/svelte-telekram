@@ -21,7 +21,7 @@
   let navInstance = createKaiNavigator(navOptions);
 
   onMount(() => {
-    // console.log(message);
+    console.log(message);
     // todo kai-list-view-content align-items if type => group/bot/user
     // todo render message.media if !null
     registerkeyEvent(message.id.toString(), navInstance);
@@ -51,6 +51,7 @@
   }
 
   .kai-list-view > .kai-list-view-content {
+    border-radius: 5px;
     box-sizing: border-box;
     padding: 8px!important;
     background-color: transparent;
@@ -58,7 +59,6 @@
     flex-direction: column;
     justify-content: space-between;
     align-items: center;
-    padding: 0px 4px 0px 0px;
     max-width: calc(100% - 60px);
   }
 
