@@ -15,6 +15,7 @@
   let hasAvatar: bool = false;
   let avatarSrc: string = '';
   let justifyContent: string = 'start';
+  let expandable: bool = false;
 
   let navOptions = {
     softkeyLeftListener: function(evt) {
@@ -29,6 +30,8 @@
 
   onMount(async () => {
     // todo render message.media if !null
+    if (message.message.length > 80)
+      expandable = true;
     const user = await getAuthorizedUser();
     if (['group', 'user', 'bot'].indexOf(type) > -1) {
       if (user[0] == null) {
@@ -67,7 +70,7 @@
   {#if hasAvatar }{@html avatarSrc}{/if}
   <div class="kai-list-view-content" style="margin-left:{hasAvatar ? '45px' : '0px'};">
     {#if hasAvatar }<b>{message.sender.firstName}</b>{/if}
-    <p>{message.message || 'WIP'}</p>
+    <p>{message.message.length > 80 ? message.message.substring(0, 80) + '...' : (message.message || 'WIP')}</p>
   </div>
 </div>
 
@@ -80,7 +83,6 @@
     justify-content: space-between;
     align-items: start;
     box-sizing: border-box;
-    max-height: 100px;
     width: 100%;
     font-size: 14px;
     overflow: hidden;
@@ -100,6 +102,7 @@
   }
 
   .kai-list-view > .kai-list-view-content > p {
+    max-height: 100px;
     background-color: transparent;
     padding: 0px;
     margin: 0px;
@@ -110,10 +113,6 @@
     white-space: pre-wrap!important;
     word-break: break-word!important;
     overflow: hidden;
-    text-overflow: ellipsis;
-    vertical-align: middle;
-    display: table-cell;
-    vertical-align: middle;
   }
 
   .kai-list-view.focus,
