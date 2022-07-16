@@ -5,7 +5,7 @@
 
   import { Api, client } from '../utils/bootstrap';
 
-  import { getChatCollection } from '../stores/telegram';
+  import { getChatCollection, runTask } from '../stores/telegram';
 
   import { Dummy, MessageText, MessageActionChannelCreate, MessageActionChatEditPhoto } from '../widgets/message';
 
@@ -59,6 +59,7 @@
 
   function buildIndex(messages) {
     messages.forEach((message, index) => {
+      // console.log('iconRef:', message.iconRef);
       if (messageMetadata[message.id.toString()] == null) {
         messageMetadata[message.id.toString()] = {}
       }
@@ -73,8 +74,29 @@
       const target = chats.find(chat => {
         return chat.entity.id.value == entity.id.value;
       });
+      const httpTasks = [];
+      const websocketTasks = [];
       const _messages = await client.getMessages(target, { limit: 50 });
       messages = _messages.reverse();
+      messages.forEach(message => {
+        if (['group', 'user', 'bot'].indexOf(location.state.type) > -1) {
+          if (!(message.sender.username == null && message.sender.phone == null) && message.sender.photo != null) {
+            message.iconRef = message.sender.photo.photoId.toString();
+            httpTasks.push({
+              url: `https://api.codetabs.com/v1/proxy/?quest=https://t.me/${message.sender.phone === "42777" ? 'telegram' : message.sender.username}`,
+              photoId: message.sender.photo.photoId.toString(),
+              chat: message.sender
+            });
+          } else if (message.sender.photo != null) {
+            message.iconRef = message.sender.photo.photoId.toString();
+            websocketTasks.push({
+              photoId: message.sender.photo.photoId.toString(),
+              chat: message.sender
+            });
+          }
+        }
+      });
+      runTask(httpTasks, websocketTasks);
       buildIndex(messages);
     } catch (err) {
       console.log(err);
@@ -92,7 +114,11 @@
     appBar.setTitleText(location.state.name || name);
     console.log('Room:', location.state.type);
     getMessages(location.state.entity);
-    softwareKey.setText({ left: 'Action', center: 'S/B', right: '📎' });
+    if (['group', 'user', 'bot'].indexOf(location.state.type) > -1) {
+      softwareKey.setText({ left: 'Action', center: 'SEND', right: '📎' });
+    } else {
+      softwareKey.setText({ left: 'Action', center: 'BROADCAST', right: '📎' });
+    }
     navInstance.attachListener();
   });
 
@@ -119,6 +145,5 @@
   }
   :global(#room-screen > .roomNav.focus) {
     background-color: transparent;
-    color: #fff;
   }
 </style>
