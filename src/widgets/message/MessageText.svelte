@@ -96,7 +96,7 @@
     flex-direction: column;
     justify-content: space-between;
     align-items: start;
-    max-width: calc(100% - 80px);
+    max-width: calc(100% - 50px);
   }
 
   .kai-list-view > .kai-list-view-content > p {
