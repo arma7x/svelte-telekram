@@ -16,6 +16,7 @@
   let avatarSrc: string = '';
   let justifyContent: string = 'start';
   let expandable: bool = false;
+  let media: any;
 
   let navOptions = {
     softkeyLeftListener: function(evt) {
@@ -32,6 +33,9 @@
     // todo render message.media if !null
     if (message.message.length > 80)
       expandable = true;
+    if (message.media) {
+
+    }
     const user = await getAuthorizedUser();
     if (['group', 'user', 'bot'].indexOf(type) > -1) {
       if (user[0] == null) {
