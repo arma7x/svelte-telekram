@@ -1,7 +1,7 @@
 <script lang="ts">
   import { onMount, onDestroy } from 'svelte';
   import { getCachedThumbnails } from '../../stores/telegram';
-  import { createKaiNavigator } from '../../utils/navigation';
+  import { createKaiNavigator, KaiNavigator } from '../../utils/navigation';
 
   export let key: any = '';
   export let type: string = '';
@@ -9,6 +9,7 @@
   export let className: string = null;
   export let onClick: Function = (evt) => {}
   export let registerkeyEvent: Function = (id, instance) => {}
+  export let parentNavInstance: typeof KaiNavigator;
 
   let navOptions = {
     softkeyLeftListener: function(evt) {

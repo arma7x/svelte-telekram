@@ -130,7 +130,7 @@
 
 <main id="room-screen" data-pad-top="28" data-pad-bottom="30">
   {#each messages as message}
-    <svelte:component this={resolveMessageWidget(message)} {message} {registerkeyEvent} className="roomNav" type={location.state.type}/>
+    <svelte:component className="roomNav" type={location.state.type} this={resolveMessageWidget(message)} {message} {registerkeyEvent} parentNavInstance={navInstance}/>
   {/each}
 </main>
 

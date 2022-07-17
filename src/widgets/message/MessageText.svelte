@@ -1,6 +1,6 @@
 <script lang="ts">
   import { onMount, onDestroy } from 'svelte';
-  import { createKaiNavigator } from '../../utils/navigation';
+  import { createKaiNavigator, KaiNavigator } from '../../utils/navigation';
 
   import { cachedThumbnails, getAuthorizedUser } from '../../stores/telegram';
 
@@ -18,6 +18,7 @@
   export let className: string = null;
   export let onClick: Function = (evt) => {}
   export let registerkeyEvent: Function = (id, instance) => {}
+  export let parentNavInstance: typeof KaiNavigator;
 
   let uncachedThumbnails;
   let hasAvatar: bool = false;
