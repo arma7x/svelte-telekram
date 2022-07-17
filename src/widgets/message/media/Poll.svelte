@@ -8,7 +8,6 @@
 
   onMount(() => {
     console.log('--------------------------------');
-    console.log(message);
     console.log(message.media.poll.question, `quiz: ${message.media.poll.quiz}`, `multipleChoice: ${message.media.poll.multipleChoice}`, message.media.poll.answers);
     if (message.media.results.solution)
       console.log(message.media.results.solution);
