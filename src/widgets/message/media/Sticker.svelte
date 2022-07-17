@@ -9,7 +9,7 @@
 
 <svelte:options accessors immutable={true}/>
 <div class="media-container">
-  <span>! Not Support Sticker</span>
+  <span style="color:#A20000;">Unsupported Media: Sticker</span>
 </div>
 
 <style>

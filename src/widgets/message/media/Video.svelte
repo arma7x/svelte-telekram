@@ -68,7 +68,7 @@
   {#if mediaSrc}
     <video  src="{mediaSrc}" type="{message.media.document.mimeType}" autoplay loop></video>
   {/if}
-  <span>! Not Support Video</span>
+  <span style="color:#A20000;">Unsupported Media: Video</span>
 </div>
 
 <style>
