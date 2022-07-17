@@ -21,6 +21,8 @@
   <p>{message.media.poll.question}</p>
   {#if message.media.results}
   <small><i>Status: {message.media.poll.quiz ? 'Answered' : 'Voted'}</i></small>
+  {:else}
+  <small><i>Status: Available</i></small>
   {/if}
 </div>
 
