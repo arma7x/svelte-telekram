@@ -1,12 +1,23 @@
 <script lang="ts">
   import { onMount, onDestroy } from 'svelte';
+  import { createKaiNavigator, KaiNavigator } from '../../../utils/navigation';
 
   export let message: any = {};
+  export let parentNavInstance: typeof KaiNavigator;
+  export let registerCallback: Function = (id, callback) => {}
 
   let available: bool = true;
   let answeredOrVoted: bool = false;
 
+  function actionMenu() {
+    // show media option menu
+    // onOpened parentNavInstance.detachListener
+    // onClosed parentNavInstance.attachListener
+    console.log('Clicked:', message.id.toString());
+  }
+
   onMount(() => {
+    registerCallback(message.id.toString(), actionMenu);
     console.log('--------------------------------');
     console.log(message.media.poll.question, `quiz: ${message.media.poll.quiz}`, `multipleChoice: ${message.media.poll.multipleChoice}`, message.media.poll.answers);
     if (message.media.results.solution)
@@ -21,6 +32,8 @@
       }
     }
   })
+
+  onDestroy(() => {});
 
 </script>
 

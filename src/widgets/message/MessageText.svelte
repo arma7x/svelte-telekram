@@ -17,8 +17,8 @@
   export let message: any = {};
   export let className: string = null;
   export let onClick: Function = (evt) => {}
-  export let registerkeyEvent: Function = (id, instance) => {}
   export let parentNavInstance: typeof KaiNavigator;
+  export let registerCallback: Function = (id, callback) => {}
 
   let uncachedThumbnails;
   let hasAvatar: bool = false;
@@ -27,17 +27,6 @@
   let expandable: bool = false;
   let media: any;
   let _wip: string = null;
-
-  let navOptions = {
-    softkeyLeftListener: function(evt) {
-      console.log('propagated softkeyLeftListener to:', message.id.toString());
-    },
-    softkeyRightListener: function(evt) {},
-    enterListener: function(evt) {},
-    backspaceListener: function(evt) {}
-  };
-
-  let navInstance = createKaiNavigator(navOptions);
 
   onMount(async () => {
     // todo render message.media if !null
@@ -92,7 +81,6 @@
     } else {
       hasAvatar = false;
     }
-    registerkeyEvent(message.id.toString(), navInstance);
     if (!hasAvatar)
       return;
     uncachedThumbnails = cachedThumbnails.subscribe(data => {
@@ -118,7 +106,7 @@
       <b>{message.sender.firstName}</b>
     {/if}
     {#if media }
-      <svelte:component this={media} {message}/>
+      <svelte:component this={media} {message} {parentNavInstance} {registerCallback}/>
     {/if}
     {#if _wip }
       { _wip }

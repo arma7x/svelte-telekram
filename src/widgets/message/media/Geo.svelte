@@ -1,11 +1,19 @@
 <script lang="ts">
   import { onMount, onDestroy } from 'svelte';
+  import { createKaiNavigator, KaiNavigator } from '../../../utils/navigation';
 
   export let message: any = {};
+  export let parentNavInstance: typeof KaiNavigator;
+  export let registerCallback: Function = (id, callback) => {}
+
+  function actionMenu() {
+    console.log('Clicked:', message.id.toString());
+  }
 
   let url: string = '';
 
   onMount(() => {
+    registerCallback(message.id.toString(), actionMenu);
     url = `https://maps.google.com/maps?width=100px;height=100px&hl=en&q=${message.media.geo.lat},${message.media.geo.long}+(Location)&t=&z=15&ie=UTF8&iwloc=B&output=embed`
   })
 

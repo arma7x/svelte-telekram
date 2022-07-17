@@ -7,23 +7,10 @@
   export let message: any = {};
   export let className: string = null;
   export let onClick: Function = (evt) => {}
-  export let registerkeyEvent: Function = (id, instance) => {}
   export let parentNavInstance: typeof KaiNavigator;
-
-  let navOptions = {
-    softkeyLeftListener: function(evt) {
-      console.log('propagated softkeyLeftListener to:', message.id.toString());
-    },
-    softkeyRightListener: function(evt) {},
-    enterListener: function(evt) {},
-    backspaceListener: function(evt) {}
-  };
-
-  let navInstance = createKaiNavigator(navOptions);
 
   onMount(() => {
     // console.log(message);
-    registerkeyEvent(message.id.toString(), navInstance);
   });
 
 </script>

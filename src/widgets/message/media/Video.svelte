@@ -1,9 +1,13 @@
 <script lang="ts">
   import { onMount, onDestroy } from 'svelte';
+  import { createKaiNavigator, KaiNavigator } from '../../../utils/navigation';
+
   import { client } from '../../../utils/bootstrap';
   import { Buffer} from 'buffer';
 
   export let message: any = {};
+  export let parentNavInstance: typeof KaiNavigator;
+  export let registerCallback: Function = (id, callback) => {}
 
   let JPEG_HEADER = Buffer.from(
     'ffd8ffe000104a46494600010100000100010000ffdb004300281c1e231e1928' +
@@ -42,7 +46,12 @@
     return result
   }
 
+  function actionMenu() {
+    console.log('Clicked:', message.id.toString());
+  }
+
   onMount(async () => {
+    registerCallback(message.id.toString(), actionMenu);
     //try {
       //const result = await client.downloadMedia(message.media);
       //const reader = new FileReader();

@@ -1,9 +1,18 @@
 <script lang="ts">
   import { onMount, onDestroy } from 'svelte';
+  import { createKaiNavigator, KaiNavigator } from '../../../utils/navigation';
 
   export let message: any = {};
+  export let parentNavInstance: typeof KaiNavigator;
+  export let registerCallback: Function = (id, callback) => {}
 
-  onMount(() => {})
+  function actionMenu() {
+    console.log('Clicked:', message.id.toString());
+  }
+
+  onMount(() => {
+    registerCallback(message.id.toString(), actionMenu);
+  })
 
 </script>
 

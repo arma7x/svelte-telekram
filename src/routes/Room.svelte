@@ -15,17 +15,12 @@
 
   let name: string = 'Room';
   let messages: Array<any> = [];
-  let messageMetadata: { [key: string]: { index: number, deleted: bool, keyEvent: typeof KaiNavigator }; } = {};
+  let messageMetadata: { [key: string]: { index: number, deleted: bool, callback: Function }; } = {};
 
   let navOptions = {
     verticalNavClass: 'roomNav',
     softkeyLeftListener: function(evt) {
-      if (messages[this.verticalNavIndex] && messages[this.verticalNavIndex].id.toString()) {
-        if (messageMetadata[messages[this.verticalNavIndex].id.toString()]) {
-          console.log('propagate softkeyLeftListener', messages[this.verticalNavIndex].id.toString());
-          messageMetadata[messages[this.verticalNavIndex].id.toString()].keyEvent.softkeyLeftListener(evt);
-        }
-      }
+      // common action menu; reply, forward, report, delete, edit
     },
     softkeyRightListener: function(evt) {
       // send attachment + bot command
@@ -103,9 +98,20 @@
     }
   }
 
-  function registerkeyEvent(id, instance: typeof KaiNavigator) {
+  function registerCallback(id, callback) {
     if (messageMetadata[id]) {
-      messageMetadata[id].keyEvent = instance;
+      messageMetadata[id].callback = callback;
+    }
+  }
+
+  function eventHandler(evt) {
+    if (evt.key === 'Call' || evt.code === 'ShiftLeft') {
+      if (messages[navInstance.verticalNavIndex] && messages[navInstance.verticalNavIndex].id.toString()) {
+        if (messageMetadata[messages[navInstance.verticalNavIndex].id.toString()]) {
+          const cb = messageMetadata[messages[navInstance.verticalNavIndex].id.toString()].callback;
+          cb && cb();
+        }
+      }
     }
   }
 
@@ -120,17 +126,19 @@
       softwareKey.setText({ left: 'Action', center: 'BROADCAST', right: '📎' });
     }
     navInstance.attachListener();
+    document.addEventListener('keydown', eventHandler);
   });
 
   onDestroy(() => {
     navInstance.detachListener();
+    document.removeEventListener('keydown', eventHandler);
   });
 
 </script>
 
 <main id="room-screen" data-pad-top="28" data-pad-bottom="30">
   {#each messages as message}
-    <svelte:component className="roomNav" type={location.state.type} this={resolveMessageWidget(message)} {message} {registerkeyEvent} parentNavInstance={navInstance}/>
+    <svelte:component className="roomNav" type={location.state.type} this={resolveMessageWidget(message)} {message} {registerCallback} parentNavInstance={navInstance}/>
   {/each}
 </main>
 
