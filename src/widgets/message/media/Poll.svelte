@@ -38,6 +38,7 @@
 </script>
 
 <svelte:options accessors immutable={true}/>
+
 <div class="media-container">
   <b>{message.media.poll.quiz ? 'Quiz' : 'Poll'}:</b>
   <p>{message.media.poll.question}</p>
