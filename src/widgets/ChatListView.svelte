@@ -20,7 +20,7 @@
       {:else if chat.message.action}
       {chat.message.action.className}
       {:else}
-      {chat.message.className}
+      {chat.message.media ? chat.message.media.className : chat.message.className}
       {/if}
     </small>
   </div>
