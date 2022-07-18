@@ -1,7 +1,7 @@
 <script lang="ts">
   import { onMount, onDestroy } from 'svelte';
   import { createKaiNavigator, KaiNavigator } from '../../../utils/navigation';
-  import { OptionMenu, MultiSelector } from '../../../components';
+  import { OptionMenu, MultiSelector, SingleSelector } from '../../../components';
 
   export let message: any = {};
   export let parentNavInstance: typeof KaiNavigator;
@@ -11,20 +11,100 @@
   let answeredOrVoted: bool = false;
 
   let optionMenu: OptionMenu;
+  let singleSelector: SingleSelector;
+  let multiSelector: MultiSelector;
 
   function actionMenu() {
-    // show media option menu
-    // onOpened parentNavInstance.detachListener
-    // onClosed parentNavInstance.attachListener
     if (available) {
-      if (message.media.poll.quiz) {
-         console.log('show quiz OptionMenu');
+      const answers = [];
+      message.media.poll.answers.forEach((answer) => {
+        answers.push({ title: answer.text });
+      });
+      if (message.media.poll.quiz || !message.media.poll.multipleChoice) {
+        singleSelector = new SingleSelector({
+          target: document.body,
+          props: {
+            title: message.media.poll.quiz ? 'Pick your answer' : 'Cast your vote',
+            focusIndex: 0,
+            options: answers,
+            softKeyCenterText: 'select',
+            onSoftkeyRight: (evt, scope) => {},
+            onSoftkeyLeft: (evt, scope) => {},
+            onEnter: (evt, scope) => {
+              singleSelector.$destroy();
+              let vote;
+              for (let i in scope.options) {
+                if (scope.options[i].selected) {
+                  vote = message.media.poll.answers[i];
+                  break;
+                }
+              }
+              if (vote) {
+                console.log('Vote:', vote);
+              } else {
+                console.log('Empty vote');
+              }
+            },
+            onBackspace: (evt, scope) => {
+              evt.preventDefault();
+              evt.stopPropagation();
+              singleSelector.$destroy();
+            },
+            onOpened: () => {
+              parentNavInstance.detachListener();
+            },
+            onClosed: (scope) => {
+              parentNavInstance.attachListener();
+              singleSelector = null;
+            }
+          }
+        });
       } else {
-        if (message.media.poll.multipleChoice) {
-          console.log('show poll MultiSelector');
-        } else {
-          console.log('show poll OptionMenu');
-        }
+        multiSelector = new MultiSelector({
+          target: document.body,
+          props: {
+            title: 'Cast your votes',
+            focusIndex: 0,
+            options: answers,
+            softKeyLeftText: 'Cancel',
+            softKeyRightText: 'Done',
+            softKeyCenterTextSelect: 'select',
+            softKeyCenterTextDeselect: 'deselect',
+            onSoftkeyLeft: (evt, scope) => {
+              evt.preventDefault();
+              evt.stopPropagation();
+              multiSelector.$destroy();
+            },
+            onSoftkeyRight: (evt, scope) => {
+              evt.preventDefault();
+              evt.stopPropagation();
+              multiSelector.$destroy();
+              const votes = []
+              scope.options.forEach((o, i) => {
+                if (o.checked) {
+                  votes.push(message.media.poll.answers[i])
+                }
+              });
+              if (votes.length > 0) {
+                console.log('Votes:', votes);
+              } else {
+                console.log('Empty votes');
+              }
+            },
+            onBackspace: (evt, scope) => {
+              evt.preventDefault();
+              evt.stopPropagation();
+              multiSelector.$destroy();
+            },
+            onOpened: () => {
+              parentNavInstance.detachListener();
+            },
+            onClosed: (scope) => {
+              parentNavInstance.attachListener();
+              multiSelector = null;
+            }
+          }
+        });
       }
     } else {
       const results = [];
