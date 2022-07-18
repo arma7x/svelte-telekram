@@ -115,6 +115,53 @@
     }
   }
 
+  function eventListener(evt) {
+    // console.log('Listen:', location.state.entity.id.value.toString(), evt.className, evt);
+    switch (evt.className) {
+      case 'UpdateNewChannelMessage':
+        var entities = Array.from(evt._entities.entries());
+        for (let i in entities) {
+          if (entities[i][1].id.toString() === location.state.entity.id.value.toString()) {
+            const temp = [...messages, evt.message];
+            buildIndex(temp);
+            messages = temp;
+            autoScroll();
+            break;
+          }
+        }
+        break;
+      case 'UpdateEditChannelMessage':
+        var entities = Array.from(evt._entities.entries());
+        for (let i in entities) {
+          if (entities[i][1].id.toString() === location.state.entity.id.value.toString()) {
+            if (messageMetadata[evt.message.id.toString()]) {
+              const idx = messageMetadata[evt.message.id.toString()].index;
+              messages[idx] = evt.message;
+            }
+            break;
+          }
+        }
+        break;
+      case 'UpdateDeleteChannelMessages':
+        if (evt.channelId.toString() === location.state.entity.id.value.toString()) {
+          evt.messages.forEach(id => {
+            if (messageMetadata[id.toString()]) {
+              messageMetadata[id.toString()].deleted = true;
+              navInstance.navigateListNav(-1);
+            }
+          });
+        }
+        break;
+    }
+  }
+
+  function autoScroll() {
+    setTimeout(() => {
+      if (messages.length - navInstance.verticalNavIndex === 2)
+        navInstance.navigateListNav(1);
+    }, 500);
+  }
+
   onMount(() => {
     const { appBar, softwareKey } = getAppProp();
     appBar.setTitleText(location.state.name || name);
@@ -127,18 +174,22 @@
     }
     navInstance.attachListener();
     document.addEventListener('keydown', eventHandler);
+    client.addEventHandler(eventListener);
   });
 
   onDestroy(() => {
     navInstance.detachListener();
     document.removeEventListener('keydown', eventHandler);
+    client.removeEventHandler(eventListener);
   });
 
 </script>
 
 <main id="room-screen" data-pad-top="28" data-pad-bottom="30">
   {#each messages as message}
+    {#if messageMetadata[message.id.toString()] && messageMetadata[message.id.toString()].deleted === false}
     <svelte:component className="roomNav" type={location.state.type} this={resolveMessageWidget(message)} {message} {registerCallback} parentNavInstance={navInstance}/>
+    {/if}
   {/each}
 </main>
 
