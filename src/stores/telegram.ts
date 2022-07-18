@@ -8,12 +8,13 @@ export const chatCollections = writable([]);
 export const cachedThumbnails = writable({});
 
 client.addEventHandler((evt) => {
-  console.log(evt);
+  // console.log(evt);
   switch (evt.className) {
     case "UpdateFolderPeers":
     case "UpdateNewChannelMessage":
     case "UpdateReadChannelInbox":
     case "UpdateEditChannelMessage":
+    case "UpdateDeleteChannelMessages":
     case "UpdateShortMessage":
     case "UpdateReadHistoryInbox":
       retrieveChats();
