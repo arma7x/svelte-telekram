@@ -1,6 +1,7 @@
 <script lang="ts">
   import { onMount, onDestroy } from 'svelte';
   import { createKaiNavigator, KaiNavigator } from '../../../utils/navigation';
+  import { OptionMenu, MultiSelector } from '../../../components';
 
   export let message: any = {};
   export let parentNavInstance: typeof KaiNavigator;
@@ -9,17 +10,68 @@
   let available: bool = true;
   let answeredOrVoted: bool = false;
 
+  let resultsMenu: OptionMenu;
+
   function actionMenu() {
     // show media option menu
     // onOpened parentNavInstance.detachListener
     // onClosed parentNavInstance.attachListener
-    console.log('Clicked:', message.id.toString());
+    if (available) {
+      if (message.media.poll.quiz) {
+         console.log('show quiz OptionMenu');
+      } else {
+        if (message.media.poll.multipleChoice) {
+          console.log('show poll MultiSelector');
+        } else {
+          console.log('show poll OptionMenu');
+        }
+      }
+    } else {
+      const results = [];
+      if (message.media.results.solution) {
+        results.push({
+          title: 'Explanation',
+          subtitle: message.media.results.solution
+        });
+      }
+      message.media.results.results.forEach((result, i) => {
+        results.push({
+          title: message.media.poll.answers[i].text,
+          subtitle: `Voters: ${result.voters}, Chosen: ${result.chosen ? '√' : 'X'}${message.media.poll.quiz ? (result.correct ? ', Correct: √' : ', Correct: X') : ''}${message.media.poll.quiz ? (result.chosen && result.correct ? ', Result: √' : ', Result: X') : ''}`
+        });
+      });
+      resultsMenu = new OptionMenu({
+        target: document.body,
+        props: {
+          title: `Total Voters: ${message.media.results.totalVoters}`,
+          focusIndex: 0,
+          options: results,
+          softKeyCenterText: 'select',
+          onSoftkeyRight: (evt, scope) => {},
+          onSoftkeyLeft: (evt, scope) => {},
+          onEnter: (evt, scope) => {
+            resultsMenu.$destroy();
+          },
+          onBackspace: (evt, scope) => {
+            evt.preventDefault();
+            evt.stopPropagation();
+            resultsMenu.$destroy();
+          },
+          onOpened: () => {
+            parentNavInstance.detachListener();
+          },
+          onClosed: (scope) => {
+            console.log(scope);
+            parentNavInstance.attachListener();
+            resultsMenu = null;
+          }
+        }
+      });
+    }
   }
 
   onMount(() => {
     registerCallback(message.id.toString(), actionMenu);
-    console.log('--------------------------------');
-    console.log(message.media.poll.question, `quiz: ${message.media.poll.quiz}`, `multipleChoice: ${message.media.poll.multipleChoice}`, message.media.poll.answers);
     if (message.media.results.solution)
       console.log(message.media.results.solution);
     if (message.media.poll.closed)
