@@ -41,6 +41,7 @@
               }
               if (vote) {
                 console.log('Vote:', vote);
+                // TODO: Submit vote
               } else {
                 console.log('Empty vote');
               }
@@ -87,6 +88,7 @@
               });
               if (votes.length > 0) {
                 console.log('Votes:', votes);
+                // TODO: Submit votes
               } else {
                 console.log('Empty votes');
               }
