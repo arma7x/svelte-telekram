@@ -7,7 +7,7 @@
   export let registerCallback: Function = (id, callback) => {}
 
   function actionMenu() {
-    console.log('Clicked:', message.id.toString());
+    window.open(`https://www.google.com/maps/search/?api=1&query=${message.media.geo.lat},${message.media.geo.long}`, '_blank').focus();
   }
 
   let url: string = '';
