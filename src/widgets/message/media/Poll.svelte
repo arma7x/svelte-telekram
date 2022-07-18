@@ -10,7 +10,7 @@
   let available: bool = true;
   let answeredOrVoted: bool = false;
 
-  let resultsMenu: OptionMenu;
+  let optionMenu: OptionMenu;
 
   function actionMenu() {
     // show media option menu
@@ -40,7 +40,7 @@
           subtitle: `Voters: ${result.voters}, Chosen: ${result.chosen ? '√' : 'X'}${message.media.poll.quiz ? (result.correct ? ', Correct: √' : ', Correct: X') : ''}${message.media.poll.quiz ? (result.chosen && result.correct ? ', Result: √' : ', Result: X') : ''}`
         });
       });
-      resultsMenu = new OptionMenu({
+      optionMenu = new OptionMenu({
         target: document.body,
         props: {
           title: `Total Voters: ${message.media.results.totalVoters}`,
@@ -50,20 +50,19 @@
           onSoftkeyRight: (evt, scope) => {},
           onSoftkeyLeft: (evt, scope) => {},
           onEnter: (evt, scope) => {
-            resultsMenu.$destroy();
+            optionMenu.$destroy();
           },
           onBackspace: (evt, scope) => {
             evt.preventDefault();
             evt.stopPropagation();
-            resultsMenu.$destroy();
+            optionMenu.$destroy();
           },
           onOpened: () => {
             parentNavInstance.detachListener();
           },
           onClosed: (scope) => {
-            console.log(scope);
             parentNavInstance.attachListener();
-            resultsMenu = null;
+            optionMenu = null;
           }
         }
       });
