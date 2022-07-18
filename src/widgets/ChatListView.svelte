@@ -1,9 +1,16 @@
 <script lang="ts">
+  import { onMount, onDestroy } from 'svelte';
+
   export let key:any = '';
   export let icon: string = '';
   export let chat: any = {};
   export let className: string = null;
   export let onClick: Function = (evt) => {}
+
+  onMount(() => {
+    // console.log(chat);
+  });
+
 </script>
 
 <div data-key="{key}" class="kai-list-view {className ? className : ''}" on:click={onClick}>
