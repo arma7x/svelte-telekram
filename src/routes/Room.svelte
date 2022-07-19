@@ -62,26 +62,27 @@
       messageMetadata[message.id.toString()].index = index;
       messageMetadata[message.id.toString()].deleted = false;
     });
-    const fetchReplied = [];
-    messages.forEach((message) => {
+    const fetchReply = [];
+    messages.forEach((message, index) => {
       if (message.replyTo) {
         if (messageMetadata[message.replyTo.replyToMsgId.toString()]) {
           replyIndex[message.replyTo.replyToMsgId.toString()] = messageMetadata[message.replyTo.replyToMsgId.toString()].index;
-          // fetchReplied.push(message.replyTo.replyToMsgId);
+          // fetchReply.push(message.replyTo.replyToMsgId);
         } else {
-          fetchReplied.push(message.replyTo.replyToMsgId);
+          if (fetchReply.indexOf(message.replyTo.replyToMsgId) < 0)
+            fetchReply.push(message.replyTo.replyToMsgId);
         }
       }
     });
     try {
-      const messages = await client.getMessages(chat, {ids:fetchReplied});
-      fetchReplied.forEach((id, index) => {
+      const messages = await client.getMessages(chat, {ids:fetchReply});
+      fetchReply.forEach((id, index) => {
         replyIndex[id.toString()] = messages[index];
       });
     } catch (err) {
       console.log(err);
     }
-    // console.log(replyIndex);
+    return messages;
   }
 
   async function getMessages(entity) {
@@ -93,8 +94,8 @@
       const httpTasks = [];
       const websocketTasks = [];
       const _messages = await client.getMessages(chat, { limit: 50 });
-      messages = _messages.reverse();
-      messages.forEach(message => {
+      _messages.reverse();
+      _messages.forEach(message => {
         if (['group', 'user', 'bot'].indexOf(location.state.type) > -1) {
           if (!(message.sender.username == null && message.sender.phone == null) && message.sender.photo != null) {
             message.iconRef = message.sender.photo.photoId.toString();
@@ -113,7 +114,7 @@
         }
       });
       runTask(httpTasks, websocketTasks);
-      buildIndex(messages);
+      messages = await buildIndex(_messages);
     } catch (err) {
       console.log(err);
     }
@@ -188,7 +189,7 @@
   function getReplyHeader(message) {
     if (message.replyTo == null)
       return false;
-    if (replyIndex[message.replyTo.replyToMsgId]) {
+    if (replyIndex[message.replyTo.replyToMsgId] || replyIndex[message.replyTo.replyToMsgId] === 0) {
       if (typeof replyIndex[message.replyTo.replyToMsgId] === 'number')
         return messages[replyIndex[message.replyTo.replyToMsgId]];
       return replyIndex[message.replyTo.replyToMsgId];
