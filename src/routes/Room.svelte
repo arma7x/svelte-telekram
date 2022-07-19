@@ -13,9 +13,11 @@
   export let navigate: any;
   export let getAppProp: Function;
 
+  let chat: any;
   let name: string = 'Room';
   let messages: Array<any> = [];
   let messageMetadata: { [key: string]: { index: number, deleted: bool, callback: Function }; } = {};
+  let replyIndex: { [key: string]: any; } = {};
 
   let navOptions = {
     verticalNavClass: 'roomNav',
@@ -52,26 +54,45 @@
     return Dummy;
   }
 
-  function buildIndex(messages) {
+  async function buildIndex(messages) {
     messages.forEach((message, index) => {
-      // console.log('iconRef:', message.iconRef);
       if (messageMetadata[message.id.toString()] == null) {
         messageMetadata[message.id.toString()] = {}
       }
       messageMetadata[message.id.toString()].index = index;
       messageMetadata[message.id.toString()].deleted = false;
     });
+    const fetchReplied = [];
+    messages.forEach((message) => {
+      if (message.replyTo) {
+        if (messageMetadata[message.replyTo.replyToMsgId.toString()]) {
+          replyIndex[message.replyTo.replyToMsgId.toString()] = messageMetadata[message.replyTo.replyToMsgId.toString()].index;
+          // fetchReplied.push(message.replyTo.replyToMsgId);
+        } else {
+          fetchReplied.push(message.replyTo.replyToMsgId);
+        }
+      }
+    });
+    try {
+      const messages = await client.getMessages(chat, {ids:fetchReplied});
+      fetchReplied.forEach((id, index) => {
+        replyIndex[id.toString()] = messages[index];
+      });
+    } catch (err) {
+      console.log(err);
+    }
+    // console.log(replyIndex);
   }
 
   async function getMessages(entity) {
     try {
       const chats = await getChatCollection();
-      const target = chats.find(chat => {
+      chat = chats.find(chat => {
         return chat.entity.id.value == entity.id.value;
       });
       const httpTasks = [];
       const websocketTasks = [];
-      const _messages = await client.getMessages(target, { limit: 50 });
+      const _messages = await client.getMessages(chat, { limit: 50 });
       messages = _messages.reverse();
       messages.forEach(message => {
         if (['group', 'user', 'bot'].indexOf(location.state.type) > -1) {
@@ -164,6 +185,17 @@
     }, 500);
   }
 
+  function getReplyHeader(message) {
+    if (message.replyTo == null)
+      return false;
+    if (replyIndex[message.replyTo.replyToMsgId]) {
+      if (typeof replyIndex[message.replyTo.replyToMsgId] === 'number')
+        return messages[replyIndex[message.replyTo.replyToMsgId]];
+      return replyIndex[message.replyTo.replyToMsgId];
+    }
+    return -1;
+  }
+
   onMount(() => {
     const { appBar, softwareKey } = getAppProp();
     appBar.setTitleText(location.state.name || name);
@@ -190,7 +222,7 @@
 <main id="room-screen" data-pad-top="28" data-pad-bottom="30">
   {#each messages as message}
     {#if messageMetadata[message.id.toString()] && messageMetadata[message.id.toString()].deleted === false}
-    <svelte:component className="roomNav" type={location.state.type} this={resolveMessageWidget(message)} {message} {registerCallback} parentNavInstance={navInstance}/>
+      <svelte:component className="roomNav" type={location.state.type} this={resolveMessageWidget(message)} {message} {registerCallback} parentNavInstance={navInstance} replyTo={getReplyHeader(message)}/>
     {/if}
   {/each}
 </main>

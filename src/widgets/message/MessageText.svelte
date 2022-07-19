@@ -19,6 +19,7 @@
   export let onClick: Function = (evt) => {}
   export let parentNavInstance: typeof KaiNavigator;
   export let registerCallback: Function = (id, callback) => {}
+  export let replyTo: any;
 
   let uncachedThumbnails;
   let hasAvatar: bool = false;
@@ -27,6 +28,17 @@
   let expandable: bool = false;
   let media: any;
   let _wip: string = null;
+
+  function renderReplyHeader(msg) {
+    const columns = [];
+    if (msg.media) {
+      columns.push(`<div>${msg.media.className}</div>`);
+    }
+    if (msg.message && msg.message !== '') {
+      columns.push(`<div>${msg.message.length > 10 ? msg.message.substring(0, 10) + '...' : msg.message}</div>`);
+    }
+    return `<div>${columns.join('')}<div>`;
+  }
 
   onMount(async () => {
     // todo render message.media if !null
@@ -53,7 +65,7 @@
             break;
           default:
             _wip = 'WIP Media: ' + message.media.className;
-            console.log(message.media);
+            // console.log(message.media);
         }
       } else if (message.media.className === "MessageMediaPoll"){
         media = Poll;
@@ -104,6 +116,15 @@
 <div data-key="{key}" class="kai-list-view {className ? className : ''}" on:click={onClick} style="justify-content:{type === 'channel' ? 'start' : justifyContent};min-height:{hasAvatar ? '50px' : '0px'};">
   {#if hasAvatar }{@html avatarSrc}{/if}
   <div class="kai-list-view-content" style="margin-left:{hasAvatar ? '45px' : '0px'};">
+    {#if replyTo !== false}
+      <div class="reply-box">
+      {#if replyTo === -1}
+        <small>Deleted</small>
+      {:else}
+        {@html renderReplyHeader(replyTo)}
+      {/if}
+      </div>
+    {/if}
     {#if hasAvatar }
       <b>{message.sender.firstName}</b>
     {/if}
@@ -160,6 +181,13 @@
     text-align: start;
     white-space: pre-wrap!important;
     word-break: break-word!important;
+  }
+
+  .kai-list-view > .kai-list-view-content > .reply-box {
+    padding: 1px 1px 1px 3px;
+    margin-bottom: 2px;
+    border-left: 1px solid var(--themeColor);
+    font-size: 90%
   }
 
   .kai-list-view.focus,
