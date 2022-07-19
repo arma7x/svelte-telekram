@@ -116,6 +116,9 @@
 <div data-key="{key}" class="kai-list-view {className ? className : ''}" on:click={onClick} style="justify-content:{type === 'channel' ? 'start' : justifyContent};min-height:{hasAvatar ? '50px' : '0px'};">
   {#if hasAvatar }{@html avatarSrc}{/if}
   <div class="kai-list-view-content" style="margin-left:{hasAvatar ? '45px' : '0px'};">
+    {#if hasAvatar }
+      <b>{message.sender.firstName}</b>
+    {/if}
     {#if replyTo !== false}
       <div class="reply-box">
       {#if replyTo === -1}
@@ -124,9 +127,6 @@
         {@html renderReplyHeader(replyTo)}
       {/if}
       </div>
-    {/if}
-    {#if hasAvatar }
-      <b>{message.sender.firstName}</b>
     {/if}
     {#if media }
       <svelte:component this={media} {message} {parentNavInstance} {registerCallback}/>
