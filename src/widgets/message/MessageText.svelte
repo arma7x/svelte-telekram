@@ -3,6 +3,8 @@
   import { onMount, onDestroy } from 'svelte';
   import { createKaiNavigator, KaiNavigator } from '../../utils/navigation';
 
+  import { Api, client } from '../../utils/bootstrap';
+
   import { cachedThumbnails, getAuthorizedUser } from '../../stores/telegram';
 
   import Sticker from './media/Sticker.svelte';
@@ -28,6 +30,7 @@
   let justifyContent: string = 'start';
   let expandable: bool = false;
   let media: any;
+  let fullName: string;
   let _wip: string = null;
 
   function renderReplyHeader(msg) {
@@ -39,6 +42,30 @@
       columns.push(`<div>${msg.message.length > 10 ? msg.message.substring(0, 10) + '...' : msg.message}</div>`);
     }
     return `<div>${columns.join('')}<div>`;
+  }
+
+  function getFullname() {
+    let fullname = '';
+    if (message.forward && message.forward.originalFwd.fromName) {
+      fullname = message.forward.originalFwd.fromName;
+    } else if (message.forward && message.forward.originalFwd.sender) {
+      let fn = '';
+      if (message.forward.originalFwd.sender.firstName)
+        fn += message.forward.originalFwd.sender.firstName;
+      if (message.forward.originalFwd.sender.lastName)
+        fn += ' ' + message.forward.originalFwd.sender.lastName;
+      if (message.forward.originalFwd.sender.title)
+        fn = message.forward.originalFwd.sender.title;
+      fullname = fn;
+    } else if (message.sender) {
+      let fn = '';
+      if (message.sender.firstName)
+        fn += message.sender.firstName;
+      if (message.sender.lastName)
+        fn += ' ' + message.sender.lastName;
+      fullname = fn;
+    }
+    return fullname;
   }
 
   onMount(async () => {
@@ -83,16 +110,51 @@
     if (['group', 'user', 'bot'].indexOf(type) > -1) {
       if (user[0] == null) {
         hasAvatar = true;
+        justifyContent = 'start';
       } else {
         if (message.sender.id.toString() === user[0].id.toString()) {
           hasAvatar = false;
           justifyContent = 'end';
         } else {
           hasAvatar = true;
+          justifyContent = 'start';
         }
       }
     } else {
       hasAvatar = false;
+      justifyContent = 'end';
+    }
+    if (message.forward) {
+      if (message.forward.originalFwd.fromName) {
+        delete message.iconRef;
+        hasAvatar = true;
+        justifyContent = 'start';
+      } else if (message.forward.originalFwd.fromId) {
+        delete message.iconRef;
+        hasAvatar = true;
+        justifyContent = 'start';
+        if (message.forward.originalFwd.fromId.className === 'PeerUser') {
+          const users = await client.invoke(
+            new Api.users.GetUsers({
+              id: [message.forward.originalFwd.fromId]
+            })
+          );
+          if (users[0])
+            message.forward.originalFwd.sender = users[0];
+          fullName = getFullname();
+        } else if (message.forward.originalFwd.fromId.className === 'PeerChannel') {
+          const channels = await client.invoke(
+            new Api.channels.GetChannels({
+              id: [message.forward.originalFwd.fromId]
+            })
+          );
+          if (channels.chats[0])
+            message.forward.originalFwd.sender = channels.chats[0];
+          fullName = getFullname();
+        }
+      }
+    } else if (message.sender && user[0] && message.sender.id.toString() !== user[0].id.toString()) {
+      console.log('???', message.sender);
     }
     if (!hasAvatar)
       return;
@@ -100,7 +162,8 @@
       if (message.iconRef && data[message.iconRef]) {
         avatarSrc = `<img alt="icon" style="position:absolute;bottom:0;background-color:var(--themeColor);width:40px;height:40px;border-radius:50%;box-sizing:border-box;border: 2px solid #fff;"" src="${data[message.iconRef]}"/>`
       } else {
-        avatarSrc = `<div style="position:absolute;bottom:0;display:flex;flex-direction:column;justify-content:center;align-items:center;font-weight:bold;color:#fff;background-color:var(--themeColor);width:40px;height:40px;border-radius:50%;box-sizing:border-box;border: 2px solid #fff;">${message.sender.firstName.split(' ').map(text => text[0]).splice(0, 2).join('')}</div>`
+        let name = getFullname().split(' ').map(text => text[0].toUpperCase()).splice(0, 2).join('');
+        avatarSrc = `<div style="position:absolute;bottom:0;display:flex;flex-direction:column;justify-content:center;align-items:center;font-weight:bold;color:#fff;background-color:var(--themeColor);width:40px;height:40px;border-radius:50%;box-sizing:border-box;border: 2px solid #fff;">${name}</div>`
       }
     });
   });
@@ -118,7 +181,7 @@
   {#if hasAvatar }{@html DOMPurify.sanitize(avatarSrc)}{/if}
   <div class="kai-list-view-content" style="margin-left:{hasAvatar ? '45px' : '0px'};">
     {#if hasAvatar }
-      <b>{message.sender.firstName}</b>
+      <b>{fullName || getFullname()}</b>
     {/if}
     {#if replyTo !== false}
       <div class="reply-box">
