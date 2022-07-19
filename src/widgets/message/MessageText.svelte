@@ -1,4 +1,5 @@
 <script lang="ts">
+  import DOMPurify from 'dompurify';
   import { onMount, onDestroy } from 'svelte';
   import { createKaiNavigator, KaiNavigator } from '../../utils/navigation';
 
@@ -114,7 +115,7 @@
 <svelte:options accessors immutable={true}/>
 
 <div data-key="{key}" class="kai-list-view {className ? className : ''}" on:click={onClick} style="justify-content:{type === 'channel' ? 'start' : justifyContent};min-height:{hasAvatar ? '50px' : '0px'};">
-  {#if hasAvatar }{@html avatarSrc}{/if}
+  {#if hasAvatar }{@html DOMPurify.sanitize(avatarSrc)}{/if}
   <div class="kai-list-view-content" style="margin-left:{hasAvatar ? '45px' : '0px'};">
     {#if hasAvatar }
       <b>{message.sender.firstName}</b>
@@ -124,7 +125,7 @@
       {#if replyTo === -1}
         <small>Deleted</small>
       {:else}
-        {@html renderReplyHeader(replyTo)}
+        {@html DOMPurify.sanitize(renderReplyHeader(replyTo))}
       {/if}
       </div>
     {/if}
