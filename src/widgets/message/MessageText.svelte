@@ -130,26 +130,11 @@
         hasAvatar = true;
         justifyContent = 'start';
       } else if (message.forward.originalFwd.fromId) {
-        delete message.iconRef;
         hasAvatar = true;
         justifyContent = 'start';
         if (message.forward.originalFwd.fromId.className === 'PeerUser') {
-          const users = await client.invoke(
-            new Api.users.GetUsers({
-              id: [message.forward.originalFwd.fromId]
-            })
-          );
-          if (users[0])
-            message.forward.originalFwd.sender = users[0];
           fullName = getFullname();
         } else if (message.forward.originalFwd.fromId.className === 'PeerChannel') {
-          const channels = await client.invoke(
-            new Api.channels.GetChannels({
-              id: [message.forward.originalFwd.fromId]
-            })
-          );
-          if (channels.chats[0])
-            message.forward.originalFwd.sender = channels.chats[0];
           fullName = getFullname();
         }
       }
