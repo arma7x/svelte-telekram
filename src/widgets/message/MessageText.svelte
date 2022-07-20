@@ -139,7 +139,7 @@
         }
       }
     } else if (message.sender && user[0] && message.sender.id.toString() !== user[0].id.toString()) {
-      console.log('???', message.sender);
+      // console.log('???', message.sender);
     }
     if (!hasAvatar)
       return;

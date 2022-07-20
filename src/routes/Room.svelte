@@ -66,6 +66,7 @@
 
     const httpTasks = [];
     const websocketTasks = [];
+    const fetchReply = [];
 
     messages.forEach((message, index) => {
       if (messageMetadata[message.id.toString()] == null) {
@@ -73,6 +74,24 @@
       }
       messageMetadata[message.id.toString()].index = index;
       messageMetadata[message.id.toString()].deleted = false;
+
+      if (['group', 'user', 'bot'].indexOf(location.state.type) > -1) {
+        if (!(message.sender.username == null && message.sender.phone == null) && message.sender.photo != null) {
+          message.iconRef = message.sender.photo.photoId.toString();
+          httpTasks.push({
+            url: `https://api.codetabs.com/v1/proxy/?quest=https://t.me/${message.sender.phone === "42777" ? 'telegram' : message.sender.username}`,
+            photoId: message.sender.photo.photoId.toString(),
+            chat: message.sender
+          });
+        } else if (message.sender.photo != null) {
+          message.iconRef = message.sender.photo.photoId.toString();
+          websocketTasks.push({
+            photoId: message.sender.photo.photoId.toString(),
+            chat: message.sender
+          });
+        }
+      }
+
       if (message.forward) {
         if (message.forward.originalFwd.fromName) {
           delete message.iconRef;
@@ -91,39 +110,18 @@
           }
         }
       }
-    });
 
-    messages.forEach(message => {
-      if (['group', 'user', 'bot'].indexOf(location.state.type) > -1) {
-        if (!(message.sender.username == null && message.sender.phone == null) && message.sender.photo != null) {
-          message.iconRef = message.sender.photo.photoId.toString();
-          httpTasks.push({
-            url: `https://api.codetabs.com/v1/proxy/?quest=https://t.me/${message.sender.phone === "42777" ? 'telegram' : message.sender.username}`,
-            photoId: message.sender.photo.photoId.toString(),
-            chat: message.sender
-          });
-        } else if (message.sender.photo != null) {
-          message.iconRef = message.sender.photo.photoId.toString();
-          websocketTasks.push({
-            photoId: message.sender.photo.photoId.toString(),
-            chat: message.sender
-          });
-        }
-      }
-    });
-
-    const fetchReply = [];
-    messages.forEach((message, index) => {
       if (message.replyTo) {
         if (messageMetadata[message.replyTo.replyToMsgId.toString()]) {
           replyIndex[message.replyTo.replyToMsgId.toString()] = messageMetadata[message.replyTo.replyToMsgId.toString()].index;
-          // fetchReply.push(message.replyTo.replyToMsgId);
         } else {
           if (fetchReply.indexOf(message.replyTo.replyToMsgId) < 0)
             fetchReply.push(message.replyTo.replyToMsgId);
         }
       }
+
     });
+
     try {
       const messages = await client.getMessages(chat, {ids:fetchReply});
       fetchReply.forEach((id, index) => {
