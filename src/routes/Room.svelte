@@ -280,10 +280,10 @@
     const { appBar, softwareKey } = getAppProp();
     appBar.setTitleText(location.state.name || name);
     getMessages(location.state.entity);
-    if (['group', 'user', 'bot'].indexOf(location.state.type) > -1) {
-      softwareKey.setText({ left: 'Action', center: 'SEND', right: '📎' });
-    } else {
+    if (location.state.entity.className === 'Channel' && !location.state.entity.megagroup) {
       softwareKey.setText({ left: 'Action', center: 'BROADCAST', right: '📎' });
+    } else {
+      softwareKey.setText({ left: 'Action', center: 'SEND', right: '📎' });
     }
     navInstance.attachListener();
     document.addEventListener('keydown', eventHandler);
