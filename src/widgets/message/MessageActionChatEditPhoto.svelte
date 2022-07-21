@@ -9,7 +9,7 @@
   export let className: string = null;
   export let onClick: Function = (evt) => {}
   export let parentNavInstance: typeof KaiNavigator;
-  export let registerCallback: Function = (id, callback) => {}
+  export let registerCallButtonHandler: Function = (id, callback) => {}
   export let replyTo: any;
 
   let src: string = '';

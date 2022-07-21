@@ -199,7 +199,7 @@
     }
   }
 
-  function registerCallback(id, callback) {
+  function registerCallButtonHandler(id, callback) {
     if (messageMetadata[id]) {
       messageMetadata[id].callback = callback;
     }
@@ -301,7 +301,7 @@
 <main id="room-screen" data-pad-top="28" data-pad-bottom="30">
   {#each messages as message}
     {#if messageMetadata[message.id.toString()] && messageMetadata[message.id.toString()].deleted === false}
-      <svelte:component className="roomNav" this={resolveMessageWidget(message)} {message} {registerCallback} parentNavInstance={navInstance} replyTo={getReplyHeader(message)} entity={location.state.entity}/>
+      <svelte:component className="roomNav" this={resolveMessageWidget(message)} {message} {registerCallButtonHandler} parentNavInstance={navInstance} replyTo={getReplyHeader(message)} entity={location.state.entity}/>
     {/if}
   {/each}
 </main>

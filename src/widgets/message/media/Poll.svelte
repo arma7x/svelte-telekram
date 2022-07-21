@@ -5,7 +5,7 @@
 
   export let message: any = {};
   export let parentNavInstance: typeof KaiNavigator;
-  export let registerCallback: Function = (id, callback) => {}
+  export let registerCallButtonHandler: Function = (id, callback) => {}
 
   let available: bool = true;
   let answeredOrVoted: bool = false;
@@ -152,7 +152,7 @@
   }
 
   onMount(() => {
-    registerCallback(message.id.toString(), actionMenu);
+    registerCallButtonHandler(message.id.toString(), actionMenu);
     if (message.media.results.solution)
       console.log(message.media.results.solution);
     if (message.media.poll.closed)

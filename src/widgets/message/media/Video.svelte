@@ -7,7 +7,7 @@
 
   export let message: any = {};
   export let parentNavInstance: typeof KaiNavigator;
-  export let registerCallback: Function = (id, callback) => {}
+  export let registerCallButtonHandler: Function = (id, callback) => {}
 
   let JPEG_HEADER = Buffer.from(
     'ffd8ffe000104a46494600010100000100010000ffdb004300281c1e231e1928' +
@@ -51,7 +51,7 @@
   }
 
   onMount(async () => {
-    registerCallback(message.id.toString(), actionMenu);
+    registerCallButtonHandler(message.id.toString(), actionMenu);
     //try {
       //const result = await client.downloadMedia(message.media);
       //const reader = new FileReader();

@@ -4,14 +4,14 @@
 
   export let message: any = {}; //.media.photo or .media.document
   export let parentNavInstance: typeof KaiNavigator;
-  export let registerCallback: Function = (id, callback) => {}
+  export let registerCallButtonHandler: Function = (id, callback) => {}
 
   function actionMenu() {
     console.log('Clicked:', message.id.toString());
   }
 
   onMount(() => {
-    registerCallback(message.id.toString(), actionMenu);
+    registerCallButtonHandler(message.id.toString(), actionMenu);
   })
 
 
