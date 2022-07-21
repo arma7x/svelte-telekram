@@ -5,7 +5,7 @@
   export let className: string = null;
   export let onClick: Function = (evt) => {}
 
-  function senderName() {
+  function getLastMessageSender() {
     if (chat.message._sender.username)
       return chat.message._sender.username.substring(0, 16);
     if (chat.message._sender.firstName)
@@ -24,7 +24,7 @@
       {chat.name}
     </p>
     <small>
-      {#if chat.isGroup}<b>{senderName()}</b>:
+      {#if chat.isGroup}<b>{getLastMessageSender()}</b>:
       {/if}
       {#if chat.message && chat.message.message}
       {chat.message.message.substring(0, (chat.isGroup ? 15 : 30)) + (chat.message.message.length > (chat.isGroup ? 15 : 30) ? '...' : '')}
