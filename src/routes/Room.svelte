@@ -280,8 +280,10 @@
     const { appBar, softwareKey } = getAppProp();
     appBar.setTitleText(location.state.name || name);
     getMessages(location.state.entity);
-    if (location.state.entity.className === 'Channel' && !location.state.entity.megagroup) {
+    if (location.state.entity.className === 'Channel' && !location.state.entity.megagroup && location.state.entity.creator) {
       softwareKey.setText({ left: 'Action', center: 'BROADCAST', right: '📎' });
+    } else if (location.state.entity.className === 'Channel' && !location.state.entity.megagroup && !location.state.entity.creator) {
+      softwareKey.setText({ left: '', center: 'UN/MUTED', right: '' });
     } else {
       softwareKey.setText({ left: 'Action', center: 'SEND', right: '📎' });
     }
