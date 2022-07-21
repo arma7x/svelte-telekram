@@ -76,14 +76,14 @@
       messageMetadata[message.id.toString()].deleted = false;
 
       if (['group', 'user', 'bot'].indexOf(location.state.type) > -1) {
-        if (!(message.sender.username == null && message.sender.phone == null) && message.sender.photo != null) {
+        if (message.sender && !(message.sender.username == null && message.sender.phone == null) && message.sender.photo != null) {
           message.iconRef = message.sender.photo.photoId.toString();
           httpTasks.push({
             url: `https://api.codetabs.com/v1/proxy/?quest=https://t.me/${message.sender.phone === "42777" ? 'telegram' : message.sender.username}`,
             photoId: message.sender.photo.photoId.toString(),
             chat: message.sender
           });
-        } else if (message.sender.photo != null) {
+        } else if (message.sender && message.sender.photo != null) {
           message.iconRef = message.sender.photo.photoId.toString();
           websocketTasks.push({
             photoId: message.sender.photo.photoId.toString(),

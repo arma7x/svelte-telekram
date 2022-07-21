@@ -113,7 +113,7 @@
         hasAvatar = true;
         justifyContent = 'start';
       } else {
-        if (message.sender.id.toString() === user[0].id.toString()) {
+        if (message.sender && message.sender.id.toString() === user[0].id.toString()) {
           hasAvatar = false;
           justifyContent = 'end';
         } else {
@@ -139,7 +139,10 @@
           fullName = getFullname();
         }
       }
-      if (type === 'user' && user[0].id.toString() !== entity.id.value.toString()) {
+      if (['user', 'bot'].indexOf(type) > -1 && user[0].id.toString() !== entity.id.value.toString()) {
+        hasAvatar = false;
+        justifyContent = 'end';
+      } else if (type === 'group' && message.sender.id.value.toString() === user[0].id.value.toString()) {
         hasAvatar = false;
         justifyContent = 'end';
       }
@@ -170,6 +173,8 @@
   <div class="kai-list-view-content" style="margin-left:{hasAvatar ? '45px' : '0px'};">
     {#if hasAvatar }
       <b>{fullName || getFullname()}</b>
+    {:else if message.forward}
+      <b>Forwarded from {fullName || getFullname()}</b>
     {/if}
     {#if replyTo !== false}
       <div class="reply-box">
