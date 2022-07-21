@@ -188,3 +188,6 @@ button:not(:disabled):active {
 button:focus {
   border-color: #666;
 }
+.kai-app-bar {
+  text-transform: none!important;
+}
