@@ -4,11 +4,13 @@
   import { createKaiNavigator, KaiNavigator } from '../../utils/navigation';
 
   export let key: any = '';
-  export let type: string = '';
+  export let entity: any = {};
   export let message: any = {};
   export let className: string = null;
   export let onClick: Function = (evt) => {}
   export let parentNavInstance: typeof KaiNavigator;
+  export let registerCallback: Function = (id, callback) => {}
+  export let replyTo: any;
 
   let src: string = '';
 

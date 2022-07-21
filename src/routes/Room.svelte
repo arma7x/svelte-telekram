@@ -75,7 +75,7 @@
       messageMetadata[message.id.toString()].index = index;
       messageMetadata[message.id.toString()].deleted = false;
 
-      if (['group', 'user', 'bot'].indexOf(location.state.type) > -1) {
+      if (!(location.state.entity.className === 'Channel' && !location.state.entity.megagroup)) {
         if (message.sender && !(message.sender.username == null && message.sender.phone == null) && message.sender.photo != null) {
           message.iconRef = message.sender.photo.photoId.toString();
           httpTasks.push({
@@ -279,7 +279,6 @@
   onMount(() => {
     const { appBar, softwareKey } = getAppProp();
     appBar.setTitleText(location.state.name || name);
-    console.log('Room:', location.state.type);
     getMessages(location.state.entity);
     if (['group', 'user', 'bot'].indexOf(location.state.type) > -1) {
       softwareKey.setText({ left: 'Action', center: 'SEND', right: '📎' });
@@ -302,7 +301,7 @@
 <main id="room-screen" data-pad-top="28" data-pad-bottom="30">
   {#each messages as message}
     {#if messageMetadata[message.id.toString()] && messageMetadata[message.id.toString()].deleted === false}
-      <svelte:component className="roomNav" type={location.state.type} this={resolveMessageWidget(message)} {message} {registerCallback} parentNavInstance={navInstance} replyTo={getReplyHeader(message)} entity={location.state.entity}/>
+      <svelte:component className="roomNav" this={resolveMessageWidget(message)} {message} {registerCallback} parentNavInstance={navInstance} replyTo={getReplyHeader(message)} entity={location.state.entity}/>
     {/if}
   {/each}
 </main>

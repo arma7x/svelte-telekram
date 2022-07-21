@@ -16,7 +16,6 @@
   import Geo from './media/Geo.svelte';
 
   export let key: any = '';
-  export let type: string = '';
   export let entity: any = {};
   export let message: any = {};
   export let className: string = null;
@@ -108,43 +107,29 @@
       }
     }
     const user = await getAuthorizedUser();
-    if (['group', 'user', 'bot'].indexOf(type) > -1) {
-      if (user[0] == null) {
-        hasAvatar = true;
-        justifyContent = 'start';
-      } else {
-        if (message.sender && message.sender.id.toString() === user[0].id.toString()) {
-          hasAvatar = false;
-          justifyContent = 'end';
-        } else {
-          hasAvatar = true;
-          justifyContent = 'start';
-        }
-      }
-    } else {
+    if (message.sender && user[0] && message.sender.id.toString() === user[0].id.toString()) {
       hasAvatar = false;
       justifyContent = 'end';
+    } else {
+      hasAvatar = true;
+      justifyContent = 'start';
+      if (entity.className === 'Channel' && !entity.megagroup) {
+        hasAvatar = false;
+      }
     }
     if (message.forward) {
+      if (message.sender.id.toString() === user[0].id.toString() && message.sender.id.toString() === entity.id.value.toString()) {
+        hasAvatar = true;
+        justifyContent = 'start';
+      }
       if (message.forward.originalFwd.fromName) {
         delete message.iconRef;
-        hasAvatar = true;
-        justifyContent = 'start';
       } else if (message.forward.originalFwd.fromId) {
-        hasAvatar = true;
-        justifyContent = 'start';
         if (message.forward.originalFwd.fromId.className === 'PeerUser') {
           fullName = getFullname();
         } else if (message.forward.originalFwd.fromId.className === 'PeerChannel') {
           fullName = getFullname();
         }
-      }
-      if (['user', 'bot'].indexOf(type) > -1 && user[0].id.toString() !== entity.id.value.toString()) {
-        hasAvatar = false;
-        justifyContent = 'end';
-      } else if (type === 'group' && message.sender.id.value.toString() === user[0].id.value.toString()) {
-        hasAvatar = false;
-        justifyContent = 'end';
       }
     }
     if (!hasAvatar)
@@ -168,7 +153,7 @@
 
 <svelte:options accessors immutable={true}/>
 
-<div data-key="{key}" class="kai-list-view {className ? className : ''}" on:click={onClick} style="justify-content:{type === 'channel' ? 'start' : justifyContent};min-height:{hasAvatar ? '50px' : '0px'};">
+<div data-key="{key}" class="kai-list-view {className ? className : ''}" on:click={onClick} style="justify-content:{entity.className === 'Channel' && !entity.megagroup ? 'start' : justifyContent};min-height:{hasAvatar ? '50px' : '0px'};">
   {#if hasAvatar }{@html DOMPurify.sanitize(avatarSrc)}{/if}
   <div class="kai-list-view-content" style="margin-left:{hasAvatar ? '45px' : '0px'};">
     {#if hasAvatar }

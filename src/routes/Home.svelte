@@ -446,20 +446,7 @@
   }
 
   function openRoom(name, entity) {
-    let className = entity.className.toLowerCase();
-    switch (className) {
-      case 'channel':
-        if (entity.megagroup)
-          className = 'group';
-        break;
-      case 'user':
-        if (entity.bot)
-          className = 'bot';
-        break;
-      default:
-        console.log('Unknown:', className);
-    }
-    goto('room', { state: { name, entity: entity.toJSON(), type: className } });
+    goto('room', { state: { name, entity: entity.toJSON() } });
   }
 
   function eventHandler(evt) {
