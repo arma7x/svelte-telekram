@@ -205,7 +205,7 @@
     }
   }
 
-  function eventHandler(evt) {
+  function keydownEventHandler(evt) {
     if (evt.key === 'Call' || evt.code === 'ShiftLeft') {
       if (messages[navInstance.verticalNavIndex] && messages[navInstance.verticalNavIndex].id.toString()) {
         if (messageMetadata[messages[navInstance.verticalNavIndex].id.toString()]) {
@@ -216,7 +216,7 @@
     }
   }
 
-  function eventListener(evt) {
+  function incomingMessageListener(evt) {
     // console.log('Listen:', location.state.entity.id.value.toString(), evt.className, evt);
     switch (evt.className) {
       case 'UpdateNewChannelMessage':
@@ -286,14 +286,14 @@
       softwareKey.setText({ left: 'Action', center: 'SEND', right: '📎' });
     }
     navInstance.attachListener();
-    document.addEventListener('keydown', eventHandler);
-    client.addEventHandler(eventListener);
+    document.addEventListener('keydown', keydownEventHandler);
+    client.addEventHandler(incomingMessageListener);
   });
 
   onDestroy(() => {
     navInstance.detachListener();
-    document.removeEventListener('keydown', eventHandler);
-    client.removeEventHandler(eventListener);
+    document.removeEventListener('keydown', keydownEventHandler);
+    client.removeEventHandler(incomingMessageListener);
   });
 
 </script>
