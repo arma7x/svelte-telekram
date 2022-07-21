@@ -17,6 +17,7 @@
 
   export let key: any = '';
   export let type: string = '';
+  export let entity: any = {};
   export let message: any = {};
   export let className: string = null;
   export let onClick: Function = (evt) => {}
@@ -138,8 +139,10 @@
           fullName = getFullname();
         }
       }
-    } else if (message.sender && user[0] && message.sender.id.toString() !== user[0].id.toString()) {
-      // console.log('???', message.sender);
+      if (type === 'user' && user[0].id.toString() !== entity.id.value.toString()) {
+        hasAvatar = false;
+        justifyContent = 'end';
+      }
     }
     if (!hasAvatar)
       return;

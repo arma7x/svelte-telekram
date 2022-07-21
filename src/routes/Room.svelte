@@ -302,7 +302,7 @@
 <main id="room-screen" data-pad-top="28" data-pad-bottom="30">
   {#each messages as message}
     {#if messageMetadata[message.id.toString()] && messageMetadata[message.id.toString()].deleted === false}
-      <svelte:component className="roomNav" type={location.state.type} this={resolveMessageWidget(message)} {message} {registerCallback} parentNavInstance={navInstance} replyTo={getReplyHeader(message)}/>
+      <svelte:component className="roomNav" type={location.state.type} this={resolveMessageWidget(message)} {message} {registerCallback} parentNavInstance={navInstance} replyTo={getReplyHeader(message)} entity={location.state.entity}/>
     {/if}
   {/each}
 </main>
