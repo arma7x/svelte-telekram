@@ -3,11 +3,13 @@
   import { createKaiNavigator } from '../../utils/navigation';
 
   export let key: any = '';
-  export let type: string = '';
+  export let entity: any = {};
   export let message: any = {};
   export let className: string = null;
   export let onClick: Function = (evt) => {}
-  export let registerkeyEvent: Function = (id, instance) => {}
+  export let parentNavInstance: typeof KaiNavigator;
+  export let registerCallback: Function = (id, callback) => {}
+  export let replyTo: any;
 
   let navOptions = {
     softkeyLeftListener: function(evt) {
