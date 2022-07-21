@@ -31,6 +31,7 @@
   let expandable: bool = false;
   let media: any;
   let fullName: string;
+  let forwardedPrefix: string = '';
   let _wip: string = null;
 
   function renderReplyHeader(msg) {
@@ -118,6 +119,9 @@
       }
     }
     if (message.forward) {
+      if (entity.id.value.toString() !== user[0].id.toString()) {
+        forwardedPrefix = 'Forwarded from ';
+      }
       if (message.sender.id.toString() === user[0].id.toString() && message.sender.id.toString() === entity.id.value.toString()) {
         hasAvatar = true;
         justifyContent = 'start';
@@ -159,7 +163,7 @@
     {#if hasAvatar }
       <b>{fullName || getFullname()}</b>
     {:else if message.forward}
-      <b>Forwarded from {fullName || getFullname()}</b>
+      <b>{forwardedPrefix}{fullName || getFullname()}</b>
     {/if}
     {#if replyTo !== false}
       <div class="reply-box">
