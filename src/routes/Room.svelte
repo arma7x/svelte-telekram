@@ -13,13 +13,13 @@
   export let navigate: any;
   export let getAppProp: Function;
 
-  const collectUsers = [];
-  const collectUserIndex = [];
-  const cachedUsers = {};
+  let fetchForwardedUsers = [];
+  const forwardedUsersIndex = [];
+  const cachedForwardedUsers = {};
 
-  const collectChannels = [];
-  const collectChannelIndex = [];
-  const cachedChannels = {};
+  let fetchForwardedChannels = [];
+  const forwardedChannelsIndex = [];
+  const cachedForwardedChannels = {};
 
   let chat: any;
   let name: string = 'Room';
@@ -98,15 +98,15 @@
         } else if (message.forward.originalFwd.fromId) {
           delete message.iconRef;
           if (message.forward.originalFwd.fromId.className === 'PeerUser') {
-            if (cachedUsers[message.forward.originalFwd.fromId.userId.toString()] == null) {
-              collectUsers.push(message.forward.originalFwd.fromId);
+            if (cachedForwardedUsers[message.forward.originalFwd.fromId.userId.toString()] == null) {
+              fetchForwardedUsers.push(message.forward.originalFwd.fromId);
             }
-            collectUserIndex.push(index);
+            forwardedUsersIndex.push(index);
           } else if (message.forward.originalFwd.fromId.className === 'PeerChannel') {
-            if (cachedChannels[message.forward.originalFwd.fromId.channelId.toString()] == null) {
-              collectChannels.push(message.forward.originalFwd.fromId);
+            if (cachedForwardedChannels[message.forward.originalFwd.fromId.channelId.toString()] == null) {
+              fetchForwardedChannels.push(message.forward.originalFwd.fromId);
             }
-            collectChannelIndex.push(index);
+            forwardedChannelsIndex.push(index);
           }
         }
       }
@@ -131,9 +131,9 @@
       console.log(err);
     }
 
-    const users = await client.invoke(new Api.users.GetUsers({ id: collectUsers }));
+    const users = await client.invoke(new Api.users.GetUsers({ id: fetchForwardedUsers }));
     users.forEach(u => {
-      cachedUsers[u.id.toString()] = u;
+      cachedForwardedUsers[u.id.toString()] = u;
       if (!(u.username == null && u.phone == null) && u.photo != null) {
         httpTasks.push({
           url: `https://api.codetabs.com/v1/proxy/?quest=https://t.me/${u.phone === "42777" ? 'telegram' : u.username}`,
@@ -147,18 +147,19 @@
         })
       }
     });
-    collectUserIndex.forEach(i => {
-      messages[i].forward.originalFwd.sender = cachedUsers[messages[i].forward.originalFwd.fromId.userId.toString()];
+    forwardedUsersIndex.forEach(i => {
+      messages[i].forward.originalFwd.sender = cachedForwardedUsers[messages[i].forward.originalFwd.fromId.userId.toString()];
       if (!(messages[i].forward.originalFwd.sender.username == null && messages[i].forward.originalFwd.sender.phone == null) && messages[i].forward.originalFwd.sender.photo != null) {
         messages[i].iconRef = messages[i].forward.originalFwd.sender.photo.photoId.toString();
       } else if (messages[i].forward.originalFwd.sender.photo != null) {
         messages[i].iconRef = messages[i].forward.originalFwd.sender.photo.photoId.toString();
       }
     });
+    fetchForwardedUsers = [];
 
-    const channels = await client.invoke(new Api.channels.GetChannels({ id: collectChannels }));
+    const channels = await client.invoke(new Api.channels.GetChannels({ id: fetchForwardedChannels }));
     channels.chats.forEach(c => {
-      cachedChannels[c.id.toString()] = c;
+      cachedForwardedChannels[c.id.toString()] = c;
       if (!(c.username == null && c.phone == null) && c.photo != null) {
         httpTasks.push({
           url: `https://api.codetabs.com/v1/proxy/?quest=https://t.me/${c.phone === "42777" ? 'telegram' : c.username}`,
@@ -172,14 +173,15 @@
         })
       }
     });
-    collectChannelIndex.forEach(i => {
-      messages[i].forward.originalFwd.sender = cachedChannels[messages[i].forward.originalFwd.fromId.channelId.toString()];
+    forwardedChannelsIndex.forEach(i => {
+      messages[i].forward.originalFwd.sender = cachedForwardedChannels[messages[i].forward.originalFwd.fromId.channelId.toString()];
       if (!(messages[i].forward.originalFwd.sender.username == null && messages[i].forward.originalFwd.sender.phone == null) && messages[i].forward.originalFwd.sender.photo != null) {
         messages[i].iconRef = messages[i].forward.originalFwd.sender.photo.photoId.toString();
       } else if (messages[i].forward.originalFwd.sender.photo != null) {
         messages[i].iconRef = messages[i].forward.originalFwd.sender.photo.photoId.toString();
       }
     });
+    fetchForwardedChannels = [];
 
     runTask(httpTasks, websocketTasks);
     return messages;
