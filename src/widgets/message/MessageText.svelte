@@ -40,7 +40,7 @@
       columns.push(`<div>${msg.media.className}</div>`);
     }
     if (msg.message && msg.message !== '') {
-      columns.push(`<div>${msg.message.length > 10 ? msg.message.substring(0, 10) + '...' : msg.message}</div>`);
+      columns.push(`<div>${msg.message.length > 20 ? msg.message.substring(0, 20) + '...' : msg.message}</div>`);
     }
     return `<div>${columns.join('')}<div>`;
   }
@@ -236,8 +236,8 @@
   }
 
   .kai-list-view > .kai-list-view-content > .reply-box {
-    padding: 1px 1px 1px 3px;
-    margin-bottom: 2px;
+    padding: 2px 0px 2px 3px;
+    margin-bottom: 3px;
     border-left: 1px solid var(--themeColor);
     font-size: 90%
   }
