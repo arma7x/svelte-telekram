@@ -10,6 +10,7 @@ export const cachedThumbnails = writable({});
 client.addEventHandler((evt) => {
   // console.log(evt);
   switch (evt.className) {
+    case "UpdateNotifySettings":
     case "UpdateFolderPeers":
     case "UpdateNewChannelMessage":
     case "UpdateReadChannelInbox":

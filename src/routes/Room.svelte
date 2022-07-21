@@ -21,11 +21,14 @@
   const forwardedChannelsIndex = [];
   const cachedForwardedChannels = {};
 
+  let cachedSender: any = {};
+
   let chat: any;
   let name: string = 'Room';
   let messages: Array<any> = [];
   let messageMetadata: { [key: string]: { index: number, deleted: bool, callback: Function }; } = {};
   let replyIndex: { [key: string]: any; } = {};
+  let muteUntil: number|bool = false;
 
   let navOptions = {
     verticalNavClass: 'roomNav',
@@ -75,19 +78,36 @@
       messageMetadata[message.id.toString()].index = index;
       messageMetadata[message.id.toString()].deleted = false;
 
+      if (message.sender && message.peerId.className === 'PeerUser' && cachedSender[message.peerId.userId.toString()] == null) {
+        cachedSender[message.peerId.userId.toString()] = message.sender;
+      } else if (message.sender && message.peerId.className === 'PeerChannel' && cachedForwardedChannels[message.peerId.channelId.value.toString()] == null) {
+        cachedForwardedChannels[message.peerId.channelId.value.toString()] = message.sender;
+      } else if (message.sender == null) {
+        if (message.peerId.className === 'PeerUser' && cachedSender[message.peerId.userId.toString()]) {
+          // console.log('get sender from cachedForwardedUsers:', cachedSender[message.peerId.userId.toString()]);
+          message.__sender = cachedSender[message.peerId.userId.toString()];
+        } else if (message.peerId.className === 'PeerChannel' && cachedForwardedChannels[message.peerId.channelId.value.toString()]) {
+          // console.log('get sender from cachedForwardedChannels:', cachedForwardedChannels[message.peerId.channelId.value.toString()]);
+          message.__sender = cachedForwardedChannels[message.peerId.channelId.value.toString()];
+        } else {
+          console.log('fetch:', message);
+        }
+      }
+
+      const sender = message.sender || message.__sender;
       if (!(location.state.entity.className === 'Channel' && !location.state.entity.megagroup)) {
-        if (message.sender && !(message.sender.username == null && message.sender.phone == null) && message.sender.photo != null) {
-          message.iconRef = message.sender.photo.photoId.toString();
+        if (sender && !(sender.username == null && sender.phone == null) && sender.photo != null) {
+          message.iconRef = sender.photo.photoId.toString();
           httpTasks.push({
-            url: `https://api.codetabs.com/v1/proxy/?quest=https://t.me/${message.sender.phone === "42777" ? 'telegram' : message.sender.username}`,
-            photoId: message.sender.photo.photoId.toString(),
-            chat: message.sender
+            url: `https://api.codetabs.com/v1/proxy/?quest=https://t.me/${sender.phone === "42777" ? 'telegram' : sender.username}`,
+            photoId: sender.photo.photoId.toString(),
+            chat: sender
           });
-        } else if (message.sender && message.sender.photo != null) {
-          message.iconRef = message.sender.photo.photoId.toString();
+        } else if (sender && sender.photo != null) {
+          message.iconRef = sender.photo.photoId.toString();
           websocketTasks.push({
-            photoId: message.sender.photo.photoId.toString(),
-            chat: message.sender
+            photoId: sender.photo.photoId.toString(),
+            chat: sender
           });
         }
       }
@@ -193,6 +213,12 @@
       chat = chats.find(chat => {
         return chat.entity.id.value == entity.id.value;
       });
+      if (chat.dialog.notifySettings.muteUntil) {
+        muteUntil = new Date(new Date().getTime() + chat.dialog.notifySettings.muteUntil);
+      } else {
+        muteUntil = false;
+      }
+      console.log('muteUntil:', muteUntil);
       const _messages = await client.getMessages(chat, { limit: 50 });
       _messages.reverse();
       messages = await buildIndex(_messages);
@@ -218,16 +244,23 @@
     }
   }
 
-  function incomingMessageListener(evt) {
+  async function incomingMessageListener(evt) {
     // console.log('Listen:', location.state.entity.id.value.toString(), evt.className, evt);
     switch (evt.className) {
+      case "UpdateNotifySettings":
+        if (evt.notifySettings.muteUntil) {
+          muteUntil = new Date(new Date().getTime() + evt.notifySettings.muteUntil);
+        } else {
+          muteUntil = false;
+        }
+        console.log('muteUntil:', muteUntil);
+        break;
       case 'UpdateNewChannelMessage':
         var entities = Array.from(evt._entities.entries());
         for (let i in entities) {
           if (entities[i][1].id.toString() === location.state.entity.id.value.toString()) {
             const temp = [...messages, evt.message];
-            buildIndex(temp);
-            messages = temp;
+            messages = await buildIndex(temp);
             autoScroll();
             break;
           }
