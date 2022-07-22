@@ -287,14 +287,25 @@
         break;
       case 'UpdateDeleteChannelMessages':
         if (evt.channelId.toString() === location.state.entity.id.value.toString()) {
+          const pops = [];
+          const temp = [];
           evt.messages.forEach(id => {
             if (messageMetadata[id.toString()]) {
               messageMetadata[id.toString()].deleted = true;
-              // messages.splice(messageMetadata[id.toString()].index, 1);
+              pops.push(messageMetadata[id.toString()].index);
               delete messageMetadata[id.toString()];
               navInstance.navigateListNav(-1);
             }
           });
+          for (let i in messages) {
+            if (pops.indexOf(parseInt(i)) === -1) {
+              temp.push(messages[i]);
+            }
+          }
+          if (temp.length > 0) {
+            messages = await buildIndex(temp);
+            autoScroll();
+          }
         }
         break;
     }
