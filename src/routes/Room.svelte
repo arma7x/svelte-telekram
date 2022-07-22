@@ -120,6 +120,7 @@
 
   async function buildIndex(messages) {
 
+    console.time('buildIndex');
     forwardedUsersIndex = [];
     forwardedChannelsIndex = [];
     const httpTasks = [];
@@ -278,6 +279,7 @@
     console.timeEnd('fetchForwardedChannels');
 
     runTask(httpTasks, websocketTasks);
+    console.timeEnd('buildIndex');
     return messages;
   }
 
