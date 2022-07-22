@@ -47,6 +47,7 @@
 
   function getFullname() {
     let fullname = '';
+    const sender = message.sender || message.__sender;
     if (message.forward && message.forward.originalFwd.fromName) {
       fullname = message.forward.originalFwd.fromName;
     } else if (message.forward && message.forward.originalFwd.sender) {
@@ -58,12 +59,12 @@
       if (message.forward.originalFwd.sender.title)
         fn = message.forward.originalFwd.sender.title;
       fullname = fn;
-    } else if (message.sender) {
+    } else if (sender) {
       let fn = '';
-      if (message.sender.firstName)
-        fn += message.sender.firstName;
-      if (message.sender.lastName)
-        fn += ' ' + message.sender.lastName;
+      if (sender.firstName)
+        fn += sender.firstName;
+      if (sender.lastName)
+        fn += ' ' + sender.lastName;
       fullname = fn;
     }
     return fullname;
@@ -108,7 +109,8 @@
       }
     }
     const user = await getAuthorizedUser();
-    if (message.sender && user[0] && message.sender.id.toString() === user[0].id.toString()) {
+    const sender = message.sender || message.__sender;
+    if (sender && user[0] && sender.id.toString() === user[0].id.toString()) {
       hasAvatar = false;
       justifyContent = 'end';
     } else {
@@ -122,7 +124,7 @@
       if (entity.id.value.toString() !== user[0].id.toString()) {
         forwardedPrefix = 'Forwarded from ';
       }
-      if (message.sender.id.toString() === user[0].id.toString() && message.sender.id.toString() === entity.id.value.toString()) {
+      if (sender.id.toString() === user[0].id.toString() && sender.id.toString() === entity.id.value.toString()) {
         hasAvatar = true;
         justifyContent = 'start';
       }

@@ -21,8 +21,6 @@
   const forwardedChannelsIndex = [];
   const cachedForwardedChannels = {};
 
-  let cachedSender: any = {};
-
   let chat: any;
   let name: string = 'Room';
   let messages: Array<any> = [];
@@ -78,37 +76,38 @@
       messageMetadata[message.id.toString()].index = index;
       messageMetadata[message.id.toString()].deleted = false;
 
-      if (message.sender && message.peerId.className === 'PeerUser' && cachedSender[message.peerId.userId.toString()] == null) {
-        cachedSender[message.peerId.userId.toString()] = message.sender;
-      } else if (message.sender && message.peerId.className === 'PeerChannel' && cachedForwardedChannels[message.peerId.channelId.value.toString()] == null) {
-        cachedForwardedChannels[message.peerId.channelId.value.toString()] = message.sender;
-      } else if (message.sender == null) {
-        if (message.peerId.className === 'PeerUser' && cachedSender[message.peerId.userId.toString()]) {
-          // console.log('get sender from cachedForwardedUsers:', cachedSender[message.peerId.userId.toString()]);
-          message.__sender = cachedSender[message.peerId.userId.toString()];
-        } else if (message.peerId.className === 'PeerChannel' && cachedForwardedChannels[message.peerId.channelId.value.toString()]) {
-          // console.log('get sender from cachedForwardedChannels:', cachedForwardedChannels[message.peerId.channelId.value.toString()]);
-          message.__sender = cachedForwardedChannels[message.peerId.channelId.value.toString()];
-        } else {
-          console.log('fetch:', message);
-        }
-      }
-
-      const sender = message.sender || message.__sender;
+      // Skip for channel, only group or private chat
       if (!(location.state.entity.className === 'Channel' && !location.state.entity.megagroup)) {
-        if (sender && !(sender.username == null && sender.phone == null) && sender.photo != null) {
-          message.iconRef = sender.photo.photoId.toString();
-          httpTasks.push({
-            url: `https://api.codetabs.com/v1/proxy/?quest=https://t.me/${sender.phone === "42777" ? 'telegram' : sender.username}`,
-            photoId: sender.photo.photoId.toString(),
-            chat: sender
-          });
-        } else if (sender && sender.photo != null) {
-          message.iconRef = sender.photo.photoId.toString();
-          websocketTasks.push({
-            photoId: sender.photo.photoId.toString(),
-            chat: sender
-          });
+        if (message.sender && message.sender.className === 'User' && cachedForwardedUsers[message.sender.id.value.toString()] == null) {
+          cachedForwardedUsers[message.sender.id.value.toString()] = message.sender;
+        } else if (message.sender && message.sender.className === 'Channel' && cachedForwardedChannels[message.sender.id.value.toString()] == null) {
+          cachedForwardedChannels[message.sender.id.value.toString()] = message.sender;
+        } else if (message.sender == null) {
+          if (cachedForwardedUsers[message.senderId.value.toString()]) {
+            // console.log('get sender from cachedForwardedUsers:', cachedForwardedUsers[message.senderId.value.toString()]);
+            message.__sender = cachedForwardedUsers[message.senderId.value.toString()];
+          } else if (cachedForwardedChannels[message.senderId.value.toString()]) {
+            // console.log('get sender from cachedForwardedChannels:', cachedForwardedChannels[message.senderId.value.toString()]);
+            message.__sender = cachedForwardedChannels[message.senderId.value.toString()];
+          }
+        }
+
+        const sender = message.sender || message.__sender;
+        if (!(location.state.entity.className === 'Channel' && !location.state.entity.megagroup)) {
+          if (sender && !(sender.username == null && sender.phone == null) && sender.photo != null) {
+            message.iconRef = sender.photo.photoId.toString();
+            httpTasks.push({
+              url: `https://api.codetabs.com/v1/proxy/?quest=https://t.me/${sender.phone === "42777" ? 'telegram' : sender.username}`,
+              photoId: sender.photo.photoId.toString(),
+              chat: sender
+            });
+          } else if (sender && sender.photo != null) {
+            message.iconRef = sender.photo.photoId.toString();
+            websocketTasks.push({
+              photoId: sender.photo.photoId.toString(),
+              chat: sender
+            });
+          }
         }
       }
 
@@ -259,6 +258,14 @@
         var entities = Array.from(evt._entities.entries());
         for (let i in entities) {
           if (entities[i][1].id.toString() === location.state.entity.id.value.toString()) {
+            // Skip for channel, only group or private chat
+            if (!(location.state.entity.className === 'Channel' && !location.state.entity.megagroup)) {
+              if (!cachedForwardedUsers[evt.message.senderId.value.toString()]) {
+                console.log('Api.users.GetUsers', evt.message.senderId.value.toString());
+                // const users = await client.invoke(new Api.users.GetUsers({ id: [temp1.senderId] }));
+              }
+            }
+            console.log(evt.message);
             const temp = [...messages, evt.message];
             messages = await buildIndex(temp);
             autoScroll();
