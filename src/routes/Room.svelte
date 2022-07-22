@@ -111,19 +111,19 @@
         }
       }
 
-      if (message.forward) {
-        if (message.forward.originalFwd.fromName) {
+      if (message.fwdFrom) {
+        if (message.fwdFrom.fromName) {
           delete message.iconRef;
-        } else if (message.forward.originalFwd.fromId) {
+        } else if (message.fwdFrom.fromId) {
           delete message.iconRef;
-          if (message.forward.originalFwd.fromId.className === 'PeerUser') {
-            if (cachedForwardedUsers[message.forward.originalFwd.fromId.userId.toString()] == null) {
-              fetchForwardedUsers.push(message.forward.originalFwd.fromId);
+          if (message.fwdFrom.fromId.className === 'PeerUser') {
+            if (cachedForwardedUsers[message.fwdFrom.fromId.userId.toString()] == null) {
+              fetchForwardedUsers.push(message.fwdFrom.fromId);
             }
             forwardedUsersIndex.push(index);
-          } else if (message.forward.originalFwd.fromId.className === 'PeerChannel') {
-            if (cachedForwardedChannels[message.forward.originalFwd.fromId.channelId.toString()] == null) {
-              fetchForwardedChannels.push(message.forward.originalFwd.fromId);
+          } else if (message.fwdFrom.fromId.className === 'PeerChannel') {
+            if (cachedForwardedChannels[message.fwdFrom.fromId.channelId.toString()] == null) {
+              fetchForwardedChannels.push(message.fwdFrom.fromId);
             }
             forwardedChannelsIndex.push(index);
           }
@@ -168,11 +168,11 @@
         }
       });
       forwardedUsersIndex.forEach(i => {
-        messages[i].forward.originalFwd.sender = cachedForwardedUsers[messages[i].forward.originalFwd.fromId.userId.toString()];
-        if (!(messages[i].forward.originalFwd.sender.username == null && messages[i].forward.originalFwd.sender.phone == null) && messages[i].forward.originalFwd.sender.photo != null) {
-          messages[i].iconRef = messages[i].forward.originalFwd.sender.photo.photoId.toString();
-        } else if (messages[i].forward.originalFwd.sender.photo != null) {
-          messages[i].iconRef = messages[i].forward.originalFwd.sender.photo.photoId.toString();
+        messages[i].fwdFrom.sender = cachedForwardedUsers[messages[i].fwdFrom.fromId.userId.toString()];
+        if (!(messages[i].fwdFrom.sender.username == null && messages[i].fwdFrom.sender.phone == null) && messages[i].fwdFrom.sender.photo != null) {
+          messages[i].iconRef = messages[i].fwdFrom.sender.photo.photoId.toString();
+        } else if (messages[i].fwdFrom.sender.photo != null) {
+          messages[i].iconRef = messages[i].fwdFrom.sender.photo.photoId.toString();
         }
       });
       fetchForwardedUsers = [];
@@ -198,11 +198,11 @@
         }
       });
       forwardedChannelsIndex.forEach(i => {
-        messages[i].forward.originalFwd.sender = cachedForwardedChannels[messages[i].forward.originalFwd.fromId.channelId.toString()];
-        if (!(messages[i].forward.originalFwd.sender.username == null && messages[i].forward.originalFwd.sender.phone == null) && messages[i].forward.originalFwd.sender.photo != null) {
-          messages[i].iconRef = messages[i].forward.originalFwd.sender.photo.photoId.toString();
-        } else if (messages[i].forward.originalFwd.sender.photo != null) {
-          messages[i].iconRef = messages[i].forward.originalFwd.sender.photo.photoId.toString();
+        messages[i].fwdFrom.sender = cachedForwardedChannels[messages[i].fwdFrom.fromId.channelId.toString()];
+        if (!(messages[i].fwdFrom.sender.username == null && messages[i].fwdFrom.sender.phone == null) && messages[i].fwdFrom.sender.photo != null) {
+          messages[i].iconRef = messages[i].fwdFrom.sender.photo.photoId.toString();
+        } else if (messages[i].fwdFrom.sender.photo != null) {
+          messages[i].iconRef = messages[i].fwdFrom.sender.photo.photoId.toString();
         }
       });
       fetchForwardedChannels = [];
@@ -263,6 +263,7 @@
         console.log('muteUntil:', muteUntil);
         break;
       case 'UpdateNewChannelMessage':
+      case 'UpdateNewMessage':
         var entities = Array.from(evt._entities.entries());
         for (let i in entities) {
           if (entities[i][1].id.toString() === location.state.entity.id.value.toString()) {
@@ -289,6 +290,7 @@
         }
         break;
       case 'UpdateEditChannelMessage':
+      case 'UpdateEditMessage':
         var entities = Array.from(evt._entities.entries());
         for (let i in entities) {
           if (entities[i][1].id.toString() === location.state.entity.id.value.toString()) {
@@ -301,26 +303,25 @@
         }
         break;
       case 'UpdateDeleteChannelMessages':
-        if (evt.channelId.toString() === location.state.entity.id.value.toString()) {
-          const pops = [];
-          const temp = [];
-          evt.messages.forEach(id => {
-            if (messageMetadata[id.toString()]) {
-              messageMetadata[id.toString()].deleted = true;
-              pops.push(messageMetadata[id.toString()].index);
-              delete messageMetadata[id.toString()];
-              navInstance.navigateListNav(-1);
-            }
-          });
-          for (let i in messages) {
-            if (pops.indexOf(parseInt(i)) === -1) {
-              temp.push(messages[i]);
-            }
+      case 'UpdateDeleteMessages':
+        const pops = [];
+        const temp = [];
+        evt.messages.forEach(id => {
+          if (messageMetadata[id.toString()]) {
+            messageMetadata[id.toString()].deleted = true;
+            pops.push(messageMetadata[id.toString()].index);
+            delete messageMetadata[id.toString()];
+            navInstance.navigateListNav(-1);
           }
-          if (temp.length > 0) {
-            messages = await buildIndex(temp);
-            autoScroll();
+        });
+        for (let i in messages) {
+          if (pops.indexOf(parseInt(i)) === -1) {
+            temp.push(messages[i]);
           }
+        }
+        if (temp.length > 0) {
+          messages = await buildIndex(temp);
+          autoScroll();
         }
         break;
     }

@@ -48,16 +48,16 @@
   function getFullname() {
     let fullname = '';
     const sender = message.sender || message.__sender;
-    if (message.forward && message.forward.originalFwd.fromName) {
-      fullname = message.forward.originalFwd.fromName;
-    } else if (message.forward && message.forward.originalFwd.sender) {
+    if (message.fwdFrom && message.fwdFrom.fromName) {
+      fullname = message.fwdFrom.fromName;
+    } else if (message.fwdFrom && message.fwdFrom.sender) {
       let fn = '';
-      if (message.forward.originalFwd.sender.firstName)
-        fn += message.forward.originalFwd.sender.firstName;
-      if (message.forward.originalFwd.sender.lastName)
-        fn += ' ' + message.forward.originalFwd.sender.lastName;
-      if (message.forward.originalFwd.sender.title)
-        fn = message.forward.originalFwd.sender.title;
+      if (message.fwdFrom.sender.firstName)
+        fn += message.fwdFrom.sender.firstName;
+      if (message.fwdFrom.sender.lastName)
+        fn += ' ' + message.fwdFrom.sender.lastName;
+      if (message.fwdFrom.sender.title)
+        fn = message.fwdFrom.sender.title;
       fullname = fn;
     } else if (sender) {
       let fn = '';
@@ -120,7 +120,7 @@
         hasAvatar = false;
       }
     }
-    if (message.forward) {
+    if (message.fwdFrom) {
       if (entity.id.value.toString() !== user[0].id.toString()) {
         forwardedPrefix = 'Forwarded from ';
       }
@@ -128,12 +128,12 @@
         hasAvatar = true;
         justifyContent = 'start';
       }
-      if (message.forward.originalFwd.fromName) {
+      if (message.fwdFrom.fromName) {
         delete message.iconRef;
-      } else if (message.forward.originalFwd.fromId) {
-        if (message.forward.originalFwd.fromId.className === 'PeerUser') {
+      } else if (message.fwdFrom.fromId) {
+        if (message.fwdFrom.fromId.className === 'PeerUser') {
           fullName = getFullname();
-        } else if (message.forward.originalFwd.fromId.className === 'PeerChannel') {
+        } else if (message.fwdFrom.fromId.className === 'PeerChannel') {
           fullName = getFullname();
         }
       }
@@ -164,7 +164,7 @@
   <div class="kai-list-view-content" style="margin-left:{hasAvatar ? '45px' : '0px'};">
     {#if hasAvatar }
       <b>{fullName || getFullname()}</b>
-    {:else if message.forward}
+    {:else if message.fwdFrom}
       <b>{forwardedPrefix}{fullName || getFullname()}</b>
     {/if}
     {#if replyTo !== false}
