@@ -150,57 +150,65 @@
       console.log(err);
     }
 
-    const users = await client.invoke(new Api.users.GetUsers({ id: fetchForwardedUsers }));
-    users.forEach(u => {
-      cachedForwardedUsers[u.id.toString()] = u;
-      if (!(u.username == null && u.phone == null) && u.photo != null) {
-        httpTasks.push({
-          url: `https://api.codetabs.com/v1/proxy/?quest=https://t.me/${u.phone === "42777" ? 'telegram' : u.username}`,
-          photoId: u.photo.photoId.toString(),
-          chat: u
-        })
-      } else if (u.photo != null) {
-        websocketTasks.push({
-          photoId: u.photo.photoId.toString(),
-          chat: u
-        })
-      }
-    });
-    forwardedUsersIndex.forEach(i => {
-      messages[i].forward.originalFwd.sender = cachedForwardedUsers[messages[i].forward.originalFwd.fromId.userId.toString()];
-      if (!(messages[i].forward.originalFwd.sender.username == null && messages[i].forward.originalFwd.sender.phone == null) && messages[i].forward.originalFwd.sender.photo != null) {
-        messages[i].iconRef = messages[i].forward.originalFwd.sender.photo.photoId.toString();
-      } else if (messages[i].forward.originalFwd.sender.photo != null) {
-        messages[i].iconRef = messages[i].forward.originalFwd.sender.photo.photoId.toString();
-      }
-    });
-    fetchForwardedUsers = [];
+    try {
+      const users = await client.invoke(new Api.users.GetUsers({ id: fetchForwardedUsers }));
+      users.forEach(u => {
+        cachedForwardedUsers[u.id.toString()] = u;
+        if (!(u.username == null && u.phone == null) && u.photo != null) {
+          httpTasks.push({
+            url: `https://api.codetabs.com/v1/proxy/?quest=https://t.me/${u.phone === "42777" ? 'telegram' : u.username}`,
+            photoId: u.photo.photoId.toString(),
+            chat: u
+          })
+        } else if (u.photo != null) {
+          websocketTasks.push({
+            photoId: u.photo.photoId.toString(),
+            chat: u
+          })
+        }
+      });
+      forwardedUsersIndex.forEach(i => {
+        messages[i].forward.originalFwd.sender = cachedForwardedUsers[messages[i].forward.originalFwd.fromId.userId.toString()];
+        if (!(messages[i].forward.originalFwd.sender.username == null && messages[i].forward.originalFwd.sender.phone == null) && messages[i].forward.originalFwd.sender.photo != null) {
+          messages[i].iconRef = messages[i].forward.originalFwd.sender.photo.photoId.toString();
+        } else if (messages[i].forward.originalFwd.sender.photo != null) {
+          messages[i].iconRef = messages[i].forward.originalFwd.sender.photo.photoId.toString();
+        }
+      });
+      fetchForwardedUsers = [];
+    } catch (err) {
+      console.log(err);
+    }
 
-    const channels = await client.invoke(new Api.channels.GetChannels({ id: fetchForwardedChannels }));
-    channels.chats.forEach(c => {
-      cachedForwardedChannels[c.id.toString()] = c;
-      if (!(c.username == null && c.phone == null) && c.photo != null) {
-        httpTasks.push({
-          url: `https://api.codetabs.com/v1/proxy/?quest=https://t.me/${c.phone === "42777" ? 'telegram' : c.username}`,
-          photoId: c.photo.photoId.toString(),
-          chat: c
-        })
-      } else if (c.photo != null) {
-        websocketTasks.push({
-          photoId: c.photo.photoId.toString(),
-          chat: c
-        })
-      }
-    });
-    forwardedChannelsIndex.forEach(i => {
-      messages[i].forward.originalFwd.sender = cachedForwardedChannels[messages[i].forward.originalFwd.fromId.channelId.toString()];
-      if (!(messages[i].forward.originalFwd.sender.username == null && messages[i].forward.originalFwd.sender.phone == null) && messages[i].forward.originalFwd.sender.photo != null) {
-        messages[i].iconRef = messages[i].forward.originalFwd.sender.photo.photoId.toString();
-      } else if (messages[i].forward.originalFwd.sender.photo != null) {
-        messages[i].iconRef = messages[i].forward.originalFwd.sender.photo.photoId.toString();
-      }
-    });
-    fetchForwardedChannels = [];
+    try {
+      const channels = await client.invoke(new Api.channels.GetChannels({ id: fetchForwardedChannels }));
+      channels.chats.forEach(c => {
+        cachedForwardedChannels[c.id.toString()] = c;
+        if (!(c.username == null && c.phone == null) && c.photo != null) {
+          httpTasks.push({
+            url: `https://api.codetabs.com/v1/proxy/?quest=https://t.me/${c.phone === "42777" ? 'telegram' : c.username}`,
+            photoId: c.photo.photoId.toString(),
+            chat: c
+          })
+        } else if (c.photo != null) {
+          websocketTasks.push({
+            photoId: c.photo.photoId.toString(),
+            chat: c
+          })
+        }
+      });
+      forwardedChannelsIndex.forEach(i => {
+        messages[i].forward.originalFwd.sender = cachedForwardedChannels[messages[i].forward.originalFwd.fromId.channelId.toString()];
+        if (!(messages[i].forward.originalFwd.sender.username == null && messages[i].forward.originalFwd.sender.phone == null) && messages[i].forward.originalFwd.sender.photo != null) {
+          messages[i].iconRef = messages[i].forward.originalFwd.sender.photo.photoId.toString();
+        } else if (messages[i].forward.originalFwd.sender.photo != null) {
+          messages[i].iconRef = messages[i].forward.originalFwd.sender.photo.photoId.toString();
+        }
+      });
+      fetchForwardedChannels = [];
+    } catch (err) {
+      console.log(err);
+    }
 
     runTask(httpTasks, websocketTasks);
     return messages;
