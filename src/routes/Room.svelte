@@ -262,7 +262,14 @@
             if (!(location.state.entity.className === 'Channel' && !location.state.entity.megagroup)) {
               if (!cachedForwardedUsers[evt.message.senderId.value.toString()]) {
                 console.log('Api.users.GetUsers', evt.message.senderId.value.toString());
-                // const users = await client.invoke(new Api.users.GetUsers({ id: [temp1.senderId] }));
+                try {
+                  const users = await client.invoke(new Api.users.GetUsers({ id: [evt.message.senderId.value.toString()] }));
+                  if (users.length > 0) {
+                    cachedForwardedUsers[users[0].id.toString()] = users[0];
+                  }
+                } catch (err) {
+                  console.log(err);
+                }
               }
             }
             console.log(evt.message);
