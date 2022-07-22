@@ -87,7 +87,9 @@
     });
     returnValue = value;
     inputDOM = selfDOM.getElementsByTagName('TEXTAREA')[0];
-    inputDOM.focus();
+    setTimeout(() => {
+      inputDOM.focus();
+    }, 200);
     onOpened();
   })
 

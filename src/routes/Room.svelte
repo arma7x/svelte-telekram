@@ -8,10 +8,13 @@
   import { getChatCollection, runTask } from '../stores/telegram';
 
   import { Dummy, MessageText, MessageActionChannelCreate, MessageActionChatEditPhoto } from '../widgets/message';
+  import { TextAreaDialog } from '../components';
 
   export let location: any;
   export let navigate: any;
   export let getAppProp: Function;
+
+  let textAreaDialog: TextAreaDialog;
 
   let fetchForwardedUsers = [];
   let forwardedUsersIndex = [];
@@ -20,6 +23,7 @@
   let fetchForwardedChannels = [];
   let forwardedChannelsIndex = [];
   const cachedForwardedChannels = {};
+
 
   let chat: any;
   let name: string = 'Room';
@@ -39,6 +43,11 @@
     enterListener: function(evt) {
       // use TextAreaDialog
       // send msg or broadcast(channel && admin)
+      if (location.state.entity.className === 'Channel' && !location.state.entity.megagroup && location.state.entity.creator) {
+        openTextAreaDialog()
+      } else {
+        openTextAreaDialog()
+      }
     },
     backspaceListener: function(evt) {
       evt.preventDefault();
@@ -47,6 +56,50 @@
   };
 
   let navInstance = createKaiNavigator(navOptions);
+
+  function openTextAreaDialog() {
+    textAreaDialog = new TextAreaDialog({
+      target: document.body,
+      props: {
+        title: 'Message',
+        softKeyCenterText: 'ok',
+        value: '',
+        placeholder: 'Enter you text',
+        type: 'text',
+        rows: 3,
+        onSoftkeyLeft: (evt, value) => {},
+        onSoftkeyRight: (evt, value) => {},
+        onEnter: async (evt, value) => {
+          const msg = value.trim();
+          if (msg.length > 0) {
+            console.log(location.state.entity.id.value, msg);
+            textAreaDialog.$destroy();
+            try {
+              const result = await client.sendMessage(chat, {message: msg});
+              const temp = [...messages, result];
+              messages = await buildIndex(temp);
+              autoScroll();
+            } catch (err) {
+              console.log(err);
+            }
+          }
+        },
+        onBackspace: (evt, value) => {
+          evt.stopPropagation();
+          if (value.length === 0) {
+            textAreaDialog.$destroy();
+          }
+        },
+        onOpened: () => {
+          navInstance.detachListener();
+        },
+        onClosed: (value) => {
+          navInstance.attachListener();
+          textAreaDialog = null;
+        }
+      }
+    });
+  }
 
   function resolveMessageWidget(m) {
     if (m.className === "MessageService") {
@@ -232,6 +285,10 @@
       const _messages = await client.getMessages(chat, { limit: 50 });
       _messages.reverse();
       messages = await buildIndex(_messages);
+      navInstance.navigateListNav(1);
+      setTimeout(() => {
+        navInstance.navigateListNav(messages.length);
+      }, 100);
     } catch (err) {
       console.log(err);
     }
@@ -355,7 +412,7 @@
     if (location.state.entity.className === 'Channel' && !location.state.entity.megagroup && location.state.entity.creator) {
       softwareKey.setText({ left: 'Action', center: 'BROADCAST', right: '📎' });
     } else if (location.state.entity.className === 'Channel' && !location.state.entity.megagroup && !location.state.entity.creator) {
-      softwareKey.setText({ left: '', center: 'UN/MUTED', right: '' });
+      softwareKey.setText({ left: '', center: '', right: '' });
     } else {
       softwareKey.setText({ left: 'Action', center: 'SEND', right: '📎' });
     }
