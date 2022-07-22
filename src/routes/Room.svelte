@@ -288,7 +288,6 @@
       case 'UpdateDeleteChannelMessages':
         if (evt.channelId.toString() === location.state.entity.id.value.toString()) {
           evt.messages.forEach(id => {
-            // fix bug
             if (messageMetadata[id.toString()]) {
               messageMetadata[id.toString()].deleted = true;
               // messages.splice(messageMetadata[id.toString()].index, 1);
