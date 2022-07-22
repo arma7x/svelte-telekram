@@ -14,11 +14,11 @@
   export let getAppProp: Function;
 
   let fetchForwardedUsers = [];
-  const forwardedUsersIndex = [];
+  let forwardedUsersIndex = [];
   const cachedForwardedUsers = {};
 
   let fetchForwardedChannels = [];
-  const forwardedChannelsIndex = [];
+  let forwardedChannelsIndex = [];
   const cachedForwardedChannels = {};
 
   let chat: any;
@@ -65,80 +65,83 @@
 
   async function buildIndex(messages) {
 
+    forwardedUsersIndex = [];
+    forwardedChannelsIndex = [];
     const httpTasks = [];
     const websocketTasks = [];
     const fetchReply = [];
 
     messages.forEach((message, index) => {
-      if (messageMetadata[message.id.toString()] == null) {
-        messageMetadata[message.id.toString()] = {}
-      }
-      messageMetadata[message.id.toString()].index = index;
-      messageMetadata[message.id.toString()].deleted = false;
-
-      // Skip for channel, only group or private chat
-      if (!(location.state.entity.className === 'Channel' && !location.state.entity.megagroup)) {
-        if (message.sender && message.sender.className === 'User' && cachedForwardedUsers[message.sender.id.value.toString()] == null) {
-          cachedForwardedUsers[message.sender.id.value.toString()] = message.sender;
-        } else if (message.sender && message.sender.className === 'Channel' && cachedForwardedChannels[message.sender.id.value.toString()] == null) {
-          cachedForwardedChannels[message.sender.id.value.toString()] = message.sender;
-        } else if (message.sender == null) {
-          if (cachedForwardedUsers[message.senderId.value.toString()]) {
-            // console.log('get sender from cachedForwardedUsers:', cachedForwardedUsers[message.senderId.value.toString()]);
-            message.__sender = cachedForwardedUsers[message.senderId.value.toString()];
-          } else if (cachedForwardedChannels[message.senderId.value.toString()]) {
-            // console.log('get sender from cachedForwardedChannels:', cachedForwardedChannels[message.senderId.value.toString()]);
-            message.__sender = cachedForwardedChannels[message.senderId.value.toString()];
-          }
+      if (message && message.id) {
+        if (messageMetadata[message.id.toString()] == null) {
+          messageMetadata[message.id.toString()] = {}
         }
+        messageMetadata[message.id.toString()].index = index;
+        messageMetadata[message.id.toString()].deleted = false;
 
-        const sender = message.sender || message.__sender;
+        // Skip for channel, only group or private chat
         if (!(location.state.entity.className === 'Channel' && !location.state.entity.megagroup)) {
-          if (sender && !(sender.username == null && sender.phone == null) && sender.photo != null) {
-            message.iconRef = sender.photo.photoId.toString();
-            httpTasks.push({
-              url: `https://api.codetabs.com/v1/proxy/?quest=https://t.me/${sender.phone === "42777" ? 'telegram' : sender.username}`,
-              photoId: sender.photo.photoId.toString(),
-              chat: sender
-            });
-          } else if (sender && sender.photo != null) {
-            message.iconRef = sender.photo.photoId.toString();
-            websocketTasks.push({
-              photoId: sender.photo.photoId.toString(),
-              chat: sender
-            });
+          if (message.sender && message.sender.className === 'User' && cachedForwardedUsers[message.sender.id.value.toString()] == null) {
+            cachedForwardedUsers[message.sender.id.value.toString()] = message.sender;
+          } else if (message.sender && message.sender.className === 'Channel' && cachedForwardedChannels[message.sender.id.value.toString()] == null) {
+            cachedForwardedChannels[message.sender.id.value.toString()] = message.sender;
+          } else if (message.sender == null) {
+            if (cachedForwardedUsers[message.senderId.value.toString()]) {
+              // console.log('get sender from cachedForwardedUsers:', cachedForwardedUsers[message.senderId.value.toString()]);
+              message.__sender = cachedForwardedUsers[message.senderId.value.toString()];
+            } else if (cachedForwardedChannels[message.senderId.value.toString()]) {
+              // console.log('get sender from cachedForwardedChannels:', cachedForwardedChannels[message.senderId.value.toString()]);
+              message.__sender = cachedForwardedChannels[message.senderId.value.toString()];
+            }
+          }
+
+          const sender = message.sender || message.__sender;
+          if (!(location.state.entity.className === 'Channel' && !location.state.entity.megagroup)) {
+            if (sender && !(sender.username == null && sender.phone == null) && sender.photo != null) {
+              message.iconRef = sender.photo.photoId.toString();
+              httpTasks.push({
+                url: `https://api.codetabs.com/v1/proxy/?quest=https://t.me/${sender.phone === "42777" ? 'telegram' : sender.username}`,
+                photoId: sender.photo.photoId.toString(),
+                chat: sender
+              });
+            } else if (sender && sender.photo != null) {
+              message.iconRef = sender.photo.photoId.toString();
+              websocketTasks.push({
+                photoId: sender.photo.photoId.toString(),
+                chat: sender
+              });
+            }
           }
         }
-      }
 
-      if (message.fwdFrom) {
-        if (message.fwdFrom.fromName) {
-          delete message.iconRef;
-        } else if (message.fwdFrom.fromId) {
-          delete message.iconRef;
-          if (message.fwdFrom.fromId.className === 'PeerUser') {
-            if (cachedForwardedUsers[message.fwdFrom.fromId.userId.toString()] == null) {
-              fetchForwardedUsers.push(message.fwdFrom.fromId);
+        if (message.fwdFrom) {
+          if (message.fwdFrom.fromName) {
+            delete message.iconRef;
+          } else if (message.fwdFrom.fromId) {
+            delete message.iconRef;
+            if (message.fwdFrom.fromId.className === 'PeerUser') {
+              if (cachedForwardedUsers[message.fwdFrom.fromId.userId.toString()] == null) {
+                fetchForwardedUsers.push(message.fwdFrom.fromId);
+              }
+              forwardedUsersIndex.push(index);
+            } else if (message.fwdFrom.fromId.className === 'PeerChannel') {
+              if (cachedForwardedChannels[message.fwdFrom.fromId.channelId.toString()] == null) {
+                fetchForwardedChannels.push(message.fwdFrom.fromId);
+              }
+              forwardedChannelsIndex.push(index);
             }
-            forwardedUsersIndex.push(index);
-          } else if (message.fwdFrom.fromId.className === 'PeerChannel') {
-            if (cachedForwardedChannels[message.fwdFrom.fromId.channelId.toString()] == null) {
-              fetchForwardedChannels.push(message.fwdFrom.fromId);
-            }
-            forwardedChannelsIndex.push(index);
           }
         }
-      }
 
-      if (message.replyTo) {
-        if (messageMetadata[message.replyTo.replyToMsgId.toString()]) {
-          replyIndex[message.replyTo.replyToMsgId.toString()] = messageMetadata[message.replyTo.replyToMsgId.toString()].index;
-        } else {
-          if (fetchReply.indexOf(message.replyTo.replyToMsgId) < 0)
-            fetchReply.push(message.replyTo.replyToMsgId);
-        }
+        if (message.replyTo) {
+          if (messageMetadata[message.replyTo.replyToMsgId.toString()]) {
+            replyIndex[message.replyTo.replyToMsgId.toString()] = messageMetadata[message.replyTo.replyToMsgId.toString()].index;
+          } else {
+            if (fetchReply.indexOf(message.replyTo.replyToMsgId) < 0)
+              fetchReply.push(message.replyTo.replyToMsgId);
+          }
       }
-
+      }
     });
 
     try {
