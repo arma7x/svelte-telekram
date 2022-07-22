@@ -284,7 +284,7 @@
                 }
               }
             }
-            console.log(evt.message);
+            // console.log(evt.message);
             const temp = [...messages, evt.message];
             messages = await buildIndex(temp);
             autoScroll();
