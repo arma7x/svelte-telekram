@@ -12,12 +12,21 @@ client.addEventHandler((evt) => {
   switch (evt.className) {
     case "UpdateNotifySettings":
     case "UpdateFolderPeers":
+    case "UpdateNewMessage":
+    case "UpdateEditMessage":
+    case "UpdateDeleteMessages":
     case "UpdateNewChannelMessage":
-    case "UpdateReadChannelInbox":
     case "UpdateEditChannelMessage":
     case "UpdateDeleteChannelMessages":
     case "UpdateShortMessage":
     case "UpdateReadHistoryInbox":
+    case "UpdateReadHistoryOutbox":
+    case "UpdateReadMessagesContents":
+    case "UpdateReadChannelInbox":
+    case "UpdateReadChannelOutbox":
+    case "UpdateReadFeaturedStickers":
+    case "UpdateReadChannelDiscussionInbox":
+    case "UpdateReadChannelDiscussionOutbox":
       retrieveChats();
       break
   }
