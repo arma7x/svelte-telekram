@@ -35,7 +35,7 @@
   let navOptions = {
     verticalNavClass: 'roomNav',
     softkeyLeftListener: function(evt) {
-      // common action menu; reply, forward, report, delete, edit
+      // common action menu; reply, forward, report, delete, edit, mute/unmute
     },
     softkeyRightListener: function(evt) {
       // send attachment + bot command
@@ -72,16 +72,18 @@
         onEnter: async (evt, value) => {
           const msg = value.trim();
           if (msg.length > 0) {
-            console.log(location.state.entity.id.value, msg);
-            textAreaDialog.$destroy();
+            // console.log(location.state.entity.id.value, msg);
+            console.time('sendMessage');
             try {
               const result = await client.sendMessage(chat, {message: msg});
               const temp = [...messages, result];
               messages = await buildIndex(temp);
               autoScroll();
+              textAreaDialog.$destroy();
             } catch (err) {
               console.log(err);
             }
+            console.timeEnd('sendMessage');
           }
         },
         onBackspace: (evt, value) => {
@@ -197,6 +199,8 @@
       }
     });
 
+    console.log('fetchReply:', fetchReply.length);
+    console.time('fetchReply');
     try {
       const messages = await client.getMessages(chat, {ids:fetchReply});
       fetchReply.forEach((id, index) => {
@@ -205,7 +209,10 @@
     } catch (err) {
       console.log(err);
     }
+    console.timeEnd('fetchReply');
 
+    console.log('fetchForwardedUsers:', fetchForwardedUsers.length);
+    console.time('fetchForwardedUsers');
     try {
       const users = await client.invoke(new Api.users.GetUsers({ id: fetchForwardedUsers }));
       users.forEach(u => {
@@ -235,7 +242,10 @@
     } catch (err) {
       console.log(err);
     }
+    console.timeEnd('fetchForwardedUsers');
 
+    console.log('fetchForwardedChannels:', fetchForwardedChannels.length);
+    console.time('fetchForwardedChannels');
     try {
       const channels = await client.invoke(new Api.channels.GetChannels({ id: fetchForwardedChannels }));
       channels.chats.forEach(c => {
@@ -265,33 +275,10 @@
     } catch (err) {
       console.log(err);
     }
+    console.timeEnd('fetchForwardedChannels');
 
     runTask(httpTasks, websocketTasks);
     return messages;
-  }
-
-  async function getMessages(entity) {
-    try {
-      const chats = await getChatCollection();
-      chat = chats.find(chat => {
-        return chat.entity.id.value == entity.id.value;
-      });
-      if (chat.dialog.notifySettings.muteUntil) {
-        muteUntil = new Date(new Date().getTime() + chat.dialog.notifySettings.muteUntil);
-      } else {
-        muteUntil = false;
-      }
-      console.log('muteUntil:', muteUntil);
-      const _messages = await client.getMessages(chat, { limit: 50 });
-      _messages.reverse();
-      messages = await buildIndex(_messages);
-      navInstance.navigateListNav(1);
-      setTimeout(() => {
-        navInstance.navigateListNav(messages.length);
-      }, 100);
-    } catch (err) {
-      console.log(err);
-    }
   }
 
   function registerCallButtonHandler(id, callback) {
@@ -330,7 +317,8 @@
             // Skip for channel, only group or private chat
             if (!(location.state.entity.className === 'Channel' && !location.state.entity.megagroup)) {
               if (!cachedForwardedUsers[evt.message.senderId.value.toString()]) {
-                console.log('Api.users.GetUsers', evt.message.senderId.value.toString());
+                // console.log('Api.users.GetUsers', evt.message.senderId.value.toString());
+                console.time('fetchuncachedforwardsuser');
                 try {
                   const users = await client.invoke(new Api.users.GetUsers({ id: [evt.message.senderId.value.toString()] }));
                   if (users.length > 0) {
@@ -339,6 +327,7 @@
                 } catch (err) {
                   console.log(err);
                 }
+                console.timeEnd('fetchuncachedforwardsuser');
               }
             }
             // console.log(evt.message);
@@ -405,6 +394,32 @@
     return -1;
   }
 
+  async function getMessages(entity) {
+    console.time('Finished');
+    try {
+      const chats = await getChatCollection();
+      chat = chats.find(chat => {
+        return chat.entity.id.value == entity.id.value;
+      });
+      if (chat.dialog.notifySettings.muteUntil) {
+        muteUntil = new Date(new Date().getTime() + chat.dialog.notifySettings.muteUntil);
+      } else {
+        muteUntil = false;
+      }
+      console.log('muteUntil:', muteUntil);
+      const _messages = await client.getMessages(chat, { limit: 50 });
+      _messages.reverse();
+      messages = await buildIndex(_messages);
+      navInstance.navigateListNav(1);
+      setTimeout(() => {
+        navInstance.navigateListNav(messages.length);
+      }, 100);
+    } catch (err) {
+      console.log(err);
+    }
+    console.timeEnd('Finished');
+  }
+
   onMount(() => {
     const { appBar, softwareKey } = getAppProp();
     appBar.setTitleText(location.state.name || name);
@@ -431,7 +446,7 @@
 
 <main id="room-screen" data-pad-top="28" data-pad-bottom="30">
   {#each messages as message}
-    {#if messageMetadata[message.id.toString()] && messageMetadata[message.id.toString()].deleted === false}
+    {#if message && messageMetadata[message.id.toString()] && messageMetadata[message.id.toString()].deleted === false}
       <svelte:component className="roomNav" this={resolveMessageWidget(message)} {message} {registerCallButtonHandler} parentNavInstance={navInstance} replyTo={getReplyHeader(message)} entity={location.state.entity}/>
     {/if}
   {/each}

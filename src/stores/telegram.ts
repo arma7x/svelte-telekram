@@ -70,6 +70,7 @@ export async function isUserAuthorized() {
 }
 
 export async function retrieveChats() {
+  console.time('retrieveChats');
   try {
     const user = await getAuthorizedUser();
     const chats = await client.getDialogs({
@@ -108,6 +109,7 @@ export async function retrieveChats() {
   } catch (err) {
     console.log(err);
   }
+  console.timeEnd('retrieveChats');
 }
 
 export function getChatCollection() {
@@ -124,6 +126,8 @@ export function getAuthorizedUser() {
 
 export function runTask(httpTasks, websocketTasks) {
   let tempRef = {};
+  console.log('httpTasks:', httpTasks.length);
+  console.time('httpTasks');
   httpTasks.forEach(async (task, index) => {
     try {
       let cache = await (await cachedDatabase).get('profilePhotos', task.photoId);
@@ -147,7 +151,11 @@ export function runTask(httpTasks, websocketTasks) {
       console.log('Err:', err);
     }
   });
+  console.timeEnd('httpTasks');
+
   let elapsed = 0;
+  console.log('websocketTasks:', websocketTasks.length);
+  console.time('websocketTasks');
   websocketTasks.forEach(async (task) => {
     try {
       let cache = await (await cachedDatabase).get('profilePhotos', task.photoId);
@@ -162,8 +170,8 @@ export function runTask(httpTasks, websocketTasks) {
     } finally {
       elapsed++;
     }
-
   });
+  console.timeEnd('websocketTasks');
 }
 
 async function updateThumbCached(ref, base64) {

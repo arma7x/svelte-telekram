@@ -9,6 +9,7 @@ const session = new StoreSession("gramjs");
 const client: typeof TelegramClient = new TelegramClient(session, TelegramKeyHash.api_id, TelegramKeyHash.api_hash, {
   maxConcurrentDownloads: 1,
 });
+client.setLogLevel('none');
 
 const cachedDatabase = idb.openDB('telekram', 1, {
   upgrade: (db) => {

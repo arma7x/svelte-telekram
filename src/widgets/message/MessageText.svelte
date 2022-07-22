@@ -47,25 +47,29 @@
 
   function getFullname() {
     let fullname = '';
-    const sender = message.sender || message.__sender;
-    if (message.fwdFrom && message.fwdFrom.fromName) {
-      fullname = message.fwdFrom.fromName;
-    } else if (message.fwdFrom && message.fwdFrom.sender) {
-      let fn = '';
-      if (message.fwdFrom.sender.firstName)
-        fn += message.fwdFrom.sender.firstName;
-      if (message.fwdFrom.sender.lastName)
-        fn += ' ' + message.fwdFrom.sender.lastName;
-      if (message.fwdFrom.sender.title)
-        fn = message.fwdFrom.sender.title;
-      fullname = fn;
-    } else if (sender) {
-      let fn = '';
-      if (sender.firstName)
-        fn += sender.firstName;
-      if (sender.lastName)
-        fn += ' ' + sender.lastName;
-      fullname = fn;
+    try {
+      const sender = message.sender || message.__sender;
+      if (message.fwdFrom && message.fwdFrom.fromName) {
+        fullname = message.fwdFrom.fromName;
+      } else if (message.fwdFrom && message.fwdFrom.sender) {
+        let fn = '';
+        if (message.fwdFrom.sender.firstName)
+          fn += message.fwdFrom.sender.firstName;
+        if (message.fwdFrom.sender.lastName)
+          fn += ' ' + message.fwdFrom.sender.lastName;
+        if (message.fwdFrom.sender.title)
+          fn = message.fwdFrom.sender.title;
+        fullname = fn;
+      } else if (sender) {
+        let fn = '';
+        if (sender.firstName)
+          fn += sender.firstName;
+        if (sender.lastName)
+          fn += ' ' + sender.lastName;
+        fullname = fn;
+      }
+    } catch (err) {
+      console.log(err, message);
     }
     return fullname;
   }
@@ -105,7 +109,7 @@
         media = Geo;
       } else {
         _wip = 'WIP Media: ' + message.media.className;
-        console.log(message.media);
+        // console.log(message.media);
       }
     }
     const user = await getAuthorizedUser();
