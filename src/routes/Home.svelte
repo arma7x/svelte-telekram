@@ -119,7 +119,7 @@
         options: [
           { title: 'Clear profilePhotoDb' },
           { title: 'New Contact' },
-          { title: 'Contact' },
+          { title: 'Contacts' },
           { title: 'Settings' },
           { title: 'Logout' },
           { title: 'Exit' },
@@ -127,8 +127,15 @@
         softKeyCenterText: 'select',
         onSoftkeyRight: (evt, scope) => {},
         onSoftkeyLeft: (evt, scope) => {},
-        onEnter: (evt, scope) => {
-          if (scope.selected.title === 'Exit') {
+        onEnter: async(evt, scope) => {
+          if (scope.selected.title === 'Contacts') {
+            try {
+              const result = await client.invoke(new Api.contacts.GetSaved());
+              console.log(result);
+            } catch (err) {
+              console.log(err);
+            }
+          } else if (scope.selected.title === 'Exit') {
             window.close();
           } else if (scope.selected.title === 'Clear profilePhotoDb') {}
           authorizedMenu.$destroy();

@@ -6,6 +6,7 @@ function keydownEventHandler(evt, scope) {
       break;
     case 'SoftLeft':
     case 'PageUp':
+    case 'Shift':
       scope.softkeyLeftListener(evt);
       evt.preventDefault();
       break;
@@ -89,7 +90,7 @@ class KaiNavigator {
   softkeyRightListener: Function = (evt) => {};
   enterListener: Function = (evt) => {};
   backspaceListener: Function = (evt) => {};
- 
+
   constructor(opts = {}) {
     for(const x in opts) {
       if (typeof opts[x] === 'function')
