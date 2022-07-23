@@ -5,16 +5,6 @@
   export let className: string = null;
   export let onClick: Function = (evt) => {}
 
-  function getLastMessageSender() {
-    if (chat.message._sender.username)
-      return chat.message._sender.username.substring(0, 16);
-    if (chat.message._sender.firstName)
-      return chat.message._sender.firstName.substring(0, 16);
-    if (chat.message._sender.lastName)
-      return chat.message._sender.lastName.substring(0, 16);
-    return chat.message._sender.id.toString();
-  }
-
 </script>
 
 <svelte:options accessors immutable={true}/>
@@ -26,7 +16,7 @@
       {chat.name}
     </p>
     <small>
-      {#if chat.isGroup}<b>{getLastMessageSender()}</b>:
+      {#if chat.isGroup}<b>{chat.message._sender.username || chat.message._sender.firstName || chat.message._sender.lastName || chat.message._sender.id}</b>:
       {/if}
       {#if chat.message && chat.message.message}
       {chat.message.message.substring(0, (chat.isGroup ? 15 : 30)) + (chat.message.message.length > (chat.isGroup ? 15 : 30) ? '...' : '')}
