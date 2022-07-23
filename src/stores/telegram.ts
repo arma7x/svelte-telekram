@@ -8,7 +8,7 @@ export const chatCollections = writable([]);
 export const cachedThumbnails = writable({});
 
 client.addEventHandler((evt) => {
-  // console.log(evt);
+  console.log(evt);
   switch (evt.className) {
     case "UpdateNotifySettings":
     case "UpdateFolderPeers":
@@ -28,6 +28,9 @@ client.addEventHandler((evt) => {
     case "UpdateReadChannelDiscussionInbox":
     case "UpdateReadChannelDiscussionOutbox":
       retrieveChats();
+      break
+    case "UpdatesTooLong":
+      isUserAuthorized();
       break
   }
   if (evt.state) {
