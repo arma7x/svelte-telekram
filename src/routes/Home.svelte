@@ -133,7 +133,7 @@
               const result = await client.invoke(new Api.contacts.GetSaved());
               console.log(result);
             } catch (err) {
-              console.log(err);
+              console.log(err.toString());
             }
           } else if (scope.selected.title === 'Exit') {
             window.close();

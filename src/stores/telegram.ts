@@ -8,7 +8,6 @@ export const chatCollections = writable([]);
 export const cachedThumbnails = writable({});
 
 client.addEventHandler((evt) => {
-  console.log(evt);
   switch (evt.className) {
     case "UpdateNotifySettings":
     case "UpdateFolderPeers":
@@ -32,6 +31,8 @@ client.addEventHandler((evt) => {
     case "UpdatesTooLong":
       isUserAuthorized();
       break
+    default:
+      console.log(evt);
   }
   if (evt.state) {
     if (evt.state === 1)
