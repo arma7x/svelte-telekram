@@ -110,6 +110,27 @@
     });
   }
 
+  async function getContacts() {
+    try {
+      let result = await client.invoke(new Api.contacts.GetSaved());
+      console.log(result);
+    } catch (err) {
+      if (err.errorMessage === "TAKEOUT_REQUIRED") {
+        getContactsFallback();
+      }
+    }
+  }
+
+  async function getContactsFallback() {
+    try {
+      let result = await client.invoke(new Api.account.InitTakeoutSession({ contacts: true }));
+      result = await client.invoke(new Api.InvokeWithTakeout({ takeoutId: result.id, query: new Api.contacts.GetSaved() }));
+      console.log(result);
+    } catch (err) {
+      console.log(err);
+    }
+  }
+
   function openAuthorizedMenu() {
     authorizedMenu = new OptionMenu({
       target: document.body,
@@ -129,12 +150,7 @@
         onSoftkeyLeft: (evt, scope) => {},
         onEnter: async(evt, scope) => {
           if (scope.selected.title === 'Contacts') {
-            try {
-              const result = await client.invoke(new Api.contacts.GetSaved());
-              console.log(result);
-            } catch (err) {
-              console.log(err.toString());
-            }
+            getContacts();
           } else if (scope.selected.title === 'Exit') {
             window.close();
           } else if (scope.selected.title === 'Clear profilePhotoDb') {}
