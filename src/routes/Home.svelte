@@ -112,6 +112,17 @@
 
   async function getContacts() {
     try {
+      const result = await client.invoke(
+        new Api.contacts.GetContacts()
+      );
+      console.log(result.users);
+    } catch (err) {
+      console.log(err);
+    }
+  }
+
+  async function getSavedContacts() {
+    try {
       let result = await client.invoke(new Api.contacts.GetSaved());
       console.log(result);
     } catch (err) {
@@ -121,7 +132,7 @@
     }
   }
 
-  async function getContactsFallback() {
+  async function getSavedContactsFallback() {
     try {
       let result = await client.invoke(new Api.account.InitTakeoutSession({ contacts: true }));
       result = await client.invoke(new Api.InvokeWithTakeout({ takeoutId: result.id, query: new Api.contacts.GetSaved() }));
