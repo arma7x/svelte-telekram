@@ -17,6 +17,8 @@
 
 </script>
 
+<svelte:options accessors immutable={true}/>
+
 <div data-key="{key}" class="kai-list-view {className ? className : ''}" on:click={onClick}>
   <div class="kai-list-view-icon">{@html icon}</div>
   <div class="kai-list-view-content">
