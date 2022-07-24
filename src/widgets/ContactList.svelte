@@ -123,7 +123,6 @@
         page = [];
       }
     }
-    console.log(contactPages);
     contactSeeds = contactPages[contactPagesCursor];
     setTimeout(() => {
       navInstance.navigateListNav(1);
