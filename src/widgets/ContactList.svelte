@@ -1,6 +1,7 @@
 <script lang="ts">
   import { onMount, onDestroy } from 'svelte';
   import { createKaiNavigator } from '../utils/navigation';
+  import ListView from '../components/ListView.svelte';
   import SoftwareKey from '../components/SoftwareKey.svelte';
   import TextInputField from '../components/TextInputField.svelte';
   import ChatListView from './ChatListView.svelte';
@@ -9,7 +10,7 @@
 
   export let title: string = 'Option Menu';
   export let focusIndex: number = 0;
-  export let options: Array<any>;
+  export let sources: Array<any>;
   export let thumbs: { [key: string]: string; } = {};
   export let softKeyLeftText: string = '';
   export let softKeyCenterText: string = 'Close';
@@ -21,12 +22,31 @@
 
   let softwareKey: SoftwareKey;
 
+  const contactPerPage: number = 5;
+  let contactPages: Array<any> = [];
+  let contactPagesCursor: number = 0;
+  let contactSeeds: Array<any> = [];
+
   export function setTitleText(text) {
     title = text;
   }
 
   let navOptions = {
     verticalNavClass: navClass,
+    arrowUpListener: (evt) => {
+      if (navInstance.verticalNavIndex !== 0) {
+        evt.preventDefault();
+        navInstance.navigateListNav(-1);
+      }
+    },
+    arrowDownListener: (evt) => {
+      if (contactSeeds.length - navInstance.verticalNavIndex === 2 && contactPages.length - 1 !== contactPagesCursor)
+        contactSeeds = [...contactSeeds, ...contactPages[++contactPagesCursor]];
+      if (navInstance.verticalNavIndex !== contactSeeds.length) {
+        evt.preventDefault();
+        navInstance.navigateListNav(1);
+      }
+    },
     softkeyLeftListener: function(evt) {
       if (document.activeElement.tagName !== 'INPUT') {
         setTimeout(() => {
@@ -43,12 +63,12 @@
     enterListener: function(evt) {
       if (onEnter == null)
         return;
-      onEnter(evt, {index: this.verticalNavIndex, selected: options[this.verticalNavIndex]});
+      onEnter(evt, {index: this.verticalNavIndex, selected: contactSeeds[this.verticalNavIndex - 1] || null});
     },
     backspaceListener: function(evt) {
       if (onBackspace == null)
         return;
-      onBackspace(evt, {index: this.verticalNavIndex, selected: options[this.verticalNavIndex]});
+      onBackspace(evt, {index: this.verticalNavIndex, selected: sources[this.verticalNavIndex]});
     }
   };
 
@@ -66,10 +86,10 @@
   function onFocus(evt) {
     if (softwareKey != null) {
       softwareKey.setText({
-          left: '',
-          center: '',
-          right: 'Submit',
-        });
+        left: '',
+        center: '',
+        right: 'Submit',
+      });
     }
   }
 
@@ -95,6 +115,20 @@
       }
     });
     onOpened();
+    let page = [];
+    for (let i=0;i<sources.length;i++) {
+      if ((i+1) % contactPerPage !== 0) {
+        page.push(sources[i]);
+        if (i === sources.length-1) {
+          contactPages.push(page);
+          page = [];
+        }
+      } else {
+        contactPages.push(page);
+        page = [];
+      }
+    }
+    contactSeeds = contactPages[contactPagesCursor];
     setTimeout(() => {
       navInstance.navigateListNav(1);
     }, 500);
@@ -103,7 +137,7 @@
   onDestroy(() => {
     navInstance.detachListener();
     softwareKey.$destroy();
-    onClosed({index: navInstance.verticalNavIndex, selected: options[navInstance.verticalNavIndex]});
+    onClosed({index: navInstance.verticalNavIndex, selected: sources[navInstance.verticalNavIndex]});
   })
 
 </script>
@@ -115,8 +149,8 @@
     <div class="kai-option-menu-header">{title}</div>
     <div class="kai-option-menu-body" data-pad-top="66" data-pad-bottom="30">
       <TextInputField className="{navClass}" label="Search Contacts" placeholder="Enter search keyword" value="" type="text" {onInput} {onFocus} {onBlur} />
-      {#each options as option}
-      <ChatListView chat={option} className="{navClass}" icon={getThumb(option)} />
+      {#each contactSeeds as contact}
+      <ListView title="{[(contact.firstName || ''), ( contact.lastName || '')].join(' ')}" subtitle="{undefined}" className="{navClass}" />
       {/each}
     </div>
   </div>

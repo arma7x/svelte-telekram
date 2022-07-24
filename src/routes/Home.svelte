@@ -113,44 +113,50 @@
   }
 
   async function getContacts() {
-    contactListMenu = new ContactList({
-      target: document.body,
-      props: {
-        title: 'Contact List',
-        focusIndex: 0,
-        options: archivedChatList,
-        thumbs: thumbs,
-        softKeyLeftText: 'Search',
-        softKeyCenterText: 'Chat',
-        softKeyRightText: '',
-        onEnter: (evt, scope) => {
-          contactListMenu.$destroy();
-          setTimeout(() => {
-            console.log(scope.selected);
-          }, 100);
-        },
-        onBackspace: (evt, scope) => {
-          evt.preventDefault();
-          evt.stopPropagation();
-          contactListMenu.$destroy();
-        },
-        onOpened: () => {
-          navInstance.detachListener();
-        },
-        onClosed: (scope) => {
-          navInstance.attachListener();
-          contactListMenu = null;
+    try {
+      const result = await client.invoke(
+        new Api.contacts.GetContacts()
+      );
+      contactListMenu = new ContactList({
+        target: document.body,
+        props: {
+          title: 'Contact List',
+          focusIndex: 0,
+          sources: result.users,
+          thumbs: thumbs,
+          softKeyLeftText: 'Search',
+          softKeyCenterText: 'Chat',
+          softKeyRightText: '',
+          onEnter: (evt, scope) => {
+            contactListMenu.$destroy();
+            setTimeout(() => {
+              if (scope.selected) {
+                let chat = [...chatList, ...archivedChatList].find(c => scope.selected.id.value.toString() === c.id.value.toString());
+                if (chat != null) {
+                  openRoom(chat.name, chat.entity);
+                } else {
+                  console.log('Init', scope.selected.id.value);
+                }
+              }
+            }, 100);
+          },
+          onBackspace: (evt, scope) => {
+            evt.preventDefault();
+            evt.stopPropagation();
+            contactListMenu.$destroy();
+          },
+          onOpened: () => {
+            navInstance.detachListener();
+          },
+          onClosed: (scope) => {
+            navInstance.attachListener();
+            contactListMenu = null;
+          }
         }
-      }
-    });
-    //try {
-      //const result = await client.invoke(
-        //new Api.contacts.GetContacts()
-      //);
-      //console.log(result.users[0]);
-    //} catch (err) {
-      //console.log(err);
-    //}
+      });
+    } catch (err) {
+      console.log(err);
+    }
   }
 
   async function getSavedContacts() {
