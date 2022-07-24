@@ -90,6 +90,7 @@ export async function retrieveChats() {
     chats.forEach((chat, index) => {
       if (chat.id.value === user[0].id.value) {
         chat.name = 'Saved Messages';
+        chat.__isSavedMessages = true;
       }
       chat.iconRef = chat.id.toString();
       if (!(chat.entity.username == null && chat.entity.phone == null) && chat.entity.photo != null && chat.entity.photo.className !== 'ChatPhotoEmpty') {
