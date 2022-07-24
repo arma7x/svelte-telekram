@@ -128,7 +128,6 @@
         onEnter: async (evt, value) => {
           const msg = value.trim();
           if (msg.length > 0) {
-            console.time('sendMessage');
             try {
               const result = await client.sendMessage(chat, {message: msg});
               const updates = await retrieveChats();
@@ -140,7 +139,6 @@
             } catch (err) {
               console.log(err);
             }
-            console.timeEnd('sendMessage');
           }
         },
         onBackspace: (evt, value) => {
