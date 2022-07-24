@@ -76,9 +76,12 @@
             console.time('sendMessage');
             try {
               const result = await client.sendMessage(chat, {message: msg});
-              const temp = [...messages, result];
-              messages = await buildIndex(temp);
-              autoScroll();
+              const tmessages = await client.getMessages(chat, {ids:result.id})
+              if (tmessages.length > 0) {
+                const temp = [...messages, ...tmessages];
+                messages = await buildIndex(temp);
+                autoScroll();
+              }
               textAreaDialog.$destroy();
             } catch (err) {
               console.log(err);
@@ -141,7 +144,7 @@
             cachedForwardedUsers[message.sender.id.value.toString()] = message.sender;
           } else if (message.sender && message.sender.className === 'Channel' && cachedForwardedChannels[message.sender.id.value.toString()] == null) {
             cachedForwardedChannels[message.sender.id.value.toString()] = message.sender;
-          } else if (message.sender == null) {
+          } else if (message.sender == null && message.senderId != null) {
             if (cachedForwardedUsers[message.senderId.value.toString()]) {
               // console.log('get sender from cachedForwardedUsers:', cachedForwardedUsers[message.senderId.value.toString()]);
               message.__sender = cachedForwardedUsers[message.senderId.value.toString()];
@@ -196,7 +199,7 @@
             if (fetchReply.indexOf(message.replyTo.replyToMsgId) < 0)
               fetchReply.push(message.replyTo.replyToMsgId);
           }
-      }
+        }
       }
     });
 
