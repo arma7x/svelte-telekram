@@ -1,7 +1,7 @@
 <script lang="ts">
   import { Route, navigate as goto } from "svelte-navigator";
   import { createKaiNavigator } from '../utils/navigation';
-  import { ListView, LoadingBar, Button, TextInputField, Toast, Toaster, SoftwareKey, TextInputDialog, OptionMenu } from '../components';
+  import { ListView, LoadingBar, Button, TextInputField, TextAreaDialog, Toast, Toaster, SoftwareKey, TextInputDialog, OptionMenu } from '../components';
   import { onMount, onDestroy } from 'svelte';
 
   import { TelegramKeyHash, Api, client, session } from '../utils/bootstrap';
@@ -26,6 +26,7 @@
   let authorizedMenu: OptionMenu;
   let archivedChatListMenu: ArchivedChats;
   let contactListMenu: ContactList;
+  let textAreaDialog: TextAreaDialog;
 
   let unchatCollections;
   let unauthorizedStatus;
@@ -112,6 +113,54 @@
     });
   }
 
+  function openTextAreaDialog(chat) {
+    console.log(chat.id.value.toString());
+    textAreaDialog = new TextAreaDialog({
+      target: document.body,
+      props: {
+        title: 'Message',
+        softKeyCenterText: 'ok',
+        value: '',
+        placeholder: 'Enter you text',
+        type: 'text',
+        rows: 3,
+        onSoftkeyLeft: (evt, value) => {},
+        onSoftkeyRight: (evt, value) => {},
+        onEnter: async (evt, value) => {
+          const msg = value.trim();
+          if (msg.length > 0) {
+            console.time('sendMessage');
+            try {
+              const result = await client.sendMessage(chat, {message: msg});
+              const updates = await retrieveChats();
+              textAreaDialog.$destroy();
+              let found = updates.find(c => chat.id.value.toString() === c.id.value.toString());
+              if (found != null) {
+                openRoom(found.name, found.entity);
+              }
+            } catch (err) {
+              console.log(err);
+            }
+            console.timeEnd('sendMessage');
+          }
+        },
+        onBackspace: (evt, value) => {
+          evt.stopPropagation();
+          if (value.length === 0) {
+            textAreaDialog.$destroy();
+          }
+        },
+        onOpened: () => {
+          navInstance.detachListener();
+        },
+        onClosed: (value) => {
+          navInstance.attachListener();
+          textAreaDialog = null;
+        }
+      }
+    });
+  }
+
   async function getContacts() {
     try {
       const result = await client.invoke(
@@ -135,7 +184,7 @@
                 if (chat != null) {
                   openRoom(chat.name, chat.entity);
                 } else {
-                  console.log('Init', scope.selected);
+                  openTextAreaDialog(scope.selected);
                 }
               }
             }, 100);

@@ -113,6 +113,7 @@ export async function retrieveChats() {
     });
     chatCollections.update(n => chats);
     runTask(httpTasks, websocketTasks);
+    return chats;
   } catch (err) {
     console.log(err);
   }

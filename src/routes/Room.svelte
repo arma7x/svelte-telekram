@@ -128,6 +128,7 @@
     const fetchReply = [];
 
     messages.forEach((message, index) => {
+      console.log(message);
       if (message && message.id) {
         if (messageMetadata[message.id.toString()] == null) {
           messageMetadata[message.id.toString()] = {}
