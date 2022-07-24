@@ -117,17 +117,13 @@
     onOpened();
     let page = [];
     for (let i=0;i<sources.length;i++) {
-      if ((i+1) % contactPerPage !== 0) {
-        page.push(sources[i]);
-        if (i === sources.length-1) {
-          contactPages.push(page);
-          page = [];
-        }
-      } else {
+      page.push(sources[i]);
+      if (i === sources.length - 1 || (i + 1) % contactPerPage === 0) {
         contactPages.push(page);
         page = [];
       }
     }
+    console.log(contactPages);
     contactSeeds = contactPages[contactPagesCursor];
     setTimeout(() => {
       navInstance.navigateListNav(1);
