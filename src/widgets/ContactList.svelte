@@ -22,7 +22,7 @@
 
   let softwareKey: SoftwareKey;
 
-  const contactPerPage: number = 5;
+  const contactPerPage: number = 15;
   let contactPages: Array<any> = [];
   let contactPagesCursor: number = 0;
   let contactSeeds: Array<any> = [];

@@ -145,6 +145,7 @@
           evt.stopPropagation();
           if (value.length === 0) {
             textAreaDialog.$destroy();
+            evt.preventDefault();
           }
         },
         onOpened: () => {
