@@ -163,12 +163,15 @@
       const result = await client.invoke(
         new Api.contacts.GetContacts()
       );
+      const sorted = result.users.sort((a, b) => {
+        return [a.firstName || '', a.lastName || '', a.phone || ''].join(' ').localeCompare([b.firstName || '', b.lastName || '', b.phone || ''].join(' '));
+      });
       contactListMenu = new ContactList({
         target: document.body,
         props: {
           title: 'Contact List',
           focusIndex: 0,
-          sources: result.users,
+          sources: sorted,
           thumbs: thumbs,
           softKeyLeftText: 'Search',
           softKeyCenterText: 'Chat',
