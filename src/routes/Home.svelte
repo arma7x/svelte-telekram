@@ -187,7 +187,6 @@
         title: user.length > 0 ? `Hi ${user[0].username}` : 'Menu',
         focusIndex: 0,
         options: [
-          { title: 'Clear profilePhotoDb' },
           { title: 'New Contact' },
           { title: 'Contacts' },
           { title: 'Settings' },
@@ -203,7 +202,7 @@
             getContacts();
           } else if (scope.selected.title === 'Exit') {
             window.close();
-          } else if (scope.selected.title === 'Clear profilePhotoDb') {}
+          }
         },
         onBackspace: (evt, scope) => {
           evt.preventDefault();
