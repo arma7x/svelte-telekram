@@ -86,7 +86,7 @@
   function onFocus(evt) {
     if (softwareKey != null) {
       softwareKey.setText({
-        left: '',
+        left: 'Reset',
         center: '',
         right: 'Submit',
       });
