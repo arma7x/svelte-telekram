@@ -129,13 +129,13 @@
           softKeyRightText: '',
           onEnter: (evt, scope) => {
             contactListMenu.$destroy();
-            setTimeout(() => {
+            setTimeout(async () => {
               if (scope.selected) {
                 let chat = [...chatList, ...archivedChatList].find(c => scope.selected.id.value.toString() === c.id.value.toString());
                 if (chat != null) {
                   openRoom(chat.name, chat.entity);
                 } else {
-                  console.log('Init', scope.selected.id.value);
+                  console.log('Init', scope.selected);
                 }
               }
             }, 100);

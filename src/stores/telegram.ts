@@ -26,6 +26,7 @@ client.addEventHandler((evt) => {
     case "UpdateReadFeaturedStickers":
     case "UpdateReadChannelDiscussionInbox":
     case "UpdateReadChannelDiscussionOutbox":
+    case "Updates":
       retrieveChats();
       break
     case "UpdatesTooLong":
