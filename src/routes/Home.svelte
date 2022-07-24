@@ -114,7 +114,6 @@
   }
 
   function openTextAreaDialog(chat) {
-    console.log(chat.id.value.toString());
     textAreaDialog = new TextAreaDialog({
       target: document.body,
       props: {
