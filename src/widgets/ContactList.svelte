@@ -25,7 +25,7 @@
   const contactPerPage: number = 15;
   let contactPages: Array<any> = [];
   let contactPagesCursor: number = 0;
-  let contactSeeds: Array<any> = [];
+  let contactFeeds: Array<any> = [];
 
   export function setTitleText(text) {
     title = text;
@@ -40,9 +40,9 @@
       }
     },
     arrowDownListener: (evt) => {
-      if (contactSeeds.length - navInstance.verticalNavIndex === 2 && contactPages.length - 1 !== contactPagesCursor)
-        contactSeeds = [...contactSeeds, ...contactPages[++contactPagesCursor]];
-      if (navInstance.verticalNavIndex !== contactSeeds.length) {
+      if (contactFeeds.length - navInstance.verticalNavIndex === 2 && contactPages.length - 1 !== contactPagesCursor)
+        contactFeeds = [...contactFeeds, ...contactPages[++contactPagesCursor]];
+      if (navInstance.verticalNavIndex !== contactFeeds.length) {
         evt.preventDefault();
         navInstance.navigateListNav(1);
       }
@@ -63,7 +63,7 @@
     enterListener: function(evt) {
       if (onEnter == null)
         return;
-      onEnter(evt, {index: this.verticalNavIndex, selected: contactSeeds[this.verticalNavIndex - 1] || null});
+      onEnter(evt, {index: this.verticalNavIndex, selected: contactFeeds[this.verticalNavIndex - 1] || null});
     },
     backspaceListener: function(evt) {
       if (onBackspace == null)
@@ -123,7 +123,7 @@
         page = [];
       }
     }
-    contactSeeds = contactPages[contactPagesCursor];
+    contactFeeds = contactPages[contactPagesCursor];
     setTimeout(() => {
       navInstance.navigateListNav(1);
     }, 500);
@@ -144,7 +144,7 @@
     <div class="kai-option-menu-header">{title}</div>
     <div class="kai-option-menu-body" data-pad-top="66" data-pad-bottom="30">
       <TextInputField className="{navClass}" label="Search Contacts" placeholder="Enter search keyword" value="" type="text" {onInput} {onFocus} {onBlur} />
-      {#each contactSeeds as contact}
+      {#each contactFeeds as contact}
       <ListView title="{[(contact.firstName || ''), ( contact.lastName || '')].join(' ')}" subtitle="{undefined}" className="{navClass}" />
       {/each}
     </div>
