@@ -151,8 +151,10 @@ class KaiNavigator {
     const keys = Object.keys(cursor.children);
     for (var k in keys) {
       if (['INPUT', 'TEXTAREA'].indexOf(cursor.children[k].tagName) > -1) {
-        cursor.children[k].focus();
-        cursor.children[k].selectionStart = cursor.children[k].selectionEnd = (cursor.children[k].value.length || cursor.children[k].value.length);
+        setTimeout(() => {
+          cursor.children[k].focus();
+          cursor.children[k].selectionStart = cursor.children[k].selectionEnd = (cursor.children[k].value.length || cursor.children[k].value.length);
+        }, 100);
         break;
       }
     }

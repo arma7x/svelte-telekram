@@ -423,6 +423,7 @@
   }
 
   onMount(() => {
+    console.log(location.state.entity);
     const { appBar, softwareKey } = getAppProp();
     appBar.setTitleText(location.state.name || name);
     getMessages(location.state.entity);

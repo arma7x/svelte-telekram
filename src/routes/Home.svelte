@@ -9,6 +9,7 @@
   import QRModal from '../widgets/QRModal.svelte';
   import ChatListView from '../widgets/ChatListView.svelte';
   import ArchivedChats from '../widgets/ArchivedChats.svelte';
+  import ContactList from '../widgets/ContactList.svelte';
 
   import { connectionStatus, authorizedStatus, isUserAuthorized, authorizedUser, chatCollections, retrieveChats, cachedThumbnails } from '../stores/telegram';
 
@@ -24,6 +25,7 @@
   let password2FA: TextInputDialog;
   let authorizedMenu: OptionMenu;
   let archivedChatListMenu: ArchivedChats;
+  let contactListMenu: ContactList;
 
   let unchatCollections;
   let unauthorizedStatus;
@@ -111,14 +113,44 @@
   }
 
   async function getContacts() {
-    try {
-      const result = await client.invoke(
-        new Api.contacts.GetContacts()
-      );
-      console.log(result.users);
-    } catch (err) {
-      console.log(err);
-    }
+    contactListMenu = new ContactList({
+      target: document.body,
+      props: {
+        title: 'Contact List',
+        focusIndex: 0,
+        options: archivedChatList,
+        thumbs: thumbs,
+        softKeyLeftText: 'Search',
+        softKeyCenterText: 'Chat',
+        softKeyRightText: '',
+        onEnter: (evt, scope) => {
+          contactListMenu.$destroy();
+          setTimeout(() => {
+            console.log(scope.selected);
+          }, 100);
+        },
+        onBackspace: (evt, scope) => {
+          evt.preventDefault();
+          evt.stopPropagation();
+          contactListMenu.$destroy();
+        },
+        onOpened: () => {
+          navInstance.detachListener();
+        },
+        onClosed: (scope) => {
+          navInstance.attachListener();
+          contactListMenu = null;
+        }
+      }
+    });
+    //try {
+      //const result = await client.invoke(
+        //new Api.contacts.GetContacts()
+      //);
+      //console.log(result.users[0]);
+    //} catch (err) {
+      //console.log(err);
+    //}
   }
 
   async function getSavedContacts() {
@@ -160,12 +192,12 @@
         onSoftkeyRight: (evt, scope) => {},
         onSoftkeyLeft: (evt, scope) => {},
         onEnter: async(evt, scope) => {
+          authorizedMenu.$destroy();
           if (scope.selected.title === 'Contacts') {
             getContacts();
           } else if (scope.selected.title === 'Exit') {
             window.close();
           } else if (scope.selected.title === 'Clear profilePhotoDb') {}
-          authorizedMenu.$destroy();
         },
         onBackspace: (evt, scope) => {
           evt.preventDefault();

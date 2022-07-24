@@ -74,7 +74,8 @@ export async function isUserAuthorized() {
 }
 
 export async function retrieveChats() {
-  console.time('retrieveChats');
+  const timer = new Date().getTime().toString();
+  console.time('retrieveChats_' + timer);
   try {
     const user = await getAuthorizedUser();
     const chats = await client.getDialogs({
@@ -113,7 +114,7 @@ export async function retrieveChats() {
   } catch (err) {
     console.log(err);
   }
-  console.timeEnd('retrieveChats');
+  console.timeEnd('retrieveChats_' + timer);
 }
 
 export function getChatCollection() {
