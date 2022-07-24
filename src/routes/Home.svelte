@@ -117,7 +117,6 @@
       const result = await client.invoke(
         new Api.contacts.GetContacts()
       );
-      result.users.forEach((u, i) => console.log(i ,u.username));
       contactListMenu = new ContactList({
         target: document.body,
         props: {
