@@ -75,8 +75,8 @@ export async function isUserAuthorized() {
 }
 
 export async function retrieveChats() {
-  const timer = new Date().getTime().toString();
-  console.time('retrieveChats_' + timer);
+  // const timer = new Date().getTime().toString();
+  // console.time('retrieveChats_' + timer);
   try {
     const user = await getAuthorizedUser();
     const chats = await client.getDialogs({
@@ -117,7 +117,7 @@ export async function retrieveChats() {
   } catch (err) {
     console.log(err);
   }
-  console.timeEnd('retrieveChats_' + timer);
+  // console.timeEnd('retrieveChats_' + timer);
 }
 
 export function getChatCollection() {
@@ -135,7 +135,7 @@ export function getAuthorizedUser() {
 export function runTask(httpTasks, websocketTasks) {
   let tempRef = {};
   console.log('httpTasks:', httpTasks.length);
-  console.time('httpTasks');
+  // console.time('httpTasks');
   httpTasks.forEach(async (task, index) => {
     try {
       let cache = await (await cachedDatabase).get('profilePhotos', task.photoId);
@@ -159,11 +159,11 @@ export function runTask(httpTasks, websocketTasks) {
       console.log('Err:', err);
     }
   });
-  console.timeEnd('httpTasks');
+  // console.timeEnd('httpTasks');
 
   let elapsed = 0;
   console.log('websocketTasks:', websocketTasks.length);
-  console.time('websocketTasks');
+  // console.time('websocketTasks');
   websocketTasks.forEach(async (task) => {
     try {
       let cache = await (await cachedDatabase).get('profilePhotos', task.photoId);
@@ -179,7 +179,7 @@ export function runTask(httpTasks, websocketTasks) {
       elapsed++;
     }
   });
-  console.timeEnd('websocketTasks');
+  // console.timeEnd('websocketTasks');
 }
 
 async function updateThumbCached(ref, base64) {

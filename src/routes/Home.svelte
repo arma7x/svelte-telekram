@@ -129,7 +129,7 @@
           const msg = value.trim();
           if (msg.length > 0) {
             // console.log(location.state.entity.id.value, msg);
-            console.time('sendMessage');
+            // console.time('sendMessage');
             try {
               const result = await client.sendMessage(chat, {message: msg});
               const tmessages = await client.getMessages(chat, {ids:result.id})
@@ -142,7 +142,7 @@
             } catch (err) {
               console.log(err);
             }
-            console.timeEnd('sendMessage');
+            // console.timeEnd('sendMessage');
           }
         },
         onSoftkeyRight: (evt, value) => {},

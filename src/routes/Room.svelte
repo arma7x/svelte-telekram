@@ -73,7 +73,7 @@
           const msg = value.trim();
           if (msg.length > 0) {
             // console.log(location.state.entity.id.value, msg);
-            console.time('sendMessage');
+            // console.time('sendMessage');
             try {
               const result = await client.sendMessage(chat, {message: msg});
               const tmessages = await client.getMessages(chat, {ids:result.id})
@@ -86,7 +86,7 @@
             } catch (err) {
               console.log(err);
             }
-            console.timeEnd('sendMessage');
+            // console.timeEnd('sendMessage');
           }
         },
         onSoftkeyRight: (evt, value) => {},
@@ -125,7 +125,7 @@
 
   async function buildIndex(messages) {
 
-    console.time('buildIndex');
+    // console.time('buildIndex');
     forwardedUsersIndex = [];
     forwardedChannelsIndex = [];
     const httpTasks = [];
@@ -206,7 +206,7 @@
     });
 
     console.log('fetchReply:', fetchReply.length);
-    console.time('fetchReply');
+    // console.time('fetchReply');
     try {
       const messages = await client.getMessages(chat, {ids:fetchReply});
       fetchReply.forEach((id, index) => {
@@ -215,10 +215,10 @@
     } catch (err) {
       console.log(err);
     }
-    console.timeEnd('fetchReply');
+    // console.timeEnd('fetchReply');
 
     console.log('fetchForwardedUsers:', fetchForwardedUsers.length);
-    console.time('fetchForwardedUsers');
+    // console.time('fetchForwardedUsers');
     try {
       const users = await client.invoke(new Api.users.GetUsers({ id: fetchForwardedUsers }));
       users.forEach(u => {
@@ -248,10 +248,10 @@
     } catch (err) {
       console.log(err);
     }
-    console.timeEnd('fetchForwardedUsers');
+    // console.timeEnd('fetchForwardedUsers');
 
     console.log('fetchForwardedChannels:', fetchForwardedChannels.length);
-    console.time('fetchForwardedChannels');
+    // console.time('fetchForwardedChannels');
     try {
       const channels = await client.invoke(new Api.channels.GetChannels({ id: fetchForwardedChannels }));
       channels.chats.forEach(c => {
@@ -281,10 +281,10 @@
     } catch (err) {
       console.log(err);
     }
-    console.timeEnd('fetchForwardedChannels');
+    // console.timeEnd('fetchForwardedChannels');
 
     runTask(httpTasks, websocketTasks);
-    console.timeEnd('buildIndex');
+    // console.timeEnd('buildIndex');
     return messages;
   }
 
@@ -325,7 +325,7 @@
             if (!(location.state.entity.className === 'Channel' && !location.state.entity.megagroup)) {
               if (!cachedForwardedUsers[evt.message.senderId.value.toString()]) {
                 // console.log('Api.users.GetUsers', evt.message.senderId.value.toString());
-                console.time('fetchuncachedforwardsuser');
+                // console.time('fetchuncachedforwardsuser');
                 try {
                   const users = await client.invoke(new Api.users.GetUsers({ id: [evt.message.senderId.value.toString()] }));
                   if (users.length > 0) {
@@ -334,7 +334,7 @@
                 } catch (err) {
                   console.log(err);
                 }
-                console.timeEnd('fetchuncachedforwardsuser');
+                // console.timeEnd('fetchuncachedforwardsuser');
               }
             }
             // console.log(evt.message);
@@ -402,7 +402,7 @@
   }
 
   async function getMessages(entity) {
-    console.time('Finished');
+    // console.time('Finished');
     try {
       const chats = await getChatCollection();
       chat = chats.find(chat => {
@@ -424,7 +424,7 @@
     } catch (err) {
       console.log(err);
     }
-    console.timeEnd('Finished');
+    // console.timeEnd('Finished');
   }
 
   onMount(() => {
