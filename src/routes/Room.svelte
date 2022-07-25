@@ -14,7 +14,7 @@
   export let navigate: any;
   export let getAppProp: Function;
 
-  let textAreaDialog: TextAreaDialog;
+  let sendMessageDialog: TextAreaDialog;
 
   let fetchForwardedUsers = [];
   let forwardedUsersIndex = [];
@@ -58,18 +58,18 @@
   let navInstance = createKaiNavigator(navOptions);
 
   function openTextAreaDialog() {
-    textAreaDialog = new TextAreaDialog({
+    sendMessageDialog = new TextAreaDialog({
       target: document.body,
       props: {
         title: 'Message',
-        softKeyCenterText: 'ok',
+        softKeyLeftText: 'Send',
+        softKeyCenterText: 'New line',
+        softKeyRightText: '',
         value: '',
         placeholder: 'Enter you text',
         type: 'text',
         rows: 3,
-        onSoftkeyLeft: (evt, value) => {},
-        onSoftkeyRight: (evt, value) => {},
-        onEnter: async (evt, value) => {
+        onSoftkeyLeft: async (evt, value) => {
           const msg = value.trim();
           if (msg.length > 0) {
             // console.log(location.state.entity.id.value, msg);
@@ -82,17 +82,19 @@
                 messages = await buildIndex(temp);
                 autoScroll();
               }
-              textAreaDialog.$destroy();
+              sendMessageDialog.$destroy();
             } catch (err) {
               console.log(err);
             }
             console.timeEnd('sendMessage');
           }
         },
+        onSoftkeyRight: (evt, value) => {},
+        onEnter: (evt, value) => {},
         onBackspace: (evt, value) => {
           evt.stopPropagation();
           if (value.length === 0) {
-            textAreaDialog.$destroy();
+            sendMessageDialog.$destroy();
           }
         },
         onOpened: () => {
@@ -100,7 +102,7 @@
         },
         onClosed: (value) => {
           navInstance.attachListener();
-          textAreaDialog = null;
+          sendMessageDialog = null;
         }
       }
     });

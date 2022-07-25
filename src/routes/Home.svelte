@@ -26,7 +26,7 @@
   let authorizedMenu: OptionMenu;
   let archivedChatListMenu: ArchivedChats;
   let contactListMenu: ContactList;
-  let textAreaDialog: TextAreaDialog;
+  let sendMessageDialog: TextAreaDialog;
 
   let unchatCollections;
   let unauthorizedStatus;
@@ -114,37 +114,43 @@
   }
 
   function openTextAreaDialog(chat) {
-    textAreaDialog = new TextAreaDialog({
+    sendMessageDialog = new TextAreaDialog({
       target: document.body,
       props: {
         title: 'Message',
-        softKeyCenterText: 'ok',
+        softKeyLeftText: 'Send',
+        softKeyCenterText: 'New line',
+        softKeyRightText: '',
         value: '',
         placeholder: 'Enter you text',
         type: 'text',
         rows: 3,
-        onSoftkeyLeft: (evt, value) => {},
-        onSoftkeyRight: (evt, value) => {},
-        onEnter: async (evt, value) => {
+        onSoftkeyLeft: async (evt, value) => {
           const msg = value.trim();
           if (msg.length > 0) {
+            // console.log(location.state.entity.id.value, msg);
+            console.time('sendMessage');
             try {
               const result = await client.sendMessage(chat, {message: msg});
-              const updates = await retrieveChats();
-              textAreaDialog.$destroy();
-              let found = updates.find(c => chat.id.value.toString() === c.id.value.toString());
-              if (found != null) {
-                openRoom(found.name, found.entity);
+              const tmessages = await client.getMessages(chat, {ids:result.id})
+              if (tmessages.length > 0) {
+                const temp = [...messages, ...tmessages];
+                messages = await buildIndex(temp);
+                autoScroll();
               }
+              sendMessageDialog.$destroy();
             } catch (err) {
               console.log(err);
             }
+            console.timeEnd('sendMessage');
           }
         },
+        onSoftkeyRight: (evt, value) => {},
+        onEnter: (evt, value) => {},
         onBackspace: (evt, value) => {
           evt.stopPropagation();
           if (value.length === 0) {
-            textAreaDialog.$destroy();
+            sendMessageDialog.$destroy();
             evt.preventDefault();
           }
         },
@@ -153,7 +159,7 @@
         },
         onClosed: (value) => {
           navInstance.attachListener();
-          textAreaDialog = null;
+          sendMessageDialog = null;
         }
       }
     });
