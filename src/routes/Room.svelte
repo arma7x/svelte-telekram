@@ -97,6 +97,7 @@
           evt.stopPropagation();
           if (value.length === 0) {
             sendMessageDialog.$destroy();
+            evt.preventDefault();
           }
         },
         onOpened: () => {
