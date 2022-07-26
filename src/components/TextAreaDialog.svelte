@@ -19,7 +19,7 @@
   export let onOpened: Function = () => {};
   export let onClosed: Function = (value: string) => {};
 
-  let selfDOM: any;
+  let nodeRef: any;
   let inputDOM: any;
   let softwareKey: SoftwareKey;
   let returnValue: string = '';
@@ -86,7 +86,7 @@
       }
     });
     returnValue = value;
-    inputDOM = selfDOM.getElementsByTagName('TEXTAREA')[0];
+    inputDOM = nodeRef.getElementsByTagName('TEXTAREA')[0];
     setTimeout(() => {
       inputDOM.focus();
     }, 200);
@@ -104,7 +104,7 @@
 
 <svelte:options accessors/>
 
-<div class="kai-dialog"bind:this={selfDOM}>
+<div class="kai-dialog"bind:this={nodeRef}>
   <div class="kai-dialog-content">
     <div class="kai-dialog-header">{title}</div>
     <div class="kai-dialog-body">
