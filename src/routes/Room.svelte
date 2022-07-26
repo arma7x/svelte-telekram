@@ -8,13 +8,14 @@
   import { getChatCollection, runTask, getAuthorizedUser } from '../stores/telegram';
 
   import { Dummy, MessageText, MessageActionChannelCreate, MessageActionChatEditPhoto } from '../widgets/message';
-  import { TextAreaDialog } from '../components';
+  import { TextAreaDialog, OptionMenu } from '../components';
 
   export let location: any;
   export let navigate: any;
   export let getAppProp: Function;
 
   let sendMessageDialog: TextAreaDialog;
+  let contextMenu: OptionMenu;
 
   let fetchForwardedUsers = [];
   let forwardedUsersIndex = [];
@@ -23,7 +24,6 @@
   let fetchForwardedChannels = [];
   let forwardedChannelsIndex = [];
   const cachedForwardedChannels = {};
-
 
   let chat: any;
   let name: string = 'Room';
@@ -35,26 +35,9 @@
   let navOptions = {
     verticalNavClass: 'roomNav',
     softkeyLeftListener: async function(evt) {
-      const user = await getAuthorizedUser();
       const msg = messages[navInstance.verticalNavIndex];
-      let menu = [];
-      if (msg.message && msg.message.length > 80) {
-        menu.push('Show Full');
-      }
-      if (!msg.noforwards) {
-        menu.push('Forward');
-      }
-      menu = [...menu, 'Reply', 'Report'];
-      if (muteUntil === false)
-        menu.push('Mute');
-      else
-        menu.push('Unmute');
-      const sender = msg.sender || msg.__sender;
-      if (sender && sender.id.value.toString() === user[0].id.value.toString())
-        menu = [...menu, 'Edit', 'Delete'];
-      else if (chat.entity.className === 'Channel', chat.entity.creator)
-        menu.push('Delete');
-      console.log(menu);
+      if (msg)
+        openContextMenu(msg);
     },
     softkeyRightListener: function(evt) {
       // send attachment + bot command
@@ -122,6 +105,70 @@
         onClosed: (value) => {
           navInstance.attachListener();
           sendMessageDialog = null;
+        }
+      }
+    });
+  }
+
+  async function openContextMenu(msg) {
+    const user = await getAuthorizedUser();
+    let menu = [];
+    if (msg.message && msg.message.length > 80) {
+      menu.push({ title: 'Show Full' });
+    }
+    if (!msg.noforwards) {
+      menu.push({ title: 'Forward' });
+    }
+    menu = [...menu, { title: 'Reply' }, { title: 'Report' }];
+    const sender = msg.sender || msg.__sender;
+    if (sender && sender.id.value.toString() === user[0].id.value.toString())
+      menu = [...menu, { title: 'Edit' }, { title: 'Delete' }];
+    else if (chat.entity.className === 'Channel', chat.entity.creator)
+      menu.push({ title: 'Delete' });
+    if (muteUntil === false)
+      menu.push({ title: 'Mute' });
+    else
+      menu.push({ title: 'Unmute' });
+    contextMenu = new OptionMenu({
+      target: document.body,
+      props: {
+        title: 'Action',
+        focusIndex: 0,
+        options: menu,
+        softKeyCenterText: 'select',
+        onSoftkeyRight: (evt, scope) => {},
+        onSoftkeyLeft: (evt, scope) => {},
+        onEnter: async(evt, scope) => {
+          contextMenu.$destroy();
+          if (scope.selected.title === 'Show Full' && msg.className === "Message") {
+            setTimeout(() => {
+              const className = new resolveMessageWidget(msg);
+              new className({
+                target: document.body,
+                props: {
+                  className: "",
+                  message: msg,
+                  registerCallButtonHandler: (evt) => {},
+                  parentNavInstance: navInstance,
+                  replyTo: getReplyHeader(msg),
+                  entity: chat.entity.entity,
+                  short: false
+                }
+              });
+            }, 200);
+          }
+        },
+        onBackspace: (evt, scope) => {
+          evt.preventDefault();
+          evt.stopPropagation();
+          contextMenu.$destroy();
+        },
+        onOpened: () => {
+          navInstance.detachListener();
+        },
+        onClosed: (scope) => {
+          navInstance.attachListener();
+          contextMenu = null;
         }
       }
     });

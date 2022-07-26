@@ -25,6 +25,7 @@
   export let replyTo: any;
   export let short: bool = false;
 
+  let nodeRef;
   let uncachedThumbnails;
   let hasAvatar: bool = false;
   let avatarSrc: string = '';
@@ -34,6 +35,21 @@
   let fullName: string;
   let forwardedPrefix: string = '';
   let _wip: string = null;
+
+  let navOptions = {
+    softkeyLeftListener: async function(evt) {},
+    softkeyRightListener: function(evt) {},
+    enterListener: function(evt) {},
+    backspaceListener: function(evt) {
+      evt.preventDefault();
+      console.log('destroy self');
+      parentNavInstance.attachListener();
+      navInstance.detachListener();
+      nodeRef.parentNode.removeChild(nodeRef);
+    }
+  };
+
+  let navInstance = createKaiNavigator(navOptions);
 
   function renderReplyHeader(msg) {
     const columns = [];
@@ -77,6 +93,10 @@
 
   onMount(async () => {
     // todo render message.media if !null
+    if (!short) {
+      parentNavInstance.detachListener();
+      navInstance.attachListener();
+    }
     if (message.message.length > 80 && short)
       expandable = true;
     if (message.media) {
@@ -160,6 +180,10 @@
   });
 
   onDestroy(() => {
+    if (!short) {
+      parentNavInstance.attachListener();
+      navInstance.detachListener();
+    }
     if (uncachedThumbnails)
       uncachedThumbnails();
   });
@@ -168,7 +192,7 @@
 
 <svelte:options accessors immutable={true}/>
 
-<div data-key="{key}" class="kai-list-view {className ? className : ''}" on:click={onClick} style="justify-content:{entity.className === 'Channel' && !entity.megagroup ? 'start' : justifyContent};min-height:{hasAvatar ? '50px' : '0px'};">
+<div bind:this={nodeRef} data-key="{key}" class="kai-list-view {className ? className : ''}" on:click={onClick} style="background-color:{!short ? 'var(--themeColorLight)' : 'inherit'};height:{!short ? '92%' : 'auto'};justify-content:{entity.className === 'Channel' && !entity.megagroup ? 'start' : justifyContent};min-height:{hasAvatar ? '50px' : '0px'};">
   {#if hasAvatar }{@html DOMPurify.sanitize(avatarSrc)}{/if}
   <div class="kai-list-view-content" style="margin-left:{hasAvatar ? '45px' : '0px'};">
     {#if hasAvatar }
