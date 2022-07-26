@@ -151,7 +151,7 @@
                   registerCallButtonHandler: (evt) => {},
                   parentNavInstance: navInstance,
                   replyTo: getReplyHeader(msg),
-                  entity: chat.entity.entity,
+                  entity: chat.entity,
                   short: false,
                   destroyCallback: () => {
                     full.$destroy();

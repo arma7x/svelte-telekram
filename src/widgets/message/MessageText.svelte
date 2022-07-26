@@ -144,10 +144,10 @@
       }
     }
     if (message.fwdFrom) {
-      if (entity.id.value.toString() !== user[0].id.toString()) {
+      if (entity.id && entity.id.value.toString() !== user[0].id.toString()) {
         forwardedPrefix = 'Forwarded from ';
       }
-      if (sender.id.toString() === user[0].id.toString() && sender.id.toString() === entity.id.value.toString()) {
+      if (sender.id && sender.id.toString() === user[0].id.toString() && sender.id.toString() === entity.id.value.toString()) {
         hasAvatar = true;
         justifyContent = 'start';
       }
