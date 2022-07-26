@@ -5,7 +5,7 @@
 
   import { Api, client } from '../utils/bootstrap';
 
-  import { getChatCollection, runTask } from '../stores/telegram';
+  import { getChatCollection, runTask, getAuthorizedUser } from '../stores/telegram';
 
   import { Dummy, MessageText, MessageActionChannelCreate, MessageActionChatEditPhoto } from '../widgets/message';
   import { TextAreaDialog } from '../components';
@@ -34,8 +34,27 @@
 
   let navOptions = {
     verticalNavClass: 'roomNav',
-    softkeyLeftListener: function(evt) {
-      // common action menu; reply, forward, report, delete, edit, mute/unmute
+    softkeyLeftListener: async function(evt) {
+      const user = await getAuthorizedUser();
+      const msg = messages[navInstance.verticalNavIndex];
+      let menu = [];
+      if (msg.message && msg.message.length > 80) {
+        menu.push('Show Full');
+      }
+      if (!msg.noforwards) {
+        menu.push('Forward');
+      }
+      menu = [...menu, 'Reply', 'Report'];
+      if (muteUntil === false)
+        menu.push('Mute');
+      else
+        menu.push('Unmute');
+      const sender = msg.sender || msg.__sender;
+      if (sender && sender.id.value.toString() === user[0].id.value.toString())
+        menu = [...menu, 'Edit', 'Delete'];
+      else if (chat.entity.className === 'Channel', chat.entity.creator)
+        menu.push('Delete');
+      console.log(menu);
     },
     softkeyRightListener: function(evt) {
       // send attachment + bot command
@@ -455,7 +474,7 @@
 <main id="room-screen" data-pad-top="28" data-pad-bottom="30">
   {#each messages as message}
     {#if message && messageMetadata[message.id.toString()] && messageMetadata[message.id.toString()].deleted === false}
-      <svelte:component className="roomNav" this={resolveMessageWidget(message)} {message} {registerCallButtonHandler} parentNavInstance={navInstance} replyTo={getReplyHeader(message)} entity={location.state.entity}/>
+      <svelte:component className="roomNav" this={resolveMessageWidget(message)} {message} {registerCallButtonHandler} parentNavInstance={navInstance} replyTo={getReplyHeader(message)} entity={location.state.entity} short={true}/>
     {/if}
   {/each}
 </main>

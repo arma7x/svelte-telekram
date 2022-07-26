@@ -23,6 +23,7 @@
   export let parentNavInstance: typeof KaiNavigator;
   export let registerCallButtonHandler: Function = (id, callback) => {}
   export let replyTo: any;
+  export let short: bool = false;
 
   let uncachedThumbnails;
   let hasAvatar: bool = false;
@@ -76,7 +77,7 @@
 
   onMount(async () => {
     // todo render message.media if !null
-    if (message.message.length > 80)
+    if (message.message.length > 80 && short)
       expandable = true;
     if (message.media) {
       if (message.media.className === 'MessageMediaDocument') {
@@ -191,7 +192,7 @@
       { _wip }
     {/if}
     {#if message.message }
-      <p>{message.message.length > 80 ? message.message.substring(0, 80) + '...' : message.message}</p>
+      <p>{message.message.length > 80 && short ? message.message.substring(0, 80) + '...' : message.message}</p>
     {/if}
   </div>
 </div>
@@ -227,7 +228,6 @@
   }
 
   .kai-list-view > .kai-list-view-content > p {
-    max-height: 100px;
     background-color: transparent;
     padding: 0px;
     margin: 0px;
