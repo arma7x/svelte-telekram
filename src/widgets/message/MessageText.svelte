@@ -22,6 +22,7 @@
   export let onClick: Function = (evt) => {}
   export let parentNavInstance: typeof KaiNavigator;
   export let registerCallButtonHandler: Function = (id, callback) => {}
+  export let destroyCallback: Function = () => {}
   export let replyTo: any;
   export let short: bool = false;
 
@@ -42,10 +43,7 @@
     enterListener: function(evt) {},
     backspaceListener: function(evt) {
       evt.preventDefault();
-      console.log('destroy self');
-      parentNavInstance.attachListener();
-      navInstance.detachListener();
-      nodeRef.parentNode.removeChild(nodeRef);
+      destroyCallback();
     }
   };
 

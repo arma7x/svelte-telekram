@@ -143,7 +143,7 @@
           if (scope.selected.title === 'Show Full' && msg.className === "Message") {
             setTimeout(() => {
               const className = new resolveMessageWidget(msg);
-              new className({
+              const full = new className({
                 target: document.body,
                 props: {
                   className: "",
@@ -152,7 +152,10 @@
                   parentNavInstance: navInstance,
                   replyTo: getReplyHeader(msg),
                   entity: chat.entity.entity,
-                  short: false
+                  short: false,
+                  destroyCallback: () => {
+                    full.$destroy();
+                  }
                 }
               });
             }, 200);
