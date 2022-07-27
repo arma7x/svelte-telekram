@@ -38,6 +38,26 @@
   let _wip: string = null;
 
   let navOptions = {
+    arrowUpListener: function(evt) {
+      nodeRef.scrollTop -= 20;
+      evt.preventDefault();
+      evt.stopPropagation();
+    },
+    arrowDownListener: function(evt) {
+      nodeRef.scrollTop += 20;
+      evt.preventDefault();
+      evt.stopPropagation();
+    },
+    arrowLeftListener: function(evt) {
+      nodeRef.scrollLeft -= 20;
+      evt.preventDefault();
+      evt.stopPropagation();
+    },
+    arrowRightListener: function(evt) {
+      nodeRef.scrollLeft += 20;
+      evt.preventDefault();
+      evt.stopPropagation();
+    },
     softkeyLeftListener: async function(evt) {},
     softkeyRightListener: function(evt) {},
     enterListener: function(evt) {},
@@ -190,7 +210,7 @@
 
 <svelte:options accessors immutable={true}/>
 
-<div bind:this={nodeRef} data-key="{key}" class="kai-list-view {className ? className : ''}" on:click={onClick} style="background-color:{!short ? 'var(--themeColorLight)' : 'inherit'};height:{!short ? '92%' : 'auto'};justify-content:{entity.className === 'Channel' && !entity.megagroup ? 'start' : justifyContent};min-height:{hasAvatar ? '50px' : '0px'};">
+<div bind:this={nodeRef} data-key="{key}" class="kai-list-view {className ? className : ''}" on:click={onClick} style="background-color:{!short ? 'var(--themeColorLight)' : 'inherit'};height:{!short ? '92%' : 'auto'};overflow:{!short ? 'scroll' : 'inherit'};justify-content:{entity.className === 'Channel' && !entity.megagroup ? 'start' : justifyContent};min-height:{hasAvatar ? '50px' : '0px'};">
   {#if hasAvatar }{@html DOMPurify.sanitize(avatarSrc)}{/if}
   <div class="kai-list-view-content" style="margin-left:{hasAvatar ? '45px' : '0px'};">
     {#if hasAvatar }

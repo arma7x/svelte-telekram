@@ -1,11 +1,9 @@
 import Dummy from "./Dummy.svelte";
-import MessageText from "./MessageText.svelte";
-import MessageActionChannelCreate from "./MessageActionChannelCreate.svelte";
-import MessageActionChatEditPhoto from "./MessageActionChatEditPhoto.svelte";
+import Message from "./Message.svelte";
+import MessageService from "./MessageService.svelte";
 
 export {
   Dummy,
-  MessageText,
-  MessageActionChannelCreate,
-  MessageActionChatEditPhoto,
+  Message,
+  MessageService,
 }

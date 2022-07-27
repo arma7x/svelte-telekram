@@ -2,6 +2,10 @@
   import { onMount, onDestroy } from 'svelte';
   import { createKaiNavigator } from '../../utils/navigation';
 
+  import MessageActionChannelCreate from "./action/MessageActionChannelCreate.svelte";
+  import MessageActionChatEditPhoto from "./action/MessageActionChatEditPhoto.svelte";
+  import Dummy from "./action/Dummy.svelte";
+
   export let key: any = '';
   export let entity: any = {};
   export let message: any = {};
@@ -22,64 +26,62 @@
 
   let navInstance = createKaiNavigator(navOptions);
 
+  function resolveActionWidget(msg) {
+    switch (msg.action.className) {
+      case 'MessageActionChannelCreate':
+        return MessageActionChannelCreate;
+      case 'MessageActionChatEditPhoto':
+        return MessageActionChatEditPhoto;
+    }
+    return Dummy;
+  }
+
   onMount(() => {
     // console.log(message);
   });
 
 </script>
 
+<svelte:options accessors immutable={true}/>
+
 <div data-key="{key}" class="kai-list-view {className ? className : ''}" on:click={onClick}>
   <div class="kai-list-view-content">
-    <p>WIP: {message.action.className}</p>
+    <svelte:component this={resolveActionWidget(message)} {message} {parentNavInstance} {registerCallButtonHandler}/>
   </div>
 </div>
 
 <style>
   .kai-list-view {
+    position: relative;
     background-color: transparent;
     display: flex;
     flex-direction: row;
-    justify-content: space-between;
-    align-items: center;
+    justify-content: center;
+    align-items: start;
     box-sizing: border-box;
-    max-height: 100px;
     width: 100%;
     font-size: 14px;
+    overflow: hidden;
+    padding: 4px;
   }
 
   .kai-list-view > .kai-list-view-content {
+    border-radius: 5px;
     box-sizing: border-box;
-    padding: 8px!important;
-    background-color: transparent;
+    padding: 5px!important;
+    background-color: #fff;
     display: flex;
     flex-direction: column;
-    justify-content: center;
+    justify-content: space-between;
     align-items: center;
-    padding: 0px 4px 0px 0px;
-    width: 100%;
-  }
-
-  .kai-list-view > .kai-list-view-content > p {
-    background-color: transparent;
-    padding: 0px;
-    margin: 0px;
-    font-weight: 400;
-    color: #323232;
-    font-size: 14px;
     text-align: center;
-    width: 100%;
-    white-space: pre-wrap!important;
-    word-break: break-word!important;
+    max-width: calc(100% - 50px);
     overflow: hidden;
-    text-overflow: ellipsis;
-    vertical-align: middle;
-    display: table-cell;
-    vertical-align: middle;
+    border: 1px solid var(--themeColorTransparent);
   }
 
   .kai-list-view.focus,
   .kai-list-view.focus > .kai-list-view-content {
     background-color: var(--themeColorTransparent);
-    color: #ffffff;
   }
 </style>

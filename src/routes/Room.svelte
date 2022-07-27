@@ -1,5 +1,4 @@
 <script lang="ts">
-  import { navigate as goto } from "svelte-navigator";
   import { createKaiNavigator, KaiNavigator } from '../utils/navigation';
   import { onMount, onDestroy } from 'svelte';
 
@@ -7,7 +6,7 @@
 
   import { getChatCollection, runTask, getAuthorizedUser } from '../stores/telegram';
 
-  import { Dummy, MessageText, MessageActionChannelCreate, MessageActionChatEditPhoto } from '../widgets/message';
+  import { Dummy, Message, MessageService } from '../widgets/message';
   import { TextAreaDialog, OptionMenu } from '../components';
 
   export let location: any;
@@ -53,7 +52,7 @@
     },
     backspaceListener: function(evt) {
       evt.preventDefault();
-      goto(-1);
+      navigate(-1);
     }
   };
 
@@ -180,15 +179,16 @@
 
   function resolveMessageWidget(m) {
     if (m.className === "MessageService") {
-      switch (m.action.className) {
-        case 'MessageActionChannelCreate':
-          return MessageActionChannelCreate;
-        case 'MessageActionChatEditPhoto':
-          return MessageActionChatEditPhoto;
-      }
-      return Dummy;
+      return MessageService;
+      //switch (m.action.className) {
+        //case 'MessageActionChannelCreate':
+          //return MessageActionChannelCreate;
+        //case 'MessageActionChatEditPhoto':
+          //return MessageActionChatEditPhoto;
+      //}
+      //return Dummy;
     } else if (m.className === "Message") {
-      return MessageText;
+      return Message;
     }
     return Dummy;
   }
