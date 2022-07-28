@@ -24,6 +24,7 @@
   let forwardedChannelsIndex = [];
   const cachedForwardedChannels = {};
 
+  let ready: bool = false;
   let chat: any;
   let name: string = 'Room';
   let messages: Array<any> = [];
@@ -39,9 +40,13 @@
         openContextMenu(msg);
     },
     softkeyRightListener: function(evt) {
+      if (!ready && chat == null)
+        return;
       // send attachment + bot command
     },
     enterListener: function(evt) {
+      if (!ready && chat == null)
+        return;
       // use TextAreaDialog
       // send msg or broadcast(channel && admin)
       if (location.state.entity.className === 'Channel' && !location.state.entity.megagroup && location.state.entity.creator) {
@@ -512,6 +517,7 @@
     navInstance.attachListener();
     document.addEventListener('keydown', keydownEventHandler);
     client.addEventHandler(incomingMessageListener);
+    ready = true;
   });
 
   onDestroy(() => {
