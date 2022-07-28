@@ -472,6 +472,7 @@
         break;
       case 'UpdateDeleteChannelMessages':
       case 'UpdateDeleteMessages':
+        const scroll = navInstance.verticalNavIndex !== Object.keys(messageMetadata).length - 1;
         const pops = [];
         const temp = [];
         evt.messages.forEach(id => {
@@ -489,7 +490,8 @@
         }
         if (temp.length > 0) {
           messages = await buildIndex(temp);
-          autoScroll();
+          if (scroll)
+            autoScroll();
         }
         break;
     }
