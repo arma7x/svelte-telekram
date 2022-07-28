@@ -47,8 +47,6 @@
     enterListener: function(evt) {
       if (!ready && chat == null)
         return;
-      // use TextAreaDialog
-      // send msg or broadcast(channel && admin)
       if (location.state.entity.className === 'Channel' && !location.state.entity.megagroup && location.state.entity.creator) {
         openSendMessageDialog()
       } else {
