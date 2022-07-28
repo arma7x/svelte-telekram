@@ -185,13 +185,6 @@
   function resolveMessageWidget(m) {
     if (m.className === "MessageService") {
       return MessageService;
-      //switch (m.action.className) {
-        //case 'MessageActionChannelCreate':
-          //return MessageActionChannelCreate;
-        //case 'MessageActionChatEditPhoto':
-          //return MessageActionChatEditPhoto;
-      //}
-      //return Dummy;
     } else if (m.className === "Message") {
       return Message;
     }
@@ -503,7 +496,6 @@
   }
 
   onMount(() => {
-    console.log(location.state.entity);
     const { appBar, softwareKey } = getAppProp();
     appBar.setTitleText(location.state.name || name);
     getMessages(location.state.entity);
