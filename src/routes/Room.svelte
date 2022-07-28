@@ -54,41 +54,58 @@
       }
     },
     arrowUpListener: async (evt) => {
-      if (navInstance.verticalNavIndex !== 0) {
+      if (ready && navInstance.verticalNavIndex !== 0) {
         evt.preventDefault();
         navInstance.navigateListNav(-1);
-      } else {
-        const msg = messages[navInstance.verticalNavIndex];
-        const query = { limit: 50, maxId: msg.id }
-        const _messages = await client.getMessages(chat, query);
-        if (_messages.length > 0) {
-          _messages.reverse();
-          const temp = [..._messages, ...messages];
-          messages = [];
-          messageMetadata = {};
-          // dummy fix
-          setTimeout(async () => {
-            messages = await buildIndex(temp);
-            navInstance.verticalNavIndex = _messages.length - 1;
-            setTimeout(() => {
-              navInstance.navigateListNav(1);
-            }, 500);
-          }, 500);
+        if (navInstance.verticalNavIndex == 1) {
+          if (!ready)
+            return;
+          ready = false;
+          try {
+            const msg = messages[navInstance.verticalNavIndex - 1];
+            const query = { limit: 50, maxId: msg.id }
+            const _messages = await client.getMessages(chat, query);
+            if (_messages.length > 0) {
+              _messages.reverse();
+              const temp = [..._messages, ...messages];
+              messages = [];
+              messageMetadata = {};
+              // dummy fix
+              ready = true;
+              setTimeout(async () => {
+                messages = await buildIndex(temp);
+                navInstance.verticalNavIndex = _messages.length - 1;
+                setTimeout(() => {
+                  navInstance.navigateListNav(1);
+                }, 200);
+              }, 500);
+            }
+          } catch (err) {
+            ready = true;
+          }
         }
       }
     },
     arrowDownListener: async (evt) => {
-      if (navInstance.verticalNavIndex !== Object.keys(messageMetadata).length - 1) {
+      if (ready && navInstance.verticalNavIndex !== Object.keys(messageMetadata).length - 1) {
         evt.preventDefault();
         navInstance.navigateListNav(1);
       } else {
-        const msg = messages[navInstance.verticalNavIndex];
-        const query = { limit: 50, minId: msg.id }
-        const _messages = await client.getMessages(chat, query);
-        if (_messages.length > 0) {
-          _messages.reverse();
-          const temp = [...messages, ..._messages];
-          messages = await buildIndex(temp);
+        if (!ready)
+          return;
+        ready = false;
+        try {
+          const msg = messages[navInstance.verticalNavIndex];
+          const query = { limit: 50, minId: msg.id }
+          const _messages = await client.getMessages(chat, query);
+          if (_messages.length > 0) {
+            _messages.reverse();
+            const temp = [...messages, ..._messages];
+            messages = await buildIndex(temp);
+          }
+          ready = true;
+        } catch (err) {
+          ready = true;
         }
       }
     },
@@ -573,11 +590,15 @@
 </script>
 
 <main id="room-screen" data-pad-top="28" data-pad-bottom="30">
+  {#if ready }
   {#each messages as message}
     {#if message && message.id && messageMetadata[message.id.toString()] && messageMetadata[message.id.toString()].deleted === false}
       <svelte:component className="roomNav" this={resolveMessageWidget(message)} {message} {registerCallButtonHandler} parentNavInstance={navInstance} replyTo={getReplyHeader(message)} entity={location.state.entity} short={true}/>
     {/if}
   {/each}
+  {:else}
+    <div style="margin-top:45%;">Loading</div>
+  {/if}
 </main>
 
 <style>
