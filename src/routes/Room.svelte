@@ -34,7 +34,7 @@
 
   let navOptions = {
     verticalNavClass: 'roomNav',
-    softkeyLeftListener: async function(evt) {
+    softkeyLeftListener: function(evt) {
       const msg = messages[navInstance.verticalNavIndex];
       if (msg)
         openContextMenu(msg);
@@ -122,6 +122,8 @@
     if (!msg.noforwards) {
       menu.push({ title: 'Forward' });
     }
+    if (msg.replies && msg.replies.replies > 0)
+      menu.push({ title: 'View Replies' });
     menu = [...menu, { title: 'Reply' }, { title: 'Report' }];
     const sender = msg.sender || msg.__sender;
     if (sender && sender.id.value.toString() === user[0].id.value.toString())
@@ -162,6 +164,8 @@
                 }
               });
             }, 200);
+          } else if (scope.selected.title === 'View Replies' && msg.className === "Message" && msg.replies && msg.replies.replies > 0) {
+            showReplies(msg);
           }
         },
         onBackspace: (evt, scope) => {
@@ -178,6 +182,14 @@
         }
       }
     });
+  }
+
+  async function showReplies(msg) {
+    if (msg.replies && msg.replies.replies > 0) {
+      const query = { limit: msg.replies.replies, replyTo: msg.id }
+      const replies = await client.getMessages(chat, query);
+      console.log(replies.reverse());
+    }
   }
 
   function resolveMessageWidget(m) {
@@ -480,7 +492,7 @@
         muteUntil = false;
       }
       console.log('muteUntil:', muteUntil);
-      const _messages = await client.getMessages(chat, { limit: 50 });
+      const _messages = await client.getMessages(chat, { limit: 100 });
       _messages.reverse();
       messages = await buildIndex(_messages);
       navInstance.navigateListNav(1);
