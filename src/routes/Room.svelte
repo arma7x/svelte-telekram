@@ -53,6 +53,40 @@
         openSendMessageDialog()
       }
     },
+    arrowUpListener: async (evt) => {
+      if (navInstance.verticalNavIndex !== 0) {
+        evt.preventDefault();
+        navInstance.navigateListNav(-1);
+      } else {
+        const msg = messages[navInstance.verticalNavIndex];
+        const query = { limit: 50, maxId: msg.id }
+        const _messages = await client.getMessages(chat, query);
+        if (_messages.length > 0) {
+          _messages.reverse();
+          const temp = [..._messages, ...messages];
+          messages = await buildIndex(temp);
+          navInstance.verticalNavIndex = _messages.length - 1;
+          setTimeout(() => {
+            navInstance.navigateListNav(1);
+          }, 500);
+        }
+      }
+    },
+    arrowDownListener: async (evt) => {
+      if (navInstance.verticalNavIndex !== Object.keys(messageMetadata).length - 1) {
+        evt.preventDefault();
+        navInstance.navigateListNav(1);
+      } else {
+        const msg = messages[navInstance.verticalNavIndex];
+        const query = { limit: 50, minId: msg.id }
+        const _messages = await client.getMessages(chat, query);
+        if (_messages.length > 0) {
+          _messages.reverse();
+          const temp = [...messages, ..._messages];
+          messages = await buildIndex(temp);
+        }
+      }
+    },
     backspaceListener: function(evt) {
       evt.preventDefault();
       navigate(-1);
@@ -479,7 +513,7 @@
     return -1;
   }
 
-  async function getMessages(entity) {
+  async function fetchMessages(entity) {
     // console.time('Finished');
     try {
       const chats = await getChatCollection();
@@ -492,7 +526,7 @@
         muteUntil = false;
       }
       console.log('muteUntil:', muteUntil);
-      const _messages = await client.getMessages(chat, { limit: 100 });
+      const _messages = await client.getMessages(chat, { limit: 50 });
       _messages.reverse();
       messages = await buildIndex(_messages);
       navInstance.navigateListNav(1);
@@ -508,7 +542,7 @@
   onMount(() => {
     const { appBar, softwareKey } = getAppProp();
     appBar.setTitleText(location.state.name || name);
-    getMessages(location.state.entity);
+    fetchMessages(location.state.entity);
     if (location.state.entity.className === 'Channel' && !location.state.entity.megagroup && location.state.entity.creator) {
       softwareKey.setText({ left: 'Action', center: 'BROADCAST', right: '📎' });
     } else if (location.state.entity.className === 'Channel' && !location.state.entity.megagroup && !location.state.entity.creator) {
@@ -532,7 +566,7 @@
 
 <main id="room-screen" data-pad-top="28" data-pad-bottom="30">
   {#each messages as message}
-    {#if message && messageMetadata[message.id.toString()] && messageMetadata[message.id.toString()].deleted === false}
+    {#if message && message.id && messageMetadata[message.id.toString()] && messageMetadata[message.id.toString()].deleted === false}
       <svelte:component className="roomNav" this={resolveMessageWidget(message)} {message} {registerCallButtonHandler} parentNavInstance={navInstance} replyTo={getReplyHeader(message)} entity={location.state.entity} short={true}/>
     {/if}
   {/each}
