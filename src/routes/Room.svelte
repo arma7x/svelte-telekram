@@ -60,12 +60,12 @@
         if (navInstance.verticalNavIndex == 1) {
           if (!ready)
             return;
-          ready = false;
           try {
             const msg = messages[navInstance.verticalNavIndex - 1];
             const query = { limit: 50, maxId: msg.id }
             const _messages = await client.getMessages(chat, query);
             if (_messages.length > 0) {
+              ready = false;
               _messages.reverse();
               const temp = [..._messages, ...messages];
               messages = [];
@@ -93,12 +93,12 @@
       } else {
         if (!ready)
           return;
-        ready = false;
         try {
           const msg = messages[navInstance.verticalNavIndex];
           const query = { limit: 50, minId: msg.id }
           const _messages = await client.getMessages(chat, query);
           if (_messages.length > 0) {
+            ready = false;
             _messages.reverse();
             const temp = [...messages, ..._messages];
             messages = await buildIndex(temp);
