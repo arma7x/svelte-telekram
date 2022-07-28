@@ -110,7 +110,6 @@
   }
 
   onMount(async () => {
-    console.log(chat);
     // todo render message.media if !null
     if (!short) {
       parentNavInstance.detachListener();
