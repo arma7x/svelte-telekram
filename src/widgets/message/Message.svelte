@@ -80,20 +80,20 @@
     return `<div>${columns.join('')}<div>`;
   }
 
-  function getFullname() {
+  function getFullname(msg) {
     let fullname = '';
     try {
-      const sender = message.sender || message.__sender;
-      if (message.fwdFrom && message.fwdFrom.fromName) {
-        fullname = message.fwdFrom.fromName;
-      } else if (message.fwdFrom && message.fwdFrom.sender) {
+      const sender = msg.sender || msg.__sender;
+      if (msg.fwdFrom && msg.fwdFrom.fromName) {
+        fullname = msg.fwdFrom.fromName;
+      } else if (msg.fwdFrom && msg.fwdFrom.sender) {
         let fn = '';
-        if (message.fwdFrom.sender.firstName)
-          fn += message.fwdFrom.sender.firstName;
-        if (message.fwdFrom.sender.lastName)
-          fn += ' ' + message.fwdFrom.sender.lastName;
-        if (message.fwdFrom.sender.title)
-          fn = message.fwdFrom.sender.title;
+        if (msg.fwdFrom.sender.firstName)
+          fn += msg.fwdFrom.sender.firstName;
+        if (msg.fwdFrom.sender.lastName)
+          fn += ' ' + msg.fwdFrom.sender.lastName;
+        if (msg.fwdFrom.sender.title)
+          fn = msg.fwdFrom.sender.title;
         fullname = fn;
       } else if (sender) {
         let fn = '';
@@ -175,9 +175,9 @@
         delete message.iconRef;
       } else if (message.fwdFrom.fromId) {
         if (message.fwdFrom.fromId.className === 'PeerUser') {
-          fullName = getFullname();
+          fullName = getFullname(message);
         } else if (message.fwdFrom.fromId.className === 'PeerChannel') {
-          fullName = getFullname();
+          fullName = getFullname(message);
         }
       }
     }
@@ -214,9 +214,9 @@
   {#if hasAvatar }{@html DOMPurify.sanitize(avatarSrc)}{/if}
   <div class="kai-list-view-content" style="margin-left:{hasAvatar ? '45px' : '0px'};">
     {#if hasAvatar }
-      <b>{fullName || getFullname()}</b>
+      <b>{fullName || getFullname(message)}</b>
     {:else if message.fwdFrom}
-      <b>{forwardedPrefix}{fullName || getFullname()}</b>
+      <b>{forwardedPrefix}{fullName || getFullname(message)}</b>
     {/if}
     {#if replyTo !== false}
       <div class="reply-box">
