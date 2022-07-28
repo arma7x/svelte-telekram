@@ -63,7 +63,7 @@
         const _messages = await client.getMessages(chat, query);
         if (_messages.length > 0) {
           _messages.reverse();
-          const temp = [..._messages, ...messages];
+          const temp = [..._messages, ...messages]; // bug merged
           messages = await buildIndex(temp);
           navInstance.verticalNavIndex = _messages.length - 1;
           setTimeout(() => {
