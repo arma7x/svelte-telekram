@@ -7,7 +7,7 @@
   import Dummy from "./action/Dummy.svelte";
 
   export let key: any = '';
-  export let entity: any = {};
+  export let chat: any = {};
   export let message: any = {};
   export let className: string = null;
   export let onClick: Function = (evt) => {}

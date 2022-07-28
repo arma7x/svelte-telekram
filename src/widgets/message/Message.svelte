@@ -16,7 +16,7 @@
   import Geo from './media/Geo.svelte';
 
   export let key: any = '';
-  export let entity: any = {};
+  export let chat: any = {};
   export let message: any = {};
   export let className: string = null;
   export let onClick: Function = (evt) => {}
@@ -110,6 +110,7 @@
   }
 
   onMount(async () => {
+    console.log(chat);
     // todo render message.media if !null
     if (!short) {
       parentNavInstance.detachListener();
@@ -159,15 +160,15 @@
     } else {
       hasAvatar = true;
       justifyContent = 'start';
-      if (entity.className === 'Channel' && !entity.megagroup) {
+      if (chat.entity.className === 'Channel' && !chat.entity.megagroup) {
         hasAvatar = false;
       }
     }
     if (message.fwdFrom) {
-      if (entity.id && entity.id.value.toString() !== user[0].id.toString()) {
+      if (chat.entity.id && chat.entity.id.value.toString() !== user[0].id.toString()) {
         forwardedPrefix = 'Forwarded from ';
       }
-      if (sender.id && sender.id.toString() === user[0].id.toString() && sender.id.toString() === entity.id.value.toString()) {
+      if (sender.id && sender.id.toString() === user[0].id.toString() && sender.id.toString() === chat.entity.id.value.toString()) {
         hasAvatar = true;
         justifyContent = 'start';
       }
@@ -210,10 +211,10 @@
 
 <svelte:options accessors immutable={true}/>
 
-<div bind:this={nodeRef} data-key="{key}" class="kai-list-view {className ? className : ''}" on:click={onClick} style="background-color:{!short ? 'var(--themeColorLight)' : 'inherit'};height:{!short ? '92%' : 'auto'};overflow:{!short ? 'scroll' : 'inherit'};justify-content:{entity.className === 'Channel' && !entity.megagroup ? 'start' : justifyContent};min-height:{hasAvatar ? '50px' : '0px'};">
-  {#if hasAvatar }{@html DOMPurify.sanitize(avatarSrc)}{/if}
-  <div class="kai-list-view-content" style="margin-left:{hasAvatar ? '45px' : '0px'};">
-    {#if hasAvatar }
+<div bind:this={nodeRef} data-key="{key}" class="kai-list-view {className ? className : ''}" on:click={onClick} style="background-color:{!short ? 'var(--themeColorLight)' : 'inherit'};height:{!short ? '92%' : 'auto'};overflow:{!short ? 'scroll' : 'inherit'};justify-content:{chat.entity.className === 'Channel' && !chat.entity.megagroup ? 'start' : justifyContent};min-height:{hasAvatar ? '50px' : '0px'};">
+  {#if hasAvatar && !chat.isUser }{@html DOMPurify.sanitize(avatarSrc)}{/if}
+  <div class="kai-list-view-content" style="margin-left:{hasAvatar && !chat.isUser ? '45px' : '0px'};">
+    {#if hasAvatar}
       <b>{fullName || getFullname(message)}</b>
     {:else if message.fwdFrom}
       <b>{forwardedPrefix}{fullName || getFullname(message)}</b>
