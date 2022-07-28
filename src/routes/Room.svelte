@@ -50,9 +50,9 @@
       // use TextAreaDialog
       // send msg or broadcast(channel && admin)
       if (location.state.entity.className === 'Channel' && !location.state.entity.megagroup && location.state.entity.creator) {
-        openTextAreaDialog()
+        openSendMessageDialog()
       } else {
-        openTextAreaDialog()
+        openSendMessageDialog()
       }
     },
     backspaceListener: function(evt) {
@@ -63,7 +63,7 @@
 
   let navInstance = createKaiNavigator(navOptions);
 
-  function openTextAreaDialog() {
+  function openSendMessageDialog() {
     sendMessageDialog = new TextAreaDialog({
       target: document.body,
       props: {
