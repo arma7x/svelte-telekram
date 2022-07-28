@@ -454,6 +454,7 @@
                 // console.timeEnd('fetchuncachedforwardsuser');
               }
             }
+            // check message chain before update
             // console.log(evt.message);
             const temp = [...messages, evt.message];
             messages = await buildIndex(temp);
