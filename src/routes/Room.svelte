@@ -532,6 +532,7 @@
       chat = chats.find(chat => {
         return chat.entity.id.value == entity.id.value;
       });
+      // console.log(chat);
       if (chat.dialog.notifySettings.muteUntil) {
         muteUntil = new Date(new Date().getTime() + chat.dialog.notifySettings.muteUntil);
       } else {
@@ -541,6 +542,8 @@
       const newMessages = await client.getMessages(chat, { limit: 50 });
       newMessages.reverse();
       messages = await buildIndex(newMessages);
+      //console.log(_messages);
+      //console.log(messageMetadata);
       navInstance.navigateListNav(1);
       setTimeout(() => {
         navInstance.navigateListNav(messages.length);

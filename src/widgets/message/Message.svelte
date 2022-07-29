@@ -33,7 +33,7 @@
   let avatarSrc: string = '';
   let justifyContent: string = 'start';
   let expandable: bool = false;
-  let fullName: string;
+  let fullName: string = '';
   let forwardedPrefix: string = '';
 
   let navOptions = {
@@ -155,16 +155,18 @@
   beforeUpdate(async () => {
     if (message.message.length > 80 && short)
       expandable = true;
+    let _hasAvatar;
+    let _justifyContent;
     const user = await getAuthorizedUser();
     const sender = message.sender || message.__sender;
     if (sender && user[0] && sender.id.toString() === user[0].id.toString()) {
-      hasAvatar = false;
-      justifyContent = 'end';
+      _hasAvatar = false;
+      _justifyContent = 'end';
     } else {
-      hasAvatar = true;
-      justifyContent = 'start';
+      _hasAvatar = true;
+      _justifyContent = 'start';
       if (chat.entity.className === 'Channel' && !chat.entity.megagroup) {
-        hasAvatar = false;
+        _hasAvatar = false;
       }
     }
     if (message.fwdFrom) {
@@ -172,8 +174,8 @@
         forwardedPrefix = 'Forwarded from ';
       }
       if (sender.id && sender.id.toString() === user[0].id.toString() && sender.id.toString() === chat.entity.id.value.toString()) {
-        hasAvatar = true;
-        justifyContent = 'start';
+        _hasAvatar = true;
+        _justifyContent = 'start';
       }
       if (message.fwdFrom.fromName) {
         delete message.iconRef;
@@ -185,6 +187,8 @@
         }
       }
     }
+    hasAvatar = _hasAvatar;
+    justifyContent = _justifyContent;
     if (!hasAvatar)
       return;
     if (uncachedThumbnails)
