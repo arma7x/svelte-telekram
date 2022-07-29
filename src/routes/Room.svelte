@@ -63,26 +63,17 @@
           try {
             const msg = messages[navInstance.verticalNavIndex - 1];
             const query = { limit: 50, maxId: msg.id }
-            const _messages = await client.getMessages(chat, query);
-            if (_messages.length > 0) {
-              ready = false;
-              _messages.reverse();
-              const temp = [..._messages, ...messages];
-              messages = [];
-              messageMetadata = {};
-              // dummy fix
-              ready = true;
-              setTimeout(async () => {
-                messages = await buildIndex(temp);
-                navInstance.verticalNavIndex = _messages.length - 1;
-                setTimeout(() => {
-                  navInstance.navigateListNav(1);
-                }, 200);
-              }, 500);
+            const newMessages = await client.getMessages(chat, query);
+            if (newMessages.length > 0) {
+              newMessages.reverse();
+              const temp = [...newMessages, ...messages];
+              messages = await buildIndex(temp);
+              navInstance.verticalNavIndex = newMessages.length - 1;
+              setTimeout(() => {
+                navInstance.navigateListNav(1);
+              }, 200);
             }
-          } catch (err) {
-            ready = true;
-          }
+          } catch (err) {}
         }
       }
     },
@@ -96,17 +87,13 @@
         try {
           const msg = messages[navInstance.verticalNavIndex];
           const query = { limit: 50, minId: msg.id }
-          const _messages = await client.getMessages(chat, query);
-          if (_messages.length > 0) {
-            ready = false;
-            _messages.reverse();
-            const temp = [...messages, ..._messages];
+          const newMessages = await client.getMessages(chat, query);
+          if (newMessages.length > 0) {
+            newMessages.reverse();
+            const temp = [...messages, ...newMessages];
             messages = await buildIndex(temp);
           }
-          ready = true;
-        } catch (err) {
-          ready = true;
-        }
+        } catch (err) {}
       }
     },
     backspaceListener: function(evt) {
@@ -551,9 +538,9 @@
         muteUntil = false;
       }
       console.log('muteUntil:', muteUntil);
-      const _messages = await client.getMessages(chat, { limit: 50 });
-      _messages.reverse();
-      messages = await buildIndex(_messages);
+      const newMessages = await client.getMessages(chat, { limit: 50 });
+      newMessages.reverse();
+      messages = await buildIndex(newMessages);
       navInstance.navigateListNav(1);
       setTimeout(() => {
         navInstance.navigateListNav(messages.length);

@@ -1,12 +1,13 @@
 <script lang="ts">
   import DOMPurify from 'dompurify';
-  import { onMount, onDestroy } from 'svelte';
+  import { onMount, onDestroy, beforeUpdate } from 'svelte';
   import { createKaiNavigator, KaiNavigator } from '../../utils/navigation';
 
   import { Api, client } from '../../utils/bootstrap';
 
   import { cachedThumbnails, getAuthorizedUser } from '../../stores/telegram';
 
+  import Dummy from './media/Dummy.svelte';
   import Sticker from './media/Sticker.svelte';
   import Video from './media/Video.svelte';
   import Photo from './media/Photo.svelte';
@@ -32,10 +33,8 @@
   let avatarSrc: string = '';
   let justifyContent: string = 'start';
   let expandable: bool = false;
-  let media: any;
   let fullName: string;
   let forwardedPrefix: string = '';
-  let _wip: string = null;
 
   let navOptions = {
     arrowUpListener: function(evt) {
@@ -109,48 +108,53 @@
     return fullname;
   }
 
-  onMount(async () => {
-    // todo render message.media if !null
+  function resolveMediaWidget(msg) {
+    let media;
+    if (msg.media.className === 'MessageMediaDocument') {
+      switch (msg.media.document.mimeType) {
+        case 'application/x-tgsticker':
+          media = Sticker;
+          break;
+        case 'video/mp4':
+          media = Video;
+          break;
+        case 'image/jpeg':
+          media = Photo;
+          break;
+        case 'text/plain':
+          media = Text;
+          break;
+        case 'audio/mpeg':
+        case 'audio/ogg':
+          media = Audio;
+          break;
+        default:
+          media = Dummy;
+          // console.log(msg.media);
+      }
+    } else if (msg.media.className === "MessageMediaPoll"){
+      media = Poll;
+    } else if (msg.media.className === "MessageMediaPhoto"){
+      media = Photo;
+    } else if (msg.media.className === "MessageMediaGeo"){
+      media = Geo;
+    } else {
+      media = Dummy;
+      // console.log(message.media);
+    }
+    return media;
+  }
+
+  onMount(() => {
     if (!short) {
       parentNavInstance.detachListener();
       navInstance.attachListener();
     }
+  });
+
+  beforeUpdate(async () => {
     if (message.message.length > 80 && short)
       expandable = true;
-    if (message.media) {
-      if (message.media.className === 'MessageMediaDocument') {
-        switch (message.media.document.mimeType) {
-          case 'application/x-tgsticker':
-            media = Sticker;
-            break;
-          case 'video/mp4':
-            media = Video;
-            break;
-          case 'image/jpeg':
-            media = Photo;
-            break;
-          case 'text/plain':
-            media = Text;
-            break;
-          case 'audio/mpeg':
-          case 'audio/ogg':
-            media = Audio;
-            break;
-          default:
-            _wip = 'WIP Media: ' + message.media.className;
-            // console.log(message.media);
-        }
-      } else if (message.media.className === "MessageMediaPoll"){
-        media = Poll;
-      } else if (message.media.className === "MessageMediaPhoto"){
-        media = Photo;
-      } else if (message.media.className === "MessageMediaGeo"){
-        media = Geo;
-      } else {
-        _wip = 'WIP Media: ' + message.media.className;
-        // console.log(message.media);
-      }
-    }
     const user = await getAuthorizedUser();
     const sender = message.sender || message.__sender;
     if (sender && user[0] && sender.id.toString() === user[0].id.toString()) {
@@ -183,6 +187,8 @@
     }
     if (!hasAvatar)
       return;
+    if (uncachedThumbnails)
+      uncachedThumbnails();
     uncachedThumbnails = cachedThumbnails.subscribe(data => {
       if (message.iconRef && data[message.iconRef]) {
         avatarSrc = `<img alt="icon" style="position:absolute;${!short?'top:0':'bottom:0'};background-color:var(--themeColor);width:40px;height:40px;border-radius:50%;box-sizing:border-box;border: 2px solid #fff;"" src="${data[message.iconRef]}"/>`
@@ -227,11 +233,8 @@
       {/if}
       </div>
     {/if}
-    {#if media }
-      <svelte:component this={media} {message} {parentNavInstance} {registerCallButtonHandler}/>
-    {/if}
-    {#if _wip }
-      { _wip }
+    {#if message.media }
+      <svelte:component this={resolveMediaWidget(message)} {message} {parentNavInstance} {registerCallButtonHandler}/>
     {/if}
     {#if message.message }
       <p>{message.message.length > 80 && short ? message.message.substring(0, 80) + '...' : message.message}</p>
