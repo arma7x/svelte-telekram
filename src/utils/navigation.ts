@@ -12,6 +12,7 @@ function keydownEventHandler(evt, scope) {
       break;
     case 'SoftRight':
     case 'PageDown':
+    case 'Control':
       scope.softkeyRightListener(evt);
       evt.preventDefault();
       break;

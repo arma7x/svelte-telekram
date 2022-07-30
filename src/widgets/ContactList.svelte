@@ -52,12 +52,13 @@
         setTimeout(() => {
           navInstance.navigateListNav(-navInstance.verticalNavIndex);
         }, 200);
+      } else if (document.activeElement.tagName === 'INPUT') {
+        searchContacts('');
       }
     },
     softkeyRightListener: function(evt) {
       if (document.activeElement.tagName === 'INPUT') {
-        console.log('Searching, then');
-        navInstance.navigateListNav(1);
+        searchContacts(document.activeElement.value);
       }
     },
     enterListener: function(evt) {
@@ -68,6 +69,9 @@
     backspaceListener: function(evt) {
       if (onBackspace == null)
         return;
+      if (document.activeElement.tagName === 'INPUT') {
+        return;
+      }
       onBackspace(evt, {index: this.verticalNavIndex, selected: sources[this.verticalNavIndex]});
     }
   };
@@ -103,6 +107,38 @@
     }
   }
 
+  function searchContacts(keyword = '') {
+    contactPages = [];
+    contactPagesCursor = 0;
+    let page = [];
+    for (let i=0;i<sources.length;i++) {
+      if (keyword == '') {
+        page.push(sources[i]);
+      } else {
+        let strings = [];
+        if (sources[i].firstName)
+          strings.push(sources[i].firstName);
+        if (sources[i].lastName)
+          strings.push(sources[i].lastName);
+        if (sources[i].phone)
+          strings.push(sources[i].phone);
+        if (sources[i].username)
+          strings.push(sources[i].username);
+        if (strings.join(' ').toLocaleLowerCase().indexOf(keyword.toLocaleLowerCase()) > -1) {
+          page.push(sources[i]);
+        }
+      }
+      if ((i === sources.length - 1 || (i + 1) % contactPerPage === 0) && page.length > 0) {
+        contactPages.push(page);
+        page = [];
+      }
+    }
+    contactFeeds = contactPages[contactPagesCursor];
+    setTimeout(() => {
+      navInstance.navigateListNav(1);
+    }, 500);
+  }
+
   onMount(() => {
     navInstance.attachListener(focusIndex + 1);
     softwareKey = new SoftwareKey({
@@ -114,19 +150,8 @@
         rightText: softKeyRightText
       }
     });
+    searchContacts('');
     onOpened();
-    let page = [];
-    for (let i=0;i<sources.length;i++) {
-      page.push(sources[i]);
-      if (i === sources.length - 1 || (i + 1) % contactPerPage === 0) {
-        contactPages.push(page);
-        page = [];
-      }
-    }
-    contactFeeds = contactPages[contactPagesCursor];
-    setTimeout(() => {
-      navInstance.navigateListNav(1);
-    }, 500);
   })
 
   onDestroy(() => {
