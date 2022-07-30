@@ -36,7 +36,7 @@
     verticalNavClass: 'roomNav',
     softkeyLeftListener: function(evt) {
       const msg = messages[navInstance.verticalNavIndex];
-      if (msg)
+      if (msg && msg.className === "Message")
         openContextMenu(msg);
     },
     softkeyRightListener: function(evt) {
@@ -57,6 +57,10 @@
       if (ready && navInstance.verticalNavIndex !== 0) {
         evt.preventDefault();
         navInstance.navigateListNav(-1);
+        const msg = messages[navInstance.verticalNavIndex];
+        if (msg == null)
+          return;
+        console.log(navInstance.verticalNavIndex, msg.id, chat.message.id);
         if (navInstance.verticalNavIndex == 1) {
           if (!ready)
             return;
@@ -81,6 +85,10 @@
       if (ready && navInstance.verticalNavIndex !== Object.keys(messageMetadata).length - 1) {
         evt.preventDefault();
         navInstance.navigateListNav(1);
+        const msg = messages[navInstance.verticalNavIndex];
+        if (msg == null)
+          return;
+        console.log(navInstance.verticalNavIndex, msg.id, chat.message.id);
       } else {
         if (!ready)
           return;
@@ -578,6 +586,8 @@
   });
 
 </script>
+
+<svelte:options accessors immutable={true}/>
 
 <main id="room-screen" data-pad-top="28" data-pad-bottom="30">
   {#if ready }
