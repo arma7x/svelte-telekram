@@ -178,6 +178,8 @@ export function runTask(httpTasks, websocketTasks) {
     } finally {
       elapsed++;
     }
+    // sleep 3sec
+    await new Promise(resolve => setTimeout(() => {}, 3000));
   });
   // console.timeEnd('websocketTasks');
 }
