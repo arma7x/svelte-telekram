@@ -69,7 +69,7 @@
         const msg = messages[navInstance.verticalNavIndex];
         if (msg == null)
           return;
-        console.log(navInstance.verticalNavIndex, msg.id, chat.message.id);
+        msg.markAsRead();
         if (navInstance.verticalNavIndex == 1) {
           if (!ready)
             return;
@@ -105,7 +105,7 @@
         const msg = messages[navInstance.verticalNavIndex];
         if (msg == null)
           return;
-        console.log(navInstance.verticalNavIndex, msg.id, chat.message.id);
+        msg.markAsRead();
       } else {
         if (!ready)
           return;
