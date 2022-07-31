@@ -1,12 +1,24 @@
 <script lang="ts">
   export let title: string = 'Svelte';
 
+  let visible: bool = true;
+
   export function setTitleText(text) {
     title = text;
   }
+
+  export function toggleVisibility() {
+    visible = !visible;
+    return visible;
+  }
+
+  export function getVisibility() {
+    return visible;
+  }
+
 </script>
 
-<div class="kai-app-bar">{title}</div>
+<div class="kai-app-bar" style="display:{visible ? '' : 'none'};">{title}</div>
 
 <style>
   .kai-app-bar {

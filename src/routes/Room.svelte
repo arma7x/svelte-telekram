@@ -24,6 +24,7 @@
   let forwardedChannelsIndex = [];
   const cachedForwardedChannels = {};
 
+  let padTop: bool = true;
   let ready: bool = false;
   let chat: any;
   let name: string = 'Room';
@@ -54,6 +55,14 @@
       }
     },
     arrowUpListener: async (evt) => {
+      const { appBar } = getAppProp();
+      if (appBar.getVisibility()) {
+        padTop = appBar.toggleVisibility();
+        const main = document.getElementsByTagName('main');
+        const style = window.getComputedStyle(main[0]);
+        main[0].style.setProperty('top', `calc(${style.top} - 28px)`);
+        main[0].style.setProperty('height', `calc(${style.height} + 28px)`);
+      }
       if (ready && navInstance.verticalNavIndex !== 0) {
         evt.preventDefault();
         navInstance.navigateListNav(-1);
@@ -82,6 +91,14 @@
       }
     },
     arrowDownListener: async (evt) => {
+      const { appBar } = getAppProp();
+      if (!appBar.getVisibility()) {
+        padTop = appBar.toggleVisibility();
+        const main = document.getElementsByTagName('main');
+        const style = window.getComputedStyle(main[0]);
+        main[0].style.setProperty('top', `calc(${style.top} + 28px)`);
+        main[0].style.setProperty('height', `calc(${style.height} - 28px)`);
+      }
       if (ready && navInstance.verticalNavIndex !== Object.keys(messageMetadata).length - 1) {
         evt.preventDefault();
         navInstance.navigateListNav(1);
@@ -580,6 +597,14 @@
   });
 
   onDestroy(() => {
+    const { appBar } = getAppProp();
+    if (!appBar.getVisibility()) {
+      padTop = appBar.toggleVisibility();
+      const main = document.getElementsByTagName('main');
+      const style = window.getComputedStyle(main[0]);
+      main[0].style.setProperty('top', `calc(${style.top} + 28px)`);
+      main[0].style.setProperty('height', `calc(${style.height} - 28px)`);
+    }
     navInstance.detachListener();
     document.removeEventListener('keydown', keydownEventHandler);
     client.removeEventHandler(incomingMessageListener);
@@ -589,7 +614,7 @@
 
 <svelte:options accessors immutable={true}/>
 
-<main id="room-screen" data-pad-top="28" data-pad-bottom="30">
+<main id="room-screen" data-pad-top="{padTop ? '28' : '0'}" data-pad-bottom="30">
   {#if ready }
   {#each messages as message}
     {#if message && message.id && messageMetadata[message.id.toString()] && messageMetadata[message.id.toString()].deleted === false}
