@@ -79,7 +79,7 @@ export async function retrieveChats() {
   // const timer = new Date().getTime().toString();
   // console.time('retrieveChats_' + timer);
   try {
-    const chatPreferences = [];
+    const chatPreferencesTask = {};
     const user = await getAuthorizedUser();
     const chats = await client.getDialogs({
       offsetPeer: new Api.InputPeerSelf(),
@@ -98,6 +98,11 @@ export async function retrieveChats() {
       if (chat.dialog.notifySettings.muteUntil != null) {
         chat.__muted = true;
       }
+      if (chatPreferencesTask[chat.id.value.toString()] == null) {
+        chatPreferencesTask[chat.id.value.toString()] = {};
+      }
+      chatPreferencesTask[chat.id.value.toString()]['muted'] = chat.dialog.notifySettings.muteUntil || false;
+      chatPreferencesTask[chat.id.value.toString()]['scrollAt'] = chat.message.id;
       chat.iconRef = chat.id.toString();
       if (!(chat.entity.username == null && chat.entity.phone == null) && chat.entity.photo != null && chat.entity.photo.className !== 'ChatPhotoEmpty') {
         chat.iconRef = chat.entity.photo.photoId.toString();
@@ -118,7 +123,7 @@ export async function retrieveChats() {
       });
     });
     chatCollections.update(n => chats);
-    runTask(httpTasks, websocketTasks);
+    runTask(httpTasks, websocketTasks, chatPreferencesTask);
     return chats;
   } catch (err) {
     console.log(err);
@@ -138,8 +143,21 @@ export function getAuthorizedUser() {
   return get(authorizedUser);
 }
 
-export function runTask(httpTasks, websocketTasks) {
-  let tempRef = {};
+export async function runTask(httpTasks, websocketTasks, chatPreferencesTask = {}) {
+  // console.time('chatPreferencesTask');
+  console.log('chatPreferencesTask:', Object.keys(chatPreferencesTask).length);
+  for (let chatId in chatPreferencesTask) {
+    let pref = await (await cachedDatabase).get('chatPreferences', chatId);
+    if (pref == null)
+      pref = {};
+    pref['muted'] = chatPreferencesTask[chatId]['muted'];
+    if (pref['scrollAt'] == null) {
+      pref['scrollAt'] = chatPreferencesTask[chatId]['scrollAt'];
+    }
+    await (await cachedDatabase).put('chatPreferences', pref, chatId);
+  }
+  // console.timeEnd('chatPreferencesTaskTask');
+
   console.log('httpTasks:', httpTasks.length);
   // console.time('httpTasks');
   httpTasks.forEach(async (task, index) => {
