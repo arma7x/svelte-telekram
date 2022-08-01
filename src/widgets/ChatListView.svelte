@@ -13,7 +13,7 @@
   <div class="kai-list-view-icon">{@html icon}</div>
   <div class="kai-list-view-content">
     <p>
-      {chat.name}
+      {#if chat.__muted && !chat.__isSavedMessages}&#128263;&nbsp;{/if}{chat.name}
     </p>
     <small>
       {#if chat.isGroup}<b>{chat.message._sender.firstName || chat.message._sender.lastName || chat.message._sender.username || chat.message._sender.id}</b>:

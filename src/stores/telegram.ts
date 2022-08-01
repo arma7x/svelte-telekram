@@ -79,6 +79,7 @@ export async function retrieveChats() {
   // const timer = new Date().getTime().toString();
   // console.time('retrieveChats_' + timer);
   try {
+    const chatPreferences = [];
     const user = await getAuthorizedUser();
     const chats = await client.getDialogs({
       offsetPeer: new Api.InputPeerSelf(),
@@ -92,6 +93,10 @@ export async function retrieveChats() {
       if (chat.id.value === user[0].id.value) {
         chat.name = 'Saved Messages';
         chat.__isSavedMessages = true;
+      }
+      chat.__muted = false;
+      if (chat.dialog.notifySettings.muteUntil != null) {
+        chat.__muted = true;
       }
       chat.iconRef = chat.id.toString();
       if (!(chat.entity.username == null && chat.entity.phone == null) && chat.entity.photo != null && chat.entity.photo.className !== 'ChatPhotoEmpty') {
