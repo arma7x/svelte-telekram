@@ -90,12 +90,13 @@ export async function retrieveChats() {
     const httpTasks = [];
     const websocketTasks = [];
     chats.forEach((chat, index) => {
+      chat.__isSavedMessages = false;
       if (chat.id.value === user[0].id.value) {
         chat.name = 'Saved Messages';
         chat.__isSavedMessages = true;
       }
       chat.__muted = false;
-      if (chat.dialog.notifySettings.muteUntil !== 0) {
+      if (chat.dialog.notifySettings.muteUntil != null) {
         chat.__muted = true;
       }
       if (chatPreferencesTask[chat.id.value.toString()] == null) {
