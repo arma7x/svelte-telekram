@@ -550,7 +550,8 @@
     return -1;
   }
 
-  async function fetchMessages(entity) {
+  async function fetchMessages(entity, scrollAt) {
+    console.log('scrollAt:', location.state.scrollAt);
     // console.time('Finished');
     try {
       const chats = await getChatCollection();
@@ -582,7 +583,7 @@
   onMount(() => {
     const { appBar, softwareKey } = getAppProp();
     appBar.setTitleText(location.state.name || name);
-    fetchMessages(location.state.entity);
+    fetchMessages(location.state.entity, location.state.scrollAt);
     if (location.state.entity.className === 'Channel' && !location.state.entity.megagroup && location.state.entity.creator) {
       softwareKey.setText({ left: 'Action', center: 'BROADCAST', right: '📎' });
     } else if (location.state.entity.className === 'Channel' && !location.state.entity.megagroup && !location.state.entity.creator) {

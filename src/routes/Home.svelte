@@ -4,7 +4,7 @@
   import { ListView, LoadingBar, Button, TextInputField, TextAreaDialog, Toast, Toaster, SoftwareKey, TextInputDialog, OptionMenu } from '../components';
   import { onMount, onDestroy } from 'svelte';
 
-  import { TelegramKeyHash, Api, client, session } from '../utils/bootstrap';
+  import { TelegramKeyHash, Api, client, session, cachedDatabase } from '../utils/bootstrap';
 
   import QRModal from '../widgets/QRModal.svelte';
   import ChatListView from '../widgets/ChatListView.svelte';
@@ -572,8 +572,15 @@
     }
   }
 
-  function openRoom(name, entity) {
-    goto('room', { state: { name, entity: entity.toJSON() } });
+  async function openRoom(name, chat) {
+    let scrollAt;
+    try {
+      let pref = await (await cachedDatabase).get('chatPreferences', chat.id.value.toString());
+      scrollAt = pref['scrollAt'];
+      console.log(scrollAt);
+    } catch(err) {}
+    goto('room', { state: { name, entity: chat.entity.toJSON(), scrollAt } });
+
   }
 
   function eventHandler(evt) {
@@ -699,7 +706,7 @@
     </ListView>
   {/if}
   {#each chatList as chat}
-    <ChatListView chat={chat} className="{navClass}" icon={getThumb(chat)} onClick={() => openRoom(chat.name, chat.entity)} />
+    <ChatListView chat={chat} className="{navClass}" icon={getThumb(chat)} onClick={() => openRoom(chat.name, chat)} />
   {/each}
   {/if}
 </main>
