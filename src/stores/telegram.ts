@@ -95,7 +95,7 @@ export async function retrieveChats() {
         chat.__isSavedMessages = true;
       }
       chat.__muted = false;
-      if (chat.dialog.notifySettings.muteUntil != null) {
+      if (chat.dialog.notifySettings.muteUntil !== 0) {
         chat.__muted = true;
       }
       if (chatPreferencesTask[chat.id.value.toString()] == null) {
