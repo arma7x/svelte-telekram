@@ -16,7 +16,7 @@
       {chat.name}
     </p>
     <small>
-      {#if chat.isGroup}<b>{chat.message._sender.username || chat.message._sender.firstName || chat.message._sender.lastName || chat.message._sender.id}</b>:
+      {#if chat.isGroup}<b>{chat.message._sender.firstName || chat.message._sender.lastName || chat.message._sender.username || chat.message._sender.id}</b>:
       {/if}
       {#if chat.message && chat.message.message}
       {chat.message.message.substring(0, (chat.isGroup ? 15 : 30)) + (chat.message.message.length > (chat.isGroup ? 15 : 30) ? '...' : '')}
