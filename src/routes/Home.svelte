@@ -94,7 +94,7 @@
         onEnter: (evt, scope) => {
           archivedChatListMenu.$destroy();
           setTimeout(() => {
-            openRoom(scope.selected.name, scope.selected.entity);
+            openRoom(scope.selected.name, scope.selected);
           }, 100);
         },
         onBackspace: (evt, scope) => {
@@ -189,7 +189,7 @@
               if (scope.selected) {
                 let chat = [...chatList, ...archivedChatList].find(c => scope.selected.id.value.toString() === c.id.value.toString());
                 if (chat != null) {
-                  openRoom(chat.name, chat.entity);
+                  openRoom(chat.name, chat);
                 } else {
                   openTextAreaDialog(scope.selected);
                 }
