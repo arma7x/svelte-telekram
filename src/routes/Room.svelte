@@ -55,14 +55,14 @@
       }
     },
     arrowUpListener: async (evt) => {
-      const { appBar } = getAppProp();
-      if (appBar.getVisibility()) {
-        padTop = appBar.toggleVisibility();
-        const main = document.getElementsByTagName('main');
-        const style = window.getComputedStyle(main[0]);
-        main[0].style.setProperty('top', `calc(${style.top} - 28px)`);
-        main[0].style.setProperty('height', `calc(${style.height} + 28px)`);
-      }
+      //const { appBar } = getAppProp();
+      //if (appBar.getVisibility()) {
+        //padTop = appBar.toggleVisibility();
+        //const main = document.getElementsByTagName('main');
+        //const style = window.getComputedStyle(main[0]);
+        //main[0].style.setProperty('top', `calc(${style.top} - 28px)`);
+        //main[0].style.setProperty('height', `calc(${style.height} + 28px)`);
+      //}
       if (ready && navInstance.verticalNavIndex !== 0) {
         evt.preventDefault();
         navInstance.navigateListNav(-1);
@@ -92,14 +92,14 @@
       }
     },
     arrowDownListener: async (evt) => {
-      const { appBar } = getAppProp();
-      if (!appBar.getVisibility()) {
-        padTop = appBar.toggleVisibility();
-        const main = document.getElementsByTagName('main');
-        const style = window.getComputedStyle(main[0]);
-        main[0].style.setProperty('top', `calc(${style.top} + 28px)`);
-        main[0].style.setProperty('height', `calc(${style.height} - 28px)`);
-      }
+      //const { appBar } = getAppProp();
+      //if (!appBar.getVisibility()) {
+        //padTop = appBar.toggleVisibility();
+        //const main = document.getElementsByTagName('main');
+        //const style = window.getComputedStyle(main[0]);
+        //main[0].style.setProperty('top', `calc(${style.top} + 28px)`);
+        //main[0].style.setProperty('height', `calc(${style.height} - 28px)`);
+      //}
       if (ready && navInstance.verticalNavIndex !== Object.keys(messageMetadata).length - 1) {
         evt.preventDefault();
         navInstance.navigateListNav(1);
@@ -617,14 +617,14 @@
 
   onDestroy(() => {
     retrieveChats();
-    const { appBar } = getAppProp();
-    if (!appBar.getVisibility()) {
-      padTop = appBar.toggleVisibility();
-      const main = document.getElementsByTagName('main');
-      const style = window.getComputedStyle(main[0]);
-      main[0].style.setProperty('top', `calc(${style.top} + 28px)`);
-      main[0].style.setProperty('height', `calc(${style.height} - 28px)`);
-    }
+    //const { appBar } = getAppProp();
+    //if (!appBar.getVisibility()) {
+      //padTop = appBar.toggleVisibility();
+      //const main = document.getElementsByTagName('main');
+      //const style = window.getComputedStyle(main[0]);
+      //main[0].style.setProperty('top', `calc(${style.top} + 28px)`);
+      //main[0].style.setProperty('height', `calc(${style.height} - 28px)`);
+    //}
     navInstance.detachListener();
     document.removeEventListener('keydown', keydownEventHandler);
     client.removeEventHandler(incomingMessageListener);
