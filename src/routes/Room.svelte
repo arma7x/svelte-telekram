@@ -4,7 +4,7 @@
 
   import { Api, client } from '../utils/bootstrap';
 
-  import { getChatCollection, runTask, getAuthorizedUser } from '../stores/telegram';
+  import { retrieveChats, getChatCollection, runTask, getAuthorizedUser } from '../stores/telegram';
 
   import { Dummy, Message, MessageService } from '../widgets/message';
   import { TextAreaDialog, OptionMenu } from '../components';
@@ -551,7 +551,6 @@
   }
 
   async function fetchMessages(entity, scrollAt) {
-    console.log('scrollAt:', location.state.scrollAt);
     // console.time('Finished');
     try {
       const chats = await getChatCollection();
@@ -565,7 +564,14 @@
         muteUntil = false;
       }
       console.log('muteUntil:', muteUntil);
-      const newMessages = await client.getMessages(chat, { limit: 50 });
+      let params = { limit: 50 };
+      if (scrollAt) {
+        //params['maxId'] = scrollAt - 24;
+        //params['minId'] = scrollAt + 25;
+        //params['limit'] = 50;
+      }
+      console.log('scrollAt:', params);
+      const newMessages = await client.getMessages(chat, params);
       newMessages.reverse();
       messages = await buildIndex(newMessages);
       //console.log(_messages);
@@ -598,6 +604,7 @@
   });
 
   onDestroy(() => {
+    retrieveChats();
     const { appBar } = getAppProp();
     if (!appBar.getVisibility()) {
       padTop = appBar.toggleVisibility();
