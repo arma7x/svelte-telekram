@@ -2,7 +2,7 @@
   import { createKaiNavigator, KaiNavigator } from '../utils/navigation';
   import { onMount, onDestroy } from 'svelte';
 
-  import { Api, client } from '../utils/bootstrap';
+  import { Api, client, cachedDatabase } from '../utils/bootstrap';
 
   import { retrieveChats, getChatCollection, runTask, getAuthorizedUser } from '../stores/telegram';
 
@@ -70,6 +70,7 @@
         if (msg == null)
           return;
         msg.markAsRead();
+        updateScrollAt(msg);
         if (navInstance.verticalNavIndex == 1) {
           if (!ready)
             return;
@@ -106,6 +107,7 @@
         if (msg == null)
           return;
         msg.markAsRead();
+        updateScrollAt(msg);
       } else {
         if (!ready)
           return;
@@ -128,6 +130,13 @@
   };
 
   let navInstance = createKaiNavigator(navOptions);
+
+  async function updateScrollAt(msg) {
+    const chatId = chat.id.value.toString();
+    let pref = await (await cachedDatabase).get('chatPreferences', chatId);
+    pref['scrollAt'] = msg.id;
+    (await cachedDatabase).put('chatPreferences', pref, chatId);
+  }
 
   function openSendMessageDialog() {
     sendMessageDialog = new TextAreaDialog({
@@ -571,7 +580,7 @@
       }
       const newMessages = await client.getMessages(chat, params);
       newMessages.reverse();
-      // console.log('scrollAt:', scrollAt, params, newMessages.length);
+      console.log('scrollAt:', scrollAt, params, newMessages.length);
       messages = await buildIndex(newMessages);
       const cursor = messages.findIndex((msg) => {
         return msg.id == scrollAt;
