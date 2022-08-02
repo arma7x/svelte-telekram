@@ -580,11 +580,13 @@
       }
       const newMessages = await client.getMessages(chat, params);
       newMessages.reverse();
-      console.log('scrollAt:', scrollAt, params, newMessages.length);
       messages = await buildIndex(newMessages);
-      const cursor = messages.findIndex((msg) => {
+      let cursor = messages.findIndex((msg) => {
         return msg.id == scrollAt;
       });
+      if (cursor)
+        cursor++;
+      console.log('scrollAt:', scrollAt, params, newMessages.length, chat.message.id, cursor || messages.length);
       navInstance.navigateListNav(1);
       setTimeout(() => {
         navInstance.navigateListNav(cursor || messages.length);
