@@ -566,19 +566,20 @@
       console.log('muteUntil:', muteUntil);
       let params = { limit: 50 };
       if (scrollAt) {
-        //params['maxId'] = scrollAt - 24;
-        //params['minId'] = scrollAt + 25;
-        //params['limit'] = 50;
+        params['minId'] = scrollAt - 25;
+        params['limit'] = 50;
       }
-      console.log('scrollAt:', params);
       const newMessages = await client.getMessages(chat, params);
       newMessages.reverse();
+      // console.log('scrollAt:', scrollAt, params, newMessages.length);
       messages = await buildIndex(newMessages);
-      //console.log(_messages);
-      //console.log(messageMetadata);
+      const cursor = messages.findIndex((msg) => {
+        return msg.id == scrollAt;
+      });
       navInstance.navigateListNav(1);
       setTimeout(() => {
-        navInstance.navigateListNav(messages.length);
+        navInstance.navigateListNav(cursor || messages.length);
+        messages[navInstance.verticalNavIndex].markAsRead();
       }, 100);
     } catch (err) {
       console.log(err);

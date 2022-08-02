@@ -577,7 +577,6 @@
     try {
       let pref = await (await cachedDatabase).get('chatPreferences', chat.id.value.toString());
       scrollAt = pref['scrollAt'];
-      console.log(scrollAt);
     } catch(err) {}
     goto('room', { state: { name, entity: chat.entity.toJSON(), scrollAt } });
 
