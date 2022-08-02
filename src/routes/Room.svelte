@@ -574,6 +574,7 @@
       }
       console.log('muteUntil:', muteUntil);
       let params = { limit: 50 };
+      // TOFIX: unstable
       if (scrollAt) {
         params['minId'] = scrollAt - 25;
         params['limit'] = 50;
