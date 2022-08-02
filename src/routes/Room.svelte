@@ -193,7 +193,7 @@
   async function openContextMenu(msg) {
     const user = await getAuthorizedUser();
     let menu = [];
-    if (msg.message && msg.message.length > 80) {
+    if (msg.message && msg.message.length > 80 || msg.replyTo) {
       menu.push({ title: 'Show Full' });
     }
     if (!msg.noforwards) {

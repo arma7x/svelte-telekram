@@ -74,7 +74,7 @@
       columns.push(`<div>${msg.media.className}</div>`);
     }
     if (msg.message && msg.message !== '') {
-      columns.push(`<div>${msg.message.length > 20 ? msg.message.substring(0, 20) + '...' : msg.message}</div>`);
+      columns.push(`<div>${short && msg.message.length > 20 ? msg.message.substring(0, 20) + '...' : msg.message}</div>`);
     }
     return `<div>${columns.join('')}<div>`;
   }
