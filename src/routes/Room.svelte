@@ -576,8 +576,8 @@
       let params = { limit: 50 };
       // TOFIX: unstable
       if (scrollAt) {
-        params['minId'] = scrollAt - 25;
-        params['limit'] = 50;
+        //params['maxId'] = scrollAt - 100;
+        //params['limit'] = 50;
       }
       const newMessages = await client.getMessages(chat, params);
       newMessages.reverse();
@@ -616,8 +616,8 @@
     ready = true;
   });
 
-  onDestroy(() => {
-    retrieveChats();
+  onDestroy(async () => {
+    await retrieveChats();
     //const { appBar } = getAppProp();
     //if (!appBar.getVisibility()) {
       //padTop = appBar.toggleVisibility();
