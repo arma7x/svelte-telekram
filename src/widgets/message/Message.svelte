@@ -26,6 +26,7 @@
   export let destroyCallback: Function = () => {}
   export let replyTo: any;
   export let short: bool = false;
+  export let scrollable: bool = false;
 
   let nodeRef;
   let uncachedThumbnails;
@@ -154,7 +155,7 @@
   }
 
   onMount(() => {
-    if (!short) {
+    if (!short && scrollable) {
       parentNavInstance.detachListener();
       navInstance.attachListener();
     }
@@ -216,7 +217,7 @@
   });
 
   onDestroy(() => {
-    if (!short) {
+    if (!short && scrollable) {
       parentNavInstance.attachListener();
       navInstance.detachListener();
     }

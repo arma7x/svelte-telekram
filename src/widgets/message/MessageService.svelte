@@ -16,6 +16,7 @@
   export let destroyCallback: Function = () => {}
   export let replyTo: any;
   export let short: bool = false;
+  export let scrollable: bool = false;
 
   let navOptions = {
     softkeyLeftListener: function(evt) {},

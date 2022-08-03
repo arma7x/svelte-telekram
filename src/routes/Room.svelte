@@ -235,6 +235,7 @@
                   replyTo: getReplyHeader(msg),
                   chat: chat,
                   short: false,
+                  scrollable: true,
                   destroyCallback: () => {
                     full.$destroy();
                   }
@@ -639,7 +640,7 @@
   {#if ready }
   {#each messages as message}
     {#if message && message.id && messageMetadata[message.id.toString()] && messageMetadata[message.id.toString()].deleted === false}
-      <svelte:component className="roomNav" this={resolveMessageWidget(message)} {message} {registerCallButtonHandler} parentNavInstance={navInstance} replyTo={getReplyHeader(message)} chat={chat} short={true}/>
+      <svelte:component className="roomNav" this={resolveMessageWidget(message)} {message} {registerCallButtonHandler} parentNavInstance={navInstance} replyTo={getReplyHeader(message)} chat={chat} short={true} scrollable={false}/>
     {/if}
   {/each}
   {:else}
