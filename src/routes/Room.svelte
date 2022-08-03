@@ -265,7 +265,7 @@
     if (msg.replies && msg.replies.replies > 0) {
       const query = { limit: msg.replies.replies, replyTo: msg.id }
       const replies = await client.getMessages(chat, query);
-      console.log(replies.reverse());
+      console.log([msg, ...replies.reverse()]);
     }
   }
 

@@ -108,6 +108,14 @@
     return fullname;
   }
 
+  function getTime(msg) {
+    const t = new Date(msg.date * 1000).toLocaleTimeString();
+    const ts = t.split(' ');
+    let hms = ts[0].split(':');
+    hms.pop();
+    return hms.join(':') + ' ' + ts[1];
+  }
+
   function resolveMediaWidget(msg) {
     let media;
     if (msg.media.className === 'MessageMediaDocument') {
@@ -150,6 +158,7 @@
       parentNavInstance.detachListener();
       navInstance.attachListener();
     }
+    console.log(message.editDate);
   });
 
   beforeUpdate(async () => {
@@ -243,6 +252,18 @@
     {#if message.message }
       <p>{message.message.length > 80 && short ? message.message.substring(0, 80) + '...' : message.message}</p>
     {/if}
+    <div class="indicator">
+      {#if message.editDate}
+      <small class="edited">&#x270E;&nbsp;</small>
+      {/if}
+      {#if message.replies && message.replies.replies > 0}
+      <small class="replies">&#x21b6;{message.replies.replies}&nbsp;</small>
+      {/if}
+      {#if message.forwards && message.forwards > 0}
+      <small class="forwards">&#x279C;{message.forwards}&nbsp;</small>
+      {/if}
+      <small class="time">{getTime(message)}</small>
+    </div>
   </div>
 </div>
 
@@ -293,6 +314,16 @@
     margin-bottom: 3px;
     border-left: 1px solid var(--themeColor);
     font-size: 90%
+  }
+
+  .kai-list-view > .kai-list-view-content > .indicator {
+    margin: 4px 0px 0px 0px;
+    width: 100%;
+    color: #2A2A2A;
+    display: flex;
+    flex-direction: row;
+    justify-content: end;
+    align-items: center;
   }
 
   .kai-list-view.focus,
