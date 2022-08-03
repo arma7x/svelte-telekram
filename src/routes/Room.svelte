@@ -268,13 +268,12 @@
     if (msg.replies && msg.replies.replies > 0) {
       const query = { limit: msg.replies.replies, replyTo: msg.id }
       const replies = await client.getMessages(chat, query);
-      console.log([msg, ...replies.reverse()]);
       repliesDialog = new Replies({
         target: document.body,
         props: {
           title: 'Replies',
           chat: chat,
-          messages: [msg, ...replies.reverse()],
+          messages: [msg, ...(replies.reverse())],
           resolveMessageWidget: resolveMessageWidget,
           getReplyHeader: getReplyHeader,
           onBackspace: (evt) => {
