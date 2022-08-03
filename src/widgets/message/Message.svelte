@@ -229,7 +229,7 @@
 
 <svelte:options accessors immutable={true}/>
 
-<div bind:this={nodeRef} data-key="{key}" class="kai-list-view {className ? className : ''}" on:click={onClick} style="background-color:{!short ? 'var(--themeColorLight)' : 'inherit'};height:{!short ? '92%' : 'auto'};overflow:{!short ? 'scroll' : 'inherit'};justify-content:{chat.entity.className === 'Channel' && !chat.entity.megagroup ? 'start' : justifyContent};min-height:{hasAvatar ? '50px' : '0px'};">
+<div bind:this={nodeRef} data-key="{key}" class="kai-list-view {className ? className : ''}" on:click={onClick} style="background-color:{!short ? 'var(--themeColorLight)' : 'inherit'};min-height:{!short ? '92%' : 'auto'};overflow:{!short ? 'scroll' : 'inherit'};justify-content:{chat.entity.className === 'Channel' && !chat.entity.megagroup ? 'start' : justifyContent};min-height:{hasAvatar ? '50px' : '0px'};">
   {#if hasAvatar && !chat.isUser }{@html DOMPurify.sanitize(avatarSrc)}{/if}
   <div class="kai-list-view-content" style="margin-left:{hasAvatar && !chat.isUser ? '45px' : '0px'};">
     {#if hasAvatar}
