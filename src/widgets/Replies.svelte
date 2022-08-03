@@ -103,7 +103,7 @@
     display: flex;
     flex-direction: column;
     width: 100%;
-    max-height: calc(100% - 30px);
+    max-height: calc(100% - 56px);
     bottom: 30px;
     position: fixed;
     background-color: #ffffff;
@@ -122,7 +122,7 @@
   }
   .kai-option-menu > .kai-option-menu-content > .kai-option-menu-body {
     width: 100%;
-    max-height: calc(100% - 42px);
+    max-height: calc(100% - 68px);
     overflow: scroll;
   }
 </style>
