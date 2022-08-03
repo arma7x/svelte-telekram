@@ -277,6 +277,7 @@
           resolveMessageWidget: resolveMessageWidget,
           getReplyHeader: getReplyHeader,
           onBackspace: (evt) => {
+            evt.preventDefault();
             evt.stopPropagation();
             repliesDialog.$destroy();
           },
