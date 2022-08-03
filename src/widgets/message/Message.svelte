@@ -158,7 +158,6 @@
       parentNavInstance.detachListener();
       navInstance.attachListener();
     }
-    console.log(message.editDate);
   });
 
   beforeUpdate(async () => {
