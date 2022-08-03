@@ -8,12 +8,14 @@
 
   import { Dummy, Message, MessageService } from '../widgets/message';
   import { TextAreaDialog, OptionMenu } from '../components';
+  import Replies from '../widgets/Replies.svelte';
 
   export let location: any;
   export let navigate: any;
   export let getAppProp: Function;
 
   let sendMessageDialog: TextAreaDialog;
+  let repliesDialog: Replies;
   let contextMenu: OptionMenu;
 
   let fetchForwardedUsers = [];
@@ -267,6 +269,27 @@
       const query = { limit: msg.replies.replies, replyTo: msg.id }
       const replies = await client.getMessages(chat, query);
       console.log([msg, ...replies.reverse()]);
+      repliesDialog = new Replies({
+        target: document.body,
+        props: {
+          title: 'Replies',
+          chat: chat,
+          messages: [msg, ...replies.reverse()],
+          resolveMessageWidget: resolveMessageWidget,
+          getReplyHeader: getReplyHeader,
+          onBackspace: (evt) => {
+            evt.stopPropagation();
+            repliesDialog.$destroy();
+          },
+          onOpened: () => {
+            navInstance.detachListener();
+          },
+          onClosed: (value) => {
+            navInstance.attachListener();
+            repliesDialog = null;
+          }
+        }
+      });
     }
   }
 
