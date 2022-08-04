@@ -196,7 +196,7 @@
     const user = await getAuthorizedUser();
     let menu = [];
     if (msg.buttons) {
-      menu.push({ title: 'Reply Button' });
+      menu.push({ title: 'Show Reply Buttons' });
     }
     if (msg.message && msg.message.length > 80 || msg.replyTo) {
       menu.push({ title: 'Show Full' });
@@ -271,7 +271,7 @@
             // chat.
           } else if (scope.selected.title === 'Unmute') {
             // chat.
-          } else if (scope.selected.title === 'Reply Button') {
+          } else if (scope.selected.title === 'Show Reply Buttons') {
             // msg.buttons
           }
         },
