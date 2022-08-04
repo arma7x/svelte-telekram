@@ -260,9 +260,9 @@
             // msg.edit
           } else if (scope.selected.title === 'Delete') {
             // msg.delete
-          } else if ( === 'Unpin') {
+          } else if (scope.selected.title  === 'Unpin') {
             // msg.unpin
-          } else if ( === 'Pin') {
+          } else if (scope.selected.title  === 'Pin') {
             // msg.pin
           } else if (scope.selected.title === 'Mute') {
             // chat.
