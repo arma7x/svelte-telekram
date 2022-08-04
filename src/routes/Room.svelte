@@ -195,6 +195,9 @@
   async function openContextMenu(msg) {
     const user = await getAuthorizedUser();
     let menu = [];
+    if (msg.buttons) {
+      menu.push({ title: 'Reply Button' });
+    }
     if (msg.message && msg.message.length > 80 || msg.replyTo) {
       menu.push({ title: 'Show Full' });
     }
@@ -268,6 +271,8 @@
             // chat.
           } else if (scope.selected.title === 'Unmute') {
             // chat.
+          } else if (scope.selected.title === 'Reply Button') {
+            // msg.buttons
           }
         },
         onBackspace: (evt, scope) => {
