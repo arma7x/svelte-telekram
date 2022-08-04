@@ -156,7 +156,7 @@
   }
 
   onMount(() => {
-    console.log(1111, !short, scrollable);
+    console.log(message.id, `short:${!short}`, `scrollable:${scrollable}`, `out:${message.out}`, `post:${message.post}`, `ttlPeriod:${message.ttlPeriod}`, `mentioned:${message.mentioned}`, `fromScheduled:${message.fromScheduled}`);
     if (!short && scrollable) {
       showFull = true;
       parentNavInstance.detachListener();
@@ -256,14 +256,20 @@
       <p>{message.message.length > 80 && short ? message.message.substring(0, 80) + '...' : message.message}</p>
     {/if}
     <div class="indicator">
-      {#if message.editDate}
+      {#if message.pinned}
+      <small class="pinned">&#x1f588;&nbsp;</small>
+      {/if}
+      {#if message.views}
+      <small class="views">&#x1f441; {message.views}&nbsp;</small>
+      {/if}
+      {#if message.editDate && message.editHide == false}
       <small class="edited">&#x270E;&nbsp;</small>
       {/if}
       {#if message.replies && message.replies.replies > 0}
       <small class="replies">&#x21b6;{message.replies.replies}&nbsp;</small>
       {/if}
       {#if message.forwards && message.forwards > 0}
-      <small class="forwards">&#x279C;{message.forwards}&nbsp;</small>
+      <small class="forwards" style="margin-top:-1.5px;">&#x279C;{message.forwards}&nbsp;</small>
       {/if}
       <small class="time">{getTime(message)}</small>
     </div>
