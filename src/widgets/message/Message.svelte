@@ -156,7 +156,7 @@
   }
 
   onMount(() => {
-    console.log(message.id, `short:${!short}`, `scrollable:${scrollable}`, `out:${message.out}`, `post:${message.post}`, `ttlPeriod:${message.ttlPeriod}`, `mentioned:${message.mentioned}`, `fromScheduled:${message.fromScheduled}`);
+    console.log(message.id, `short:${!short}`, `scrollable:${scrollable}`, `pinned:${message.pinned}`, `out:${message.out}`, `post:${message.post}`, `ttlPeriod:${message.ttlPeriod}`, `mentioned:${message.mentioned}`, `fromScheduled:${message.fromScheduled}`);
     if (!short && scrollable) {
       showFull = true;
       parentNavInstance.detachListener();

@@ -207,8 +207,12 @@
     const sender = msg.sender || msg.__sender;
     if (sender && sender.id.value.toString() === user[0].id.value.toString())
       menu = [...menu, { title: 'Edit' }, { title: 'Delete' }];
-    else if (chat.entity.className === 'Channel', chat.entity.creator)
+    else if (chat.entity.className === 'Channel' && chat.entity.creator)
       menu.push({ title: 'Delete' });
+    if (msg.pinned && chat.entity.className === 'Channel' && chat.entity.creator)
+      menu.push({ title: 'Unpin' });
+    if (!msg.pinned && chat.entity.className === 'Channel' && chat.entity.creator)
+      menu.push({ title: 'Pin' });
     if (muteUntil === false)
       menu.push({ title: 'Mute' });
     else
@@ -246,6 +250,24 @@
             }, 200);
           } else if (scope.selected.title === 'View Replies' && msg.className === "Message" && msg.replies && msg.replies.replies > 0) {
             showReplies(msg);
+          } else if (scope.selected.title === 'Forward') {
+            // msg.forwardTo
+          } else if (scope.selected.title === 'Reply') {
+            // msg.reply
+          } else if (scope.selected.title === 'Report') {
+            // msg.?
+          } else if (scope.selected.title === 'Edit') {
+            // msg.edit
+          } else if (scope.selected.title === 'Delete') {
+            // msg.delete
+          } else if ( === 'Unpin') {
+            // msg.unpin
+          } else if ( === 'Pin') {
+            // msg.pin
+          } else if (scope.selected.title === 'Mute') {
+            // chat.
+          } else if (scope.selected.title === 'Unmute') {
+            // chat.
           }
         },
         onBackspace: (evt, scope) => {
