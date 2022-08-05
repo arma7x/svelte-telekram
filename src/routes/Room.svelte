@@ -264,9 +264,11 @@
           } else if (scope.selected.title === 'Delete') {
             // msg.delete
           } else if (scope.selected.title  === 'Unpin') {
-            // msg.unpin
+            console.log(scope.selected.title);
+            msg.unpin();
           } else if (scope.selected.title  === 'Pin') {
-            // msg.pin
+            console.log(scope.selected.title);
+            msg.pin();
           } else if (scope.selected.title === 'Mute') {
             // chat.
           } else if (scope.selected.title === 'Unmute') {
@@ -512,7 +514,7 @@
   }
 
   async function incomingMessageListener(evt) {
-    // console.log('Listen:', location.state.entity.id.value.toString(), evt.className, evt);
+    console.log('Room Listen:', location.state.entity.id.value.toString(), evt.className, evt);
     switch (evt.className) {
       case "UpdateNotifySettings":
         if (evt.notifySettings.muteUntil) {

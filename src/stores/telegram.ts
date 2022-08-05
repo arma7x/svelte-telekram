@@ -8,7 +8,7 @@ export const chatCollections = writable([]);
 export const cachedThumbnails = writable({});
 
 client.addEventHandler((evt) => {
-  console.log('client.addEventHandler', evt.className);
+  // console.log('client.addEventHandler', evt.className);
   switch (evt.className) {
     case "UpdateNotifySettings":
     case "UpdateFolderPeers":
