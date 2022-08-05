@@ -562,6 +562,7 @@
             if (messageMetadata[evt.message.id.toString()]) {
               const idx = messageMetadata[evt.message.id.toString()].index;
               messages[idx] = evt.message;
+              messages = [...messages];
             }
             break;
           }
