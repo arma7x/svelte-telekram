@@ -165,6 +165,7 @@
   });
 
   beforeUpdate(async () => {
+    console.log(message.id, message.message);
     if (message.message.length > 80 && short)
       expandable = true;
     let _hasAvatar;

@@ -40,7 +40,7 @@
     softkeyLeftListener: function(evt) {
       const msg = messages[navInstance.verticalNavIndex];
       if (msg && msg.className === "Message")
-        openContextMenu(msg);
+        openContextMenu(msg, navInstance.verticalNavIndex);
     },
     softkeyRightListener: function(evt) {
       if (!ready && chat == null)
@@ -192,7 +192,7 @@
     });
   }
 
-  async function openContextMenu(msg) {
+  async function openContextMenu(msg, index) {
     const user = await getAuthorizedUser();
     let menu = [];
     if (msg.buttons) {
@@ -264,11 +264,27 @@
           } else if (scope.selected.title === 'Delete') {
             // msg.delete
           } else if (scope.selected.title  === 'Unpin') {
-            console.log(scope.selected.title);
-            msg.unpin();
+            try {
+              await msg.unpin();
+              const tmessages = await client.getMessages(chat, {ids:msg.id})
+              if (tmessages.length > 0) {
+                messages[index] = tmessages[0];
+                messages = [...messages];
+              }
+            } catch (err) {
+              console.log('Unpin:', err);
+            }
           } else if (scope.selected.title  === 'Pin') {
-            console.log(scope.selected.title);
-            msg.pin();
+            try {
+              await msg.pin();
+              const tmessages = await client.getMessages(chat, {ids:msg.id})
+              if (tmessages.length > 0) {
+                messages[index] = tmessages[0];
+                messages = [...messages];
+              }
+            } catch (err) {
+              console.log('Pin:', err);
+            }
           } else if (scope.selected.title === 'Mute') {
             // chat.
           } else if (scope.selected.title === 'Unmute') {
