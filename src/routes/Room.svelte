@@ -212,9 +212,9 @@
       menu = [...menu, { title: 'Edit' }, { title: 'Delete' }];
     else if (chat.entity.className === 'Channel' && chat.entity.creator)
       menu.push({ title: 'Delete' });
-    if (msg.pinned && chat.entity.className === 'Channel' && chat.entity.creator)
+    if (msg.pinned && ((chat.entity.className === 'Channel' && chat.entity.creator) || chat.entity.className === 'User'))
       menu.push({ title: 'Unpin' });
-    if (!msg.pinned && chat.entity.className === 'Channel' && chat.entity.creator)
+    if (!msg.pinned && ((chat.entity.className === 'Channel' && chat.entity.creator) || chat.entity.className === 'User'))
       menu.push({ title: 'Pin' });
     if (muteUntil === false)
       menu.push({ title: 'Mute' });
