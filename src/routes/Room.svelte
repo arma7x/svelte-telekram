@@ -195,6 +195,26 @@
     });
   }
 
+  function showFull(msg, index) {
+    const className = new resolveMessageWidget(msg);
+    const full = new className({
+      target: document.body,
+      props: {
+        className: "",
+        message: msg,
+        registerCallButtonHandler: (evt) => {},
+        parentNavInstance: navInstance,
+        replyTo: getReplyHeader(msg),
+        chat: chat,
+        short: false,
+        scrollable: true,
+        destroyCallback: () => {
+          full.$destroy();
+        }
+      }
+    });
+  }
+
   function deleteMessage(msg, index) {
     deleteMessageDialog = new Dialog({
       target: document.body,
@@ -290,69 +310,53 @@
         softKeyCenterText: 'select',
         onSoftkeyRight: (evt, scope) => {},
         onSoftkeyLeft: (evt, scope) => {},
-        onEnter: async(evt, scope) => {
+        onEnter: (evt, scope) => {
           contextMenu.$destroy();
-          if (scope.selected.title === 'Show Full' && msg.className === "Message") {
-            setTimeout(() => {
-              const className = new resolveMessageWidget(msg);
-              const full = new className({
-                target: document.body,
-                props: {
-                  className: "",
-                  message: msg,
-                  registerCallButtonHandler: (evt) => {},
-                  parentNavInstance: navInstance,
-                  replyTo: getReplyHeader(msg),
-                  chat: chat,
-                  short: false,
-                  scrollable: true,
-                  destroyCallback: () => {
-                    full.$destroy();
-                  }
+          setTimeout(async () => {
+            if (scope.selected.title === 'Show Full' && msg.className === "Message") {
+              showFull(msg, index);
+            } else if (scope.selected.title === 'View Replies' && msg.className === "Message" && msg.replies && msg.replies.replies > 0) {
+              showReplies(msg);
+            } else if (scope.selected.title === 'Forward') {
+              // msg.forwardTo
+            } else if (scope.selected.title === 'Reply') {
+              // msg.reply
+            } else if (scope.selected.title === 'Report') {
+              // msg.?
+            } else if (scope.selected.title === 'Edit') {
+              // msg.edit
+            } else if (scope.selected.title === 'Delete') {
+              deleteMessage(msg, index);
+            } else if (scope.selected.title  === 'Unpin') {
+              try {
+                await msg.unpin();
+                const tmessages = await client.getMessages(chat, {ids:msg.id})
+                if (tmessages.length > 0) {
+                  messages[index] = tmessages[0];
+                  messages = [...messages];
                 }
-              });
-            }, 200);
-          } else if (scope.selected.title === 'View Replies' && msg.className === "Message" && msg.replies && msg.replies.replies > 0) {
-            showReplies(msg);
-          } else if (scope.selected.title === 'Forward') {
-            // msg.forwardTo
-          } else if (scope.selected.title === 'Reply') {
-            // msg.reply
-          } else if (scope.selected.title === 'Report') {
-            // msg.?
-          } else if (scope.selected.title === 'Edit') {
-            // msg.edit
-          } else if (scope.selected.title === 'Delete') {
-            deleteMessage(msg, index);
-          } else if (scope.selected.title  === 'Unpin') {
-            try {
-              await msg.unpin();
-              const tmessages = await client.getMessages(chat, {ids:msg.id})
-              if (tmessages.length > 0) {
-                messages[index] = tmessages[0];
-                messages = [...messages];
+              } catch (err) {
+                console.log('Unpin:', err);
               }
-            } catch (err) {
-              console.log('Unpin:', err);
-            }
-          } else if (scope.selected.title  === 'Pin') {
-            try {
-              await msg.pin();
-              const tmessages = await client.getMessages(chat, {ids:msg.id})
-              if (tmessages.length > 0) {
-                messages[index] = tmessages[0];
-                messages = [...messages];
+            } else if (scope.selected.title  === 'Pin') {
+              try {
+                await msg.pin();
+                const tmessages = await client.getMessages(chat, {ids:msg.id})
+                if (tmessages.length > 0) {
+                  messages[index] = tmessages[0];
+                  messages = [...messages];
+                }
+              } catch (err) {
+                console.log('Pin:', err);
               }
-            } catch (err) {
-              console.log('Pin:', err);
+            } else if (scope.selected.title === 'Mute') {
+              // chat.
+            } else if (scope.selected.title === 'Unmute') {
+              // chat.
+            } else if (scope.selected.title === 'Show Reply Buttons') {
+              // msg.buttons
             }
-          } else if (scope.selected.title === 'Mute') {
-            // chat.
-          } else if (scope.selected.title === 'Unmute') {
-            // chat.
-          } else if (scope.selected.title === 'Show Reply Buttons') {
-            // msg.buttons
-          }
+          }, 200);
         },
         onBackspace: (evt, scope) => {
           evt.preventDefault();
