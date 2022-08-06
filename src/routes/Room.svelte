@@ -150,7 +150,7 @@
         title: 'Message',
         softKeyLeftText: messageEntity != null ? (edit ? 'Save' : 'Reply') : 'Send',
         softKeyCenterText: 'New line',
-        softKeyRightText: '',
+        softKeyRightText: 'Cancel',
         value: edit ? messageEntity.message : '',
         placeholder: 'Enter you text',
         type: 'text',
@@ -188,7 +188,9 @@
             // console.timeEnd('sendMessage');
           }
         },
-        onSoftkeyRight: (evt, value) => {},
+        onSoftkeyRight: (evt, value) => {
+          sendMessageDialog.$destroy();
+        },
         onEnter: (evt, value) => {},
         onBackspace: (evt, value) => {
           evt.stopPropagation();
