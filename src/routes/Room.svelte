@@ -7,7 +7,7 @@
   import { retrieveChats, getChatCollection, runTask, getAuthorizedUser } from '../stores/telegram';
 
   import { Dummy, Message, MessageService } from '../widgets/message';
-  import { TextAreaDialog, OptionMenu } from '../components';
+  import { TextAreaDialog, OptionMenu, Dialog } from '../components';
   import Replies from '../widgets/Replies.svelte';
 
   export let location: any;
@@ -17,6 +17,7 @@
   let sendMessageDialog: TextAreaDialog;
   let repliesDialog: Replies;
   let contextMenu: OptionMenu;
+  let deleteMessageDialog: Dialog;
 
   let fetchForwardedUsers = [];
   let forwardedUsersIndex = [];
@@ -71,7 +72,8 @@
         const msg = messages[navInstance.verticalNavIndex];
         if (msg == null)
           return;
-        msg.markAsRead();
+        if (msg.markAsRead)
+          msg.markAsRead();
         updateScrollAt(msg);
         if (navInstance.verticalNavIndex == 1) {
           if (!ready)
@@ -108,7 +110,8 @@
         const msg = messages[navInstance.verticalNavIndex];
         if (msg == null)
           return;
-        msg.markAsRead();
+        if (msg.markAsRead)
+          msg.markAsRead();
         updateScrollAt(msg);
       } else {
         if (!ready)
@@ -192,6 +195,64 @@
     });
   }
 
+  function deleteMessage(msg, index) {
+    deleteMessageDialog = new Dialog({
+      target: document.body,
+      props: {
+        title: 'Confirm',
+        body: `Do you want to delete this message ?`,
+        softKeyLeftText: 'Cancel',
+        softKeyCenterText: '',
+        softKeyRightText: 'Yes',
+        onSoftkeyLeft: (evt) => {
+          console.log('cancel');
+          deleteMessageDialog.$destroy();
+        },
+        onSoftkeyRight: async (evt) => {
+          try {
+            await msg.delete();
+            const scroll = navInstance.verticalNavIndex !== Object.keys(messageMetadata).length - 1;
+            const pops = [];
+            const temp = [];
+            const id = msg.id;
+            if (messageMetadata[id.toString()]) {
+              messageMetadata[id.toString()].deleted = true;
+              pops.push(messageMetadata[id.toString()].index);
+              delete messageMetadata[id.toString()];
+              navInstance.navigateListNav(-1);
+            }
+            for (let i in messages) {
+              if (pops.indexOf(parseInt(i)) === -1) {
+                temp.push(messages[i]);
+              }
+            }
+            if (temp.length > 0) {
+              messages = await buildIndex(temp);
+              if (scroll)
+                autoScroll();
+            }
+          } catch (err) {
+            console.log(err);
+          }
+          deleteMessageDialog.$destroy();
+        },
+        onEnter: (evt) => {},
+        onBackspace: (evt) => {
+          evt.preventDefault();
+          evt.stopPropagation();
+          deleteMessageDialog.$destroy();
+        },
+        onOpened: () => {
+          navInstance.detachListener();
+        },
+        onClosed: () => {
+          navInstance.attachListener();
+          deleteMessageDialog = null;
+        }
+      }
+    });
+  }
+
   async function openContextMenu(msg, index) {
     const user = await getAuthorizedUser();
     let menu = [];
@@ -210,7 +271,7 @@
     const sender = msg.sender || msg.__sender;
     if (sender && sender.id.value.toString() === user[0].id.value.toString())
       menu = [...menu, { title: 'Edit' }, { title: 'Delete' }];
-    else if (chat.entity.className === 'Channel' && chat.entity.creator)
+    else if ((chat.entity.className === 'Channel' && chat.entity.creator) || chat.entity.className === 'User')
       menu.push({ title: 'Delete' });
     if (msg.pinned && ((chat.entity.className === 'Channel' && chat.entity.creator) || chat.entity.className === 'User'))
       menu.push({ title: 'Unpin' });
@@ -262,7 +323,7 @@
           } else if (scope.selected.title === 'Edit') {
             // msg.edit
           } else if (scope.selected.title === 'Delete') {
-            // msg.delete
+            deleteMessage(msg, index);
           } else if (scope.selected.title  === 'Unpin') {
             try {
               await msg.unpin();
@@ -661,7 +722,8 @@
       navInstance.navigateListNav(1);
       setTimeout(() => {
         navInstance.navigateListNav(cursor || messages.length);
-        messages[navInstance.verticalNavIndex].markAsRead();
+        if (messages[navInstance.verticalNavIndex].markAsRead)
+          messages[navInstance.verticalNavIndex].markAsRead();
       }, 100);
     } catch (err) {
       console.log(err);
