@@ -273,6 +273,22 @@
     });
   }
 
+  async function pinnedMessage(msg, index) {
+    try {
+      if (msg.pinned)
+        await msg.unpin();
+      else
+        await msg.pin();
+      const tmessages = await client.getMessages(chat, {ids:msg.id})
+      if (tmessages.length > 0) {
+        messages[index] = tmessages[0];
+        messages = [...messages];
+      }
+    } catch (err) {
+      console.log('Unpin:', err);
+    }
+  }
+
   async function openContextMenu(msg, index) {
     const user = await getAuthorizedUser();
     let menu = [];
@@ -327,28 +343,8 @@
               // msg.edit
             } else if (scope.selected.title === 'Delete') {
               deleteMessage(msg, index);
-            } else if (scope.selected.title  === 'Unpin') {
-              try {
-                await msg.unpin();
-                const tmessages = await client.getMessages(chat, {ids:msg.id})
-                if (tmessages.length > 0) {
-                  messages[index] = tmessages[0];
-                  messages = [...messages];
-                }
-              } catch (err) {
-                console.log('Unpin:', err);
-              }
-            } else if (scope.selected.title  === 'Pin') {
-              try {
-                await msg.pin();
-                const tmessages = await client.getMessages(chat, {ids:msg.id})
-                if (tmessages.length > 0) {
-                  messages[index] = tmessages[0];
-                  messages = [...messages];
-                }
-              } catch (err) {
-                console.log('Pin:', err);
-              }
+            } else if (['Pin', 'Unpin'].indexOf(scope.selected.title) > -1) {
+              pinnedMessage(msg, index);
             } else if (scope.selected.title === 'Mute') {
               // chat.
             } else if (scope.selected.title === 'Unmute') {
