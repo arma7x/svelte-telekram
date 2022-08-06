@@ -233,7 +233,7 @@
       target: document.body,
       props: {
         title: 'Confirm',
-        body: `Do you want to delete this message ?`,
+        body: 'Do you want to delete this message ?',
         softKeyLeftText: 'Cancel',
         softKeyCenterText: '',
         softKeyRightText: 'Yes',
