@@ -52,9 +52,9 @@
       if (!ready && chat == null)
         return;
       if (location.state.entity.className === 'Channel' && !location.state.entity.megagroup && location.state.entity.creator) {
-        openSendMessageDialog()
+        openSendMessage()
       } else {
-        openSendMessageDialog()
+        openSendMessage()
       }
     },
     arrowUpListener: async (evt) => {
@@ -143,7 +143,7 @@
     (await cachedDatabase).put('chatPreferences', pref, chatId);
   }
 
-  function openSendMessageDialog() {
+  function openSendMessage() {
     sendMessageDialog = new TextAreaDialog({
       target: document.body,
       props: {
@@ -301,22 +301,30 @@
     if (!msg.noforwards) {
       menu.push({ title: 'Forward' });
     }
-    if (msg.replies && msg.replies.replies > 0)
+    if (msg.replies && msg.replies.replies > 0) {
       menu.push({ title: 'View Replies' });
-    menu = [...menu, { title: 'Reply' }, { title: 'Report' }];
+    }
+    menu.push({ title: 'Reply' });
+    if (chat.entity.className === 'Channel') {
+      menu.push({ title: 'Report' });
+    }
     const sender = msg.sender || msg.__sender;
-    if (sender && sender.id.value.toString() === user[0].id.value.toString())
+    if (sender && sender.id.value.toString() === user[0].id.value.toString()) {
       menu = [...menu, { title: 'Edit' }, { title: 'Delete' }];
-    else if ((chat.entity.className === 'Channel' && chat.entity.creator) || chat.entity.className === 'User')
+    } else if ((chat.entity.className === 'Channel' && chat.entity.creator) || chat.entity.className === 'User') {
       menu.push({ title: 'Delete' });
-    if (msg.pinned && ((chat.entity.className === 'Channel' && chat.entity.creator) || chat.entity.className === 'User'))
+    }
+    if (msg.pinned && ((chat.entity.className === 'Channel' && chat.entity.creator) || chat.entity.className === 'User')) {
       menu.push({ title: 'Unpin' });
-    if (!msg.pinned && ((chat.entity.className === 'Channel' && chat.entity.creator) || chat.entity.className === 'User'))
+    }
+    if (!msg.pinned && ((chat.entity.className === 'Channel' && chat.entity.creator) || chat.entity.className === 'User')) {
       menu.push({ title: 'Pin' });
-    if (muteUntil === false)
+    }
+    if (muteUntil === false) {
       menu.push({ title: 'Mute' });
-    else
+    } else {
       menu.push({ title: 'Unmute' });
+    }
     contextMenu = new OptionMenu({
       target: document.body,
       props: {
