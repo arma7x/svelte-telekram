@@ -52,9 +52,9 @@
       if (!ready && chat == null)
         return;
       if (location.state.entity.className === 'Channel' && !location.state.entity.megagroup && location.state.entity.creator) {
-        openSendMessage()
+        openSendMessage(null)
       } else {
-        openSendMessage()
+        openSendMessage(null)
       }
     },
     arrowUpListener: async (evt) => {
@@ -143,12 +143,12 @@
     (await cachedDatabase).put('chatPreferences', pref, chatId);
   }
 
-  function openSendMessage() {
+  function openSendMessage(messageToReply = null) {
     sendMessageDialog = new TextAreaDialog({
       target: document.body,
       props: {
         title: 'Message',
-        softKeyLeftText: 'Send',
+        softKeyLeftText: messageToReply != null ? 'Reply' : 'Send',
         softKeyCenterText: 'New line',
         softKeyRightText: '',
         value: '',
@@ -161,7 +161,12 @@
             // console.log(location.state.entity.id.value, msg);
             // console.time('sendMessage');
             try {
-              const result = await client.sendMessage(chat, {message: msg});
+              let result;
+              if (messageToReply) {
+                result = await messageToReply.reply({message: msg});
+              } else {
+                result = await client.sendMessage(chat, {message: msg});
+              }
               const tmessages = await client.getMessages(chat, {ids:result.id})
               if (tmessages.length > 0) {
                 const temp = [...messages, ...tmessages];
@@ -344,7 +349,7 @@
             } else if (scope.selected.title === 'Forward') {
               // msg.forwardTo
             } else if (scope.selected.title === 'Reply') {
-              // msg.reply
+              openSendMessage(msg);
             } else if (scope.selected.title === 'Report') {
               // msg.?
             } else if (scope.selected.title === 'Edit') {
