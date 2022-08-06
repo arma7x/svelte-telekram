@@ -143,35 +143,41 @@
     (await cachedDatabase).put('chatPreferences', pref, chatId);
   }
 
-  function openSendMessage(messageToReply = null) {
+  function openSendMessage(messageEntity = null, edit = false) {
     sendMessageDialog = new TextAreaDialog({
       target: document.body,
       props: {
         title: 'Message',
-        softKeyLeftText: messageToReply != null ? 'Reply' : 'Send',
+        softKeyLeftText: messageEntity != null ? (edit ? 'Save' : 'Reply') : 'Send',
         softKeyCenterText: 'New line',
         softKeyRightText: '',
-        value: '',
+        value: edit ? messageEntity.message : '',
         placeholder: 'Enter you text',
         type: 'text',
         rows: 3,
         onSoftkeyLeft: async (evt, value) => {
           const msg = value.trim();
           if (msg.length > 0) {
-            // console.log(location.state.entity.id.value, msg);
-            // console.time('sendMessage');
             try {
               let result;
-              if (messageToReply) {
-                result = await messageToReply.reply({message: msg});
+              if (messageEntity && edit) {
+                result = await client.editMessage(chat, { message: messageEntity.id, text: msg });
+              } else if (messageEntity) {
+                result = await messageEntity.reply({message: msg});
               } else {
                 result = await client.sendMessage(chat, {message: msg});
               }
               const tmessages = await client.getMessages(chat, {ids:result.id})
               if (tmessages.length > 0) {
-                const temp = [...messages, ...tmessages];
-                messages = await buildIndex(temp);
-                autoScroll();
+                if (edit && messageMetadata[tmessages[0].id.toString()]) {
+                  const idx = messageMetadata[tmessages[0].id.toString()].index;
+                  messages[idx] = tmessages[0];
+                  messages = [...messages];
+                } else {
+                  const temp = [...messages, ...tmessages];
+                  messages = await buildIndex(temp);
+                  autoScroll();
+                }
               }
               sendMessageDialog.$destroy();
             } catch (err) {
@@ -353,7 +359,7 @@
             } else if (scope.selected.title === 'Report') {
               // msg.?
             } else if (scope.selected.title === 'Edit') {
-              // msg.edit
+              openSendMessage(msg, true);
             } else if (scope.selected.title === 'Delete') {
               deleteMessage(msg, index);
             } else if (['Pin', 'Unpin'].indexOf(scope.selected.title) > -1) {
