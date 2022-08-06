@@ -158,6 +158,8 @@
         onSoftkeyLeft: async (evt, value) => {
           const msg = value.trim();
           if (msg.length > 0) {
+            // console.log(location.state.entity.id.value, msg);
+            // console.time('sendMessage');
             try {
               let result;
               if (messageEntity && edit) {
