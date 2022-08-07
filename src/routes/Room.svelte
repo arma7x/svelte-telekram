@@ -724,11 +724,7 @@
         return chat.entity.id.value == entity.id.value;
       });
       // console.log(chat);
-      if (chat.dialog.notifySettings.muteUntil) {
-        muteUntil = new Date(new Date().getTime() + chat.dialog.notifySettings.muteUntil);
-      } else {
-        muteUntil = false;
-      }
+      muteUntil = chat.entity.__muted;
       console.log('muteUntil:', muteUntil);
       let params = { limit: 50 };
       // TOFIX: unstable

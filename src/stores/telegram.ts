@@ -97,7 +97,7 @@ export async function retrieveChats() {
       }
       chat.entity.__muted = false;
       if (chat.dialog.notifySettings.muteUntil != null) {
-        chat.entity.__muted = true;
+        chat.entity.__muted = chat.dialog.notifySettings.muteUntil;
       }
       if (chatPreferencesTask[chat.id.value.toString()] == null) {
         chatPreferencesTask[chat.id.value.toString()] = {};
