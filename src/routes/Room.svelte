@@ -325,7 +325,10 @@
     }
     const sender = msg.sender || msg.__sender;
     if (sender && sender.id.value.toString() === user[0].id.value.toString()) {
-      menu = [...menu, { title: 'Edit' }, { title: 'Delete' }];
+      if ((new Date().getTime() - new Date(msg.date * 1000).getTime() < 172800000 || chat.__isSavedMessages) && msg.fwdFrom == null) {
+        menu.push({ title: 'Edit' });
+      }
+      menu.push({ title: 'Delete' });
     } else if ((chat.entity.className === 'Channel' && chat.entity.creator) || chat.entity.className === 'User') {
       menu.push({ title: 'Delete' });
     }
