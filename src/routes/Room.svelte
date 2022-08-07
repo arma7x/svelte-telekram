@@ -137,7 +137,7 @@
   let navInstance = createKaiNavigator(navOptions);
 
   async function updateScrollAt(msg) {
-    const chatId = chat.id.value.toString();
+    const chatId = chat.entity.id.value.toString();
     let pref = await (await cachedDatabase).get('chatPreferences', chatId);
     pref['scrollAt'] = msg.id;
     (await cachedDatabase).put('chatPreferences', pref, chatId);

@@ -575,7 +575,7 @@
   async function openRoom(name, chat) {
     let scrollAt;
     try {
-      let pref = await (await cachedDatabase).get('chatPreferences', chat.id.value.toString());
+      let pref = await (await cachedDatabase).get('chatPreferences', chat.entity.id.value.toString());
       scrollAt = pref['scrollAt'];
     } catch(err) {}
     goto('room', { state: { name, entity: chat.entity.toJSON(), scrollAt } });

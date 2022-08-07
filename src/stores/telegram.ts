@@ -8,7 +8,6 @@ export const chatCollections = writable([]);
 export const cachedThumbnails = writable({});
 
 client.addEventHandler((evt) => {
-  // console.log('client.addEventHandler', evt.className);
   switch (evt.className) {
     case "UpdateNotifySettings":
     case "UpdateFolderPeers":
@@ -34,7 +33,7 @@ client.addEventHandler((evt) => {
       isUserAuthorized();
       break
     default:
-      console.log(evt);
+      console.log('client.addEventHandler:', evt);
   }
   if (evt.state) {
     if (evt.state === 1)
@@ -99,11 +98,11 @@ export async function retrieveChats() {
       if (chat.dialog.notifySettings.muteUntil != null) {
         chat.entity.__muted = chat.dialog.notifySettings.muteUntil;
       }
-      if (chatPreferencesTask[chat.id.value.toString()] == null) {
-        chatPreferencesTask[chat.id.value.toString()] = {};
+      if (chatPreferencesTask[chat.entity.id.value.toString()] == null) {
+        chatPreferencesTask[chat.entity.id.value.toString()] = {};
       }
-      chatPreferencesTask[chat.id.value.toString()]['muted'] = chat.dialog.notifySettings.muteUntil || false;
-      chatPreferencesTask[chat.id.value.toString()]['scrollAt'] = chat.message.id;
+      chatPreferencesTask[chat.entity.id.value.toString()]['muted'] = chat.dialog.notifySettings.muteUntil || false;
+      chatPreferencesTask[chat.entity.id.value.toString()]['scrollAt'] = chat.message.id;
       chat.iconRef = chat.id.toString();
       if (!(chat.entity.username == null && chat.entity.phone == null) && chat.entity.photo != null && chat.entity.photo.className !== 'ChatPhotoEmpty') {
         chat.iconRef = chat.entity.photo.photoId.toString();
