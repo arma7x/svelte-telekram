@@ -93,11 +93,11 @@ export async function retrieveChats() {
       chat.__isSavedMessages = false;
       if (chat.id.value === user[0].id.value) {
         chat.name = 'Saved Messages';
-        chat.__isSavedMessages = true;
+        chat.entity.__isSavedMessages = true;
       }
-      chat.__muted = false;
+      chat.entity.__muted = false;
       if (chat.dialog.notifySettings.muteUntil != null) {
-        chat.__muted = true;
+        chat.entity.__muted = true;
       }
       if (chatPreferencesTask[chat.id.value.toString()] == null) {
         chatPreferencesTask[chat.id.value.toString()] = {};

@@ -592,7 +592,7 @@
   }
 
   function getThumb(chat) {
-    if (chat.__isSavedMessages) {
+    if (chat.entity.__isSavedMessages) {
       return `<img alt="icon" style="background-color:var(--themeColor);width:40px;height:40px;border-radius:50%;box-sizing:border-box;border: 2px solid #fff;"" src="/icons/saved.png"/>`
     }
     if (thumbs[chat.iconRef]) {

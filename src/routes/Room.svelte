@@ -325,7 +325,7 @@
     }
     const sender = msg.sender || msg.__sender;
     if (sender && sender.id.value.toString() === user[0].id.value.toString()) {
-      if ((new Date().getTime() - new Date(msg.date * 1000).getTime() < 172800000 || chat.__isSavedMessages) && msg.fwdFrom == null) {
+      if ((new Date().getTime() - new Date(msg.date * 1000).getTime() < 172800000 || chat.entity.__isSavedMessages) && msg.fwdFrom == null) {
         menu.push({ title: 'Edit' });
       }
       menu.push({ title: 'Delete' });

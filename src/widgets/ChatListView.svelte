@@ -15,7 +15,7 @@
   <div class="kai-list-view-icon">{@html icon}</div>
   <div class="kai-list-view-content">
     <p>
-      {#if chat.__muted && !chat.__isSavedMessages}&#128263;&nbsp;{/if}{chat.name}
+      {#if chat.entity.__muted && !chat.entity.__isSavedMessages}&#128263;&nbsp;{/if}{chat.name}
     </p>
     <small>
       {#if chat.isGroup && userId === chat.message._sender.id.value.toString()}
