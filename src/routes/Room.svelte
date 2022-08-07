@@ -616,10 +616,13 @@
     }
   }
 
-  async function incomingMessageListener(evt) {
+  async function clientListener(evt) {
     console.log('Room Listen:', location.state.entity.id.value.toString(), evt.className, evt);
     switch (evt.className) {
       case "UpdateNotifySettings":
+        const id = evt.peer.peer.channelId ? evt.peer.peer.channelId.value.toString() : evt.peer.peer.userId.value.toString();
+        if (id !== chat.entity.id.value.toString())
+          break;
         if (evt.notifySettings.muteUntil) {
           muteUntil = new Date(new Date().getTime() + evt.notifySettings.muteUntil);
         } else {
@@ -766,7 +769,7 @@
     }
     navInstance.attachListener();
     document.addEventListener('keydown', keydownEventHandler);
-    client.addEventHandler(incomingMessageListener);
+    client.addEventHandler(clientListener);
     ready = true;
   });
 
@@ -782,7 +785,7 @@
     //}
     navInstance.detachListener();
     document.removeEventListener('keydown', keydownEventHandler);
-    client.removeEventHandler(incomingMessageListener);
+    client.removeEventHandler(clientListener);
   });
 
 </script>
