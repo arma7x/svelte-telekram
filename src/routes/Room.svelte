@@ -339,9 +339,9 @@
       menu.push({ title: 'Pin' });
     }
     if (muteUntil === false) {
-      menu.push({ title: 'Mute' });
+      menu.push({ title: 'Mute Chat' });
     } else {
-      menu.push({ title: 'Unmute' });
+      menu.push({ title: 'Unmute Chat' });
     }
     contextMenu = new OptionMenu({
       target: document.body,
@@ -371,9 +371,9 @@
               deleteMessage(msg, index);
             } else if (['Pin', 'Unpin'].indexOf(scope.selected.title) > -1) {
               pinnedMessage(msg, index);
-            } else if (scope.selected.title === 'Mute') {
+            } else if (scope.selected.title === 'Mute Chat') {
               // chat.
-            } else if (scope.selected.title === 'Unmute') {
+            } else if (scope.selected.title === 'Unmute Chat') {
               // chat.
             } else if (scope.selected.title === 'Show Reply Buttons') {
               // msg.buttons
