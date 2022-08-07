@@ -726,8 +726,34 @@
       chat = chats.find(chat => {
         return chat.entity.id.value == entity.id.value;
       });
-      // console.log(chat);
-      muteUntil = chat.entity.__muted;
+      if (chat == null) {
+        chat = {};
+        if (entity.className === 'User') {
+          const result = await client.invoke(new Api.users.GetUsers({
+            id: [entity.id.value]
+          }));
+          chat.entity = result[0];
+          chat.isChannel = false;
+          chat.isGroup = false;
+          chat.isUser = true;
+        } else {
+          const result = await client.invoke(new Api.users.GetChannels({
+            id: [entity.id.value]
+          }));
+          chat.entity = result[0];
+          if (entity.megagroup) {
+            chat.isChannel = true;
+            chat.isGroup = true;
+            chat.isUser = false;
+          } else {
+            chat.isChannel = true;
+            chat.isGroup = false;
+            chat.isUser = false;
+          }
+        }
+      }
+      console.log('isChannel:', chat.isChannel, ', isGroup:', chat.isGroup, ', isUser:', chat.isUser);
+      muteUntil = chat.entity.__muted || false;
       console.log('muteUntil:', muteUntil);
       let params = { limit: 50 };
       // TOFIX: unstable
@@ -735,7 +761,7 @@
         //params['maxId'] = scrollAt - 100;
         //params['limit'] = 50;
       }
-      const newMessages = await client.getMessages(chat, params);
+      const newMessages = await client.getMessages(chat.entity, params);
       newMessages.reverse();
       messages = await buildIndex(newMessages);
       let cursor = messages.findIndex((msg) => {
@@ -743,11 +769,10 @@
       });
       if (cursor)
         cursor++;
-      console.log('scrollAt:', scrollAt, params, newMessages.length, chat.message.id, cursor || messages.length);
       navInstance.navigateListNav(1);
       setTimeout(() => {
         navInstance.navigateListNav(cursor || messages.length);
-        if (messages[navInstance.verticalNavIndex].markAsRead)
+        if (messages[navInstance.verticalNavIndex] && messages[navInstance.verticalNavIndex].markAsRead)
           messages[navInstance.verticalNavIndex].markAsRead();
       }, 100);
     } catch (err) {
