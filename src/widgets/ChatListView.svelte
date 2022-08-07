@@ -1,8 +1,10 @@
 <script lang="ts">
+
   export let key:any = '';
   export let icon: string = '';
   export let chat: any = {};
   export let className: string = null;
+  export let userId: string = null;
   export let onClick: Function = (evt) => {}
 
 </script>
@@ -16,7 +18,10 @@
       {#if chat.__muted && !chat.__isSavedMessages}&#128263;&nbsp;{/if}{chat.name}
     </p>
     <small>
-      {#if chat.isGroup}<b>{chat.message._sender.firstName || chat.message._sender.lastName || chat.message._sender.username || chat.message._sender.id}</b>:
+      {#if chat.isGroup && userId === chat.message._sender.id.value.toString()}
+         <b>You</b>:
+      {:else if chat.isGroup}
+         <b>{chat.message._sender.firstName || chat.message._sender.lastName || chat.message._sender.username || chat.message._sender.id}</b>:
       {/if}
       {#if chat.message && chat.message.message}
       {chat.message.message.substring(0, (chat.isGroup ? 15 : 30)) + (chat.message.message.length > (chat.isGroup ? 15 : 30) ? '...' : '')}

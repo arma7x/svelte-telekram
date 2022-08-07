@@ -705,7 +705,7 @@
     </ListView>
   {/if}
   {#each chatList as chat}
-    <ChatListView chat={chat} className="{navClass}" icon={getThumb(chat)} onClick={() => openRoom(chat.name, chat)} />
+    <ChatListView userId={user.length > 0 ? user[0].id.value.toString() : null} chat={chat} className="{navClass}" icon={getThumb(chat)} onClick={() => openRoom(chat.name, chat)} />
   {/each}
   {/if}
 </main>
