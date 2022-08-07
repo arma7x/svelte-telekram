@@ -1,7 +1,7 @@
 <script lang="ts">
   import { Route, navigate as goto } from "svelte-navigator";
   import { createKaiNavigator } from '../utils/navigation';
-  import { ListView, LoadingBar, Button, TextInputField, TextAreaDialog, Toast, Toaster, SoftwareKey, TextInputDialog, OptionMenu } from '../components';
+  import { ListView, LoadingBar, Button, TextInputField, Toast, Toaster, SoftwareKey, TextInputDialog, OptionMenu } from '../components';
   import { onMount, onDestroy } from 'svelte';
 
   import { TelegramKeyHash, Api, client, session, cachedDatabase } from '../utils/bootstrap';
@@ -26,7 +26,6 @@
   let authorizedMenu: OptionMenu;
   let archivedChatListMenu: ArchivedChats;
   let contactListMenu: ContactList;
-  let sendMessageDialog: TextAreaDialog;
 
   let unchatCollections;
   let unauthorizedStatus;
@@ -113,58 +112,6 @@
     });
   }
 
-  function openTextAreaDialog(chat) {
-    sendMessageDialog = new TextAreaDialog({
-      target: document.body,
-      props: {
-        title: 'Message',
-        softKeyLeftText: 'Send',
-        softKeyCenterText: 'New line',
-        softKeyRightText: '',
-        value: '',
-        placeholder: 'Enter you text',
-        type: 'text',
-        rows: 3,
-        onSoftkeyLeft: async (evt, value) => {
-          const msg = value.trim();
-          if (msg.length > 0) {
-            // console.log(location.state.entity.id.value, msg);
-            // console.time('sendMessage');
-            try {
-              const result = await client.sendMessage(chat, {message: msg});
-              const tmessages = await client.getMessages(chat, {ids:result.id})
-              if (tmessages.length > 0) {
-                const temp = [...messages, ...tmessages];
-                messages = await buildIndex(temp);
-                autoScroll();
-              }
-              sendMessageDialog.$destroy();
-            } catch (err) {
-              console.log(err);
-            }
-            // console.timeEnd('sendMessage');
-          }
-        },
-        onSoftkeyRight: (evt, value) => {},
-        onEnter: (evt, value) => {},
-        onBackspace: (evt, value) => {
-          evt.stopPropagation();
-          if (value.length === 0) {
-            sendMessageDialog.$destroy();
-            evt.preventDefault();
-          }
-        },
-        onOpened: () => {
-          navInstance.detachListener();
-        },
-        onClosed: (value) => {
-          navInstance.attachListener();
-          sendMessageDialog = null;
-        }
-      }
-    });
-  }
-
   async function getContacts() {
     try {
       const result = await client.invoke(
@@ -191,7 +138,18 @@
                 if (chat != null) {
                   openRoom(chat.name, chat);
                 } else {
-                  openTextAreaDialog(scope.selected);
+                  let name = '';
+                  if (scope.selected.firstName)
+                    name = scope.selected.firstName;
+                  if (scope.selected.lastName)
+                    name += ' ' + scope.selected.lastName;
+                  if (name === '' && scope.selected.username)
+                    name = scope.selected.username;
+                  else if (name === '' && scope.selected.phone)
+                    name = scope.selected.phone;
+                  else if (name === '')
+                    name = scope.selected.id.value.toString();
+                  openRoom(name, { entity: scope.selected });
                 }
               }
             }, 100);
