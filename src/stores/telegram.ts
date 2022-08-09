@@ -145,7 +145,7 @@ export function getAuthorizedUser() {
 
 export async function runTask(httpTasks, websocketTasks, chatPreferencesTask = {}) {
   // console.time('chatPreferencesTask');
-  console.log('chatPreferencesTask:', Object.keys(chatPreferencesTask).length);
+  // console.log('chatPreferencesTask:', Object.keys(chatPreferencesTask).length);
   for (let chatId in chatPreferencesTask) {
     let pref = await (await cachedDatabase).get('chatPreferences', chatId);
     if (pref == null)
@@ -158,7 +158,7 @@ export async function runTask(httpTasks, websocketTasks, chatPreferencesTask = {
   }
   // console.timeEnd('chatPreferencesTaskTask');
 
-  console.log('httpTasks:', httpTasks.length);
+  // console.log('httpTasks:', httpTasks.length);
   // console.time('httpTasks');
   httpTasks.forEach(async (task, index) => {
     try {
@@ -186,7 +186,7 @@ export async function runTask(httpTasks, websocketTasks, chatPreferencesTask = {
   // console.timeEnd('httpTasks');
 
   let elapsed = 0;
-  console.log('websocketTasks:', websocketTasks.length);
+  // console.log('websocketTasks:', websocketTasks.length);
   // console.time('websocketTasks');
   websocketTasks.forEach(async (task) => {
     try {

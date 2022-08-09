@@ -563,7 +563,7 @@
       }
     });
 
-    console.log('fetchReply:', fetchReply.length);
+    // console.log('fetchReply:', fetchReply.length);
     // console.time('fetchReply');
     try {
       const messages = await client.getMessages(chat, {ids:fetchReply});
@@ -575,7 +575,7 @@
     }
     // console.timeEnd('fetchReply');
 
-    console.log('fetchForwardedUsers:', fetchForwardedUsers.length);
+    // console.log('fetchForwardedUsers:', fetchForwardedUsers.length);
     // console.time('fetchForwardedUsers');
     try {
       const users = await client.invoke(new Api.users.GetUsers({ id: fetchForwardedUsers }));
@@ -608,7 +608,7 @@
     }
     // console.timeEnd('fetchForwardedUsers');
 
-    console.log('fetchForwardedChannels:', fetchForwardedChannels.length);
+    // console.log('fetchForwardedChannels:', fetchForwardedChannels.length);
     // console.time('fetchForwardedChannels');
     try {
       const channels = await client.invoke(new Api.channels.GetChannels({ id: fetchForwardedChannels }));
@@ -681,7 +681,7 @@
         } else {
           muteUntil = false;
         }
-        console.log('muteUntil:', muteUntil);
+        // console.log('muteUntil:', muteUntil);
         break;
       case 'UpdateShortMessage':
         if (evt.userId && evt.userId.value.toString() === location.state.entity.id.value.toString()) {
@@ -815,9 +815,9 @@
           }
         }
       }
-      console.log('isChannel:', chat.isChannel, ', isGroup:', chat.isGroup, ', isUser:', chat.isUser);
+      // console.log('isChannel:', chat.isChannel, ', isGroup:', chat.isGroup, ', isUser:', chat.isUser);
       muteUntil = chat.entity.__muted || false;
-      console.log('muteUntil:', muteUntil);
+      // console.log('muteUntil:', muteUntil);
       let params = { limit: 50 };
       // TOFIX: unstable
       if (scrollAt) {
