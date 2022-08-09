@@ -28,7 +28,6 @@
   let forwardedChannelsIndex = [];
   const cachedForwardedChannels = {};
 
-  let blocking: bool = true;
   let padTop: bool = true;
   let ready: bool = false;
   let chat: any;
@@ -106,7 +105,7 @@
         //main[0].style.setProperty('top', `calc(${style.top} + 28px)`);
         //main[0].style.setProperty('height', `calc(${style.height} - 28px)`);
       //}
-      if (ready && navInstance.verticalNavIndex !== Object.keys(messageMetadata).length - 1) {
+      if (ready && navInstance.verticalNavIndex !== messages.length - 1) {
         evt.preventDefault();
         navInstance.navigateListNav(1);
         const msg = messages[navInstance.verticalNavIndex];
@@ -248,8 +247,8 @@
         },
         onSoftkeyRight: async (evt) => {
           try {
-            await msg.delete();
-            const scroll = navInstance.verticalNavIndex !== Object.keys(messageMetadata).length - 1;
+            await client.deleteMessages(chat, [msg.id], {revoke: true});
+            const scroll = navInstance.verticalNavIndex !== messages.length - 1;
             const pops = [];
             const temp = [];
             const id = msg.id;
@@ -479,18 +478,14 @@
     return Dummy;
   }
 
-  async function buildIndex(messages) {
-    if (blocking == true)
-      blocking = false;
-    while (!blocking) {}
-    // console.time('buildIndex');
+  async function buildIndex(_messages) {
     forwardedUsersIndex = [];
     forwardedChannelsIndex = [];
     const httpTasks = [];
     const websocketTasks = [];
     const fetchReply = [];
 
-    messages.forEach((message, index) => {
+    _messages.forEach((message, index) => {
       if (message && message.id) {
         if (messageMetadata[message.id.toString()] == null) {
           messageMetadata[message.id.toString()] = {}
@@ -566,9 +561,9 @@
     // console.log('fetchReply:', fetchReply.length);
     // console.time('fetchReply');
     try {
-      const messages = await client.getMessages(chat, {ids:fetchReply});
+      const fmessages = await client.getMessages(chat, {ids:fetchReply});
       fetchReply.forEach((id, index) => {
-        replyIndex[id.toString()] = messages[index];
+        replyIndex[id.toString()] = fmessages[index];
       });
     } catch (err) {
       console.log(err);
@@ -595,11 +590,11 @@
         }
       });
       forwardedUsersIndex.forEach(i => {
-        messages[i].fwdFrom.sender = cachedForwardedUsers[messages[i].fwdFrom.fromId.userId.toString()];
-        if (!(messages[i].fwdFrom.sender.username == null && messages[i].fwdFrom.sender.phone == null) && messages[i].fwdFrom.sender.photo != null) {
-          messages[i].iconRef = messages[i].fwdFrom.sender.photo.photoId.toString();
-        } else if (messages[i].fwdFrom.sender.photo != null) {
-          messages[i].iconRef = messages[i].fwdFrom.sender.photo.photoId.toString();
+        _messages[i].fwdFrom.sender = cachedForwardedUsers[_messages[i].fwdFrom.fromId.userId.toString()];
+        if (!(_messages[i].fwdFrom.sender.username == null && _messages[i].fwdFrom.sender.phone == null) && _messages[i].fwdFrom.sender.photo != null) {
+          _messages[i].iconRef = _messages[i].fwdFrom.sender.photo.photoId.toString();
+        } else if (_messages[i].fwdFrom.sender.photo != null) {
+          _messages[i].iconRef = _messages[i].fwdFrom.sender.photo.photoId.toString();
         }
       });
       fetchForwardedUsers = [];
@@ -628,11 +623,11 @@
         }
       });
       forwardedChannelsIndex.forEach(i => {
-        messages[i].fwdFrom.sender = cachedForwardedChannels[messages[i].fwdFrom.fromId.channelId.toString()];
-        if (!(messages[i].fwdFrom.sender.username == null && messages[i].fwdFrom.sender.phone == null) && messages[i].fwdFrom.sender.photo != null) {
-          messages[i].iconRef = messages[i].fwdFrom.sender.photo.photoId.toString();
-        } else if (messages[i].fwdFrom.sender.photo != null) {
-          messages[i].iconRef = messages[i].fwdFrom.sender.photo.photoId.toString();
+        _messages[i].fwdFrom.sender = cachedForwardedChannels[_messages[i].fwdFrom.fromId.channelId.toString()];
+        if (!(_messages[i].fwdFrom.sender.username == null && _messages[i].fwdFrom.sender.phone == null) && _messages[i].fwdFrom.sender.photo != null) {
+          _messages[i].iconRef = _messages[i].fwdFrom.sender.photo.photoId.toString();
+        } else if (_messages[i].fwdFrom.sender.photo != null) {
+          _messages[i].iconRef = _messages[i].fwdFrom.sender.photo.photoId.toString();
         }
       });
       fetchForwardedChannels = [];
@@ -643,8 +638,7 @@
 
     runTask(httpTasks, websocketTasks);
     // console.timeEnd('buildIndex');
-    blocking = true;
-    return messages;
+    return _messages;
   }
 
   function registerCallButtonHandler(id, callback) {
@@ -670,7 +664,7 @@
 
   // TODO: Fix race condition
   async function clientListener(evt) {
-    console.log('Room Listen:', location.state.entity.id.value.toString(), evt.className, evt);
+    console.log('Room :', location.state.entity.id.value.toString(), evt.className, evt);
     switch (evt.className) {
       case "UpdateNotifySettings":
         const id = evt.peer.peer.channelId ? evt.peer.peer.channelId.value.toString() : evt.peer.peer.userId.value.toString();
@@ -739,7 +733,7 @@
         break;
       case 'UpdateDeleteChannelMessages':
       case 'UpdateDeleteMessages':
-        const scroll = navInstance.verticalNavIndex !== Object.keys(messageMetadata).length - 1;
+        const scroll = navInstance.verticalNavIndex !== messages.length - 1;
         const pops = [];
         const temp = [];
         evt.messages.forEach(id => {
@@ -857,6 +851,7 @@
     }
     navInstance.attachListener();
     document.addEventListener('keydown', keydownEventHandler);
+    // TODO: Fix race condition
     client.addEventHandler(clientListener);
     ready = true;
   });
