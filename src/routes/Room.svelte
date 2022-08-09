@@ -28,6 +28,7 @@
   let forwardedChannelsIndex = [];
   const cachedForwardedChannels = {};
 
+  let blocking: bool = true;
   let padTop: bool = true;
   let ready: bool = false;
   let chat: any;
@@ -479,7 +480,9 @@
   }
 
   async function buildIndex(messages) {
-
+    if (blocking == true)
+      blocking = false;
+    while (!blocking) {}
     // console.time('buildIndex');
     forwardedUsersIndex = [];
     forwardedChannelsIndex = [];
@@ -640,6 +643,7 @@
 
     runTask(httpTasks, websocketTasks);
     // console.timeEnd('buildIndex');
+    blocking = true;
     return messages;
   }
 
