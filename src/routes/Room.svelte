@@ -18,6 +18,7 @@
   let repliesDialog: Replies;
   let contextMenu: OptionMenu;
   let deleteMessageDialog: Dialog;
+  let replyButtons: OptionMenu;
 
   let fetchForwardedUsers = [];
   let forwardedUsersIndex = [];
@@ -304,6 +305,48 @@
     }
   }
 
+  function showReplyButtons(msg) {
+    const buttons = [];
+    msg.buttons.forEach(row => {
+      row.forEach(button => {
+        buttons.push({ title: button.button.text, subtitle: button.inlineQuery, button: button.button });
+      });
+    });
+    replyButtons = new OptionMenu({
+      target: document.body,
+      props: {
+        title: 'Reply Buttons',
+        focusIndex: 0,
+        options: buttons,
+        softKeyCenterText: 'select',
+        onSoftkeyRight: (evt, scope) => {},
+        onSoftkeyLeft: (evt, scope) => {},
+        onEnter: async (evt, scope) => {
+          replyButtons.$destroy();
+          if (scope.selected.subtitle == null && scope.selected.button.requiresPassword == false) { // not support inlineQuery or requiresPassword
+            try {
+              await msg.click(scope.selected.button);
+            } catch (err) {
+              console.log(err);
+            }
+          }
+        },
+        onBackspace: (evt, scope) => {
+          evt.preventDefault();
+          evt.stopPropagation();
+          replyButtons.$destroy();
+        },
+        onOpened: () => {
+          navInstance.detachListener();
+        },
+        onClosed: (scope) => {
+          navInstance.attachListener();
+          replyButtons = null;
+        }
+      }
+    });
+  }
+
   async function openContextMenu(msg, index) {
     const user = await getAuthorizedUser();
     let menu = [];
@@ -376,7 +419,7 @@
             } else if (scope.selected.title === 'Unmute Chat') {
               // chat.
             } else if (scope.selected.title === 'Show Reply Buttons') {
-              // msg.buttons
+              showReplyButtons(msg);
             }
           }, 200);
         },
@@ -606,13 +649,17 @@
   }
 
   function keydownEventHandler(evt) {
-    if (evt.key === 'Call' || evt.code === 'ShiftLeft') {
-      if (messages[navInstance.verticalNavIndex] && messages[navInstance.verticalNavIndex].id.toString()) {
-        if (messageMetadata[messages[navInstance.verticalNavIndex].id.toString()]) {
-          const cb = messageMetadata[messages[navInstance.verticalNavIndex].id.toString()].callback;
-          cb && cb();
+    try {
+      if (evt.key === 'Call' || evt.code === 'ShiftLeft') {
+        if (messages[navInstance.verticalNavIndex] && messages[navInstance.verticalNavIndex].id.toString()) {
+          if (messageMetadata[messages[navInstance.verticalNavIndex].id.toString()]) {
+            const cb = messageMetadata[messages[navInstance.verticalNavIndex].id.toString()].callback;
+            cb && cb();
+          }
         }
       }
+    } catch (err) {
+      console.log(err);
     }
   }
 

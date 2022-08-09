@@ -256,6 +256,9 @@
       <p>{message.message.length > 80 && short ? message.message.substring(0, 80) + '...' : message.message}</p>
     {/if}
     <div class="indicator">
+      {#if message.buttons}
+      <small class="buttons">&#9000;&nbsp;</small>
+      {/if}
       {#if message.pinned}
       <small class="pinned">&#x1f588;&nbsp;</small>
       {/if}
