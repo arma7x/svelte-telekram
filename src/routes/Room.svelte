@@ -1,6 +1,6 @@
 <script lang="ts">
   import { createKaiNavigator, KaiNavigator } from '../utils/navigation';
-  import { onMount, onDestroy } from 'svelte';
+  import { onMount, onDestroy, afterUpdate } from 'svelte';
 
   import { Api, client, cachedDatabase } from '../utils/bootstrap';
 
@@ -27,6 +27,8 @@
   let fetchForwardedChannels = [];
   let forwardedChannelsIndex = [];
   const cachedForwardedChannels = {};
+
+  let messagesToMerge = [];
 
   let padTop: bool = true;
   let ready: bool = false;
@@ -105,7 +107,7 @@
         //main[0].style.setProperty('top', `calc(${style.top} + 28px)`);
         //main[0].style.setProperty('height', `calc(${style.height} - 28px)`);
       //}
-      if (ready && navInstance.verticalNavIndex !== messages.length - 1) {
+      if (ready && navInstance.verticalNavIndex !== Object.keys(messageMetadata).length - 1) {
         evt.preventDefault();
         navInstance.navigateListNav(1);
         const msg = messages[navInstance.verticalNavIndex];
@@ -162,7 +164,6 @@
             // console.log(location.state.entity.id.value, msg);
             // console.time('sendMessage');
             sendMessageDialog.$destroy();
-            // TODO: Fix race condition
             try {
               let result;
               if (messageEntity && edit) {
@@ -179,9 +180,7 @@
                   messages[idx] = tmessages[0];
                   messages = [...messages];
                 } else {
-                  const temp = [...messages, ...tmessages];
-                  messages = await buildIndex(temp);
-                  autoScroll();
+                  pushMessageToMerge(tmessages[0]);
                 }
               }
             } catch (err) {
@@ -248,7 +247,7 @@
         onSoftkeyRight: async (evt) => {
           try {
             await client.deleteMessages(chat, [msg.id], {revoke: true});
-            const scroll = navInstance.verticalNavIndex !== messages.length - 1;
+            const scroll = navInstance.verticalNavIndex !== Object.keys(messageMetadata).length - 1;
             const pops = [];
             const temp = [];
             const id = msg.id;
@@ -558,83 +557,89 @@
       }
     });
 
-    // console.log('fetchReply:', fetchReply.length);
-    // console.time('fetchReply');
-    try {
-      const fmessages = await client.getMessages(chat, {ids:fetchReply});
-      fetchReply.forEach((id, index) => {
-        replyIndex[id.toString()] = fmessages[index];
-      });
-    } catch (err) {
-      console.log(err);
+    if (fetchReply.length > 0) {
+      // console.log('fetchReply:', fetchReply.length);
+      // console.time('fetchReply');
+      try {
+        const fmessages = await client.getMessages(chat, {ids:fetchReply});
+        fetchReply.forEach((id, index) => {
+          replyIndex[id.toString()] = fmessages[index];
+        });
+      } catch (err) {
+        console.log(err);
+      }
+      // console.timeEnd('fetchReply');
     }
-    // console.timeEnd('fetchReply');
 
-    // console.log('fetchForwardedUsers:', fetchForwardedUsers.length);
-    // console.time('fetchForwardedUsers');
-    try {
-      const users = await client.invoke(new Api.users.GetUsers({ id: fetchForwardedUsers }));
-      users.forEach(u => {
-        cachedForwardedUsers[u.id.toString()] = u;
-        if (!(u.username == null && u.phone == null) && u.photo != null) {
-          httpTasks.push({
-            url: `https://api.codetabs.com/v1/proxy/?quest=https://t.me/${u.phone === "42777" ? 'telegram' : u.username}`,
-            photoId: u.photo.photoId.toString(),
-            chat: u
-          })
-        } else if (u.photo != null) {
-          websocketTasks.push({
-            photoId: u.photo.photoId.toString(),
-            chat: u
-          })
-        }
-      });
-      forwardedUsersIndex.forEach(i => {
-        _messages[i].fwdFrom.sender = cachedForwardedUsers[_messages[i].fwdFrom.fromId.userId.toString()];
-        if (!(_messages[i].fwdFrom.sender.username == null && _messages[i].fwdFrom.sender.phone == null) && _messages[i].fwdFrom.sender.photo != null) {
-          _messages[i].iconRef = _messages[i].fwdFrom.sender.photo.photoId.toString();
-        } else if (_messages[i].fwdFrom.sender.photo != null) {
-          _messages[i].iconRef = _messages[i].fwdFrom.sender.photo.photoId.toString();
-        }
-      });
-      fetchForwardedUsers = [];
-    } catch (err) {
-      console.log(err);
+    if (fetchForwardedUsers.length > 0) {
+      // console.log('fetchForwardedUsers:', fetchForwardedUsers.length);
+      // console.time('fetchForwardedUsers');
+      try {
+        const users = await client.invoke(new Api.users.GetUsers({ id: fetchForwardedUsers }));
+        users.forEach(u => {
+          cachedForwardedUsers[u.id.toString()] = u;
+          if (!(u.username == null && u.phone == null) && u.photo != null) {
+            httpTasks.push({
+              url: `https://api.codetabs.com/v1/proxy/?quest=https://t.me/${u.phone === "42777" ? 'telegram' : u.username}`,
+              photoId: u.photo.photoId.toString(),
+              chat: u
+            })
+          } else if (u.photo != null) {
+            websocketTasks.push({
+              photoId: u.photo.photoId.toString(),
+              chat: u
+            })
+          }
+        });
+        forwardedUsersIndex.forEach(i => {
+          _messages[i].fwdFrom.sender = cachedForwardedUsers[_messages[i].fwdFrom.fromId.userId.toString()];
+          if (!(_messages[i].fwdFrom.sender.username == null && _messages[i].fwdFrom.sender.phone == null) && _messages[i].fwdFrom.sender.photo != null) {
+            _messages[i].iconRef = _messages[i].fwdFrom.sender.photo.photoId.toString();
+          } else if (_messages[i].fwdFrom.sender.photo != null) {
+            _messages[i].iconRef = _messages[i].fwdFrom.sender.photo.photoId.toString();
+          }
+        });
+        fetchForwardedUsers = [];
+      } catch (err) {
+        console.log(err);
+      }
+      // console.timeEnd('fetchForwardedUsers');
     }
-    // console.timeEnd('fetchForwardedUsers');
 
-    // console.log('fetchForwardedChannels:', fetchForwardedChannels.length);
-    // console.time('fetchForwardedChannels');
-    try {
-      const channels = await client.invoke(new Api.channels.GetChannels({ id: fetchForwardedChannels }));
-      channels.chats.forEach(c => {
-        cachedForwardedChannels[c.id.toString()] = c;
-        if (!(c.username == null && c.phone == null) && c.photo != null) {
-          httpTasks.push({
-            url: `https://api.codetabs.com/v1/proxy/?quest=https://t.me/${c.phone === "42777" ? 'telegram' : c.username}`,
-            photoId: c.photo.photoId.toString(),
-            chat: c
-          })
-        } else if (c.photo != null) {
-          websocketTasks.push({
-            photoId: c.photo.photoId.toString(),
-            chat: c
-          })
-        }
-      });
-      forwardedChannelsIndex.forEach(i => {
-        _messages[i].fwdFrom.sender = cachedForwardedChannels[_messages[i].fwdFrom.fromId.channelId.toString()];
-        if (!(_messages[i].fwdFrom.sender.username == null && _messages[i].fwdFrom.sender.phone == null) && _messages[i].fwdFrom.sender.photo != null) {
-          _messages[i].iconRef = _messages[i].fwdFrom.sender.photo.photoId.toString();
-        } else if (_messages[i].fwdFrom.sender.photo != null) {
-          _messages[i].iconRef = _messages[i].fwdFrom.sender.photo.photoId.toString();
-        }
-      });
-      fetchForwardedChannels = [];
-    } catch (err) {
-      console.log(err);
+    if (fetchForwardedChannels.length > 0) {
+      // console.log('fetchForwardedChannels:', fetchForwardedChannels.length);
+      // console.time('fetchForwardedChannels');
+      try {
+        const channels = await client.invoke(new Api.channels.GetChannels({ id: fetchForwardedChannels }));
+        channels.chats.forEach(c => {
+          cachedForwardedChannels[c.id.toString()] = c;
+          if (!(c.username == null && c.phone == null) && c.photo != null) {
+            httpTasks.push({
+              url: `https://api.codetabs.com/v1/proxy/?quest=https://t.me/${c.phone === "42777" ? 'telegram' : c.username}`,
+              photoId: c.photo.photoId.toString(),
+              chat: c
+            })
+          } else if (c.photo != null) {
+            websocketTasks.push({
+              photoId: c.photo.photoId.toString(),
+              chat: c
+            })
+          }
+        });
+        forwardedChannelsIndex.forEach(i => {
+          _messages[i].fwdFrom.sender = cachedForwardedChannels[_messages[i].fwdFrom.fromId.channelId.toString()];
+          if (!(_messages[i].fwdFrom.sender.username == null && _messages[i].fwdFrom.sender.phone == null) && _messages[i].fwdFrom.sender.photo != null) {
+            _messages[i].iconRef = _messages[i].fwdFrom.sender.photo.photoId.toString();
+          } else if (_messages[i].fwdFrom.sender.photo != null) {
+            _messages[i].iconRef = _messages[i].fwdFrom.sender.photo.photoId.toString();
+          }
+        });
+        fetchForwardedChannels = [];
+      } catch (err) {
+        console.log(err);
+      }
+      // console.timeEnd('fetchForwardedChannels');
     }
-    // console.timeEnd('fetchForwardedChannels');
 
     runTask(httpTasks, websocketTasks);
     // console.timeEnd('buildIndex');
@@ -662,7 +667,29 @@
     }
   }
 
-  // TODO: Fix race condition
+  async function mergeMessages() {
+    const msg = messagesToMerge.pop();
+    const temp = [...messages, msg];
+    messages = await buildIndex(temp);
+    autoScroll();
+  }
+
+  function pushMessageToMerge(msg) {
+    console.log('pushMessageToMerge', msg.id);
+    const len = messagesToMerge.length;
+    if (len === 0) {
+      messagesToMerge.push(msg);
+    } else {
+      if (messagesToMerge[len - 1].date > msg.date) {
+        messagesToMerge = [msg, ...messagesToMerge];
+      } else {
+        messagesToMerge = [...messagesToMerge, msg];
+      }
+    }
+    if (len === 0)
+      mergeMessages();
+  }
+
   async function clientListener(evt) {
     console.log('Room :', location.state.entity.id.value.toString(), evt.className, evt);
     switch (evt.className) {
@@ -681,9 +708,7 @@
         if (evt.userId && evt.userId.value.toString() === location.state.entity.id.value.toString()) {
           const tmessages = await client.getMessages(chat, {ids: evt.id});
           if (tmessages.length > 0) {
-            const temp = [...messages, ...tmessages];
-            messages = await buildIndex(temp);
-            autoScroll();
+            pushMessageToMerge(tmessages[0]);
           }
         }
         break;
@@ -708,11 +733,7 @@
                 // console.timeEnd('fetchuncachedforwardsuser');
               }
             }
-            // check message chain before update
-            // console.log(evt.message);
-            const temp = [...messages, evt.message];
-            messages = await buildIndex(temp);
-            autoScroll();
+            pushMessageToMerge(evt.message);
             break;
           }
         }
@@ -733,7 +754,7 @@
         break;
       case 'UpdateDeleteChannelMessages':
       case 'UpdateDeleteMessages':
-        const scroll = navInstance.verticalNavIndex !== messages.length - 1;
+        const scroll = navInstance.verticalNavIndex !== Object.keys(messageMetadata).length - 1;
         const pops = [];
         const temp = [];
         evt.messages.forEach(id => {
@@ -760,7 +781,7 @@
 
   function autoScroll() {
     setTimeout(() => {
-      if (messages.length - navInstance.verticalNavIndex === 2)
+      if (Object.keys(messageMetadata).length - navInstance.verticalNavIndex === 2)
         navInstance.navigateListNav(1);
     }, 500);
   }
@@ -828,7 +849,7 @@
         cursor++;
       navInstance.navigateListNav(1);
       setTimeout(() => {
-        navInstance.navigateListNav(cursor || messages.length);
+        navInstance.navigateListNav(cursor || Object.keys(messageMetadata).length);
         if (messages[navInstance.verticalNavIndex] && messages[navInstance.verticalNavIndex].markAsRead)
           messages[navInstance.verticalNavIndex].markAsRead();
       }, 100);
@@ -837,6 +858,11 @@
     }
     // console.timeEnd('Finished');
   }
+
+  afterUpdate(async () => {
+    if (messagesToMerge.length > 0)
+      mergeMessages();
+  })
 
   onMount(() => {
     const { appBar, softwareKey } = getAppProp();
@@ -851,7 +877,6 @@
     }
     navInstance.attachListener();
     document.addEventListener('keydown', keydownEventHandler);
-    // TODO: Fix race condition
     client.addEventHandler(clientListener);
     ready = true;
   });
