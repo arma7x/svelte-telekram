@@ -882,7 +882,6 @@
   });
 
   onDestroy(async () => {
-    await retrieveChats();
     //const { appBar } = getAppProp();
     //if (!appBar.getVisibility()) {
       //padTop = appBar.toggleVisibility();
@@ -894,6 +893,7 @@
     navInstance.detachListener();
     document.removeEventListener('keydown', keydownEventHandler);
     client.removeEventHandler(clientListener);
+    await retrieveChats();
   });
 
 </script>
