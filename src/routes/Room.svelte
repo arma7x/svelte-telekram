@@ -630,6 +630,16 @@
         }
         console.log('muteUntil:', muteUntil);
         break;
+      case 'UpdateShortMessage':
+        if (evt.userId && evt.userId.value.toString() === location.state.entity.id.value.toString()) {
+          const tmessages = await client.getMessages(chat, {ids: evt.id});
+          if (tmessages.length > 0) {
+            const temp = [...messages, ...tmessages];
+            messages = await buildIndex(temp);
+            autoScroll();
+          }
+        }
+        break;
       case 'UpdateNewChannelMessage':
       case 'UpdateNewMessage':
         var entities = Array.from(evt._entities.entries());
