@@ -161,6 +161,8 @@
           if (msg.length > 0) {
             // console.log(location.state.entity.id.value, msg);
             // console.time('sendMessage');
+            sendMessageDialog.$destroy();
+            // TODO: Fix race condition
             try {
               let result;
               if (messageEntity && edit) {
@@ -182,7 +184,6 @@
                   autoScroll();
                 }
               }
-              sendMessageDialog.$destroy();
             } catch (err) {
               console.log(err);
             }
@@ -663,6 +664,7 @@
     }
   }
 
+  // TODO: Fix race condition
   async function clientListener(evt) {
     console.log('Room Listen:', location.state.entity.id.value.toString(), evt.className, evt);
     switch (evt.className) {
