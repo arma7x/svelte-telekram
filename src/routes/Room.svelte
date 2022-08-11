@@ -317,11 +317,18 @@
   function showReplyButtons(msg) {
     try {
       const buttons = [];
-      msg.buttons.forEach(row => {
-        row.forEach(button => {
-          buttons.push({ title: button.button.text, subtitle: button.inlineQuery, button: button.button });
+      msg.replyMarkup.rows.forEach(row => {
+        row.buttons.forEach(button => {
+          buttons.push({ title: button.text, subtitle: null, button: button });
         });
       });
+      //msg.buttons.forEach(row => {
+        //row.forEach(button => {
+          //console.log(button);
+          //buttons.push({ title: button.button.text, subtitle: button.inlineQuery, button: button.button });
+        //});
+      //});
+      //return
       replyButtons = new OptionMenu({
         target: document.body,
         props: {
@@ -363,7 +370,7 @@
       if (msg.media) {
         menu.push({ title: 'Show Action Menu' });
       }
-      if (msg.buttons) {
+      if (msg.replyMarkup && msg.replyMarkup.rows) {
         menu.push({ title: 'Show Reply Buttons' });
       }
       if (msg.message && msg.message.length > 80 || msg.replyTo) {
