@@ -6,6 +6,7 @@
   export let message: any = {};
   export let parentNavInstance: typeof KaiNavigator;
   export let registerCallButtonHandler: Function = (id, callback) => {}
+  export let refetchMessage: Function = (id: number) => {}
 
   function actionMenu() {
     window.open(`https://www.google.com/maps/search/?api=1&query=${message.media.geo.lat},${message.media.geo.long}`, '_blank').focus();

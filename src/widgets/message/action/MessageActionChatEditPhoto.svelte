@@ -4,10 +4,11 @@
   import { getCachedThumbnails } from '../../../stores/telegram';
   import { createKaiNavigator, KaiNavigator } from '../../../utils/navigation';
 
-  export let key: any = '';
+  export let chat: any = {};
   export let message: any = {};
   export let parentNavInstance: typeof KaiNavigator;
   export let registerCallButtonHandler: Function = (id, callback) => {}
+  export let refetchMessage: Function = (id: number) => {}
 
   let src: string = '';
 

@@ -9,6 +9,7 @@
   export let message: any = {};
   export let parentNavInstance: typeof KaiNavigator;
   export let registerCallButtonHandler: Function = (id, callback) => {}
+  export let refetchMessage: Function = (id: number) => {}
 
   let available: bool = true;
   let answeredOrVoted: bool = false;
@@ -43,19 +44,17 @@
                 }
               }
               if (vote) {
-                console.log('Vote:', vote.option);
                 try {
                   const result = await client.invoke(new Api.messages.SendVote({
                     peer: chat,
                     msgId: message.id,
                     options: [vote.option]
                   }));
-                  console.log(message, result);
+                  // console.log(message, result);
+                  refetchMessage(message.id);
                 } catch (err) {
                   console.log(err);
                 }
-              } else {
-                console.log('Empty vote');
               }
             },
             onBackspace: (evt, scope) => {
@@ -99,7 +98,6 @@
                 }
               });
               if (votes.length > 0) {
-                console.log('Votes:', votes);
                 const options = votes.map(v => v.option);
                 try {
                   const result = await client.invoke(new Api.messages.SendVote({
@@ -107,13 +105,12 @@
                     msgId: message.id,
                     options: options
                   }));
-                  console.log(message, result);
+                  // console.log(message, result);
+                  refetchMessage(message.id);
                 } catch (err) {
                   console.log(err);
                 }
                 // TODO: Submit votes
-              } else {
-                console.log('Empty votes');
               }
             },
             onBackspace: (evt, scope) => {

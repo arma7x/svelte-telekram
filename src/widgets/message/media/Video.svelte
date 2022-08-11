@@ -9,6 +9,7 @@
   export let message: any = {};
   export let parentNavInstance: typeof KaiNavigator;
   export let registerCallButtonHandler: Function = (id, callback) => {}
+  export let refetchMessage: Function = (id: number) => {}
 
   let JPEG_HEADER = Buffer.from(
     'ffd8ffe000104a46494600010100000100010000ffdb004300281c1e231e1928' +

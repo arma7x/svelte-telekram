@@ -13,6 +13,7 @@
   export let onClick: Function = (evt) => {}
   export let parentNavInstance: typeof KaiNavigator;
   export let registerCallButtonHandler: Function = (id, callback) => {}
+  export let refetchMessage: Function = (id: number) => {}
   export let destroyCallback: Function = () => {}
   export let replyTo: any;
   export let short: bool = false;
@@ -47,7 +48,7 @@
 
 <div data-key="{key}" class="kai-list-view {className ? className : ''}" on:click={onClick}>
   <div class="kai-list-view-content">
-    <svelte:component this={resolveActionWidget(message)} {message} {parentNavInstance} {registerCallButtonHandler}/>
+    <svelte:component this={resolveActionWidget(message)} {chat} {message} {parentNavInstance} {registerCallButtonHandler} {refetchMessage}/>
   </div>
 </div>
 

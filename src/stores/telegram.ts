@@ -26,7 +26,7 @@ client.addEventHandler((evt) => {
     case "UpdateReadFeaturedStickers":
     case "UpdateReadChannelDiscussionInbox":
     case "UpdateReadChannelDiscussionOutbox":
-    case "UpdateMessagePoll":
+    // case "UpdateMessagePoll":
     case "Updates":
       retrieveChats();
       break

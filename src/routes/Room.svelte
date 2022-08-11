@@ -688,6 +688,17 @@
       mergeMessages();
   }
 
+  async function refetchMessage(id: number) {
+    id = id.toString();
+    if (messageMetadata[id] && messages[messageMetadata[id].index]) {
+      const update = await client.getMessages(chat, {ids: messages[messageMetadata[id].index].id});
+      if (update.length > 0) {
+        messages[messageMetadata[id].index] = update[0];
+        messages = [...messages];
+      }
+    }
+  }
+
   async function clientListener(evt) {
     try {
       console.log('Room :', location.state.entity.id.value.toString(), evt.className, evt);
@@ -912,7 +923,7 @@
   {#if ready }
   {#each messages as message}
     {#if message && message.id && messageMetadata[message.id.toString()] && messageMetadata[message.id.toString()].deleted === false}
-      <svelte:component className="roomNav" this={resolveMessageWidget(message)} {message} {registerCallButtonHandler} parentNavInstance={navInstance} replyTo={getReplyHeader(message)} chat={chat} short={true} scrollable={false}/>
+      <svelte:component className="roomNav" this={resolveMessageWidget(message)} {message} {registerCallButtonHandler} {refetchMessage} parentNavInstance={navInstance} replyTo={getReplyHeader(message)} chat={chat} short={true} scrollable={false}/>
     {/if}
   {/each}
   {:else}

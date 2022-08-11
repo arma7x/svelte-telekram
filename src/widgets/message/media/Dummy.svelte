@@ -6,6 +6,7 @@
   export let message: any = {};
   export let parentNavInstance: typeof KaiNavigator;
   export let registerCallButtonHandler: Function = (id, callback) => {}
+  export let refetchMessage: Function = (id: number) => {}
 
   function actionMenu() {
     console.log('Clicked:', message.id.toString());
