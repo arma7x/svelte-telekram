@@ -352,7 +352,7 @@
     const user = await getAuthorizedUser();
     let menu = [];
     if (msg.media) {
-      menu.push({ title: 'Click Media' });
+      menu.push({ title: 'Show Action Menu' });
     }
     if (msg.buttons) {
       menu.push({ title: 'Show Reply Buttons' });
@@ -402,7 +402,7 @@
         onEnter: (evt, scope) => {
           contextMenu.$destroy();
           setTimeout(async () => {
-            if (scope.selected.title === 'Click Media') {
+            if (scope.selected.title === 'Show Action Menu') {
               if (msg && msg.id.toString()) {
                 if (messageMetadata[msg.id.toString()]) {
                   const cb = messageMetadata[msg.id.toString()].callback;
