@@ -62,27 +62,27 @@
       }
     },
     arrowUpListener: async (evt) => {
-      //const { appBar } = getAppProp();
-      //if (appBar.getVisibility()) {
-        //padTop = appBar.toggleVisibility();
-        //const main = document.getElementsByTagName('main');
-        //const style = window.getComputedStyle(main[0]);
-        //main[0].style.setProperty('top', `calc(${style.top} - 28px)`);
-        //main[0].style.setProperty('height', `calc(${style.height} + 28px)`);
-      //}
-      if (ready && navInstance.verticalNavIndex !== 0) {
-        evt.preventDefault();
-        navInstance.navigateListNav(-1);
-        const msg = messages[navInstance.verticalNavIndex];
-        if (msg == null)
-          return;
-        if (msg.markAsRead)
-          msg.markAsRead();
-        updateScrollAt(msg);
-        if (navInstance.verticalNavIndex == 1) {
-          if (!ready)
+      try {
+        //const { appBar } = getAppProp();
+        //if (appBar.getVisibility()) {
+          //padTop = appBar.toggleVisibility();
+          //const main = document.getElementsByTagName('main');
+          //const style = window.getComputedStyle(main[0]);
+          //main[0].style.setProperty('top', `calc(${style.top} - 28px)`);
+          //main[0].style.setProperty('height', `calc(${style.height} + 28px)`);
+        //}
+        if (ready && navInstance.verticalNavIndex !== 0) {
+          evt.preventDefault();
+          navInstance.navigateListNav(-1);
+          const msg = messages[navInstance.verticalNavIndex];
+          if (msg == null)
             return;
-          try {
+          if (msg.markAsRead)
+            msg.markAsRead();
+          updateScrollAt(msg);
+          if (navInstance.verticalNavIndex == 1) {
+            if (!ready)
+              return;
             const msg = messages[navInstance.verticalNavIndex - 1];
             const query = { limit: 50, maxId: msg.id }
             const newMessages = await client.getMessages(chat, query);
@@ -95,32 +95,34 @@
                 navInstance.navigateListNav(1);
               }, 200);
             }
-          } catch (err) {}
+          }
         }
+      } catch (err) {
+        console.log('arrowUpListener:', err);
       }
     },
     arrowDownListener: async (evt) => {
-      //const { appBar } = getAppProp();
-      //if (!appBar.getVisibility()) {
-        //padTop = appBar.toggleVisibility();
-        //const main = document.getElementsByTagName('main');
-        //const style = window.getComputedStyle(main[0]);
-        //main[0].style.setProperty('top', `calc(${style.top} + 28px)`);
-        //main[0].style.setProperty('height', `calc(${style.height} - 28px)`);
-      //}
-      if (ready && navInstance.verticalNavIndex !== Object.keys(messageMetadata).length - 1) {
-        evt.preventDefault();
-        navInstance.navigateListNav(1);
-        const msg = messages[navInstance.verticalNavIndex];
-        if (msg == null)
-          return;
-        if (msg.markAsRead)
-          msg.markAsRead();
-        updateScrollAt(msg);
-      } else {
-        if (!ready)
-          return;
-        try {
+      try {
+        //const { appBar } = getAppProp();
+        //if (!appBar.getVisibility()) {
+          //padTop = appBar.toggleVisibility();
+          //const main = document.getElementsByTagName('main');
+          //const style = window.getComputedStyle(main[0]);
+          //main[0].style.setProperty('top', `calc(${style.top} + 28px)`);
+          //main[0].style.setProperty('height', `calc(${style.height} - 28px)`);
+        //}
+        if (ready && navInstance.verticalNavIndex !== Object.keys(messageMetadata).length - 1) {
+          evt.preventDefault();
+          navInstance.navigateListNav(1);
+          const msg = messages[navInstance.verticalNavIndex];
+          if (msg == null)
+            return;
+          if (msg.markAsRead)
+            msg.markAsRead();
+          updateScrollAt(msg);
+        } else {
+          if (!ready)
+            return;
           const msg = messages[navInstance.verticalNavIndex];
           const query = { limit: 50, minId: msg.id }
           const newMessages = await client.getMessages(chat, query);
@@ -129,7 +131,9 @@
             const temp = [...messages, ...newMessages];
             messages = await buildIndex(temp);
           }
-        } catch (err) {}
+        }
+      } catch (err) {
+        console.log('arrowDownListener:', err);
       }
     },
     backspaceListener: function(evt) {
@@ -141,75 +145,79 @@
   let navInstance = createKaiNavigator(navOptions);
 
   async function updateScrollAt(msg) {
-    const chatId = chat.entity.id.value.toString();
-    let pref = await (await cachedDatabase).get('chatPreferences', chatId);
-    pref['scrollAt'] = msg.id;
-    (await cachedDatabase).put('chatPreferences', pref, chatId);
+    try {
+      const chatId = chat.entity.id.value.toString();
+      let pref = await (await cachedDatabase).get('chatPreferences', chatId);
+      pref['scrollAt'] = msg.id;
+      (await cachedDatabase).put('chatPreferences', pref, chatId);
+    } catch (err) {
+      console.log('updateScrollAt:', err);
+    }
   }
 
   function openSendMessage(messageEntity = null, edit = false) {
-    sendMessageDialog = new TextAreaDialog({
-      target: document.body,
-      props: {
-        title: 'Message',
-        softKeyLeftText: messageEntity != null ? (edit ? 'Save' : 'Reply') : 'Send',
-        softKeyCenterText: 'New line',
-        softKeyRightText: 'Cancel',
-        value: edit ? messageEntity.message : '',
-        placeholder: 'Enter you text',
-        type: 'text',
-        rows: 3,
-        onSoftkeyLeft: async (evt, value) => {
-          const msg = value.trim();
-          if (msg.length > 0) {
-            // console.log(location.state.entity.id.value, msg);
-            // console.time('sendMessage');
-            sendMessageDialog.$destroy();
-            try {
-              let result;
-              if (messageEntity && edit) {
-                result = await client.editMessage(chat, { message: messageEntity.id, text: msg });
-              } else if (messageEntity) {
-                result = await messageEntity.reply({message: msg});
-              } else {
-                result = await client.sendMessage(chat, {message: msg});
-              }
-              const tmessages = await client.getMessages(chat, {ids:result.id})
-              if (tmessages.length > 0) {
-                if (edit && messageMetadata[tmessages[0].id.toString()]) {
-                  const idx = messageMetadata[tmessages[0].id.toString()].index;
-                  messages[idx] = tmessages[0];
-                  messages = [...messages];
+    try {
+      sendMessageDialog = new TextAreaDialog({
+        target: document.body,
+        props: {
+          title: 'Message',
+          softKeyLeftText: messageEntity != null ? (edit ? 'Save' : 'Reply') : 'Send',
+          softKeyCenterText: 'New line',
+          softKeyRightText: 'Cancel',
+          value: edit ? messageEntity.message : '',
+          placeholder: 'Enter you text',
+          type: 'text',
+          rows: 3,
+          onSoftkeyLeft: async (evt, value) => {
+            const msg = value.trim();
+            if (msg.length > 0) {
+              // console.log(location.state.entity.id.value, msg);
+              // console.time('sendMessage');
+              sendMessageDialog.$destroy();
+                let result;
+                if (messageEntity && edit) {
+                  result = await client.editMessage(chat, { message: messageEntity.id, text: msg });
+                } else if (messageEntity) {
+                  result = await messageEntity.reply({message: msg});
                 } else {
-                  pushMessageToMerge(tmessages[0]);
+                  result = await client.sendMessage(chat, {message: msg});
                 }
-              }
-            } catch (err) {
-              console.log(err);
+                const tmessages = await client.getMessages(chat, {ids:result.id})
+                if (tmessages.length > 0) {
+                  if (edit && messageMetadata[tmessages[0].id.toString()]) {
+                    const idx = messageMetadata[tmessages[0].id.toString()].index;
+                    messages[idx] = tmessages[0];
+                    messages = [...messages];
+                  } else {
+                    pushMessageToMerge(tmessages[0]);
+                  }
+                }
+              // console.timeEnd('sendMessage');
             }
-            // console.timeEnd('sendMessage');
-          }
-        },
-        onSoftkeyRight: (evt, value) => {
-          sendMessageDialog.$destroy();
-        },
-        onEnter: (evt, value) => {},
-        onBackspace: (evt, value) => {
-          evt.stopPropagation();
-          if (value.length === 0) {
+          },
+          onSoftkeyRight: (evt, value) => {
             sendMessageDialog.$destroy();
-            evt.preventDefault();
+          },
+          onEnter: (evt, value) => {},
+          onBackspace: (evt, value) => {
+            evt.stopPropagation();
+            if (value.length === 0) {
+              sendMessageDialog.$destroy();
+              evt.preventDefault();
+            }
+          },
+          onOpened: () => {
+            navInstance.detachListener();
+          },
+          onClosed: (value) => {
+            navInstance.attachListener();
+            sendMessageDialog = null;
           }
-        },
-        onOpened: () => {
-          navInstance.detachListener();
-        },
-        onClosed: (value) => {
-          navInstance.attachListener();
-          sendMessageDialog = null;
         }
-      }
-    });
+      });
+    } catch (err) {
+      console.log('openSendMessage:', err);
+    }
   }
 
   function showFull(msg, index) {
@@ -233,20 +241,20 @@
   }
 
   function deleteMessage(msg, index) {
-    deleteMessageDialog = new Dialog({
-      target: document.body,
-      props: {
-        title: 'Confirm',
-        body: 'Do you want to delete this message ?',
-        softKeyLeftText: 'Cancel',
-        softKeyCenterText: '',
-        softKeyRightText: 'Yes',
-        onSoftkeyLeft: (evt) => {
-          console.log('cancel');
-          deleteMessageDialog.$destroy();
-        },
-        onSoftkeyRight: async (evt) => {
-          try {
+    try {
+      deleteMessageDialog = new Dialog({
+        target: document.body,
+        props: {
+          title: 'Confirm',
+          body: 'Do you want to delete this message ?',
+          softKeyLeftText: 'Cancel',
+          softKeyCenterText: '',
+          softKeyRightText: 'Yes',
+          onSoftkeyLeft: (evt) => {
+            console.log('cancel');
+            deleteMessageDialog.$destroy();
+          },
+          onSoftkeyRight: async (evt) => {
             await client.deleteMessages(chat, [msg.id], {revoke: true});
             const scroll = navInstance.verticalNavIndex !== Object.keys(messageMetadata).length - 1;
             const pops = [];
@@ -268,26 +276,26 @@
               if (scroll)
                 autoScroll();
             }
-          } catch (err) {
-            console.log(err);
+            deleteMessageDialog.$destroy();
+          },
+          onEnter: (evt) => {},
+          onBackspace: (evt) => {
+            evt.preventDefault();
+            evt.stopPropagation();
+            deleteMessageDialog.$destroy();
+          },
+          onOpened: () => {
+            navInstance.detachListener();
+          },
+          onClosed: () => {
+            navInstance.attachListener();
+            deleteMessageDialog = null;
           }
-          deleteMessageDialog.$destroy();
-        },
-        onEnter: (evt) => {},
-        onBackspace: (evt) => {
-          evt.preventDefault();
-          evt.stopPropagation();
-          deleteMessageDialog.$destroy();
-        },
-        onOpened: () => {
-          navInstance.detachListener();
-        },
-        onClosed: () => {
-          navInstance.attachListener();
-          deleteMessageDialog = null;
         }
-      }
-    });
+      });
+    } catch (err) {
+      console.log('deleteMessage:', err);
+    }
   }
 
   async function pinnedMessage(msg, index) {
@@ -302,180 +310,188 @@
         messages = [...messages];
       }
     } catch (err) {
-      console.log('Unpin:', err);
+      console.log('pinnedMessage', err);
     }
   }
 
   function showReplyButtons(msg) {
-    const buttons = [];
-    msg.buttons.forEach(row => {
-      row.forEach(button => {
-        buttons.push({ title: button.button.text, subtitle: button.inlineQuery, button: button.button });
+    try {
+      const buttons = [];
+      msg.buttons.forEach(row => {
+        row.forEach(button => {
+          buttons.push({ title: button.button.text, subtitle: button.inlineQuery, button: button.button });
+        });
       });
-    });
-    replyButtons = new OptionMenu({
-      target: document.body,
-      props: {
-        title: 'Reply Buttons',
-        focusIndex: 0,
-        options: buttons,
-        softKeyCenterText: 'select',
-        onSoftkeyRight: (evt, scope) => {},
-        onSoftkeyLeft: (evt, scope) => {},
-        onEnter: async (evt, scope) => {
-          replyButtons.$destroy();
-          if (scope.selected.subtitle == null && scope.selected.button.requiresPassword == false) { // not support inlineQuery or requiresPassword
-            try {
-              await msg.click(scope.selected.button);
-            } catch (err) {
-              console.log(err);
-            }
-          }
-        },
-        onBackspace: (evt, scope) => {
-          evt.preventDefault();
-          evt.stopPropagation();
-          replyButtons.$destroy();
-        },
-        onOpened: () => {
-          navInstance.detachListener();
-        },
-        onClosed: (scope) => {
-          navInstance.attachListener();
-          replyButtons = null;
-        }
-      }
-    });
-  }
-
-  async function openContextMenu(msg, index) {
-    const user = await getAuthorizedUser();
-    let menu = [];
-    if (msg.media) {
-      menu.push({ title: 'Show Action Menu' });
-    }
-    if (msg.buttons) {
-      menu.push({ title: 'Show Reply Buttons' });
-    }
-    if (msg.message && msg.message.length > 80 || msg.replyTo) {
-      menu.push({ title: 'Show Full' });
-    }
-    if (!msg.noforwards) {
-      menu.push({ title: 'Forward' });
-    }
-    if (msg.replies && msg.replies.replies > 0) {
-      menu.push({ title: 'View Replies' });
-    }
-    menu.push({ title: 'Reply' });
-    if (chat.entity.className === 'Channel') {
-      menu.push({ title: 'Report' });
-    }
-    const sender = msg.sender || msg.__sender;
-    if (sender && sender.id.value.toString() === user[0].id.value.toString()) {
-      if ((new Date().getTime() - new Date(msg.date * 1000).getTime() < 172800000 || chat.entity.__isSavedMessages) && msg.fwdFrom == null) {
-        menu.push({ title: 'Edit' });
-      }
-      menu.push({ title: 'Delete' });
-    } else if ((chat.entity.className === 'Channel' && chat.entity.creator) || chat.entity.className === 'User') {
-      menu.push({ title: 'Delete' });
-    }
-    if (msg.pinned && ((chat.entity.className === 'Channel' && chat.entity.creator) || chat.entity.className === 'User')) {
-      menu.push({ title: 'Unpin' });
-    }
-    if (!msg.pinned && ((chat.entity.className === 'Channel' && chat.entity.creator) || chat.entity.className === 'User')) {
-      menu.push({ title: 'Pin' });
-    }
-    if (muteUntil === false) {
-      menu.push({ title: 'Mute Chat' });
-    } else {
-      menu.push({ title: 'Unmute Chat' });
-    }
-    contextMenu = new OptionMenu({
-      target: document.body,
-      props: {
-        title: 'Action',
-        focusIndex: 0,
-        options: menu,
-        softKeyCenterText: 'select',
-        onSoftkeyRight: (evt, scope) => {},
-        onSoftkeyLeft: (evt, scope) => {},
-        onEnter: (evt, scope) => {
-          contextMenu.$destroy();
-          setTimeout(async () => {
-            if (scope.selected.title === 'Show Action Menu') {
-              if (msg && msg.id.toString()) {
-                if (messageMetadata[msg.id.toString()]) {
-                  const cb = messageMetadata[msg.id.toString()].callback;
-                  cb && cb();
-                }
-              }
-            } else if (scope.selected.title === 'Show Full' && msg.className === "Message") {
-              showFull(msg, index);
-            } else if (scope.selected.title === 'View Replies' && msg.className === "Message" && msg.replies && msg.replies.replies > 0) {
-              showReplies(msg);
-            } else if (scope.selected.title === 'Forward') {
-              // msg.forwardTo
-            } else if (scope.selected.title === 'Reply') {
-              openSendMessage(msg);
-            } else if (scope.selected.title === 'Report') {
-              // msg.?
-            } else if (scope.selected.title === 'Edit') {
-              openSendMessage(msg, true);
-            } else if (scope.selected.title === 'Delete') {
-              deleteMessage(msg, index);
-            } else if (['Pin', 'Unpin'].indexOf(scope.selected.title) > -1) {
-              pinnedMessage(msg, index);
-            } else if (scope.selected.title === 'Mute Chat') {
-              // chat.
-            } else if (scope.selected.title === 'Unmute Chat') {
-              // chat.
-            } else if (scope.selected.title === 'Show Reply Buttons') {
-              showReplyButtons(msg);
-            }
-          }, 200);
-        },
-        onBackspace: (evt, scope) => {
-          evt.preventDefault();
-          evt.stopPropagation();
-          contextMenu.$destroy();
-        },
-        onOpened: () => {
-          navInstance.detachListener();
-        },
-        onClosed: (scope) => {
-          navInstance.attachListener();
-          contextMenu = null;
-        }
-      }
-    });
-  }
-
-  async function showReplies(msg) {
-    if (msg.replies && msg.replies.replies > 0) {
-      const query = { limit: msg.replies.replies, replyTo: msg.id }
-      const replies = await client.getMessages(chat, query);
-      repliesDialog = new Replies({
+      replyButtons = new OptionMenu({
         target: document.body,
         props: {
-          title: 'Replies',
-          chat: chat,
-          messages: [msg, ...(replies.reverse())],
-          resolveMessageWidget: resolveMessageWidget,
-          getReplyHeader: getReplyHeader,
-          onBackspace: (evt) => {
+          title: 'Reply Buttons',
+          focusIndex: 0,
+          options: buttons,
+          softKeyCenterText: 'select',
+          onSoftkeyRight: (evt, scope) => {},
+          onSoftkeyLeft: (evt, scope) => {},
+          onEnter: async (evt, scope) => {
+            replyButtons.$destroy();
+            if (scope.selected.subtitle == null && scope.selected.button.requiresPassword == false) { // not support inlineQuery or requiresPassword
+              await msg.click(scope.selected.button);
+            }
+          },
+          onBackspace: (evt, scope) => {
             evt.preventDefault();
             evt.stopPropagation();
-            repliesDialog.$destroy();
+            replyButtons.$destroy();
           },
           onOpened: () => {
             navInstance.detachListener();
           },
-          onClosed: (value) => {
+          onClosed: (scope) => {
             navInstance.attachListener();
-            repliesDialog = null;
+            replyButtons = null;
           }
         }
       });
+    } catch (err) {
+      console.log('showReplyButtons:', err);
+    }
+  }
+
+  async function openContextMenu(msg, index) {
+    try {
+      const user = await getAuthorizedUser();
+      let menu = [];
+      if (msg.media) {
+        menu.push({ title: 'Show Action Menu' });
+      }
+      if (msg.buttons) {
+        menu.push({ title: 'Show Reply Buttons' });
+      }
+      if (msg.message && msg.message.length > 80 || msg.replyTo) {
+        menu.push({ title: 'Show Full' });
+      }
+      if (!msg.noforwards) {
+        menu.push({ title: 'Forward' });
+      }
+      if (msg.replies && msg.replies.replies > 0) {
+        menu.push({ title: 'View Replies' });
+      }
+      menu.push({ title: 'Reply' });
+      if (chat.entity.className === 'Channel') {
+        menu.push({ title: 'Report' });
+      }
+      const sender = msg.sender || msg.__sender;
+      if (sender && sender.id.value.toString() === user[0].id.value.toString()) {
+        if ((new Date().getTime() - new Date(msg.date * 1000).getTime() < 172800000 || chat.entity.__isSavedMessages) && msg.fwdFrom == null) {
+          menu.push({ title: 'Edit' });
+        }
+        menu.push({ title: 'Delete' });
+      } else if ((chat.entity.className === 'Channel' && chat.entity.creator) || chat.entity.className === 'User') {
+        menu.push({ title: 'Delete' });
+      }
+      if (msg.pinned && ((chat.entity.className === 'Channel' && chat.entity.creator) || chat.entity.className === 'User')) {
+        menu.push({ title: 'Unpin' });
+      }
+      if (!msg.pinned && ((chat.entity.className === 'Channel' && chat.entity.creator) || chat.entity.className === 'User')) {
+        menu.push({ title: 'Pin' });
+      }
+      if (muteUntil === false) {
+        menu.push({ title: 'Mute Chat' });
+      } else {
+        menu.push({ title: 'Unmute Chat' });
+      }
+      contextMenu = new OptionMenu({
+        target: document.body,
+        props: {
+          title: 'Action',
+          focusIndex: 0,
+          options: menu,
+          softKeyCenterText: 'select',
+          onSoftkeyRight: (evt, scope) => {},
+          onSoftkeyLeft: (evt, scope) => {},
+          onEnter: (evt, scope) => {
+            contextMenu.$destroy();
+            setTimeout(async () => {
+              if (scope.selected.title === 'Show Action Menu') {
+                if (msg && msg.id.toString()) {
+                  if (messageMetadata[msg.id.toString()]) {
+                    const cb = messageMetadata[msg.id.toString()].callback;
+                    cb && cb();
+                  }
+                }
+              } else if (scope.selected.title === 'Show Full' && msg.className === "Message") {
+                showFull(msg, index);
+              } else if (scope.selected.title === 'View Replies' && msg.className === "Message" && msg.replies && msg.replies.replies > 0) {
+                showReplies(msg);
+              } else if (scope.selected.title === 'Forward') {
+                // msg.forwardTo
+              } else if (scope.selected.title === 'Reply') {
+                openSendMessage(msg);
+              } else if (scope.selected.title === 'Report') {
+                // msg.?
+              } else if (scope.selected.title === 'Edit') {
+                openSendMessage(msg, true);
+              } else if (scope.selected.title === 'Delete') {
+                deleteMessage(msg, index);
+              } else if (['Pin', 'Unpin'].indexOf(scope.selected.title) > -1) {
+                pinnedMessage(msg, index);
+              } else if (scope.selected.title === 'Mute Chat') {
+                // chat.
+              } else if (scope.selected.title === 'Unmute Chat') {
+                // chat.
+              } else if (scope.selected.title === 'Show Reply Buttons') {
+                showReplyButtons(msg);
+              }
+            }, 200);
+          },
+          onBackspace: (evt, scope) => {
+            evt.preventDefault();
+            evt.stopPropagation();
+            contextMenu.$destroy();
+          },
+          onOpened: () => {
+            navInstance.detachListener();
+          },
+          onClosed: (scope) => {
+            navInstance.attachListener();
+            contextMenu = null;
+          }
+        }
+      });
+    } catch (err) {
+      console.log('openContextMenu:'. err);
+    }
+  }
+
+  async function showReplies(msg) {
+    try {
+      if (msg.replies && msg.replies.replies > 0) {
+        const query = { limit: msg.replies.replies, replyTo: msg.id }
+        const replies = await client.getMessages(chat, query);
+        repliesDialog = new Replies({
+          target: document.body,
+          props: {
+            title: 'Replies',
+            chat: chat,
+            messages: [msg, ...(replies.reverse())],
+            resolveMessageWidget: resolveMessageWidget,
+            getReplyHeader: getReplyHeader,
+            onBackspace: (evt) => {
+              evt.preventDefault();
+              evt.stopPropagation();
+              repliesDialog.$destroy();
+            },
+            onOpened: () => {
+              navInstance.detachListener();
+            },
+            onClosed: (value) => {
+              navInstance.attachListener();
+              repliesDialog = null;
+            }
+          }
+        });
+      }
+    } catch (err) {
+      console.log('showReplies:', err);
     }
   }
 
@@ -580,7 +596,7 @@
           replyIndex[id.toString()] = fmessages[index];
         });
       } catch (err) {
-        console.log(err);
+        console.log('fetchReply:', err);
       }
       // console.timeEnd('fetchReply');
     }
@@ -615,7 +631,7 @@
         });
         fetchForwardedUsers = [];
       } catch (err) {
-        console.log(err);
+        console.log('fetchForwardedUsers:', err);
       }
       // console.timeEnd('fetchForwardedUsers');
     }
@@ -650,7 +666,7 @@
         });
         fetchForwardedChannels = [];
       } catch (err) {
-        console.log(err);
+        console.log('fetchForwardedChannels:', err);
       }
       // console.timeEnd('fetchForwardedChannels');
     }
@@ -665,11 +681,15 @@
     }
   }
 
-  async function mergeMessages() {
-    const msg = messagesToMerge.pop();
-    const temp = [...messages, msg];
-    messages = await buildIndex(temp);
-    autoScroll();
+  async function merging() {
+    try {
+      const msg = messagesToMerge.pop();
+      const temp = [...messages, msg];
+      messages = await buildIndex(temp);
+      autoScroll();
+    } catch (err) {
+      console.log('merging:', err);
+    }
   }
 
   function pushMessageToMerge(msg) {
@@ -685,17 +705,21 @@
       }
     }
     if (len === 0)
-      mergeMessages();
+      merging();
   }
 
   async function refetchMessage(id: number) {
-    id = id.toString();
-    if (messageMetadata[id] && messages[messageMetadata[id].index]) {
-      const update = await client.getMessages(chat, {ids: messages[messageMetadata[id].index].id});
-      if (update.length > 0) {
-        messages[messageMetadata[id].index] = update[0];
-        messages = [...messages];
+    try {
+      id = id.toString();
+      if (messageMetadata[id] && messages[messageMetadata[id].index]) {
+        const update = await client.getMessages(chat, {ids: messages[messageMetadata[id].index].id});
+        if (update.length > 0) {
+          messages[messageMetadata[id].index] = update[0];
+          messages = [...messages];
+        }
       }
+    } catch (err) {
+      console.log('refetchMessage:', err);
     }
   }
 
@@ -742,13 +766,9 @@
                 if (!cachedForwardedUsers[evt.message.senderId.value.toString()]) {
                   // console.log('Api.users.GetUsers', evt.message.senderId.value.toString());
                   // console.time('fetchuncachedforwardsuser');
-                  try {
-                    const users = await client.invoke(new Api.users.GetUsers({ id: [evt.message.senderId.value.toString()] }));
-                    if (users.length > 0) {
-                      cachedForwardedUsers[users[0].id.toString()] = users[0];
-                    }
-                  } catch (err) {
-                    console.log(err);
+                  const users = await client.invoke(new Api.users.GetUsers({ id: [evt.message.senderId.value.toString()] }));
+                  if (users.length > 0) {
+                    cachedForwardedUsers[users[0].id.toString()] = users[0];
                   }
                   // console.timeEnd('fetchuncachedforwardsuser');
                 }
@@ -797,7 +817,9 @@
           }
           break;
       }
-    } catch (err) {}
+    } catch (err) {
+      console.log(evt.className + ':', err);
+    }
   }
 
   function autoScroll() {
@@ -875,14 +897,14 @@
           messages[navInstance.verticalNavIndex].markAsRead();
       }, 100);
     } catch (err) {
-      console.log(err);
+      console.log('fetchMessages:', err);
     }
     // console.timeEnd('Finished');
   }
 
-  afterUpdate(async () => {
+  afterUpdate(() => {
     if (messagesToMerge.length > 0)
-      mergeMessages();
+      merging();
   })
 
   onMount(() => {
@@ -912,7 +934,11 @@
     //}
     navInstance.detachListener();
     client.removeEventHandler(clientListener);
-    await retrieveChats();
+    try {
+      await retrieveChats();
+    } catch (err) {
+      console.log('onDestroy:', err);
+    }
   });
 
 </script>
