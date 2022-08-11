@@ -166,58 +166,62 @@
   });
 
   beforeUpdate(async () => {
-    if (message.message.length > 80 && short)
-      expandable = true;
-    let _hasAvatar;
-    let _justifyContent;
-    const user = await getAuthorizedUser();
-    const sender = message.sender || message.__sender;
-    if (sender && user[0] && sender.id.toString() === user[0].id.toString()) {
-      _hasAvatar = false;
-      _justifyContent = 'end';
-    } else {
-      _hasAvatar = true;
-      _justifyContent = 'start';
-      if (chat.entity.className === 'Channel' && !chat.entity.megagroup) {
+    try {
+      if (message.message.length > 80 && short)
+        expandable = true;
+      let _hasAvatar;
+      let _justifyContent;
+      const user = await getAuthorizedUser();
+      const sender = message.sender || message.__sender;
+      if (sender && user[0] && sender.id.toString() === user[0].id.toString()) {
         _hasAvatar = false;
-      }
-    }
-    if (message.fwdFrom) {
-      if (chat.entity.id && chat.entity.id.value.toString() !== user[0].id.toString()) {
-        forwardedPrefix = 'Forwarded from ';
-      }
-      if (sender.id && sender.id.toString() === user[0].id.toString() && sender.id.toString() === chat.entity.id.value.toString()) {
+        _justifyContent = 'end';
+      } else {
         _hasAvatar = true;
         _justifyContent = 'start';
-      }
-      if (message.fwdFrom.fromName) {
-        delete message.iconRef;
-      } else if (message.fwdFrom.fromId) {
-        if (message.fwdFrom.fromId.className === 'PeerUser') {
-          fullName = getFullname(message);
-        } else if (message.fwdFrom.fromId.className === 'PeerChannel') {
-          fullName = getFullname(message);
+        if (chat.entity.className === 'Channel' && !chat.entity.megagroup) {
+          _hasAvatar = false;
         }
       }
+      if (message.fwdFrom) {
+        if (chat.entity.id && chat.entity.id.value.toString() !== user[0].id.toString()) {
+          forwardedPrefix = 'Forwarded from ';
+        }
+        if (sender.id && sender.id.toString() === user[0].id.toString() && sender.id.toString() === chat.entity.id.value.toString()) {
+          _hasAvatar = true;
+          _justifyContent = 'start';
+        }
+        if (message.fwdFrom.fromName) {
+          delete message.iconRef;
+        } else if (message.fwdFrom.fromId) {
+          if (message.fwdFrom.fromId.className === 'PeerUser') {
+            fullName = getFullname(message);
+          } else if (message.fwdFrom.fromId.className === 'PeerChannel') {
+            fullName = getFullname(message);
+          }
+        }
+      }
+      hasAvatar = _hasAvatar;
+      justifyContent = _justifyContent;
+      if (!hasAvatar)
+        return;
+      if (uncachedThumbnails)
+        uncachedThumbnails();
+      uncachedThumbnails = cachedThumbnails.subscribe(data => {
+        if (message.iconRef && data[message.iconRef]) {
+          avatarSrc = `<img alt="icon" style="position:absolute;${!short?'top:0':'bottom:0'};background-color:var(--themeColor);width:40px;height:40px;border-radius:50%;box-sizing:border-box;border: 2px solid #fff;"" src="${data[message.iconRef]}"/>`
+        } else {
+          try {
+            let name = getFullname(message).split(' ').map(text => text[0].toUpperCase()).splice(0, 2).join('');
+            avatarSrc = `<div style="position:absolute;${!short?'top:0':'bottom:0'};display:flex;flex-direction:column;justify-content:center;align-items:center;font-weight:bold;color:#fff;background-color:var(--themeColor);width:40px;height:40px;border-radius:50%;box-sizing:border-box;border: 2px solid #fff;">${name}</div>`
+          } catch(err) {
+            avatarSrc = `<div style="position:absolute;${!short?'top:0':'bottom:0'};display:flex;flex-direction:column;justify-content:center;align-items:center;font-weight:bold;color:#fff;background-color:var(--themeColor);width:40px;height:40px;border-radius:50%;box-sizing:border-box;border: 2px solid #fff;">DA</div>`
+          }
+        }
+      });
+    } catch (err) {
+      console.log('beforeUpdate:', err);
     }
-    hasAvatar = _hasAvatar;
-    justifyContent = _justifyContent;
-    if (!hasAvatar)
-      return;
-    if (uncachedThumbnails)
-      uncachedThumbnails();
-    uncachedThumbnails = cachedThumbnails.subscribe(data => {
-      if (message.iconRef && data[message.iconRef]) {
-        avatarSrc = `<img alt="icon" style="position:absolute;${!short?'top:0':'bottom:0'};background-color:var(--themeColor);width:40px;height:40px;border-radius:50%;box-sizing:border-box;border: 2px solid #fff;"" src="${data[message.iconRef]}"/>`
-      } else {
-        try {
-          let name = getFullname(message).split(' ').map(text => text[0].toUpperCase()).splice(0, 2).join('');
-          avatarSrc = `<div style="position:absolute;${!short?'top:0':'bottom:0'};display:flex;flex-direction:column;justify-content:center;align-items:center;font-weight:bold;color:#fff;background-color:var(--themeColor);width:40px;height:40px;border-radius:50%;box-sizing:border-box;border: 2px solid #fff;">${name}</div>`
-        } catch(err) {
-          avatarSrc = `<div style="position:absolute;${!short?'top:0':'bottom:0'};display:flex;flex-direction:column;justify-content:center;align-items:center;font-weight:bold;color:#fff;background-color:var(--themeColor);width:40px;height:40px;border-radius:50%;box-sizing:border-box;border: 2px solid #fff;">DA</div>`
-        }
-      }
-    });
   });
 
   onDestroy(() => {
