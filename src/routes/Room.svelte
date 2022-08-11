@@ -340,9 +340,9 @@
           onSoftkeyLeft: (evt, scope) => {},
           onEnter: async (evt, scope) => {
             replyButtons.$destroy();
-            if (scope.selected.subtitle == null && scope.selected.button.requiresPassword == false) { // not support inlineQuery or requiresPassword
-              await msg.click(scope.selected.button);
-            }
+            const result = await msg.click(scope.selected.button);
+            if (result)
+              pushMessageToMerge(result);
           },
           onBackspace: (evt, scope) => {
             evt.preventDefault();
