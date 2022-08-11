@@ -268,7 +268,7 @@
       <small class="pinned">&#x1f588;&nbsp;</small>
       {/if}
       {#if message.views}
-      <small class="views">&#x1f441; {message.views}&nbsp;</small>
+      <small class="views">&#11094; {message.views}&nbsp;</small>
       {/if}
       {#if message.editDate && message.editHide == false}
       <small class="edited">&#x270E;&nbsp;</small>
