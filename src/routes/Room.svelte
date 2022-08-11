@@ -350,6 +350,9 @@
   async function openContextMenu(msg, index) {
     const user = await getAuthorizedUser();
     let menu = [];
+    if (msg.media) {
+      menu.push({ title: 'Click Media' });
+    }
     if (msg.buttons) {
       menu.push({ title: 'Show Reply Buttons' });
     }
@@ -398,7 +401,14 @@
         onEnter: (evt, scope) => {
           contextMenu.$destroy();
           setTimeout(async () => {
-            if (scope.selected.title === 'Show Full' && msg.className === "Message") {
+            if (scope.selected.title === 'Click Media') {
+              if (msg && msg.id.toString()) {
+                if (messageMetadata[msg.id.toString()]) {
+                  const cb = messageMetadata[msg.id.toString()].callback;
+                  cb && cb();
+                }
+              }
+            } else if (scope.selected.title === 'Show Full' && msg.className === "Message") {
               showFull(msg, index);
             } else if (scope.selected.title === 'View Replies' && msg.className === "Message" && msg.replies && msg.replies.replies > 0) {
               showReplies(msg);
@@ -652,21 +662,6 @@
     }
   }
 
-  function keydownEventHandler(evt) {
-    try {
-      if (evt.key === 'Call' || evt.code === 'ShiftLeft') {
-        if (messages[navInstance.verticalNavIndex] && messages[navInstance.verticalNavIndex].id.toString()) {
-          if (messageMetadata[messages[navInstance.verticalNavIndex].id.toString()]) {
-            const cb = messageMetadata[messages[navInstance.verticalNavIndex].id.toString()].callback;
-            cb && cb();
-          }
-        }
-      }
-    } catch (err) {
-      console.log(err);
-    }
-  }
-
   async function mergeMessages() {
     const msg = messagesToMerge.pop();
     const temp = [...messages, msg];
@@ -876,7 +871,6 @@
       softwareKey.setText({ left: 'Action', center: 'SEND', right: '📎' });
     }
     navInstance.attachListener();
-    document.addEventListener('keydown', keydownEventHandler);
     client.addEventHandler(clientListener);
     ready = true;
   });
@@ -891,7 +885,6 @@
       //main[0].style.setProperty('height', `calc(${style.height} - 28px)`);
     //}
     navInstance.detachListener();
-    document.removeEventListener('keydown', keydownEventHandler);
     client.removeEventHandler(clientListener);
     await retrieveChats();
   });
