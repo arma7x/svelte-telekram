@@ -5,6 +5,7 @@
   import { client } from '../../../utils/bootstrap';
   import { Buffer} from 'buffer';
 
+  export let chat: any = {};
   export let message: any = {};
   export let parentNavInstance: typeof KaiNavigator;
   export let registerCallButtonHandler: Function = (id, callback) => {}

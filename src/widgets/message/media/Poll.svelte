@@ -1,8 +1,11 @@
 <script lang="ts">
-  import { onMount, onDestroy } from 'svelte';
+  import { onMount, onDestroy, beforeUpdate } from 'svelte';
   import { createKaiNavigator, KaiNavigator } from '../../../utils/navigation';
   import { OptionMenu, MultiSelector, SingleSelector } from '../../../components';
 
+  import { client, Api } from '../../../utils/bootstrap';
+
+  export let chat: any = {};
   export let message: any = {};
   export let parentNavInstance: typeof KaiNavigator;
   export let registerCallButtonHandler: Function = (id, callback) => {}
@@ -30,7 +33,7 @@
             softKeyCenterText: 'select',
             onSoftkeyRight: (evt, scope) => {},
             onSoftkeyLeft: (evt, scope) => {},
-            onEnter: (evt, scope) => {
+            onEnter: async (evt, scope) => {
               singleSelector.$destroy();
               let vote;
               for (let i in scope.options) {
@@ -40,8 +43,17 @@
                 }
               }
               if (vote) {
-                console.log('Vote:', vote);
-                // TODO: Submit vote
+                console.log('Vote:', vote.option);
+                try {
+                  const result = await client.invoke(new Api.messages.SendVote({
+                    peer: chat,
+                    msgId: message.id,
+                    options: [vote.option]
+                  }));
+                  console.log(message, result);
+                } catch (err) {
+                  console.log(err);
+                }
               } else {
                 console.log('Empty vote');
               }
@@ -76,7 +88,7 @@
               evt.stopPropagation();
               multiSelector.$destroy();
             },
-            onSoftkeyRight: (evt, scope) => {
+            onSoftkeyRight: async (evt, scope) => {
               evt.preventDefault();
               evt.stopPropagation();
               multiSelector.$destroy();
@@ -88,6 +100,17 @@
               });
               if (votes.length > 0) {
                 console.log('Votes:', votes);
+                const options = votes.map(v => v.option);
+                try {
+                  const result = await client.invoke(new Api.messages.SendVote({
+                    peer: chat,
+                    msgId: message.id,
+                    options: options
+                  }));
+                  console.log(message, result);
+                } catch (err) {
+                  console.log(err);
+                }
                 // TODO: Submit votes
               } else {
                 console.log('Empty votes');
@@ -125,7 +148,7 @@
       optionMenu = new OptionMenu({
         target: document.body,
         props: {
-          title: `Total Voters: ${message.media.results.totalVoters}`,
+          title: 'Result',
           focusIndex: 0,
           options: results,
           softKeyCenterText: 'select',
@@ -151,10 +174,9 @@
     }
   }
 
-  onMount(() => {
-    registerCallButtonHandler(message.id.toString(), actionMenu);
-    if (message.media.results.solution)
-      console.log(message.media.results.solution);
+  function update() {
+    available = true;
+    answeredOrVoted = false;
     if (message.media.poll.closed)
       available = false;
     for (let r in message.media.results.results) {
@@ -164,6 +186,15 @@
         break;
       }
     }
+  }
+
+  beforeUpdate(() => {
+    update();
+  })
+
+  onMount(() => {
+    registerCallButtonHandler(message.id.toString(), actionMenu);
+    update();
   })
 
   onDestroy(() => {});

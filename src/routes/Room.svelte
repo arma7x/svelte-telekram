@@ -36,6 +36,7 @@
   let name: string = 'Room';
   let messages: Array<any> = [];
   let messageMetadata: { [key: string]: { index: number, deleted: bool, callback: Function }; } = {};
+  let pollMetadata: { [key: string]: any } = {};
   let replyIndex: { [key: string]: any; } = {};
   let muteUntil: number|bool = false;
 
@@ -501,6 +502,9 @@
         }
         messageMetadata[message.id.toString()].index = index;
         messageMetadata[message.id.toString()].deleted = false;
+        if (message.media && message.media.poll) {
+          pollMetadata[message.media.poll.id.value.toString()] = message.id.toString();
+        }
 
         // Skip for channel, only group or private chat
         if (!(location.state.entity.className === 'Channel' && !location.state.entity.megagroup)) {
@@ -650,7 +654,6 @@
       }
       // console.timeEnd('fetchForwardedChannels');
     }
-
     runTask(httpTasks, websocketTasks);
     // console.timeEnd('buildIndex');
     return _messages;
@@ -686,92 +689,104 @@
   }
 
   async function clientListener(evt) {
-    console.log('Room :', location.state.entity.id.value.toString(), evt.className, evt);
-    switch (evt.className) {
-      case "UpdateNotifySettings":
-        const id = evt.peer.peer.channelId ? evt.peer.peer.channelId.value.toString() : evt.peer.peer.userId.value.toString();
-        if (id !== chat.entity.id.value.toString())
-          break;
-        if (evt.notifySettings.muteUntil) {
-          muteUntil = new Date(new Date().getTime() + evt.notifySettings.muteUntil);
-        } else {
-          muteUntil = false;
-        }
-        // console.log('muteUntil:', muteUntil);
-        break;
-      case 'UpdateShortMessage':
-        if (evt.userId && evt.userId.value.toString() === location.state.entity.id.value.toString()) {
-          const tmessages = await client.getMessages(chat, {ids: evt.id});
-          if (tmessages.length > 0) {
-            pushMessageToMerge(tmessages[0]);
-          }
-        }
-        break;
-      case 'UpdateNewChannelMessage':
-      case 'UpdateNewMessage':
-        var entities = Array.from(evt._entities.entries());
-        for (let i in entities) {
-          if (entities[i][1].id.toString() === location.state.entity.id.value.toString()) {
-            // Skip for channel, only group or private chat
-            if (!(location.state.entity.className === 'Channel' && !location.state.entity.megagroup)) {
-              if (!cachedForwardedUsers[evt.message.senderId.value.toString()]) {
-                // console.log('Api.users.GetUsers', evt.message.senderId.value.toString());
-                // console.time('fetchuncachedforwardsuser');
-                try {
-                  const users = await client.invoke(new Api.users.GetUsers({ id: [evt.message.senderId.value.toString()] }));
-                  if (users.length > 0) {
-                    cachedForwardedUsers[users[0].id.toString()] = users[0];
-                  }
-                } catch (err) {
-                  console.log(err);
-                }
-                // console.timeEnd('fetchuncachedforwardsuser');
-              }
-            }
-            pushMessageToMerge(evt.message);
+    try {
+      console.log('Room :', location.state.entity.id.value.toString(), evt.className, evt);
+      switch (evt.className) {
+        case "UpdateNotifySettings":
+          const id = evt.peer.peer.channelId ? evt.peer.peer.channelId.value.toString() : evt.peer.peer.userId.value.toString();
+          if (id !== chat.entity.id.value.toString())
             break;
+          if (evt.notifySettings.muteUntil) {
+            muteUntil = new Date(new Date().getTime() + evt.notifySettings.muteUntil);
+          } else {
+            muteUntil = false;
           }
-        }
-        break;
-      case 'UpdateEditChannelMessage':
-      case 'UpdateEditMessage':
-        var entities = Array.from(evt._entities.entries());
-        for (let i in entities) {
-          if (entities[i][1].id.toString() === location.state.entity.id.value.toString()) {
-            if (messageMetadata[evt.message.id.toString()]) {
-              const idx = messageMetadata[evt.message.id.toString()].index;
-              messages[idx] = evt.message;
+          // console.log('muteUntil:', muteUntil);
+          break;
+        case 'UpdateMessagePoll':
+          if (pollMetadata[evt.pollId.value.toString()]) {
+            const id = pollMetadata[evt.pollId.value.toString()];
+            const update = await client.getMessages(chat, {ids: messages[messageMetadata[id].index].id});
+            if (update.length > 0) {
+              messages[messageMetadata[id].index] = update[0];
               messages = [...messages];
             }
-            break;
           }
-        }
-        break;
-      case 'UpdateDeleteChannelMessages':
-      case 'UpdateDeleteMessages':
-        const scroll = navInstance.verticalNavIndex !== Object.keys(messageMetadata).length - 1;
-        const pops = [];
-        const temp = [];
-        evt.messages.forEach(id => {
-          if (messageMetadata[id.toString()]) {
-            messageMetadata[id.toString()].deleted = true;
-            pops.push(messageMetadata[id.toString()].index);
-            delete messageMetadata[id.toString()];
-            navInstance.navigateListNav(-1);
+          break;
+        case 'UpdateShortMessage':
+          if (evt.userId && evt.userId.value.toString() === location.state.entity.id.value.toString()) {
+            const tmessages = await client.getMessages(chat, {ids: evt.id});
+            if (tmessages.length > 0) {
+              pushMessageToMerge(tmessages[0]);
+            }
           }
-        });
-        for (let i in messages) {
-          if (pops.indexOf(parseInt(i)) === -1) {
-            temp.push(messages[i]);
+          break;
+        case 'UpdateNewChannelMessage':
+        case 'UpdateNewMessage':
+          var entities = Array.from(evt._entities.entries());
+          for (let i in entities) {
+            if (entities[i][1].id.toString() === location.state.entity.id.value.toString()) {
+              // Skip for channel, only group or private chat
+              if (!(location.state.entity.className === 'Channel' && !location.state.entity.megagroup)) {
+                if (!cachedForwardedUsers[evt.message.senderId.value.toString()]) {
+                  // console.log('Api.users.GetUsers', evt.message.senderId.value.toString());
+                  // console.time('fetchuncachedforwardsuser');
+                  try {
+                    const users = await client.invoke(new Api.users.GetUsers({ id: [evt.message.senderId.value.toString()] }));
+                    if (users.length > 0) {
+                      cachedForwardedUsers[users[0].id.toString()] = users[0];
+                    }
+                  } catch (err) {
+                    console.log(err);
+                  }
+                  // console.timeEnd('fetchuncachedforwardsuser');
+                }
+              }
+              pushMessageToMerge(evt.message);
+              break;
+            }
           }
-        }
-        if (temp.length > 0) {
-          messages = await buildIndex(temp);
-          if (scroll)
-            autoScroll();
-        }
-        break;
-    }
+          break;
+        case 'UpdateEditChannelMessage':
+        case 'UpdateEditMessage':
+          var entities = Array.from(evt._entities.entries());
+          for (let i in entities) {
+            if (entities[i][1].id.toString() === location.state.entity.id.value.toString()) {
+              if (messageMetadata[evt.message.id.toString()]) {
+                const idx = messageMetadata[evt.message.id.toString()].index;
+                messages[idx] = evt.message;
+                messages = [...messages];
+              }
+              break;
+            }
+          }
+          break;
+        case 'UpdateDeleteChannelMessages':
+        case 'UpdateDeleteMessages':
+          const scroll = navInstance.verticalNavIndex !== Object.keys(messageMetadata).length - 1;
+          const pops = [];
+          const temp = [];
+          evt.messages.forEach(id => {
+            if (messageMetadata[id.toString()]) {
+              messageMetadata[id.toString()].deleted = true;
+              pops.push(messageMetadata[id.toString()].index);
+              delete messageMetadata[id.toString()];
+              navInstance.navigateListNav(-1);
+            }
+          });
+          for (let i in messages) {
+            if (pops.indexOf(parseInt(i)) === -1) {
+              temp.push(messages[i]);
+            }
+          }
+          if (temp.length > 0) {
+            messages = await buildIndex(temp);
+            if (scroll)
+              autoScroll();
+          }
+          break;
+      }
+    } catch (err) {}
   }
 
   function autoScroll() {

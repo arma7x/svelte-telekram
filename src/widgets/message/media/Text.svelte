@@ -2,6 +2,7 @@
   import { onMount, onDestroy } from 'svelte';
   import { createKaiNavigator, KaiNavigator } from '../../../utils/navigation';
 
+  export let chat: any = {};
   export let message: any = {};
   export let parentNavInstance: typeof KaiNavigator;
   export let registerCallButtonHandler: Function = (id, callback) => {}

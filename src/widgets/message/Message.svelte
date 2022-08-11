@@ -250,7 +250,7 @@
       </div>
     {/if}
     {#if message.media }
-      <svelte:component this={resolveMediaWidget(message)} {message} {parentNavInstance} {registerCallButtonHandler}/>
+      <svelte:component this={resolveMediaWidget(message)} {chat} {message} {parentNavInstance} {registerCallButtonHandler}/>
     {/if}
     {#if message.message }
       <p>{message.message.length > 80 && short ? message.message.substring(0, 80) + '...' : message.message}</p>
