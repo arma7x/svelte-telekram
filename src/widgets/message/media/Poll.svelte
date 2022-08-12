@@ -133,6 +133,10 @@
     }
   }
 
+  function retractVote() {
+
+  }
+
   function showResult() {
     const results = [];
     if (message.media.results.solution) {
@@ -207,11 +211,11 @@
               if (['Submit answer', 'Cast vote'].indexOf(scope.selected.title) > -1) {
                 singleChoice();
               } else if (scope.selected.title === 'Cast votes') {
-                multipleChoice()
+                multipleChoice();
               } else if (scope.selected.title === 'Retract vote') {
-
+                retractVote();
               } else if (scope.selected.title === 'Show Result') {
-                showResult()
+                showResult();
               }
             }, 100);
           },
