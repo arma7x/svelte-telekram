@@ -49,7 +49,6 @@
                 msgId: message.id,
                 options: [vote.option]
               }));
-              // console.log(message, result);
               refetchMessage(message.id);
             }
           },
@@ -110,7 +109,6 @@
                 msgId: message.id,
                 options: options
               }));
-              // console.log(message, result);
               refetchMessage(message.id);
             }
           },
@@ -133,8 +131,17 @@
     }
   }
 
-  function retractVote() {
-
+  async function retractVote() {
+    try {
+      const result = await client.invoke(new Api.messages.SendVote({
+        peer: chat,
+        msgId: message.id,
+        options: []
+      }));
+      refetchMessage(message.id);
+    } catch (err) {
+      console.log('retractVote:', err);
+    }
   }
 
   function showResult() {
