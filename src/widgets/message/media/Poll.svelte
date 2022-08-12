@@ -14,156 +14,222 @@
   let available: bool = true;
   let answeredOrVoted: bool = false;
 
-  let optionMenu: OptionMenu;
+  let pollResults: OptionMenu;
   let singleSelector: SingleSelector;
   let multiSelector: MultiSelector;
+  let menu: OptionMenu;
+
+  function singleChoice() {
+    try {
+      const answers = [];
+      message.media.poll.answers.forEach((answer) => {
+        answers.push({ title: answer.text });
+      });
+      singleSelector = new SingleSelector({
+        target: document.body,
+        props: {
+          title: message.media.poll.quiz ? 'Submit answer' : 'Cast vote',
+          focusIndex: 0,
+          options: answers,
+          softKeyCenterText: 'select',
+          onSoftkeyRight: (evt, scope) => {},
+          onSoftkeyLeft: (evt, scope) => {},
+          onEnter: async (evt, scope) => {
+            singleSelector.$destroy();
+            let vote;
+            for (let i in scope.options) {
+              if (scope.options[i].selected) {
+                vote = message.media.poll.answers[i];
+                break;
+              }
+            }
+            if (vote) {
+              const result = await client.invoke(new Api.messages.SendVote({
+                peer: chat,
+                msgId: message.id,
+                options: [vote.option]
+              }));
+              // console.log(message, result);
+              refetchMessage(message.id);
+            }
+          },
+          onBackspace: (evt, scope) => {
+            evt.preventDefault();
+            evt.stopPropagation();
+            singleSelector.$destroy();
+          },
+          onOpened: () => {
+            parentNavInstance.detachListener();
+          },
+          onClosed: (scope) => {
+            parentNavInstance.attachListener();
+            singleSelector = null;
+          }
+        }
+      });
+    } catch (err) {
+      console.log('singleChoice:', err);
+    }
+  }
+
+  function multipleChoice() {
+    try {
+      const answers = [];
+      message.media.poll.answers.forEach((answer) => {
+        answers.push({ title: answer.text });
+      });
+      multiSelector = new MultiSelector({
+        target: document.body,
+        props: {
+          title: 'Cast votes',
+          focusIndex: 0,
+          options: answers,
+          softKeyLeftText: 'Cancel',
+          softKeyRightText: 'Done',
+          softKeyCenterTextSelect: 'select',
+          softKeyCenterTextDeselect: 'deselect',
+          onSoftkeyLeft: (evt, scope) => {
+            evt.preventDefault();
+            evt.stopPropagation();
+            multiSelector.$destroy();
+          },
+          onSoftkeyRight: async (evt, scope) => {
+            evt.preventDefault();
+            evt.stopPropagation();
+            multiSelector.$destroy();
+            const votes = []
+            scope.options.forEach((o, i) => {
+              if (o.checked) {
+                votes.push(message.media.poll.answers[i])
+              }
+            });
+            if (votes.length > 0) {
+              const options = votes.map(v => v.option);
+              const result = await client.invoke(new Api.messages.SendVote({
+                peer: chat,
+                msgId: message.id,
+                options: options
+              }));
+              // console.log(message, result);
+              refetchMessage(message.id);
+            }
+          },
+          onBackspace: (evt, scope) => {
+            evt.preventDefault();
+            evt.stopPropagation();
+            multiSelector.$destroy();
+          },
+          onOpened: () => {
+            parentNavInstance.detachListener();
+          },
+          onClosed: (scope) => {
+            parentNavInstance.attachListener();
+            multiSelector = null;
+          }
+        }
+      });
+    } catch (err) {
+      console.log('multipleChoice:', err);
+    }
+  }
+
+  function showResult() {
+    const results = [];
+    if (message.media.results.solution) {
+      results.push({
+        title: 'Explanation',
+        subtitle: message.media.results.solution
+      });
+    }
+    message.media.results.results.forEach((result, i) => {
+      results.push({
+        title: message.media.poll.answers[i].text,
+        subtitle: `Voters: ${result.voters}, Chosen: ${result.chosen ? '√' : 'X'}${message.media.poll.quiz ? (result.correct ? ', Correct: √' : ', Correct: X') : ''}${message.media.poll.quiz ? (result.chosen && result.correct ? ', Result: √' : ', Result: X') : ''}`
+      });
+    });
+    pollResults = new OptionMenu({
+      target: document.body,
+      props: {
+        title: 'Result',
+        focusIndex: 0,
+        options: results,
+        softKeyCenterText: 'select',
+        onSoftkeyRight: (evt, scope) => {},
+        onSoftkeyLeft: (evt, scope) => {},
+        onEnter: (evt, scope) => {
+          pollResults.$destroy();
+        },
+        onBackspace: (evt, scope) => {
+          evt.preventDefault();
+          evt.stopPropagation();
+          pollResults.$destroy();
+        },
+        onOpened: () => {
+          parentNavInstance.detachListener();
+        },
+        onClosed: (scope) => {
+          parentNavInstance.attachListener();
+          pollResults = null;
+        }
+      }
+    });
+  }
 
   function actionMenu() {
-    try {
-      if (available) {
-        const answers = [];
-        message.media.poll.answers.forEach((answer) => {
-          answers.push({ title: answer.text });
-        });
-        if (message.media.poll.quiz || !message.media.poll.multipleChoice) {
-          singleSelector = new SingleSelector({
-            target: document.body,
-            props: {
-              title: message.media.poll.quiz ? 'Pick your answer' : 'Cast your vote',
-              focusIndex: 0,
-              options: answers,
-              softKeyCenterText: 'select',
-              onSoftkeyRight: (evt, scope) => {},
-              onSoftkeyLeft: (evt, scope) => {},
-              onEnter: async (evt, scope) => {
-                singleSelector.$destroy();
-                let vote;
-                for (let i in scope.options) {
-                  if (scope.options[i].selected) {
-                    vote = message.media.poll.answers[i];
-                    break;
-                  }
-                }
-                if (vote) {
-                  const result = await client.invoke(new Api.messages.SendVote({
-                    peer: chat,
-                    msgId: message.id,
-                    options: [vote.option]
-                  }));
-                  // console.log(message, result);
-                  refetchMessage(message.id);
-                }
-              },
-              onBackspace: (evt, scope) => {
-                evt.preventDefault();
-                evt.stopPropagation();
-                singleSelector.$destroy();
-              },
-              onOpened: () => {
-                parentNavInstance.detachListener();
-              },
-              onClosed: (scope) => {
-                parentNavInstance.attachListener();
-                singleSelector = null;
-              }
-            }
-          });
-        } else {
-          multiSelector = new MultiSelector({
-            target: document.body,
-            props: {
-              title: 'Cast your votes',
-              focusIndex: 0,
-              options: answers,
-              softKeyLeftText: 'Cancel',
-              softKeyRightText: 'Done',
-              softKeyCenterTextSelect: 'select',
-              softKeyCenterTextDeselect: 'deselect',
-              onSoftkeyLeft: (evt, scope) => {
-                evt.preventDefault();
-                evt.stopPropagation();
-                multiSelector.$destroy();
-              },
-              onSoftkeyRight: async (evt, scope) => {
-                evt.preventDefault();
-                evt.stopPropagation();
-                multiSelector.$destroy();
-                const votes = []
-                scope.options.forEach((o, i) => {
-                  if (o.checked) {
-                    votes.push(message.media.poll.answers[i])
-                  }
-                });
-                if (votes.length > 0) {
-                  const options = votes.map(v => v.option);
-                  const result = await client.invoke(new Api.messages.SendVote({
-                    peer: chat,
-                    msgId: message.id,
-                    options: options
-                  }));
-                  // console.log(message, result);
-                  refetchMessage(message.id);
-                }
-              },
-              onBackspace: (evt, scope) => {
-                evt.preventDefault();
-                evt.stopPropagation();
-                multiSelector.$destroy();
-              },
-              onOpened: () => {
-                parentNavInstance.detachListener();
-              },
-              onClosed: (scope) => {
-                parentNavInstance.attachListener();
-                multiSelector = null;
-              }
-            }
-          });
-        }
+    const options = [];
+    if (available) {
+      if (message.media.poll.quiz || !message.media.poll.multipleChoice) {
+        if (message.media.poll.quiz)
+          options.push({ title: 'Submit answer' });
+        else
+          options.push({ title: 'Cast vote' });
       } else {
-        const results = [];
-        if (message.media.results.solution) {
-          results.push({
-            title: 'Explanation',
-            subtitle: message.media.results.solution
-          });
-        }
-        message.media.results.results.forEach((result, i) => {
-          results.push({
-            title: message.media.poll.answers[i].text,
-            subtitle: `Voters: ${result.voters}, Chosen: ${result.chosen ? '√' : 'X'}${message.media.poll.quiz ? (result.correct ? ', Correct: √' : ', Correct: X') : ''}${message.media.poll.quiz ? (result.chosen && result.correct ? ', Result: √' : ', Result: X') : ''}`
-          });
-        });
-        optionMenu = new OptionMenu({
-          target: document.body,
-          props: {
-            title: 'Result',
-            focusIndex: 0,
-            options: results,
-            softKeyCenterText: 'select',
-            onSoftkeyRight: (evt, scope) => {},
-            onSoftkeyLeft: (evt, scope) => {},
-            onEnter: (evt, scope) => {
-              optionMenu.$destroy();
-            },
-            onBackspace: (evt, scope) => {
-              evt.preventDefault();
-              evt.stopPropagation();
-              optionMenu.$destroy();
-            },
-            onOpened: () => {
-              parentNavInstance.detachListener();
-            },
-            onClosed: (scope) => {
-              parentNavInstance.attachListener();
-              optionMenu = null;
-            }
-          }
-        });
+        options.push({ title: 'Cast votes' });
       }
-    } catch (err) {
-      console.log('actionMenu:', err);
+    } else {
+      if (!message.media.poll.quiz)
+        options.push({ title: 'Retract vote' });
+      options.push({ title: 'Show Result' });
     }
+    setTimeout(() => {
+      menu = new OptionMenu({
+        target: document.body,
+        props: {
+          title: 'Action Menu',
+          focusIndex: 0,
+          options: options,
+          softKeyCenterText: 'select',
+          onSoftkeyRight: (evt, scope) => {},
+          onSoftkeyLeft: (evt, scope) => {},
+          onEnter: (evt, scope) => {
+            menu.$destroy();
+            setTimeout(() => {
+              if (['Submit answer', 'Cast vote'].indexOf(scope.selected.title) > -1) {
+                singleChoice();
+              } else if (scope.selected.title === 'Cast votes') {
+                multipleChoice()
+              } else if (scope.selected.title === 'Retract vote') {
+
+              } else if (scope.selected.title === 'Show Result') {
+                showResult()
+              }
+            }, 100);
+          },
+          onBackspace: (evt, scope) => {
+            evt.preventDefault();
+            evt.stopPropagation();
+            menu.$destroy();
+          },
+          onOpened: () => {
+            parentNavInstance.detachListener();
+          },
+          onClosed: (scope) => {
+            parentNavInstance.attachListener();
+            menu = null;
+          }
+        }
+      });
+    }, 100);
   }
 
   function update() {
