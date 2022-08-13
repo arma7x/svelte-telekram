@@ -951,11 +951,7 @@
     //}
     navInstance.detachListener();
     client.removeEventHandler(clientListener);
-    try {
-      await retrieveChats();
-    } catch (err) {
-      console.log('onDestroy:', err);
-    }
+    retrieveChats();
   });
 
 </script>
