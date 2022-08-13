@@ -559,8 +559,59 @@
     return `<div style="display:flex;flex-direction:column;justify-content:center;align-items:center;font-weight:bold;color:#fff;background-color:var(--themeColor);width:40px;height:40px;border-radius:50%;box-sizing:border-box;border: 2px solid #fff;">${chat.name.split(' ').map(text => text[0]).splice(0, 2).join('')}</div>`;
   }
 
-  onMount(() => {
+  function runWorker() {
+    const script = `
+      importScripts('${window.location.origin}/js/telegram.js');
+      importScripts('${window.location.origin}/js/polyfill.min.js');
 
+      let client;
+
+      self.onmessage = function(e) {
+        switch (e.data.type) {
+          case 0:
+            const session = new telegram.sessions.MemorySession();
+            session.setDC(e.data.params.dcId, e.data.params.serverAddress, e.data.params.port);
+            session.setAuthKey(new telegram.AuthKey(e.data.params.authKey._key, e.data.params.authKey._hash), e.data.params.dcId);
+            client = new telegram.TelegramClient(session, ${TelegramKeyHash.api_id}, '${TelegramKeyHash.api_hash}', {
+              maxConcurrentDownloads: 1,
+            });
+            client.connect()
+            .then(() => {
+              self.postMessage({ type: 0, params: 1 });
+            })
+            .catch(err => {
+              self.postMessage({ type: -1, params: err });
+            });
+            break;
+        }
+      }
+    `;
+    const blob = new Blob([script], {type: 'application/javascript'});
+    const worker = new Worker(URL.createObjectURL(blob));
+    worker.postMessage({
+      type: 0,
+      params: {
+        dcId: session.dcId,
+        serverAddress: session.serverAddress,
+        port: session.port,
+        authKey: session.getAuthKey(session.dcId)
+      }
+    });
+    return worker;
+  }
+
+  onMount(() => {
+    window['web_worker'] = runWorker();
+    window['web_worker'].onmessage = (e) => {
+      switch (e.data.type) {
+        case -1:
+          console.log('Err', e.data.params);
+          break;
+        case 0:
+          console.log('Connected to web worker');
+          break;
+      }
+    }
     const { appBar, softwareKey } = getAppProp();
     appBar.setTitleText(name);
     softwareKey.setText({ left: '', center: 'SELECT', right: '' });
