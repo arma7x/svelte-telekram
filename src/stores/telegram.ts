@@ -149,8 +149,8 @@ export function getAuthorizedUser() {
 }
 
 export async function runTask(httpTasks, websocketTasks, chatPreferencesTask = {}) {
-  const lbl = `[NON-BLOCKING]:chatPreferencesTask ${Object.keys(chatPreferencesTask).length}`;
-  console.time(lbl);
+  // const lbl = `[NON-BLOCKING]:chatPreferencesTask ${Object.keys(chatPreferencesTask).length}`;
+  // console.time(lbl);
   for (let chatId in chatPreferencesTask) {
     try {
       let pref = await (await cachedDatabase).get('chatPreferences', chatId);
@@ -165,10 +165,10 @@ export async function runTask(httpTasks, websocketTasks, chatPreferencesTask = {
       console.log('chatPreferencesTask:', err);
     }
   }
-  console.timeEnd(lbl);
+  // console.timeEnd(lbl);
 
-  const lbl2 = `[NON-BLOCKING]:httpTasks ${httpTasks.length}`
-  console.time(lbl2);
+  // const lbl2 = `[NON-BLOCKING]:httpTasks ${httpTasks.length}`
+  // console.time(lbl2);
   httpTasks.forEach(async (task, index) => {
     try {
       let cache = await (await cachedDatabase).get('profilePhotos', task.photoId);
@@ -192,11 +192,11 @@ export async function runTask(httpTasks, websocketTasks, chatPreferencesTask = {
       console.log('httpTasks:', err);
     }
   });
-  console.timeEnd(lbl2);
+  // console.timeEnd(lbl2);
 
   let elapsed = 0;
-  const lbl3 = `[NON-BLOCKING]:websocketTasks ${websocketTasks.length}`
-  console.time(lbl3);
+  // const lbl3 = `[NON-BLOCKING]:websocketTasks ${websocketTasks.length}`
+  // console.time(lbl3);
   websocketTasks.forEach(async (task) => {
     try {
       let cache = await (await cachedDatabase).get('profilePhotos', task.photoId);
@@ -214,7 +214,7 @@ export async function runTask(httpTasks, websocketTasks, chatPreferencesTask = {
     // sleep 3sec
     await new Promise(resolve => setTimeout(() => {}, 3000));
   });
-  console.timeEnd(lbl3);
+  // console.timeEnd(lbl3);
 }
 
 async function updateThumbCached(ref, base64) {
