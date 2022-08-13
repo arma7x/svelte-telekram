@@ -468,7 +468,7 @@
           exceptIds: [],
         })
       );
-      console.log(result);
+      console.log(result); //TODO
       //if (result._ === 'auth.loginTokenSuccess') {
         //isUserAuthorized();
         //phoneCodeHash = null;
