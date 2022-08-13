@@ -560,11 +560,28 @@
   }
 
   function runWorker() {
+    if (window['web_worker'])
+      window['web_worker'].terminate();
     const script = `
       importScripts('${window.location.origin}/js/telegram.js');
       importScripts('${window.location.origin}/js/polyfill.min.js');
 
-      let client;
+      let clients;
+
+      function retrieveChats() {
+        client.getDialogs({
+          offsetPeer: new telegram.Api.InputPeerSelf(),
+          limit: 100,
+          excludePinned: true,
+          folderId: 0,
+        })
+        .then((chats) => {
+          //self.postMessage({ type: 1, params: chats });
+        })
+        .catch(err => {
+          //self.postMessage({ type: -1, params: err });
+        });
+      }
 
       self.onmessage = function(e) {
         switch (e.data.type) {
@@ -582,6 +599,8 @@
             .catch(err => {
               self.postMessage({ type: -1, params: err });
             });
+            break;
+          case 1:
             break;
         }
       }
@@ -601,17 +620,6 @@
   }
 
   onMount(() => {
-    window['web_worker'] = runWorker();
-    window['web_worker'].onmessage = (e) => {
-      switch (e.data.type) {
-        case -1:
-          console.log('Err', e.data.params);
-          break;
-        case 0:
-          console.log('Connected to web worker');
-          break;
-      }
-    }
     const { appBar, softwareKey } = getAppProp();
     appBar.setTitleText(name);
     softwareKey.setText({ left: '', center: 'SELECT', right: '' });
@@ -622,6 +630,17 @@
     unchatCollections = chatCollections.subscribe(chats => {
       if (client.connected) {
         sortChats(chats);
+        window['web_worker'] = runWorker();
+        window['web_worker'].onmessage = (e) => {
+          switch (e.data.type) {
+            case -1:
+              console.log('Err', e.data.params);
+              break;
+            case 0:
+              console.log('Connected to web worker');
+              break;
+          }
+        }
       }
     });
 
