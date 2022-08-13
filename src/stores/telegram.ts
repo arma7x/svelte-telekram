@@ -76,9 +76,11 @@ export async function isUserAuthorized() {
 }
 
 export async function retrieveChats() {
-  // const timer = new Date().getTime().toString();
-  // console.time('retrieveChats_' + timer);
+  console.log('\n');
+  console.log('%cSTART', 'background: #222; color: #bada55');
   try {
+    const lbl = `retrieveChats at ${new Date().getTime().toString()}`;
+    console.time(lbl);
     const chatPreferencesTask = {};
     const user = await getAuthorizedUser();
     const chats = await client.getDialogs({
@@ -87,6 +89,8 @@ export async function retrieveChats() {
       excludePinned: true,
       folderId: 0,
     });
+    console.timeEnd(lbl);
+    console.log('%cFINISH', 'background: #222; color: #bada55');
     const httpTasks = [];
     const websocketTasks = [];
     chats.forEach((chat, index) => {
@@ -129,7 +133,7 @@ export async function retrieveChats() {
   } catch (err) {
     console.log(err);
   }
-  // console.timeEnd('retrieveChats_' + timer);
+  console.log('%cFINISH', 'background: #222; color: #bada55');
 }
 
 export function getChatCollection() {
@@ -145,22 +149,26 @@ export function getAuthorizedUser() {
 }
 
 export async function runTask(httpTasks, websocketTasks, chatPreferencesTask = {}) {
-  // console.time('chatPreferencesTask');
-  // console.log('chatPreferencesTask:', Object.keys(chatPreferencesTask).length);
+  const lbl = `[NON-BLOCKING]:chatPreferencesTask ${Object.keys(chatPreferencesTask).length}`;
+  console.time(lbl);
   for (let chatId in chatPreferencesTask) {
-    let pref = await (await cachedDatabase).get('chatPreferences', chatId);
-    if (pref == null)
-      pref = {};
-    pref['muted'] = chatPreferencesTask[chatId]['muted'];
-    if (pref['scrollAt'] == null) {
-      pref['scrollAt'] = chatPreferencesTask[chatId]['scrollAt'];
+    try {
+      let pref = await (await cachedDatabase).get('chatPreferences', chatId);
+      if (pref == null)
+        pref = {};
+      pref['muted'] = chatPreferencesTask[chatId]['muted'];
+      if (pref['scrollAt'] == null) {
+        pref['scrollAt'] = chatPreferencesTask[chatId]['scrollAt'];
+      }
+      await (await cachedDatabase).put('chatPreferences', pref, chatId);
+    } catch (err) {
+      console.log('chatPreferencesTask:', err);
     }
-    await (await cachedDatabase).put('chatPreferences', pref, chatId);
   }
-  // console.timeEnd('chatPreferencesTaskTask');
+  console.timeEnd(lbl);
 
-  // console.log('httpTasks:', httpTasks.length);
-  // console.time('httpTasks');
+  const lbl2 = `[NON-BLOCKING]:httpTasks ${httpTasks.length}`
+  console.time(lbl2);
   httpTasks.forEach(async (task, index) => {
     try {
       let cache = await (await cachedDatabase).get('profilePhotos', task.photoId);
@@ -181,14 +189,14 @@ export async function runTask(httpTasks, websocketTasks, chatPreferencesTask = {
       }
       updateThumbCached(task.photoId, cache);
     } catch (err) {
-      console.log('Err:', err);
+      console.log('httpTasks:', err);
     }
   });
-  // console.timeEnd('httpTasks');
+  console.timeEnd(lbl2);
 
   let elapsed = 0;
-  // console.log('websocketTasks:', websocketTasks.length);
-  // console.time('websocketTasks');
+  const lbl3 = `[NON-BLOCKING]:websocketTasks ${websocketTasks.length}`
+  console.time(lbl3);
   websocketTasks.forEach(async (task) => {
     try {
       let cache = await (await cachedDatabase).get('profilePhotos', task.photoId);
@@ -199,14 +207,14 @@ export async function runTask(httpTasks, websocketTasks, chatPreferencesTask = {
       }
       updateThumbCached(task.photoId, cache);
     } catch (err) {
-      console.log('Err:', err);
+      console.log('websocketTasks:', err);
     } finally {
       elapsed++;
     }
     // sleep 3sec
     await new Promise(resolve => setTimeout(() => {}, 3000));
   });
-  // console.timeEnd('websocketTasks');
+  console.timeEnd(lbl3);
 }
 
 async function updateThumbCached(ref, base64) {

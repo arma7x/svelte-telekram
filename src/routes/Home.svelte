@@ -575,7 +575,7 @@
     });
 
     unconnectionStatus = connectionStatus.subscribe(status => {
-      console.log(status);
+      // console.log(status);
     });
 
     unauthorizedStatus = authorizedStatus.subscribe(status => {

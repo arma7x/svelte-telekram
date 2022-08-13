@@ -14,7 +14,7 @@
   }
 
   onMount(() => {
-    console.log('onMount', 'App');
+    // console.log('onMount', 'App');
   });
 
 </script>

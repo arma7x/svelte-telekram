@@ -83,6 +83,8 @@
           if (navInstance.verticalNavIndex == 1) {
             if (!ready)
               return;
+            console.log('\n');
+            console.log('%cSTART', 'background: #222; color: #bada55');
             const msg = messages[navInstance.verticalNavIndex - 1];
             const query = { limit: 50, maxId: msg.id }
             const newMessages = await client.getMessages(chat, query);
@@ -95,6 +97,7 @@
                 navInstance.navigateListNav(1);
               }, 200);
             }
+            console.log('%cFINISH', 'background: #222; color: #bada55');
           }
         }
       } catch (err) {
@@ -123,6 +126,8 @@
         } else {
           if (!ready)
             return;
+          console.log('\n');
+          console.log('%cSTART', 'background: #222; color: #bada55');
           const msg = messages[navInstance.verticalNavIndex];
           const query = { limit: 50, minId: msg.id }
           const newMessages = await client.getMessages(chat, query);
@@ -131,6 +136,7 @@
             const temp = [...messages, ...newMessages];
             messages = await buildIndex(temp);
           }
+          console.log('%cFINISH', 'background: #222; color: #bada55');
         }
       } catch (err) {
         console.log('arrowDownListener:', err);
@@ -512,6 +518,7 @@
   }
 
   async function buildIndex(_messages) {
+    console.time('buildIndex');
     forwardedUsersIndex = [];
     forwardedChannelsIndex = [];
     const httpTasks = [];
@@ -595,8 +602,8 @@
     });
 
     if (fetchReply.length > 0) {
-      // console.log('fetchReply:', fetchReply.length);
-      // console.time('fetchReply');
+      const lbl = `fetchReply ${fetchReply.length}`
+      console.time(lbl);
       try {
         const fmessages = await client.getMessages(chat, {ids:fetchReply});
         fetchReply.forEach((id, index) => {
@@ -605,12 +612,12 @@
       } catch (err) {
         console.log('fetchReply:', err);
       }
-      // console.timeEnd('fetchReply');
+      console.timeEnd(lbl);
     }
 
     if (fetchForwardedUsers.length > 0) {
-      // console.log('fetchForwardedUsers:', fetchForwardedUsers.length);
-      // console.time('fetchForwardedUsers');
+      const lbl = `fetchForwardedUsers ${fetchForwardedUsers.length}`;
+      console.time(lbl);
       try {
         const users = await client.invoke(new Api.users.GetUsers({ id: fetchForwardedUsers }));
         users.forEach(u => {
@@ -640,12 +647,12 @@
       } catch (err) {
         console.log('fetchForwardedUsers:', err);
       }
-      // console.timeEnd('fetchForwardedUsers');
+      console.timeEnd(lbl);
     }
 
     if (fetchForwardedChannels.length > 0) {
-      // console.log('fetchForwardedChannels:', fetchForwardedChannels.length);
-      // console.time('fetchForwardedChannels');
+      const lbl = `fetchForwardedChannels ${fetchForwardedChannels.length}`
+      console.time(lbl);
       try {
         const channels = await client.invoke(new Api.channels.GetChannels({ id: fetchForwardedChannels }));
         channels.chats.forEach(c => {
@@ -675,10 +682,10 @@
       } catch (err) {
         console.log('fetchForwardedChannels:', err);
       }
-      // console.timeEnd('fetchForwardedChannels');
+      console.timeEnd(lbl);
     }
-    runTask(httpTasks, websocketTasks);
-    // console.timeEnd('buildIndex');
+    runTask(httpTasks, websocketTasks); // non-blocking
+    console.timeEnd('buildIndex');
     return _messages;
   }
 
@@ -771,13 +778,13 @@
               // Skip for channel, only group or private chat
               if (!(location.state.entity.className === 'Channel' && !location.state.entity.megagroup)) {
                 if (!cachedForwardedUsers[evt.message.senderId.value.toString()]) {
-                  // console.log('Api.users.GetUsers', evt.message.senderId.value.toString());
-                  // console.time('fetchuncachedforwardsuser');
+                  const lbl = `fetchuncachedforwardsuser ${evt.message.senderId.value.toString()}`;
+                  console.time(lbl);
                   const users = await client.invoke(new Api.users.GetUsers({ id: [evt.message.senderId.value.toString()] }));
                   if (users.length > 0) {
                     cachedForwardedUsers[users[0].id.toString()] = users[0];
                   }
-                  // console.timeEnd('fetchuncachedforwardsuser');
+                  console.timeEnd(lbl);
                 }
               }
               pushMessageToMerge(evt.message);
@@ -848,7 +855,9 @@
   }
 
   async function fetchMessages(entity, scrollAt) {
-    // console.time('Finished');
+    console.log('\n');
+    console.log('%cSTART', 'background: #222; color: #bada55');
+    console.time('fetchMessages');
     try {
       const chats = await getChatCollection();
       chat = chats.find(chat => {
@@ -906,7 +915,8 @@
     } catch (err) {
       console.log('fetchMessages:', err);
     }
-    // console.timeEnd('Finished');
+    console.timeEnd('fetchMessages');
+    console.log('%cFINISH', 'background: #222; color: #bada55');
   }
 
   afterUpdate(() => {
