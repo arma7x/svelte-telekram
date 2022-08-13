@@ -2,8 +2,9 @@
   import { onMount, onDestroy } from 'svelte';
   import { createKaiNavigator, KaiNavigator } from '../../../utils/navigation';
 
-  import { client } from '../../../utils/bootstrap';
+  // import { client } from '../../../utils/bootstrap';
   import { Buffer} from 'buffer';
+  import { downloadMedia } from '../../../stores/telegram';
 
   export let chat: any = {};
   export let message: any = {};
@@ -11,6 +12,9 @@
   export let registerCallButtonHandler: Function = (id, callback) => {}
   export let refetchMessage: Function = (id: number) => {}
 
+  let undownloadMedia;
+
+  let src: any;
   let JPEG_HEADER = Buffer.from(
     'ffd8ffe000104a46494600010100000100010000ffdb004300281c1e231e1928' +
     '2321232d2b28303c64413c37373c7b585d4964918099968f808c8aa0b4e6c3a0aad' +
@@ -34,7 +38,6 @@
     'hex'
   );
   let JPEG_FOOTER = Buffer.from('ffd9', 'hex');
-  let mediaSrc: any;
 
   // https://github.com/gram-js/gramjs/issues/223
   function strippedPhotoToJpg(stripped) {
@@ -49,17 +52,38 @@
   }
 
   function actionMenu() {
-    console.log('Clicked:', message.id.toString());
+    if (window['web_worker']) {
+      window['web_worker'].postMessage({
+        type: 1,
+        params: {
+          chatId: chat.id.value.toString(),
+          messageId: message.id,
+        }
+      });
+    }
   }
 
   onMount(async () => {
     registerCallButtonHandler(message.id.toString(), actionMenu);
+    undownloadMedia = downloadMedia.subscribe(evt => {
+      if (evt.hash && evt.hash === chat.id.value.toString() + message.id.toString()) {
+        try {
+          const reader = new FileReader();
+          reader.readAsDataURL(new Blob([evt.result], {type : message.media.document.mimeType}));
+          reader.onloadend = () => {
+            src = reader.result;
+          }
+        } catch (err) {
+          console.log(err);
+        }
+      }
+    });
     //try {
       //const result = await client.downloadMedia(message.media);
       //const reader = new FileReader();
       //reader.readAsDataURL(new Blob([result], {type : message.media.document.mimeType}));
       //reader.onloadend = () => {
-        //mediaSrc = reader.result;
+        //src = reader.result;
       //}
     //} catch (err) {
       //console.log(err);
@@ -72,12 +96,17 @@
     //}
   })
 
+  onDestroy(() => {
+    if (undownloadMedia)
+      undownloadMedia();
+  });
+
 </script>
 
 <svelte:options accessors immutable={true}/>
 <div class="media-container">
-  {#if mediaSrc}
-    <video  src="{mediaSrc}" type="{message.media.document.mimeType}" autoplay loop></video>
+  {#if src}
+    <video src="{src}" type="{message.media.document.mimeType}" autoplay loop></video>
   {/if}
   <span style="color:#A20000;">Unsupported Media: Video</span>
 </div>

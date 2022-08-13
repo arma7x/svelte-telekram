@@ -6,6 +6,7 @@ export const authorizedStatus = writable(false);
 export const authorizedUser = writable([]);
 export const chatCollections = writable([]);
 export const cachedThumbnails = writable({});
+export const downloadMedia = writable({});
 
 client.addEventHandler((evt) => {
   switch (evt.className) {

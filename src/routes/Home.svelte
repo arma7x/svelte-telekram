@@ -2,7 +2,7 @@
   import { Route, navigate as goto } from "svelte-navigator";
   import { createKaiNavigator } from '../utils/navigation';
   import { ListView, LoadingBar, Button, TextInputField, Toast, Toaster, SoftwareKey, TextInputDialog, OptionMenu } from '../components';
-  import { onMount, onDestroy } from 'svelte';
+  import { onMount, onDestroy, createEventDispatcher } from 'svelte';
 
   import { TelegramKeyHash, Api, client, session, cachedDatabase } from '../utils/bootstrap';
 
@@ -11,7 +11,9 @@
   import ArchivedChats from '../widgets/ArchivedChats.svelte';
   import ContactList from '../widgets/ContactList.svelte';
 
-  import { connectionStatus, authorizedStatus, isUserAuthorized, authorizedUser, chatCollections, retrieveChats, cachedThumbnails } from '../stores/telegram';
+  import { connectionStatus, authorizedStatus, isUserAuthorized, authorizedUser, chatCollections, retrieveChats, cachedThumbnails, downloadMedia } from '../stores/telegram';
+
+  const dispatch = createEventDispatcher();
 
   const navClass: string = 'homeNav';
 
@@ -567,6 +569,7 @@
       importScripts('${window.location.origin}/js/polyfill.min.js');
 
       let clients;
+      let chats = {};
 
       function retrieveChats() {
         client.getDialogs({
@@ -575,11 +578,16 @@
           excludePinned: true,
           folderId: 0,
         })
-        .then((chats) => {
-          //self.postMessage({ type: 1, params: chats });
+        .then((result) => {
+          for (var x in result) {
+            if (result[x].id && result[x].id.value) {
+              const id = result[x].id.value.toString();
+              chats[id] = result[x];
+            }
+          }
         })
         .catch(err => {
-          //self.postMessage({ type: -1, params: err });
+          self.postMessage({ type: -1, params: err });
         });
       }
 
@@ -594,13 +602,30 @@
             });
             client.connect()
             .then(() => {
-              self.postMessage({ type: 0, params: 1 });
+              retrieveChats();
+              self.postMessage({ type: e.data.type, params: 1 });
             })
             .catch(err => {
               self.postMessage({ type: -1, params: err });
             });
             break;
           case 1:
+            // const chatId = telegram.helpers.returnBigInt(e.data.params.chatId);
+            if (chats[e.data.params.chatId]) {
+              // console.log(chats[e.data.params.chatId], e.data.params.chatId, e.data.params.messageId);
+              client.getMessages(chats[e.data.params.chatId].entity, { limit: 1, ids: e.data.params.messageId })
+              .then((msg) => {
+                return client.downloadMedia(msg[0].media);
+              })
+              .then((bytes) => {
+                const hash = e.data.params.chatId + e.data.params.messageId.toString();
+                self.postMessage({ type: e.data.type, hash: hash, result: bytes });
+              })
+              .catch(err => {
+                self.postMessage({ type: -1, params: err });
+              });
+
+            }
             break;
         }
       }
@@ -638,6 +663,9 @@
               break;
             case 0:
               console.log('Connected to web worker');
+              break;
+            case 1:
+              downloadMedia.update(n => e.data);
               break;
           }
         }
