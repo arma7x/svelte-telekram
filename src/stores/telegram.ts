@@ -79,7 +79,7 @@ export async function retrieveChats() {
   console.log('\n');
   console.log('%cSTART', 'background: #222; color: #bada55');
   try {
-    const lbl = `retrieveChats at ${new Date().getTime().toString()}`;
+    const lbl = 'retrieveChats';
     console.time(lbl);
     const chatPreferencesTask = {};
     const user = await getAuthorizedUser();
