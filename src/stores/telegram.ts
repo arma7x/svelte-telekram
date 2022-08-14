@@ -1,5 +1,5 @@
 import { get, writable } from 'svelte/store';
-import { TelegramKeyHash, Api, client, cachedDatabase } from '../utils/bootstrap';
+import { TelegramKeyHash, Api, client, session, cachedDatabase } from '../utils/bootstrap';
 
 export const connectionStatus = writable(false);
 export const authorizedStatus = writable(false);
@@ -70,6 +70,24 @@ export async function isUserAuthorized() {
     if (authorized) {
       await fetchUser();
       retrieveChats();
+      window['web_worker'] = runWorker();
+      window['web_worker'].onmessage = async (e) => {
+        switch (e.data.type) {
+          case -1:
+            console.log('Err', e.data.params.toString());
+            break;
+          case 0:
+            console.log('Connected to web worker');
+            break;
+          case 1:
+            downloadMedia.update(n => e.data);
+            break;
+          case 2:
+            (await cachedDatabase).put('profilePhotos', e.data.result, e.data.hash.photoId);
+            updateThumbCached(e.data.hash.photoId, e.data.result);
+            break;
+        }
+      }
     }
   } catch (err) {
     console.log(err);
@@ -251,4 +269,158 @@ function blobToBase64(blob) {
     };
     reader.readAsDataURL(blob);
   });
+}
+
+function runWorker() {
+  if (window['web_worker'])
+    window['web_worker'].terminate();
+  const script = `
+    // void 0!==typeof Symbol&&Symbol.asyncIterator||(Symbol.asyncIterator=Symbol.for("Symbol.asyncIterator"));
+    importScripts('${window.location.origin}/js/polyfill.min.js');
+    importScripts('${window.location.origin}/js/telegram.js');
+
+    let clients;
+    let chats = {};
+    let downloadMediaTask = [];
+    let downloadProfilePhotoTask = [];
+
+    function bufferToBase64(buffer) {
+      return new Promise((resolve, reject) => {
+        const reader = new FileReader();
+        reader.onloadend = () => {
+          resolve(reader.result);
+        };
+        reader.onerror = (err) => {
+          reject(err);
+        };
+        reader.readAsDataURL(new Blob([new Uint8Array(buffer, 0, buffer.length)], {type : 'image/jpeg'}));
+      });
+    }
+
+    function retrieveChats() {
+      client.getDialogs({
+        offsetPeer: new telegram.Api.InputPeerSelf(),
+        limit: 100,
+        excludePinned: true,
+        folderId: 0,
+      })
+      .then((result) => {
+        for (var x in result) {
+          if (result[x].id && result[x].id.value) {
+            const id = result[x].id.value.toString();
+            chats[id] = result[x];
+          }
+        }
+      })
+      .catch(err => {
+        self.postMessage({ type: -1, params: err });
+      });
+    }
+
+    function executeDownloadMediaTask() {
+      if (downloadMediaTask.length <= 0)
+        return;
+      const task = downloadMediaTask[0];
+      // console.log(chats[task.chatId], task.chatId, task.messageId);
+      client.getMessages(chats[task.chatId].entity, { limit: 1, ids: task.messageId })
+      .then((msg) => {
+        return client.downloadMedia(msg[0].media);
+      })
+      .then((bytes) => {
+        const hash = task.chatId + task.messageId.toString();
+        self.postMessage({ type: 1, hash: hash, result: bytes });
+      })
+      .catch(err => {
+        self.postMessage({ type: -1, params: err });
+      })
+      .finally(() => {
+        setTimeout(() => {
+          downloadMediaTask.splice(0, 1);
+          executeDownloadMediaTask();
+        }, 1500);
+      });
+    }
+
+    function executeDownloadProfilePhotoTask() {
+      if (client.connected === false && downloadProfilePhotoTask.length > 0) {
+        setTimeout(() => {
+          executeDownloadProfilePhotoTask();
+        }, 3000)
+        return;
+      }
+      if (downloadProfilePhotoTask.length <= 0)
+        return;
+      const task = downloadProfilePhotoTask[0];
+      // console.log(task.chatId, task.photoId);
+      client.downloadProfilePhoto(telegram.helpers.returnBigInt(task.chatId), { isBig: true })
+      .then((buffer) => {
+        return bufferToBase64(buffer);
+      })
+      .then((base64) => {
+        self.postMessage({ type: 2, hash: task, result: base64 });
+      })
+      .catch(err => {
+        self.postMessage({ type: -1, params: err });
+      })
+      .finally(() => {
+        setTimeout(() => {
+          downloadProfilePhotoTask.splice(0, 1);
+          executeDownloadProfilePhotoTask();
+        }, 1500);
+      });
+
+    }
+
+    self.onmessage = function(e) {
+      switch (e.data.type) {
+        case 0:
+          const session = new telegram.sessions.MemorySession();
+          if (e.data.params) {
+            session.setDC(e.data.params.dcId, e.data.params.serverAddress, e.data.params.port);
+            session.setAuthKey(new telegram.AuthKey(e.data.params.authKey._key, e.data.params.authKey._hash), e.data.params.dcId);
+          }
+          client = new telegram.TelegramClient(session, ${TelegramKeyHash.api_id}, '${TelegramKeyHash.api_hash}', {
+            maxConcurrentDownloads: 1,
+          });
+          client.addEventHandler((evt) => {
+            console.log('worker.client.addEventHandler:', evt.className);
+          });
+          client.connect()
+          .then(() => {
+            retrieveChats();
+            self.postMessage({ type: e.data.type, params: 1 });
+          })
+          .catch(err => {
+            self.postMessage({ type: -1, params: err });
+          });
+          break;
+        case 1:
+          // const chatId = telegram.helpers.returnBigInt(e.data.params.chatId);
+          if (chats[e.data.params.chatId]) {
+            downloadMediaTask.push(e.data.params);
+            if (downloadMediaTask.length === 1)
+              executeDownloadMediaTask();
+          }
+          break;
+        case 2:
+          // const chatId = telegram.helpers.returnBigInt(e.data.params.chatId);
+          downloadProfilePhotoTask.push(e.data.params);
+          if (downloadProfilePhotoTask.length === 1)
+            executeDownloadProfilePhotoTask();
+          break;
+      }
+    }
+  `;
+  const blob = new Blob([script], {type: 'application/javascript'});
+  const worker = new Worker(URL.createObjectURL(blob));
+  worker.postMessage({
+    type: 0,
+    params: {
+      dcId: session.dcId,
+      serverAddress: session.serverAddress,
+      port: session.port,
+      authKey: session.getAuthKey(session.dcId)
+    }
+  });
+  return worker;
 }
