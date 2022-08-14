@@ -52,8 +52,8 @@
   }
 
   function actionMenu() {
-    if (window['web_worker']) {
-      window['web_worker'].postMessage({
+    if (window['authorizedWebWorker']) {
+      window['authorizedWebWorker'].postMessage({
         type: 1,
         params: {
           chatId: chat.id.value.toString(),

@@ -70,8 +70,8 @@ export async function isUserAuthorized() {
     if (authorized) {
       await fetchUser();
       retrieveChats();
-      window['web_worker'] = runWorker();
-      window['web_worker'].onmessage = async (e) => {
+      window['authorizedWebWorker'] = authorizedWebWorker();
+      window['authorizedWebWorker'].onmessage = async (e) => {
         switch (e.data.type) {
           case -1:
             console.log('Err', e.data.params.toString());
@@ -163,8 +163,9 @@ export function getAuthorizedUser() {
   return get(authorizedUser);
 }
 
+// [NON-BLOCKING]
 export async function runTask(httpTasks, websocketTasks, chatPreferencesTask = {}) {
-  // const lbl = `[NON-BLOCKING]:chatPreferencesTask ${Object.keys(chatPreferencesTask).length}`;
+  // const lbl = `chatPreferencesTask ${Object.keys(chatPreferencesTask).length}`;
   // console.time(lbl);
   for (let chatId in chatPreferencesTask) {
     try {
@@ -182,7 +183,7 @@ export async function runTask(httpTasks, websocketTasks, chatPreferencesTask = {
   }
   // console.timeEnd(lbl);
 
-  // const lbl2 = `[NON-BLOCKING]:httpTasks ${httpTasks.length}`
+  // const lbl2 = `httpTasks ${httpTasks.length}`
   // console.time(lbl2);
   httpTasks.forEach(async (task, index) => {
     try {
@@ -210,7 +211,7 @@ export async function runTask(httpTasks, websocketTasks, chatPreferencesTask = {
   });
   // console.timeEnd(lbl2);
 
-  // const lbl3 = `[NON-BLOCKING]:websocketTasks ${websocketTasks.length}`
+  // const lbl3 = `websocketTasks ${websocketTasks.length}`
   // console.time(lbl3);
   websocketTasks.forEach(async (task) => {
     try {
@@ -218,8 +219,8 @@ export async function runTask(httpTasks, websocketTasks, chatPreferencesTask = {
       if (cache != null) {
         updateThumbCached(task.photoId, cache);
       } else {
-        if (window['web_worker']) {
-          window['web_worker'].postMessage({
+        if (window['authorizedWebWorker']) {
+          window['authorizedWebWorker'].postMessage({
             type: 2,
             params: {
               photoId: task.photoId.toString(),
@@ -267,11 +268,10 @@ function blobToBase64(blob) {
   });
 }
 
-function runWorker() {
-  if (window['web_worker'])
-    window['web_worker'].terminate();
+function authorizedWebWorker() {
+  if (window['authorizedWebWorker'])
+    window['authorizedWebWorker'].terminate();
   const script = `
-    // void 0!==typeof Symbol&&Symbol.asyncIterator||(Symbol.asyncIterator=Symbol.for("Symbol.asyncIterator"));
     importScripts('${window.location.origin}/js/polyfill.min.js');
     importScripts('${window.location.origin}/js/telegram.js');
 
