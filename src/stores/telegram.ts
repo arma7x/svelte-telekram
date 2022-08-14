@@ -112,7 +112,7 @@ export async function retrieveChats() {
       chat.iconRef = chat.id.toString();
       if (!(chat.entity.username == null && chat.entity.phone == null) && chat.entity.photo != null && chat.entity.photo.className !== 'ChatPhotoEmpty') {
         chat.iconRef = chat.entity.photo.photoId.toString();
-        httpTasks.push({
+        websocketTasks.push({
           url: `https://api.codetabs.com/v1/proxy/?quest=https://t.me/${chat.entity.phone === "42777" ? 'telegram' : chat.entity.username}`,
           photoId: chat.entity.photo.photoId.toString(),
           chat: chat
@@ -195,36 +195,38 @@ export async function runTask(httpTasks, websocketTasks, chatPreferencesTask = {
   });
   // console.timeEnd(lbl2);
 
-  let elapsed = 0;
   // const lbl3 = `[NON-BLOCKING]:websocketTasks ${websocketTasks.length}`
   // console.time(lbl3);
   websocketTasks.forEach(async (task) => {
     try {
-      let cache = await (await cachedDatabase).get('profilePhotos', task.photoId);
-      if (cache == null) {
-        const base64 = await bufferToBase64(await client.downloadProfilePhoto(task.chat));
-        await (await cachedDatabase).put('profilePhotos', base64, task.photoId);
-        cache = base64;
+      let cache = await (await cachedDatabase).get('profilePhotos', task.photoId.toString());
+      if (cache != null) {
+        updateThumbCached(task.photoId, cache);
+      } else {
+        if (window['web_worker']) {
+          window['web_worker'].postMessage({
+            type: 2,
+            params: {
+              photoId: task.photoId.toString(),
+              chatId: task.chat.entity.id.toString()
+            }
+          });
+        }
       }
-      updateThumbCached(task.photoId, cache);
     } catch (err) {
       console.log('websocketTasks:', err);
-    } finally {
-      elapsed++;
     }
-    // sleep 3sec
-    await new Promise(resolve => setTimeout(() => {}, 3000));
   });
   // console.timeEnd(lbl3);
 }
 
-async function updateThumbCached(ref, base64) {
+export async function updateThumbCached(ref, base64) {
   const cached = await get(cachedThumbnails);
   cached[ref] = base64;
   cachedThumbnails.update(n => cached);
 }
 
-function bufferToBase64(buffer) {
+export function bufferToBase64(buffer) {
   return new Promise((resolve, reject) => {
     const reader = new FileReader();
     reader.onloadend = () => {

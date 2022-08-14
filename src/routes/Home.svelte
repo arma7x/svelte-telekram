@@ -11,7 +11,7 @@
   import ArchivedChats from '../widgets/ArchivedChats.svelte';
   import ContactList from '../widgets/ContactList.svelte';
 
-  import { connectionStatus, authorizedStatus, isUserAuthorized, authorizedUser, chatCollections, retrieveChats, cachedThumbnails, downloadMedia } from '../stores/telegram';
+  import { connectionStatus, authorizedStatus, isUserAuthorized, authorizedUser, chatCollections, retrieveChats, cachedThumbnails, downloadMedia, updateThumbCached, bufferToBase64 } from '../stores/telegram';
 
   const dispatch = createEventDispatcher();
 
@@ -571,6 +571,20 @@
       let clients;
       let chats = {};
       let downloadMediaTask = [];
+      let downloadProfilePhotoTask = [];
+
+      function bufferToBase64(buffer) {
+        return new Promise((resolve, reject) => {
+          const reader = new FileReader();
+          reader.onloadend = () => {
+            resolve(reader.result);
+          };
+          reader.onerror = (err) => {
+            reject(err);
+          };
+          reader.readAsDataURL(new Blob([new Uint8Array(buffer, 0, buffer.length)], {type : 'image/jpeg'}));
+        });
+      }
 
       function retrieveChats() {
         client.getDialogs({
@@ -589,11 +603,6 @@
         })
         .catch(err => {
           self.postMessage({ type: -1, params: err });
-        })
-        .finally(() => {
-          setTimeout(() => {
-            executeDownloadMediaTask();
-          }, 3000);
         });
       }
 
@@ -612,15 +621,51 @@
         })
         .catch(err => {
           self.postMessage({ type: -1, params: err });
+        })
+        .finally(() => {
+          setTimeout(() => {
+            executeDownloadMediaTask();
+          }, 3000);
         });
+      }
+
+      function executeDownloadProfilePhotoTask() {
+        if (client.connected === false && downloadProfilePhotoTask.length > 0) {
+          setTimeout(() => {
+            executeDownloadProfilePhotoTask();
+          }, 3000)
+          return;
+        }
+        if (downloadProfilePhotoTask.length <= 0)
+          return;
+        const params = downloadProfilePhotoTask.splice(0, 1);
+        // console.log(params[0].chatId, params[0].photoId);
+        client.downloadProfilePhoto(telegram.helpers.returnBigInt(params[0].chatId))
+        .then((buffer) => {
+          return bufferToBase64(buffer);
+        })
+        .then((base64) => {
+          self.postMessage({ type: 2, hash: params[0], result: base64 });
+        })
+        .catch(err => {
+          self.postMessage({ type: -1, params: err });
+        })
+        .finally(() => {
+          setTimeout(() => {
+            executeDownloadProfilePhotoTask();
+          }, 3000);
+        });
+
       }
 
       self.onmessage = function(e) {
         switch (e.data.type) {
           case 0:
             const session = new telegram.sessions.MemorySession();
-            session.setDC(e.data.params.dcId, e.data.params.serverAddress, e.data.params.port);
-            session.setAuthKey(new telegram.AuthKey(e.data.params.authKey._key, e.data.params.authKey._hash), e.data.params.dcId);
+            if (e.data.params) {
+              session.setDC(e.data.params.dcId, e.data.params.serverAddress, e.data.params.port);
+              session.setAuthKey(new telegram.AuthKey(e.data.params.authKey._key, e.data.params.authKey._hash), e.data.params.dcId);
+            }
             client = new telegram.TelegramClient(session, ${TelegramKeyHash.api_id}, '${TelegramKeyHash.api_hash}', {
               maxConcurrentDownloads: 1,
             });
@@ -642,6 +687,11 @@
               downloadMediaTask.push(e.data.params);
               executeDownloadMediaTask();
             }
+            break;
+          case 2:
+            // const chatId = telegram.helpers.returnBigInt(e.data.params.chatId);
+            downloadProfilePhotoTask.push(e.data.params);
+            executeDownloadProfilePhotoTask();
             break;
         }
       }
@@ -672,7 +722,7 @@
       if (client.connected) {
         sortChats(chats);
         window['web_worker'] = runWorker();
-        window['web_worker'].onmessage = (e) => {
+        window['web_worker'].onmessage = async (e) => {
           switch (e.data.type) {
             case -1:
               console.log('Err', e.data.params);
@@ -682,6 +732,10 @@
               break;
             case 1:
               downloadMedia.update(n => e.data);
+              break;
+            case 2:
+              (await cachedDatabase).put('profilePhotos', e.data.result, e.data.hash.photoId);
+              updateThumbCached(e.data.hash.photoId, e.data.result);
               break;
           }
         }
