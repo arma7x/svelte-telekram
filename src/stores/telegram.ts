@@ -83,8 +83,9 @@ export async function isUserAuthorized() {
             downloadMedia.update(n => e.data);
             break;
           case 2:
-            (await cachedDatabase).put('profilePhotos', e.data.result, e.data.hash.photoId);
-            updateThumbCached(e.data.hash.photoId, e.data.result);
+            const base64 = await bufferToBase64(e.data.result);
+            (await cachedDatabase).put('profilePhotos', base64, e.data.hash.photoId);
+            updateThumbCached(e.data.hash.photoId, base64);
             break;
         }
       }
@@ -205,7 +206,7 @@ export async function runTask(httpTasks, websocketTasks, chatPreferencesTask = {
       }
       updateThumbCached(task.photoId, cache);
     } catch (err) {
-      console.log('httpTasks:', err, url);
+      console.log('httpTasks:', err);
       websocketTasks.push(task);
     }
   });
@@ -280,19 +281,6 @@ function authorizedWebWorker() {
     let downloadMediaTask = [];
     let downloadProfilePhotoTask = [];
 
-    function bufferToBase64(buffer) {
-      return new Promise((resolve, reject) => {
-        const reader = new FileReader();
-        reader.onloadend = () => {
-          resolve(reader.result);
-        };
-        reader.onerror = (err) => {
-          reject(err);
-        };
-        reader.readAsDataURL(new Blob([new Uint8Array(buffer, 0, buffer.length)], {type : 'image/jpeg'}));
-      });
-    }
-
     function retrieveChats() {
       client.getDialogs({
         offsetPeer: new telegram.Api.InputPeerSelf(),
@@ -350,10 +338,7 @@ function authorizedWebWorker() {
       // console.log(task.chatId, task.photoId);
       client.downloadProfilePhoto(telegram.helpers.returnBigInt(task.chatId), { isBig: true })
       .then((buffer) => {
-        return bufferToBase64(buffer);
-      })
-      .then((base64) => {
-        self.postMessage({ type: 2, hash: task, result: base64 });
+        self.postMessage({ type: 2, hash: task, result: buffer });
       })
       .catch(err => {
         self.postMessage({ type: -1, params: err });
