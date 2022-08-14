@@ -609,14 +609,14 @@
       function executeDownloadMediaTask() {
         if (downloadMediaTask.length <= 0)
           return;
-        const params = downloadMediaTask.splice(0, 1);
-        // console.log(chats[params[0].chatId], params[0].chatId, params[0].messageId);
-        client.getMessages(chats[params[0].chatId].entity, { limit: 1, ids: params[0].messageId })
+        const task = downloadMediaTask[0];
+        // console.log(chats[task.chatId], task.chatId, task.messageId);
+        client.getMessages(chats[task.chatId].entity, { limit: 1, ids: task.messageId })
         .then((msg) => {
           return client.downloadMedia(msg[0].media);
         })
         .then((bytes) => {
-          const hash = params[0].chatId + params[0].messageId.toString();
+          const hash = task.chatId + task.messageId.toString();
           self.postMessage({ type: 1, hash: hash, result: bytes });
         })
         .catch(err => {
@@ -624,8 +624,9 @@
         })
         .finally(() => {
           setTimeout(() => {
+            downloadMediaTask.splice(0, 1);
             executeDownloadMediaTask();
-          }, 3000);
+          }, 1500);
         });
       }
 
@@ -638,22 +639,23 @@
         }
         if (downloadProfilePhotoTask.length <= 0)
           return;
-        const params = downloadProfilePhotoTask.splice(0, 1);
-        // console.log(params[0].chatId, params[0].photoId);
-        client.downloadProfilePhoto(telegram.helpers.returnBigInt(params[0].chatId))
+        const task = downloadProfilePhotoTask[0];
+        // console.log(task.chatId, task.photoId);
+        client.downloadProfilePhoto(telegram.helpers.returnBigInt(task.chatId))
         .then((buffer) => {
           return bufferToBase64(buffer);
         })
         .then((base64) => {
-          self.postMessage({ type: 2, hash: params[0], result: base64 });
+          self.postMessage({ type: 2, hash: task, result: base64 });
         })
         .catch(err => {
           self.postMessage({ type: -1, params: err });
         })
         .finally(() => {
           setTimeout(() => {
+            downloadProfilePhotoTask.splice(0, 1);
             executeDownloadProfilePhotoTask();
-          }, 3000);
+          }, 1500);
         });
 
       }
@@ -685,13 +687,15 @@
             // const chatId = telegram.helpers.returnBigInt(e.data.params.chatId);
             if (chats[e.data.params.chatId]) {
               downloadMediaTask.push(e.data.params);
-              executeDownloadMediaTask();
+              if (downloadMediaTask.length === 1)
+                executeDownloadMediaTask();
             }
             break;
           case 2:
             // const chatId = telegram.helpers.returnBigInt(e.data.params.chatId);
             downloadProfilePhotoTask.push(e.data.params);
-            executeDownloadProfilePhotoTask();
+            if (downloadProfilePhotoTask.length === 1)
+              executeDownloadProfilePhotoTask();
             break;
         }
       }
