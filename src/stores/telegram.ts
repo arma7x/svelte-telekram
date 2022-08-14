@@ -95,8 +95,6 @@ export async function isUserAuthorized() {
 }
 
 export async function retrieveChats() {
-  console.log('\n');
-  console.log('%cSTART', 'background: #222; color: #bada55');
   try {
     const lbl = 'retrieveChats';
     console.time(lbl);
@@ -109,7 +107,6 @@ export async function retrieveChats() {
       folderId: 0,
     });
     console.timeEnd(lbl);
-    console.log('%cFINISH', 'background: #222; color: #bada55');
     const httpTasks = [];
     const websocketTasks = [];
     chats.forEach((chat, index) => {
@@ -152,7 +149,6 @@ export async function retrieveChats() {
   } catch (err) {
     console.log(err);
   }
-  console.log('%cFINISH', 'background: #222; color: #bada55');
 }
 
 export function getChatCollection() {
