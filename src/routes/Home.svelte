@@ -567,7 +567,6 @@
     const script = `
       importScripts('${window.location.origin}/js/polyfill.min.js');
       importScripts('${window.location.origin}/js/telegram.js');
-      importScripts('${window.location.origin}/js/polyfill.min.js');
 
       let clients;
       let chats = {};
