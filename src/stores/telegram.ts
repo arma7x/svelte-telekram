@@ -112,7 +112,7 @@ export async function retrieveChats() {
       chat.iconRef = chat.id.toString();
       if (!(chat.entity.username == null && chat.entity.phone == null) && chat.entity.photo != null && chat.entity.photo.className !== 'ChatPhotoEmpty') {
         chat.iconRef = chat.entity.photo.photoId.toString();
-        websocketTasks.push({
+        httpTasks.push({
           url: `https://api.codetabs.com/v1/proxy/?quest=https://t.me/${chat.entity.phone === "42777" ? 'telegram' : chat.entity.username}`,
           photoId: chat.entity.photo.photoId.toString(),
           chat: chat
@@ -190,7 +190,8 @@ export async function runTask(httpTasks, websocketTasks, chatPreferencesTask = {
       }
       updateThumbCached(task.photoId, cache);
     } catch (err) {
-      console.log('httpTasks:', err);
+      console.log('httpTasks:', err, url);
+      websocketTasks.push(task);
     }
   });
   // console.timeEnd(lbl2);
@@ -208,7 +209,7 @@ export async function runTask(httpTasks, websocketTasks, chatPreferencesTask = {
             type: 2,
             params: {
               photoId: task.photoId.toString(),
-              chatId: task.chat.entity.id.toString()
+              chatId: task.chat.entity ? task.chat.entity.id.toString() : task.chat.id.toString(),
             }
           });
         }

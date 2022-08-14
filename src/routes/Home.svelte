@@ -565,6 +565,7 @@
     if (window['web_worker'])
       window['web_worker'].terminate();
     const script = `
+      // void 0!==typeof Symbol&&Symbol.asyncIterator||(Symbol.asyncIterator=Symbol.for("Symbol.asyncIterator"));
       importScripts('${window.location.origin}/js/polyfill.min.js');
       importScripts('${window.location.origin}/js/telegram.js');
 
@@ -641,7 +642,7 @@
           return;
         const task = downloadProfilePhotoTask[0];
         // console.log(task.chatId, task.photoId);
-        client.downloadProfilePhoto(telegram.helpers.returnBigInt(task.chatId))
+        client.downloadProfilePhoto(telegram.helpers.returnBigInt(task.chatId), { isBig: true })
         .then((buffer) => {
           return bufferToBase64(buffer);
         })
@@ -729,7 +730,7 @@
         window['web_worker'].onmessage = async (e) => {
           switch (e.data.type) {
             case -1:
-              console.log('Err', e.data.params);
+              console.log('Err', e.data.params.toString());
               break;
             case 0:
               console.log('Connected to web worker');

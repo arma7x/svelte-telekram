@@ -567,6 +567,7 @@
                 photoId: sender.photo.photoId.toString(),
                 chat: sender
               });
+              // console.log(sender); // no username
             }
           }
         }
@@ -633,6 +634,7 @@
               photoId: u.photo.photoId.toString(),
               chat: u
             })
+            // console.log(u); // no username
           }
         });
         forwardedUsersIndex.forEach(i => {
