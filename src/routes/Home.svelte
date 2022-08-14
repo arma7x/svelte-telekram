@@ -565,7 +565,6 @@
     if (window['web_worker'])
       window['web_worker'].terminate();
     const script = `
-      importScripts('${window.location.origin}/js/polyfill.min.js');
       importScripts('${window.location.origin}/js/telegram.js');
       importScripts('${window.location.origin}/js/polyfill.min.js');
 
@@ -590,30 +589,11 @@
         })
         .catch(err => {
           self.postMessage({ type: -1, params: err });
-        })
-        .finally(() => {
-          setTimeout(() => {
-            executeDownloadMediaTask();
-          }, 3000);
         });
       }
 
       function executeDownloadMediaTask() {
-        if (downloadMediaTask.length <= 0)
-          return;
-        const params = downloadMediaTask.splice(0, 1);
-        // console.log(chats[params[0].chatId], params[0].chatId, params[0].messageId);
-        client.getMessages(chats[params[0].chatId].entity, { limit: 1, ids: params[0].messageId })
-        .then((msg) => {
-          return client.downloadMedia(msg[0].media);
-        })
-        .then((bytes) => {
-          const hash = params[0].chatId + params[0].messageId.toString();
-          self.postMessage({ type: 1, hash: hash, result: bytes });
-        })
-        .catch(err => {
-          self.postMessage({ type: -1, params: err });
-        });
+
       }
 
       self.onmessage = function(e) {
@@ -624,9 +604,6 @@
             session.setAuthKey(new telegram.AuthKey(e.data.params.authKey._key, e.data.params.authKey._hash), e.data.params.dcId);
             client = new telegram.TelegramClient(session, ${TelegramKeyHash.api_id}, '${TelegramKeyHash.api_hash}', {
               maxConcurrentDownloads: 1,
-            });
-            client.addEventHandler((evt) => {
-              console.log('worker.client.addEventHandler:', evt.className);
             });
             client.connect()
             .then(() => {
@@ -640,8 +617,19 @@
           case 1:
             // const chatId = telegram.helpers.returnBigInt(e.data.params.chatId);
             if (chats[e.data.params.chatId]) {
-              downloadMediaTask.push(e.data.params);
-              executeDownloadMediaTask();
+              // console.log(chats[e.data.params.chatId], e.data.params.chatId, e.data.params.messageId);
+              client.getMessages(chats[e.data.params.chatId].entity, { limit: 1, ids: e.data.params.messageId })
+              .then((msg) => {
+                return client.downloadMedia(msg[0].media);
+              })
+              .then((bytes) => {
+                const hash = e.data.params.chatId + e.data.params.messageId.toString();
+                self.postMessage({ type: e.data.type, hash: hash, result: bytes });
+              })
+              .catch(err => {
+                self.postMessage({ type: -1, params: err });
+              });
+
             }
             break;
         }
