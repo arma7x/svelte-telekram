@@ -570,6 +570,7 @@
 
       let clients;
       let chats = {};
+      let downloadMediaTask = [];
 
       function retrieveChats() {
         client.getDialogs({
@@ -589,6 +590,10 @@
         .catch(err => {
           self.postMessage({ type: -1, params: err });
         });
+      }
+
+      function executeDownloadMediaTask() {
+
       }
 
       self.onmessage = function(e) {
