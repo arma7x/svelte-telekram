@@ -113,7 +113,10 @@
   }
 
   function getTime(msg) {
-    const t = new Date(msg.date * 1000).toLocaleTimeString();
+    let t = new Date(msg.date * 1000)
+    if (scrollable)
+      return t.toLocaleString();
+    t = t.toLocaleTimeString();
     const ts = t.split(' ');
     let hms = ts[0].split(':');
     hms.pop();
