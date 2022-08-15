@@ -70,6 +70,8 @@ export async function isUserAuthorized() {
     if (authorized) {
       await fetchUser();
       retrieveChats();
+      if (window['authenticationWebWorker'])
+        window['authenticationWebWorker'].terminate();
       window['authorizedWebWorker'] = authorizedWebWorker();
       window['authorizedWebWorker'].onmessage = async (e) => {
         switch (e.data.type) {
@@ -92,6 +94,8 @@ export async function isUserAuthorized() {
     } else {
       console.log(1);
       return;
+      if (window['authorizedWebWorker'])
+        window['authorizedWebWorker'].terminate();
       window['authenticationWebWorker'] = authenticationWebWorker();
       window['authenticationWebWorker'].onmessage = async (e) => {
         switch (e.data.type) {
