@@ -630,13 +630,13 @@
               url: `https://api.codetabs.com/v1/proxy/?quest=https://t.me/${u.phone === "42777" ? 'telegram' : u.username}`,
               photoId: u.photo.photoId.toString(),
               chat: u,
-              //origin: { chat, message },
+              //origin: { chat, message }, // TODO
             })
           } else if (u.photo != null) {
             websocketTasks.push({
               photoId: u.photo.photoId.toString(),
               chat: u,
-              //origin: { chat, message },
+              //origin: { chat, message }, // TODO
             })
             // console.log(u); // no username
           }
@@ -668,13 +668,13 @@
               url: `https://api.codetabs.com/v1/proxy/?quest=https://t.me/${c.phone === "42777" ? 'telegram' : c.username}`,
               photoId: c.photo.photoId.toString(),
               chat: c,
-              //origin: { chat, message },
+              //origin: { chat, message }, // TODO
             })
           } else if (c.photo != null) {
             websocketTasks.push({
               photoId: c.photo.photoId.toString(),
               chat: c,
-              //origin: { chat, message },
+              //origin: { chat, message }, // TODO
             })
           }
         });

@@ -376,6 +376,7 @@ function authorizedWebWorker() {
         self.postMessage({ type: 2, hash: task, result: buffer });
       })
       .catch(err => {
+        console.log(task.chatId, chats[task.chatId], chats.length) // TODO, check private channel
         if (task.origin && chats[task.origin.chatId]) {
           client.getMessages(chats[task.origin.chatId], {ids:[task.origin.messageId]})
           .then((messages) => {
