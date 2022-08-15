@@ -559,7 +559,8 @@
               httpTasks.push({
                 url: `https://api.codetabs.com/v1/proxy/?quest=https://t.me/${sender.phone === "42777" ? 'telegram' : sender.username}`,
                 photoId: sender.photo.photoId.toString(),
-                chat: sender
+                chat: sender,
+                origin: { chat, message },
               });
             } else if (sender && sender.photo != null) {
               message.iconRef = sender.photo.photoId.toString();
@@ -628,13 +629,14 @@
             httpTasks.push({
               url: `https://api.codetabs.com/v1/proxy/?quest=https://t.me/${u.phone === "42777" ? 'telegram' : u.username}`,
               photoId: u.photo.photoId.toString(),
-              chat: u
+              chat: u,
+              //origin: { chat, message },
             })
           } else if (u.photo != null) {
             websocketTasks.push({
               photoId: u.photo.photoId.toString(),
               chat: u,
-              origin: chat,
+              //origin: { chat, message },
             })
             // console.log(u); // no username
           }
@@ -665,12 +667,14 @@
             httpTasks.push({
               url: `https://api.codetabs.com/v1/proxy/?quest=https://t.me/${c.phone === "42777" ? 'telegram' : c.username}`,
               photoId: c.photo.photoId.toString(),
-              chat: c
+              chat: c,
+              //origin: { chat, message },
             })
           } else if (c.photo != null) {
             websocketTasks.push({
               photoId: c.photo.photoId.toString(),
-              chat: c
+              chat: c,
+              //origin: { chat, message },
             })
           }
         });

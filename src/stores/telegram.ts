@@ -92,6 +92,7 @@ export async function isUserAuthorized() {
         }
       }
     } else {
+      // TODO
       console.log(1);
       return;
       if (window['authorizedWebWorker'])
@@ -113,7 +114,6 @@ export async function isUserAuthorized() {
 export async function retrieveChats() {
   try {
     const start = new Date().getTime();
-    const chatPreferencesTask = {};
     const user = await getAuthorizedUser();
     const chats = await client.getDialogs({
       offsetPeer: new Api.InputPeerSelf(),
@@ -124,6 +124,7 @@ export async function retrieveChats() {
     console.log(`retrieveChats: ${new Date().getTime() - start}ms`);
     const httpTasks = [];
     const websocketTasks = [];
+    const chatPreferencesTask = {};
     chats.forEach((chat, index) => {
       chat.__isSavedMessages = false;
       if (chat.id.value === user[0].id.value) {
@@ -200,7 +201,12 @@ export async function runTask(httpTasks, websocketTasks, chatPreferencesTask = {
 
   // const lbl2 = `httpTasks ${httpTasks.length}`
   // console.time(lbl2);
+  let skipHttpTasks = [];
   httpTasks.forEach(async (task, index) => {
+    if (skipHttpTasks.indexOf(task.photoId.toString()) > -1) {
+      return;
+    }
+    skipHttpTasks.push(task.photoId.toString());
     try {
       let cache = await (await cachedDatabase).get('profilePhotos', task.photoId);
       if (cache != null) {
@@ -209,10 +215,7 @@ export async function runTask(httpTasks, websocketTasks, chatPreferencesTask = {
         const html = new DOMParser().parseFromString(await (await fetch(task.url)).text(), 'text/html');
         const images = html.getElementsByClassName('tgme_page_photo_image');
         if (images.length === 0) {
-          // TODO: if fails CORS req
-          // const base64 = await bufferToBase64(await client.downloadProfilePhoto(task.chat));
-          // await (await cachedDatabase).put('profilePhotos', base64, task.photoId);
-          // cache = base64;
+          throw('No profile picture: tgme_page_photo_image');
         } else {
           const img = images[0] as HTMLImageElement;
           const blob = await (await fetch(img.src)).blob()
@@ -224,14 +227,28 @@ export async function runTask(httpTasks, websocketTasks, chatPreferencesTask = {
       };
     } catch (err) {
       console.log('httpTasks:', err);
-      websocketTasks.push(task);
+      if (window['authorizedWebWorker']) {
+        window['authorizedWebWorker'].postMessage({
+          type: 2,
+          params: {
+            photoId: task.photoId.toString(),
+            chatId: task.chat.entity ? task.chat.entity.id.toString() : task.chat.id.toString(),
+            origin: task.origin ? { chatId: task.origin.chat.id.toString(), messageId: task.origin.message.id } : null
+          }
+        });
+      }
     }
   });
   // console.timeEnd(lbl2);
 
   // const lbl3 = `websocketTasks ${websocketTasks.length}`
   // console.time(lbl3);
+  let skipWebsocketTasks = [];
   websocketTasks.forEach(async (task) => {
+    if (skipWebsocketTasks.indexOf(task.photoId.toString()) > -1) {
+      return;
+    }
+    skipWebsocketTasks.push(task.photoId.toString());
     try {
       let cache = await (await cachedDatabase).get('profilePhotos', task.photoId.toString());
       if (cache != null) {
@@ -353,7 +370,7 @@ function authorizedWebWorker() {
       if (downloadProfilePhotoTask.length <= 0)
         return;
       const task = downloadProfilePhotoTask[0];
-      console.log(task.chatId, task.photoId, task.origin, chats[task.origin.chatId]);
+      // console.log(task.chatId, task.photoId, task.origin, chats[task.origin.chatId]);
       client.downloadProfilePhoto(telegram.helpers.returnBigInt(task.chatId), { isBig: true })
       .then((buffer) => {
         self.postMessage({ type: 2, hash: task, result: buffer });
@@ -462,3 +479,4 @@ function authenticationWebWorker() {
     }
   });
   return worker;
+}
