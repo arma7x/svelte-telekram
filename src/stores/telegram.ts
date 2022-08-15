@@ -89,6 +89,17 @@ export async function isUserAuthorized() {
             break;
         }
       }
+    } else {
+      console.log(1);
+      return;
+      window['authenticationWebWorker'] = authenticationWebWorker();
+      window['authenticationWebWorker'].onmessage = async (e) => {
+        switch (e.data.type) {
+          case -1:
+            console.log('Err', e.data.params.toString());
+            break;
+        }
+      }
     }
   } catch (err) {
     console.log(err);
@@ -428,3 +439,22 @@ function authorizedWebWorker() {
   });
   return worker;
 }
+
+function authenticationWebWorker() {
+  if (window['authenticationWebWorker'])
+    window['authenticationWebWorker'].terminate();
+
+  let script = ``;
+  const blob = new Blob([script], {type: 'application/javascript'});
+
+  const worker = new Worker(URL.createObjectURL(blob));
+  worker.postMessage({
+    type: 0,
+    params: {
+      dcId: session.dcId,
+      serverAddress: session.serverAddress,
+      port: session.port,
+      authKey: session.getAuthKey(session.dcId)
+    }
+  });
+  return worker;
