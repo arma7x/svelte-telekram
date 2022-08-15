@@ -315,6 +315,7 @@ function authorizedWebWorker() {
     let chats = {};
     let downloadMediaTask = [];
     let downloadProfilePhotoTask = [];
+    let ready = false;
 
     function retrieveChats() {
       client.getDialogs({
@@ -333,6 +334,9 @@ function authorizedWebWorker() {
       })
       .catch(err => {
         self.postMessage({ type: -1, params: err });
+      })
+      .finally(() => {
+        ready = true;
       });
     }
 
@@ -361,7 +365,7 @@ function authorizedWebWorker() {
     }
 
     function executeDownloadProfilePhotoTask() {
-      if (client.connected === false && downloadProfilePhotoTask.length > 0) {
+      if (ready === false || (client.connected === false && downloadProfilePhotoTask.length > 0)) {
         setTimeout(() => {
           executeDownloadProfilePhotoTask();
         }, 3000)
@@ -376,7 +380,7 @@ function authorizedWebWorker() {
         self.postMessage({ type: 2, hash: task, result: buffer });
       })
       .catch(err => {
-        console.log(task.chatId, chats[task.chatId], chats.length) // TODO, check private channel
+        console.log(task.chatId, chats[task.chatId], Object.keys(chats).length) // TODO, check private channel
         if (task.origin && chats[task.origin.chatId]) {
           client.getMessages(chats[task.origin.chatId], {ids:[task.origin.messageId]})
           .then((messages) => {
