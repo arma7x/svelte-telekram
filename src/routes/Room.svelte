@@ -565,7 +565,8 @@
               message.iconRef = sender.photo.photoId.toString();
               websocketTasks.push({
                 photoId: sender.photo.photoId.toString(),
-                chat: sender
+                chat: sender,
+                origin: { chat, message },
               });
               // console.log(sender); // no username
             }
@@ -632,7 +633,8 @@
           } else if (u.photo != null) {
             websocketTasks.push({
               photoId: u.photo.photoId.toString(),
-              chat: u
+              chat: u,
+              origin: chat,
             })
             // console.log(u); // no username
           }

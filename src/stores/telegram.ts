@@ -97,8 +97,7 @@ export async function isUserAuthorized() {
 
 export async function retrieveChats() {
   try {
-    const lbl = 'retrieveChats';
-    console.time(lbl);
+    const start = new Date().getTime();
     const chatPreferencesTask = {};
     const user = await getAuthorizedUser();
     const chats = await client.getDialogs({
@@ -107,7 +106,7 @@ export async function retrieveChats() {
       excludePinned: true,
       folderId: 0,
     });
-    console.timeEnd(lbl);
+    console.log(`retrieveChats: ${new Date().getTime() - start}ms`);
     const httpTasks = [];
     const websocketTasks = [];
     chats.forEach((chat, index) => {
@@ -189,22 +188,25 @@ export async function runTask(httpTasks, websocketTasks, chatPreferencesTask = {
   httpTasks.forEach(async (task, index) => {
     try {
       let cache = await (await cachedDatabase).get('profilePhotos', task.photoId);
-      if (cache == null) {
+      if (cache != null) {
+        updateThumbCached(task.photoId, cache);
+      } else {
         const html = new DOMParser().parseFromString(await (await fetch(task.url)).text(), 'text/html');
         const images = html.getElementsByClassName('tgme_page_photo_image');
         if (images.length === 0) {
-          const base64 = await bufferToBase64(await client.downloadProfilePhoto(task.chat));
-          await (await cachedDatabase).put('profilePhotos', base64, task.photoId);
-          cache = base64;
+          // TODO: if fails CORS req
+          // const base64 = await bufferToBase64(await client.downloadProfilePhoto(task.chat));
+          // await (await cachedDatabase).put('profilePhotos', base64, task.photoId);
+          // cache = base64;
         } else {
           const img = images[0] as HTMLImageElement;
           const blob = await (await fetch(img.src)).blob()
           const base64 = await blobToBase64(blob);
           await (await cachedDatabase).put('profilePhotos', base64, task.photoId);
           cache = base64;
+          updateThumbCached(task.photoId, cache)
         }
-      }
-      updateThumbCached(task.photoId, cache);
+      };
     } catch (err) {
       console.log('httpTasks:', err);
       websocketTasks.push(task);
@@ -226,6 +228,7 @@ export async function runTask(httpTasks, websocketTasks, chatPreferencesTask = {
             params: {
               photoId: task.photoId.toString(),
               chatId: task.chat.entity ? task.chat.entity.id.toString() : task.chat.id.toString(),
+              origin: task.origin ? { chatId: task.origin.chat.id.toString(), messageId: task.origin.message.id } : null
             }
           });
         }
@@ -335,19 +338,39 @@ function authorizedWebWorker() {
       if (downloadProfilePhotoTask.length <= 0)
         return;
       const task = downloadProfilePhotoTask[0];
-      // console.log(task.chatId, task.photoId);
+      console.log(task.chatId, task.photoId, task.origin, chats[task.origin.chatId]);
       client.downloadProfilePhoto(telegram.helpers.returnBigInt(task.chatId), { isBig: true })
       .then((buffer) => {
         self.postMessage({ type: 2, hash: task, result: buffer });
       })
       .catch(err => {
-        self.postMessage({ type: -1, params: err });
-      })
-      .finally(() => {
-        setTimeout(() => {
-          downloadProfilePhotoTask.splice(0, 1);
-          executeDownloadProfilePhotoTask();
-        }, 1500);
+        if (task.origin && chats[task.origin.chatId]) {
+          client.getMessages(chats[task.origin.chatId], {ids:[task.origin.messageId]})
+          .then((messages) => {
+            console.log(messages[0].sender);
+            return client.downloadProfilePhoto(messages[0].sender);
+          })
+          .then((_buffer) => {
+            console.log('Success:', task.origin.chatId, task.origin.messageId);
+            self.postMessage({ type: 2, hash: task, result: _buffer });
+          })
+          .catch((_err) => {
+            console.log('Fail:', task.origin.chatId, task.origin.messageId);
+            self.postMessage({ type: -1, params: _err });
+          })
+          .finally(() => {
+            setTimeout(() => {
+              downloadProfilePhotoTask.splice(0, 1);
+              executeDownloadProfilePhotoTask();
+            }, 1500);
+          });
+        } else {
+          self.postMessage({ type: -1, params: err });
+          setTimeout(() => {
+            downloadProfilePhotoTask.splice(0, 1);
+            executeDownloadProfilePhotoTask();
+          }, 1500);
+        }
       });
 
     }
