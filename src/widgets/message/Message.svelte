@@ -30,6 +30,7 @@
   export let scrollable: bool = false;
 
   let nodeRef;
+  let self: bool = false;
   let uncachedThumbnails;
   let hasAvatar: bool = false;
   let avatarSrc: string = '';
@@ -171,12 +172,15 @@
         expandable = true;
       let _hasAvatar;
       let _justifyContent;
+      let _self = false;
       const user = await getAuthorizedUser();
       const sender = message.sender || message.__sender;
       if (sender && user[0] && sender.id.toString() === user[0].id.toString()) {
+        _self = true;
         _hasAvatar = false;
         _justifyContent = 'end';
       } else {
+        _self = false;
         _hasAvatar = true;
         _justifyContent = 'start';
         if (chat.entity.className === 'Channel' && !chat.entity.megagroup) {
@@ -190,6 +194,7 @@
         if (sender.id && sender.id.toString() === user[0].id.toString() && sender.id.toString() === chat.entity.id.value.toString()) {
           _hasAvatar = true;
           _justifyContent = 'start';
+          _self = false;
         }
         if (message.fwdFrom.fromName) {
           delete message.iconRef;
@@ -201,8 +206,11 @@
           }
         }
       }
+      if (chat.entity.__isSavedMessages)
+        _hasAvatar = true;
       hasAvatar = _hasAvatar;
       justifyContent = _justifyContent;
+      self = _self;
       if (!hasAvatar)
         return;
       if (uncachedThumbnails)
@@ -239,8 +247,9 @@
 
 <div bind:this={nodeRef} data-key="{key}" class="kai-list-view {className ? className : ''}" on:click={onClick} style="background-color:{!short ? 'var(--themeColorLight)' : 'inherit'};{showFull ? 'height' : 'min-height'}:{!short ? '92%' : 'auto'};overflow:{!short ? 'scroll' : 'inherit'};justify-content:{chat.entity.className === 'Channel' && !chat.entity.megagroup ? 'start' : justifyContent};min-height:{hasAvatar ? '50px' : '0px'};">
   {#if hasAvatar && !chat.isUser }{@html DOMPurify.sanitize(avatarSrc)}{/if}
-  <div class="kai-list-view-content" style="margin-left:{hasAvatar && !chat.isUser ? '45px' : '0px'};">
-    {#if hasAvatar}
+  {#if !self && chat.entity.__isSavedMessages }{@html DOMPurify.sanitize(avatarSrc)}{/if}
+  <div class="kai-list-view-content" style="margin-left:{hasAvatar && !chat.isUser || (!self && chat.entity.__isSavedMessages) ? '45px' : '0px'};">
+    {#if hasAvatar && !self && !chat.isUser}
       <b>{fullName || getFullname(message)}</b>
     {:else if message.fwdFrom}
       <b>{forwardedPrefix}{fullName || getFullname(message)}</b>
