@@ -380,6 +380,10 @@
         menu.push({ title: 'Show Reply Buttons' });
       }
       menu.push({ title: 'Show Full' });
+      const isReply = getReplyHeader(msg);
+      if (isReply !== false && isReply !== -1) {
+        menu.push({ title: 'Show Reply Header' });
+      }
       if (!msg.noforwards) {
         menu.push({ title: 'Forward' });
       }
@@ -451,6 +455,8 @@
                 // chat.
               } else if (scope.selected.title === 'Show Reply Buttons') {
                 showReplyButtons(msg);
+              } else if (scope.selected.title === 'Show Reply Header') {
+                showReplies(getReplyHeader(msg), true);
               }
             }, 200);
           },
@@ -473,17 +479,22 @@
     }
   }
 
-  async function showReplies(msg) {
+  async function showReplies(msg, reply = false) {
     try {
-      if (msg.replies && msg.replies.replies > 0) {
-        const query = { limit: msg.replies.replies, replyTo: msg.id }
-        const replies = await client.getMessages(chat, query);
+      if (msg.replies && msg.replies.replies > 0 || reply) {
+        let replies;
+        if (reply) {
+          replies = [msg];
+        } else {
+          const query = { limit: msg.replies.replies, replyTo: msg.id }
+          replies = await client.getMessages(chat, query);
+        }
         repliesDialog = new Replies({
           target: document.body,
           props: {
-            title: 'Replies',
+            title: reply ? 'Reply' : 'Replies',
             chat: chat,
-            messages: [msg, ...(replies.reverse())],
+            messages: reply ? replies : [msg, ...(replies.reverse())],
             resolveMessageWidget: resolveMessageWidget,
             getReplyHeader: getReplyHeader,
             onBackspace: (evt) => {
