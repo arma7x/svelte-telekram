@@ -196,7 +196,7 @@
     }
   }
 
-  function openAuthorizedMenu() {
+  async function openAuthorizedMenu() {
     authorizedMenu = new OptionMenu({
       target: document.body,
       props: {
@@ -216,6 +216,9 @@
           authorizedMenu.$destroy();
           if (scope.selected.title === 'Contacts') {
             getContacts();
+          } else if (scope.selected.title === 'Logout') {
+            await client.invoke(new Api.auth.LogOut({}));
+            isUserAuthorized();
           } else if (scope.selected.title === 'Exit') {
             window.close();
           }
