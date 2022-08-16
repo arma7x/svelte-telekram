@@ -92,9 +92,6 @@ export async function isUserAuthorized() {
         }
       }
     } else {
-      // TODO
-      console.log(1);
-      return;
       if (window['authorizedWebWorker'])
         window['authorizedWebWorker'].terminate();
       window['authenticationWebWorker'] = authenticationWebWorker();
@@ -424,7 +421,7 @@ function authorizedWebWorker() {
             maxConcurrentDownloads: 1,
           });
           client.addEventHandler((evt) => {
-            console.log('worker.client.addEventHandler:', evt.className);
+            console.log('authorizedWebWorker.client.addEventHandler:', evt.className);
           });
           client.connect()
           .then(() => {
@@ -470,7 +467,36 @@ function authenticationWebWorker() {
   if (window['authenticationWebWorker'])
     window['authenticationWebWorker'].terminate();
 
-  let script = ``;
+  const script = `
+    importScripts('${window.location.origin}/js/polyfill.min.js');
+    importScripts('${window.location.origin}/js/telegram.js');
+
+    self.onmessage = function(e) {
+      switch (e.data.type) {
+        case 0:
+          const session = new telegram.sessions.MemorySession();
+          if (e.data.params && e.data.params.dcId && e.data.params.serverAddress && e.data.params.port) {
+            session.setDC(e.data.params.dcId, e.data.params.serverAddress, e.data.params.port);
+            // session.setAuthKey(new telegram.AuthKey(e.data.params.authKey._key, e.data.params.authKey._hash), e.data.params.dcId);
+          }
+          client = new telegram.TelegramClient(session, ${TelegramKeyHash.api_id}, '${TelegramKeyHash.api_hash}', {
+            maxConcurrentDownloads: 1,
+          });
+          client.addEventHandler((evt) => {
+            console.log('authenticationWebWorker.client.addEventHandler:', evt.className);
+          });
+          client.connect()
+          .then(() => {
+            self.postMessage({ type: e.data.type, params: 1 });
+          })
+          .catch(err => {
+            self.postMessage({ type: -1, params: err });
+          });
+          break;
+      }
+    }
+  `;
+
   const blob = new Blob([script], {type: 'application/javascript'});
 
   const worker = new Worker(URL.createObjectURL(blob));
@@ -480,7 +506,6 @@ function authenticationWebWorker() {
       dcId: session.dcId,
       serverAddress: session.serverAddress,
       port: session.port,
-      authKey: session.getAuthKey(session.dcId)
     }
   });
   return worker;
