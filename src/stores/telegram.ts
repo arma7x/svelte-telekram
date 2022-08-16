@@ -100,12 +100,8 @@ export async function isUserAuthorized() {
         window['authorizedWebWorker'].terminate();
       }
       window['authenticationWebWorker'] = authenticationWebWorker();
-      window['authenticationWebWorker'].onmessage = async (e) => {
-        switch (e.data.type) {
-          case -1:
-            console.log('Err', e.data.params.toString());
-            break;
-        }
+      window['authenticationWebWorker'].onmessage = (e) => {
+        authenticationEmitter.update(n => e.data);
       }
     }
   } catch (err) {
@@ -480,6 +476,12 @@ function authenticationWebWorker() {
   if (window['authenticationWebWorker'])
     window['authenticationWebWorker'].terminate();
 
+  /*
+   * 0    connect
+   * -100 disconnect
+   * -1   common errors
+   * N    success N, error -N and N must >= 2
+   */
   const script = `
     importScripts('${window.location.origin}/js/polyfill.min.js');
     importScripts('${window.location.origin}/js/telegram.js');
