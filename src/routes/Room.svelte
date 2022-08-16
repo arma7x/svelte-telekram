@@ -1001,7 +1001,7 @@
 
 <svelte:options accessors immutable={true}/>
 
-<main id="room-screen" data-pad-top="{padTop ? '38' : '0'}" data-pad-bottom="40">
+<main id="room-screen" data-pad-top="{padTop ? '50' : '0'}" data-pad-bottom="30">
   {#if ready }
   {#each messages as message}
     {#if message && message.id && messageMetadata[message.id.toString()] && messageMetadata[message.id.toString()].deleted === false}
