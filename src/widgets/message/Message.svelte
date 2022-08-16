@@ -275,22 +275,22 @@
     {/if}
     <div class="indicator">
       {#if message.replyMarkup && message.replyMarkup.rows}
-      <small class="buttons">&#x2328;&nbsp;</small>
+      <small class="buttons"><img alt="buttons" src="/icons/keyboard.svg" width="10px" height="10px" />&nbsp;</small>
       {/if}
       {#if message.pinned}
-      <small class="pinned">&#x1f588;&nbsp;</small>
+      <small class="pinned"><img alt="pinned" src="/icons/pinned.svg" width="10px" height="10px" />;&nbsp;</small>
       {/if}
       {#if message.views}
-      <small class="views">&#x2B56;{message.views}&nbsp;</small>
+      <small class="views"><img alt="views" src="/icons/eye.svg" width="10px" height="10px" />{message.views}&nbsp;</small>
       {/if}
       {#if message.editDate && message.editHide == false}
-      <small class="edited">&#x270E;&nbsp;</small>
+      <small class="edited"><img alt="edited" src="/icons/edited.svg" width="10px" height="10px" />&nbsp;</small>
       {/if}
       {#if message.replies && message.replies.replies > 0}
-      <small class="replies">&#x21b6;{message.replies.replies}&nbsp;</small>
+      <small class="reply"><img alt="reply" src="/icons/reply.svg" width="10px" height="10px" />{message.replies.replies}&nbsp;</small>
       {/if}
       {#if message.forwards && message.forwards > 0}
-      <small class="forwards" style="margin-top:-1.5px;">&#x279C;{message.forwards}&nbsp;</small>
+      <small class="forwards"><img alt="forwards" src="/icons/forward.svg" width="10px" height="10px" />{message.forwards}&nbsp;</small>
       {/if}
       <small class="time">{getTime(message)}</small>
     </div>
