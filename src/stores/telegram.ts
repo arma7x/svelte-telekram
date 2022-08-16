@@ -6,7 +6,8 @@ export const authorizedStatus = writable(false);
 export const authorizedUser = writable([]);
 export const chatCollections = writable([]);
 export const cachedThumbnails = writable({});
-export const downloadMedia = writable({});
+export const downloadedMediaEmitter = writable({});
+export const authenticationEmitter = writable({});
 
 client.addEventHandler((evt) => {
   switch (evt.className) {
@@ -84,7 +85,7 @@ export async function isUserAuthorized() {
             console.log('Connected to web worker');
             break;
           case 1:
-            downloadMedia.update(n => e.data);
+            downloadedMediaEmitter.update(n => e.data);
             break;
           case 2:
             const base64 = await bufferToBase64(e.data.result);

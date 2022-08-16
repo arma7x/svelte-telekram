@@ -2,7 +2,7 @@
   import { Route, navigate as goto } from "svelte-navigator";
   import { createKaiNavigator } from '../utils/navigation';
   import { ListView, LoadingBar, Button, TextInputField, Toast, Toaster, SoftwareKey, TextInputDialog, OptionMenu } from '../components';
-  import { onMount, onDestroy, createEventDispatcher } from 'svelte';
+  import { onMount, onDestroy } from 'svelte';
 
   import { TelegramKeyHash, Api, client, session, cachedDatabase } from '../utils/bootstrap';
 
@@ -11,9 +11,7 @@
   import ArchivedChats from '../widgets/ArchivedChats.svelte';
   import ContactList from '../widgets/ContactList.svelte';
 
-  import { connectionStatus, authorizedStatus, isUserAuthorized, authorizedUser, chatCollections, retrieveChats, cachedThumbnails } from '../stores/telegram';
-
-  const dispatch = createEventDispatcher();
+  import { connectionStatus, authorizedStatus, isUserAuthorized, authorizedUser, chatCollections, retrieveChats, cachedThumbnails, authenticationEmitter } from '../stores/telegram';
 
   const navClass: string = 'homeNav';
 

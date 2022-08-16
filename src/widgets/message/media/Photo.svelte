@@ -2,7 +2,7 @@
   import { onMount, onDestroy } from 'svelte';
   import { createKaiNavigator, KaiNavigator } from '../../../utils/navigation';
 
-  import { downloadMedia } from '../../../stores/telegram';
+  import { downloadedMediaEmitter } from '../../../stores/telegram';
 
   export let chat: any = {};
   export let message: any = {}; //.media.photo or .media.document
@@ -10,7 +10,7 @@
   export let registerCallButtonHandler: Function = (id, callback) => {}
   export let refetchMessage: Function = (id: number) => {}
 
-  let undownloadMedia;
+  let undownloadedMediaEmitter;
 
   let src: any;
 
@@ -27,7 +27,7 @@
   }
   onMount(() => {
     registerCallButtonHandler(message.id.toString(), actionMenu);
-    undownloadMedia = downloadMedia.subscribe(evt => {
+    undownloadedMediaEmitter = downloadedMediaEmitter.subscribe(evt => {
       if (evt.hash && evt.hash === chat.id.value.toString() + message.id.toString()) {
         try {
           const reader = new FileReader();
@@ -44,8 +44,8 @@
   })
 
   onDestroy(() => {
-    if (undownloadMedia)
-      undownloadMedia();
+    if (undownloadedMediaEmitter)
+      undownloadedMediaEmitter();
   });
 
 </script>
