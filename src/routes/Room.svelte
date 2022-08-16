@@ -391,9 +391,6 @@
         menu.push({ title: 'View Replies' });
       }
       menu.push({ title: 'Reply' });
-      if (chat.entity.className === 'Channel') {
-        menu.push({ title: 'Report' });
-      }
       const sender = msg.sender || msg.__sender;
       if (sender && sender.id.value.toString() === user[0].id.value.toString()) {
         if ((new Date().getTime() - new Date(msg.date * 1000).getTime() < 172800000 || chat.entity.__isSavedMessages) && msg.fwdFrom == null) {
@@ -413,6 +410,9 @@
         menu.push({ title: 'Mute Chat' });
       } else {
         menu.push({ title: 'Unmute Chat' });
+      }
+      if (chat.entity.className === 'Channel') {
+        menu.push({ title: 'Report' });
       }
       contextMenu = new OptionMenu({
         target: document.body,
