@@ -374,7 +374,7 @@
       const user = await getAuthorizedUser();
       let menu = [];
       if (msg.media) {
-        menu.push({ title: 'Show Action Menu' });
+        menu.push({ title: 'Media Menu' });
       }
       if (msg.replyMarkup && msg.replyMarkup.rows) {
         menu.push({ title: 'Show Reply Buttons' });
@@ -388,7 +388,7 @@
         menu.push({ title: 'Forward' });
       }
       if (msg.replies && msg.replies.replies > 0) {
-        menu.push({ title: 'View Replies' });
+        menu.push({ title: 'Discussion' });
       }
       menu.push({ title: 'Reply' });
       const sender = msg.sender || msg.__sender;
@@ -426,7 +426,7 @@
           onEnter: (evt, scope) => {
             contextMenu.$destroy();
             setTimeout(async () => {
-              if (scope.selected.title === 'Show Action Menu') {
+              if (scope.selected.title === 'Media Menu') {
                 if (msg && msg.id.toString()) {
                   if (messageMetadata[msg.id.toString()]) {
                     const cb = messageMetadata[msg.id.toString()].callback;
@@ -435,7 +435,7 @@
                 }
               } else if (scope.selected.title === 'Show Full' && msg.className === "Message") {
                 showFull(msg, index);
-              } else if (scope.selected.title === 'View Replies' && msg.className === "Message" && msg.replies && msg.replies.replies > 0) {
+              } else if (scope.selected.title === 'Discussion' && msg.className === "Message" && msg.replies && msg.replies.replies > 0) {
                 showReplies(msg);
               } else if (scope.selected.title === 'Forward') {
                 // msg.forwardTo
@@ -518,7 +518,8 @@
         repliesDialog = new Replies({
           target: document.body,
           props: {
-            title: reply ? 'Reply' : 'Replies',
+            replyThreadId: msg.id,
+            title: reply ? 'Reply' : 'Discussion',
             chat: chat,
             messages: reply ? replies : [msg, ...(replies.reverse())],
             resolveMessageWidget: resolveMessageWidget,
@@ -1005,7 +1006,7 @@
   {#if ready }
   {#each messages as message}
     {#if message && message.id && messageMetadata[message.id.toString()] && messageMetadata[message.id.toString()].deleted === false}
-      <svelte:component className="roomNav" this={resolveMessageWidget(message)} {message} {registerCallButtonHandler} {refetchMessage} parentNavInstance={navInstance} replyTo={getReplyHeader(message)} chat={chat} short={true} scrollable={false}/>
+      <svelte:component className="roomNav" this={resolveMessageWidget(message)} {message} {registerCallButtonHandler} {refetchMessage} parentNavInstance={navInstance} replyTo={getReplyHeader(message)} chat={chat} short={true} scrollable={false} replyThreadId={null}/>
     {/if}
   {/each}
   {:else}

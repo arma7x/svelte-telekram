@@ -28,6 +28,7 @@
   export let replyTo: any;
   export let short: bool = false;
   export let scrollable: bool = false;
+  export let replyThreadId: any;
 
   let nodeRef;
   let self: bool = false;
@@ -257,7 +258,7 @@
     {:else if message.fwdFrom}
       <b>{forwardedPrefix}{fullName || getFullname(message)}</b>
     {/if}
-    {#if replyTo !== false}
+    {#if replyTo && replyTo !== false && replyTo.id && replyThreadId !== replyTo.id }
       <div class="reply-box">
       {#if replyTo === -1}
         <small>Deleted</small>

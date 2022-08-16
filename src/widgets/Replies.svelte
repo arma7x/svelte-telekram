@@ -14,6 +14,7 @@
   export let onClosed: Function = () => {};
   export let resolveMessageWidget: Function = (msg) => {};
   export let getReplyHeader: Function = (msg) => {};
+  export let replyThreadId: any;
 
   let softwareKey: SoftwareKey;
 
@@ -85,7 +86,7 @@
     <div class="kai-option-menu-header">{title}</div>
     <div bind:this={nodeRef} class="kai-option-menu-body" data-pad-top="66" data-pad-bottom="30">
       {#each messages as message}
-        <svelte:component className="replies" this={resolveMessageWidget(message)} {message} {registerCallButtonHandler} parentNavInstance={navInstance} replyTo={getReplyHeader(message)} chat={chat} short={false} scrollable={false}/>
+        <svelte:component className="replies" this={resolveMessageWidget(message)} {message} {registerCallButtonHandler} parentNavInstance={navInstance} replyTo={getReplyHeader(message)} chat={chat} short={false} scrollable={false} replyThreadId={replyThreadId}/>
       {/each}
     </div>
   </div>
