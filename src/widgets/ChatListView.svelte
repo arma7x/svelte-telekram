@@ -19,12 +19,12 @@
     </p>
     <small>
       {#if chat.isGroup && userId === chat.message._sender.id.value.toString()}
-         <b>You</b>:
+         <b>You</b><br>
       {:else if chat.isGroup}
-         <b>{chat.message._sender.firstName || chat.message._sender.lastName || chat.message._sender.username || chat.message._sender.id}</b>:
+         <b>{chat.message._sender.firstName || chat.message._sender.lastName || chat.message._sender.username || chat.message._sender.id}</b><br>
       {/if}
       {#if chat.message && chat.message.message}
-      {chat.message.message.substring(0, (chat.isGroup ? 15 : 30)) + (chat.message.message.length > (chat.isGroup ? 15 : 30) ? '...' : '')}
+      {chat.message.message.substring(0, 25) + (chat.message.message.length > 25 ? '...' : '')}
       {:else if chat.message.action}
       {chat.message.action.className}
       {:else}
@@ -66,7 +66,8 @@
     justify-content: center;
     align-items: start;
     padding: 0px 4px 0px 0px;
-    width: 100%;
+    width: calc(100% - 56px);
+    overflow-x: hidden;
   }
 
   .kai-list-view > .kai-list-view-content > p {
@@ -91,6 +92,8 @@
     color: #6A6A6A;
     text-align: start;
     vertical-align: middle;
+    max-height: 30px;
+    overflow: hidden;
   }
 
   .kai-list-view > .kai-list-view-indicator {
