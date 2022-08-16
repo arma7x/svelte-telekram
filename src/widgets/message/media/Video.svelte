@@ -106,7 +106,7 @@
 <svelte:options accessors immutable={true}/>
 <div class="media-container">
   {#if src}
-    <video src="{src}" type="{message.media.document.mimeType}" autoplay loop></video>
+    <video style="max-width:170px;height:auto;" src="{src}" type="{message.media.document.mimeType}" autoplay loop></video>
   {/if}
   <span style="color:#A20000;">Unsupported Media: Video</span>
 </div>
