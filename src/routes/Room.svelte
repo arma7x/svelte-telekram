@@ -379,9 +379,7 @@
       if (msg.replyMarkup && msg.replyMarkup.rows) {
         menu.push({ title: 'Show Reply Buttons' });
       }
-      if (msg.message && msg.message.length > 80 || msg.replyTo) {
-        menu.push({ title: 'Show Full' });
-      }
+      menu.push({ title: 'Show Full' });
       if (!msg.noforwards) {
         menu.push({ title: 'Forward' });
       }
