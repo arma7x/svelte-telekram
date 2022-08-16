@@ -70,8 +70,10 @@ export async function isUserAuthorized() {
     if (authorized) {
       await fetchUser();
       retrieveChats();
-      if (window['authenticationWebWorker'])
+      if (window['authenticationWebWorker']) {
+        window['authenticationWebWorker'].postMessage({ type: -100 })
         window['authenticationWebWorker'].terminate();
+      }
       window['authorizedWebWorker'] = authorizedWebWorker();
       window['authorizedWebWorker'].onmessage = async (e) => {
         switch (e.data.type) {
@@ -92,8 +94,10 @@ export async function isUserAuthorized() {
         }
       }
     } else {
-      if (window['authorizedWebWorker'])
+      if (window['authorizedWebWorker']) {
+        window['authorizedWebWorker'].postMessage({ type: -100 })
         window['authorizedWebWorker'].terminate();
+      }
       window['authenticationWebWorker'] = authenticationWebWorker();
       window['authenticationWebWorker'].onmessage = async (e) => {
         switch (e.data.type) {
@@ -411,6 +415,14 @@ function authorizedWebWorker() {
 
     self.onmessage = function(e) {
       switch (e.data.type) {
+        case -100:
+          client.disconnect()
+          .then(() => {
+            self.postMessage({ type: -100 });
+          }).catch(() => {
+            self.postMessage({ type: -1, params: err });
+          });
+          break;
         case 0:
           const session = new telegram.sessions.MemorySession();
           if (e.data.params) {
@@ -471,8 +483,18 @@ function authenticationWebWorker() {
     importScripts('${window.location.origin}/js/polyfill.min.js');
     importScripts('${window.location.origin}/js/telegram.js');
 
+    let clients;
+
     self.onmessage = function(e) {
       switch (e.data.type) {
+        case -100:
+          client.disconnect()
+          .then(() => {
+            self.postMessage({ type: -100 });
+          }).catch(() => {
+            self.postMessage({ type: -1, params: err });
+          });
+          break;
         case 0:
           const session = new telegram.sessions.MemorySession();
           if (e.data.params && e.data.params.dcId && e.data.params.serverAddress && e.data.params.port) {
