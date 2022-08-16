@@ -486,8 +486,34 @@
         if (reply) {
           replies = [msg];
         } else {
+          const httpTasks = [];
+          const websocketTasks = [];
+          const fetchReply = [];
           const query = { limit: msg.replies.replies, replyTo: msg.id }
           replies = await client.getMessages(chat, query);
+          replies.forEach(message => {
+            const sender = message.sender || message.__sender;
+            if (!(location.state.entity.className === 'Channel' && !location.state.entity.megagroup)) {
+              if (sender && !(sender.username == null && sender.phone == null) && sender.photo != null) {
+                message.iconRef = sender.photo.photoId.toString();
+                httpTasks.push({
+                  url: `https://api.codetabs.com/v1/proxy/?quest=https://t.me/${sender.phone === "42777" ? 'telegram' : sender.username}`,
+                  photoId: sender.photo.photoId.toString(),
+                  chat: sender,
+                  origin: { chat, message },
+                });
+              } else if (sender && sender.photo != null) {
+                message.iconRef = sender.photo.photoId.toString();
+                websocketTasks.push({
+                  photoId: sender.photo.photoId.toString(),
+                  chat: sender,
+                  origin: { chat, message },
+                });
+                // console.log(sender); // no username
+              }
+            }
+          });
+          runTask(httpTasks, websocketTasks); // non-blocking
         }
         repliesDialog = new Replies({
           target: document.body,
