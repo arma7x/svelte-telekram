@@ -4,14 +4,14 @@
   import { ListView, LoadingBar, Button, TextInputField, Toast, Toaster, SoftwareKey, TextInputDialog, OptionMenu } from '../components';
   import { onMount, onDestroy } from 'svelte';
 
-  import { TelegramKeyHash, Api, client, session, cachedDatabase } from '../utils/bootstrap';
+  import { TelegramKeyHash, Api, AuthKey, client, session, cachedDatabase } from '../utils/bootstrap';
 
   import QRModal from '../widgets/QRModal.svelte';
   import ChatListView from '../widgets/ChatListView.svelte';
   import ArchivedChats from '../widgets/ArchivedChats.svelte';
   import ContactList from '../widgets/ContactList.svelte';
 
-  import { connectionStatus, authorizedStatus, isUserAuthorized, authorizedUser, chatCollections, retrieveChats, cachedThumbnails, authenticationEmitter } from '../stores/telegram';
+  import { connect, connectionStatus, authorizedStatus, isUserAuthorized, authorizedUser, chatCollections, retrieveChats, cachedThumbnails, dispatchMessageToClient, dispatchMessageToWorker } from '../stores/telegram';
 
   const navClass: string = 'homeNav';
 
@@ -32,7 +32,6 @@
   let unconnectionStatus;
   let uncachedThumbnails;
   let unauthorizedUser;
-  let unauthenticationEmitter;
 
   let name: string = 'Telekram';
   let phoneNumber = '';
@@ -216,8 +215,7 @@
           if (scope.selected.title === 'Contacts') {
             getContacts();
           } else if (scope.selected.title === 'Logout') {
-            await client.invoke(new Api.auth.LogOut({}));
-            isUserAuthorized();
+            signOut();
           } else if (scope.selected.title === 'Exit') {
             window.close();
           }
@@ -316,6 +314,44 @@
     }
   }
 
+  function sign_up() {}
+
+  // EVENT 2
+  function sendCode() {
+    const params = {
+      type: 2,
+      params: {
+        phoneNumber: phoneNumber,
+        apiId: TelegramKeyHash.api_id,
+        apiHash: TelegramKeyHash.api_hash,
+        settings: {
+          allowFlashcall: true,
+          currentNumber: true,
+          allowAppHash: true,
+        },
+      }
+    }
+    if (loadingBar == null)
+      showLoadingBar();
+    dispatchMessageToWorker.emit('message', params);
+  }
+
+  // EVENT 3
+  function signIn() {
+    const params = {
+      type: 3,
+      params: {
+        phoneNumber: phoneNumber,
+        phoneCodeHash: phoneCodeHash,
+        phoneCode: phoneCode,
+      }
+    }
+    if (loadingBar == null)
+      showLoadingBar();
+    dispatchMessageToWorker.emit('message', params);
+  }
+
+  // EVENT 4
   function signIn2FA() {
     password2FA = new TextInputDialog({
       target: document.body,
@@ -330,40 +366,19 @@
         onSoftkeyRight: (evt, value) => {
           password2FA.$destroy();
         },
-        onEnter: async (evt, password) => {
-          try {
-            showLoadingBar();
-            const result = await client.signInWithPassword(
-              {
-                apiId: TelegramKeyHash.api_id,
-                apiHash: TelegramKeyHash.api_hash,
-              },
-              {
-                password: (hint) => {
-                  return Promise.resolve(password);
-                },
-                onError: (err) => {
-                  if (loadingBar) {
-                    loadingBar.$destroy();
-                  }
-                  console.log(err);
-                }
-              }
-            );
-            console.log(result);
-            if (loadingBar) {
-              loadingBar.$destroy();
+        onEnter: (evt, password) => {
+          console.log('onEnter signIn2FA', new Date().getTime());
+          const params = {
+            type: 4,
+            params: {
+              apiId: TelegramKeyHash.api_id,
+              apiHash: TelegramKeyHash.api_hash,
+              password: password
             }
-            isUserAuthorized();
-            resetCursor();
-            phoneCodeHash = null;
-            password2FA.$destroy();
-          } catch (err) {
-            if (loadingBar) {
-              loadingBar.$destroy();
-            }
-            console.log(err);
           }
+          if (loadingBar == null)
+            showLoadingBar();
+          dispatchMessageToWorker.emit('message', params);
         },
         onBackspace: (evt, value) => {
           evt.stopPropagation();
@@ -377,54 +392,9 @@
         }
       }
     });
-
   }
 
-  function sign_up() {}
-
-  async function signIn() {
-    try {
-      const result = await client.invoke(
-        new Api.auth.SignIn({
-          phoneNumber: phoneNumber,
-          phoneCodeHash: phoneCodeHash,
-          phoneCode: phoneCode,
-        })
-      );
-      console.log(result);
-      isUserAuthorized();
-      resetCursor();
-      phoneCodeHash = null;
-    } catch (err) {
-      if (err.errorMessage !== 'SESSION_PASSWORD_NEEDED') {
-        console.log(err);
-        return;
-      }
-      signIn2FA();
-    }
-  }
-
-  async function send_code() {
-    try {
-      const result = await client.invoke(
-        new Api.auth.SendCode({
-          phoneNumber: phoneNumber,
-          apiId: TelegramKeyHash.api_id,
-          apiHash: TelegramKeyHash.api_hash,
-          settings: new Api.CodeSettings({
-            allowFlashcall: true,
-            currentNumber: true,
-            allowAppHash: true,
-          }),
-        })
-      );
-      phoneCodeHash = result.phoneCodeHash;
-      resetCursor();
-    } catch (err) {
-      console.log(err);
-    }
-  }
-
+  // EVENT 5
   function signInQR() {
     setTimeout(() => {
       qrModal = new QRModal({
@@ -448,6 +418,22 @@
     }, 100);
   }
 
+  // EVENT 6
+  async function exportLoginToken() {
+    const params = {
+      type: 6,
+      params: {
+        apiId: TelegramKeyHash.api_id,
+        apiHash: TelegramKeyHash.api_hash,
+        exceptIds: []
+      }
+    }
+    if (loadingBar == null)
+      showLoadingBar();
+    dispatchMessageToWorker.emit('message', params);
+  }
+
+  // EVENT 7 // TODO
   async function importLoginToken(token) {
     try {
       const result = await client.invoke(
@@ -463,31 +449,6 @@
     }
   }
 
-  async function exportLoginToken() {
-    try {
-      const result = await client.invoke(
-        new Api.auth.ExportLoginToken({
-          apiId: TelegramKeyHash.api_id,
-          apiHash: TelegramKeyHash.api_hash,
-          exceptIds: [],
-        })
-      );
-      console.log(result); // TODO
-      //if (result._ === 'auth.loginTokenSuccess') {
-        //isUserAuthorized();
-        //phoneCodeHash = null;
-      //} else if (result._ === 'auth.loginTokenMigrateTo') {
-        //importLoginToken(result.token);
-      //}
-    } catch (err) {
-      if (err.errorMessage !== 'SESSION_PASSWORD_NEEDED') {
-        console.log(err);
-        return;
-      }
-      signIn2FA();
-    }
-  }
-
   function resetSignIn() {
     phoneCodeHash = null;
     resetCursor();
@@ -496,7 +457,6 @@
   async function signOut() {
     try {
       const result = await client.invoke(new Api.auth.LogOut({}));
-      console.log(result);
       isUserAuthorized();
       phoneCodeHash = null;
     } catch (err) {
@@ -563,13 +523,140 @@
     return `<div style="display:flex;flex-direction:column;justify-content:center;align-items:center;font-weight:bold;color:#fff;background-color:var(--themeColor);width:40px;height:40px;border-radius:50%;box-sizing:border-box;border: 2px solid #fff;">${chat.name.split(' ').map(text => text[0]).splice(0, 2).join('')}</div>`;
   }
 
+  async function handleWebWorkerMessage(data: any) {
+    try {
+      // console.log('dispatchMessageToClient:', data.type);
+      switch (data.type) {
+        case -1:
+          console.error('Error', data.params);
+          break;
+        case 0:
+          console.log('Connected to authenticationWebWorker');
+          break;
+        case 1:
+          console.log('authenticationWebWorker.client.event:', data.params);
+          if (data.params.data && data.params.data.className === "UpdateLoginToken") {
+            exportLoginToken();
+            if (qrModal) {
+              qrModal.$destroy();
+            }
+          }
+          break;
+        case 2:
+          if (loadingBar)
+            loadingBar.$destroy();
+          console.log('sendCode:', data.params.phoneCodeHash);
+          phoneCodeHash = data.params.phoneCodeHash;
+          resetCursor();
+          break;
+        case -2:
+          if (loadingBar)
+            loadingBar.$destroy();
+          console.error('sendCode:', data.params);
+          break;
+        case 3:
+          if (loadingBar)
+            loadingBar.$destroy();
+          console.log('signIn:', data.params.session.authKey, data.params.session.dcId);
+          resetCursor();
+          phoneCodeHash = null;
+          if (data.params.session) {
+            const authKey = new AuthKey(data.params.session.authKey._key, data.params.session.authKey._hash);
+            session.setDC(data.params.session.dcId, data.params.session.serverAddress, data.params.session.port);
+            session.setAuthKey(authKey);
+            session.authKey = authKey;
+            const typedArray = authKey.getKey();
+            const arr = Array.from ? Array.from(typedArray) : [].map.call(typedArray, (v => v));
+            const str = JSON.stringify(arr);
+            window.localStorage.setItem('gramjs:authKey', `{ "type": "Buffer", "data": ${str} }`);
+            alert('Please re-launch the app');
+            window.close();
+          }
+          break;
+        case -3:
+          if (loadingBar)
+            loadingBar.$destroy();
+          console.error('signIn:', data.params);
+          if (data.params !== 'SESSION_PASSWORD_NEEDED') {
+            console.error('signIn:', data.params);
+            return;
+          }
+          signIn2FA();
+          break;
+        case 4:
+          if (loadingBar)
+            loadingBar.$destroy();
+          console.log('signIn2FA:', data.params, new Date().getTime());
+          if (password2FA) {
+            password2FA.$destroy();
+          }
+          resetCursor();
+          phoneCodeHash = null;
+          if (data.params.session) {
+            const authKey = new AuthKey(data.params.session.authKey._key, data.params.session.authKey._hash);
+            session.setDC(data.params.session.dcId, data.params.session.serverAddress, data.params.session.port);
+            session.setAuthKey(authKey);
+            session.authKey = authKey;
+            const typedArray = authKey.getKey();
+            const arr = Array.from ? Array.from(typedArray) : [].map.call(typedArray, (v => v));
+            const str = JSON.stringify(arr);
+            window.localStorage.setItem('gramjs:authKey', `{ "type": "Buffer", "data": ${str} }`);
+            alert('Please re-launch the app');
+            window.close();
+          }
+          break;
+        case -4:
+          if (loadingBar)
+            loadingBar.$destroy();
+          console.error('signIn2FA:', data.params, new Date().getTime());
+          break;
+        case 6:
+          if (loadingBar)
+            loadingBar.$destroy();
+          console.log('exportLoginToken:', data.params);
+          if (data.params.result.className.toLocaleLowerCase() === 'auth.LoginTokenSuccess'.toLocaleLowerCase()) {
+            resetCursor();
+            phoneCodeHash = null;
+            if (data.params.session) {
+              const authKey = new AuthKey(data.params.session.authKey._key, data.params.session.authKey._hash);
+              session.setDC(data.params.session.dcId, data.params.session.serverAddress, data.params.session.port);
+              session.setAuthKey(authKey);
+              session.authKey = authKey;
+              const typedArray = authKey.getKey();
+              const arr = Array.from ? Array.from(typedArray) : [].map.call(typedArray, (v => v));
+              const str = JSON.stringify(arr);
+              window.localStorage.setItem('gramjs:authKey', `{ "type": "Buffer", "data": ${str} }`);
+              alert('Please re-launch the app');
+              window.close();
+            }
+          } else if (data.params.result.className.toLocaleLowerCase() === 'auth.LoginTokenMigrateTo'.toLocaleLowerCase()) {
+            // result.token // importLoginToken // TODO
+            console.log('TODO');
+          }
+          break;
+        case -6:
+          if (loadingBar)
+            loadingBar.$destroy();
+          console.log('exportLoginToken:', data.params);
+          if (data.params !== 'SESSION_PASSWORD_NEEDED') {
+            console.error('exportLoginToken:', data.params);
+            return;
+          }
+          signIn2FA();
+          break;
+      }
+    } catch (err) {
+      console.error('dispatchMessageToClient:', err);
+    }
+  }
+
   onMount(() => {
     const { appBar, softwareKey } = getAppProp();
     appBar.setTitleText(name);
     softwareKey.setText({ left: '', center: 'SELECT', right: '' });
     navInstance.attachListener();
 
-    client.addEventHandler(eventHandler);
+    // client.addEventHandler(eventHandler);
 
     unchatCollections = chatCollections.subscribe(chats => {
       if (client.connected) {
@@ -613,9 +700,7 @@
       user = data;
     });
 
-    unauthenticationEmitter = authenticationEmitter.subscribe(data => {
-      console.log('authenticationEmitter:', data);
-    });
+    dispatchMessageToClient.addListener('message', handleWebWorkerMessage);
 
   });
 
@@ -632,8 +717,7 @@
       uncachedThumbnails();
     if (unauthorizedUser)
       unauthorizedUser();
-    if (unauthenticationEmitter)
-      unauthenticationEmitter();
+    dispatchMessageToClient.removeListener('message', handleWebWorkerMessage);
   });
 
 </script>
@@ -642,7 +726,7 @@
   {#if authStatus === false }
   {#if phoneCodeHash === null}
   <TextInputField className="{navClass}" label="Phone Number" placeholder="Phone Number" value={phoneNumber} type="tel" onInput="{onInputPhoneNumber}" {onFocus} {onBlur} />
-  <Button className="{navClass}" text="Send Code" onClick={send_code}>
+  <Button className="{navClass}" text="Send Code" onClick={sendCode}>
     <span slot="leftWidget" class="kai-icon-arrow" style="margin:0px 5px;-moz-transform: scale(-1, 1);-webkit-transform: scale(-1, 1);-o-transform: scale(-1, 1);-ms-transform: scale(-1, 1);transform: scale(-1, 1);"></span>
     <span slot="rightWidget" class="kai-icon-arrow" style="margin:0px 5px;"></span>
   </Button>

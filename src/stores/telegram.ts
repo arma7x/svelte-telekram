@@ -1,4 +1,5 @@
 import { get, writable } from 'svelte/store';
+import EventEmitter from 'events';
 import { TelegramKeyHash, Api, client, session, cachedDatabase } from '../utils/bootstrap';
 
 export const connectionStatus = writable(false);
@@ -7,7 +8,8 @@ export const authorizedUser = writable([]);
 export const chatCollections = writable([]);
 export const cachedThumbnails = writable({});
 export const downloadedMediaEmitter = writable({});
-export const authenticationEmitter = writable({});
+export const dispatchMessageToClient = new EventEmitter();
+export const dispatchMessageToWorker = new EventEmitter();
 
 client.addEventHandler((evt) => {
   switch (evt.className) {
@@ -46,14 +48,18 @@ client.addEventHandler((evt) => {
   }
 });
 
-client.connect()
-.then(() => {
-  connectionStatus.update(n => true);
-  isUserAuthorized();
-})
-.catch(err => {
-  connectionStatus.update(n => false);
-});
+export function connect() {
+  return client.connect()
+  .then(() => {
+    connectionStatus.update(n => true);
+    isUserAuthorized();
+  })
+  .catch(err => {
+    connectionStatus.update(n => false);
+  });
+}
+
+connect();
 
 export async function fetchUser() {
   const result = await client.invoke(
@@ -79,7 +85,7 @@ export async function isUserAuthorized() {
       window['authorizedWebWorker'].onmessage = async (e) => {
         switch (e.data.type) {
           case -1:
-            console.log('Err', e.data.params.toString());
+            console.error(e.data.params);
             break;
           case 0:
             console.log('Connected to authorizedWebWorker');
@@ -95,22 +101,35 @@ export async function isUserAuthorized() {
         }
       }
     } else {
+      await client.disconnect();
       if (window['authorizedWebWorker']) {
         window['authorizedWebWorker'].postMessage({ type: -100 })
         window['authorizedWebWorker'].terminate();
       }
       window['authenticationWebWorker'] = authenticationWebWorker();
       window['authenticationWebWorker'].onmessage = (e) => {
-        authenticationEmitter.update(n => e.data);
+        // console.log('authenticationWebWorker:', e.data.type, e.data.params.state, e.data.params.className, e.data.params.data);
         switch (e.data.type) {
           case -1:
-            console.log('Err', e.data.params.toString());
-            break;
           case 0:
-            console.log('Connected to authorizedWebWorker');
+          case 1:
+          case 2:
+          case -2:
+          case 3:
+          case -3:
+          case 4:
+          case -4:
+          case 5:
+          case -5:
+          case 6:
+          case -6:
+            dispatchMessageToClient.emit('message', e.data);
             break;
         }
       }
+      dispatchMessageToWorker.addListener('message', (data: any) => {
+        window['authenticationWebWorker'].postMessage(data);
+      });
     }
   } catch (err) {
     console.log(err);
@@ -443,7 +462,7 @@ function authorizedWebWorker() {
           client.connect()
           .then(() => {
             retrieveChats();
-            self.postMessage({ type: 0 });
+            self.postMessage({ type: 0, params: {} });
           })
           .catch(err => {
             self.postMessage({ type: -1, params: err });
@@ -496,6 +515,7 @@ function authenticationWebWorker() {
     importScripts('${window.location.origin}/js/telegram.js');
 
     let clients;
+    let session;
 
     self.onmessage = function(e) {
       switch (e.data.type) {
@@ -508,7 +528,7 @@ function authenticationWebWorker() {
           });
           break;
         case 0:
-          const session = new telegram.sessions.MemorySession();
+          session = new telegram.sessions.MemorySession();
           if (e.data.params && e.data.params.dcId && e.data.params.serverAddress && e.data.params.port) {
             session.setDC(e.data.params.dcId, e.data.params.serverAddress, e.data.params.port);
             // session.setAuthKey(new telegram.AuthKey(e.data.params.authKey._key, e.data.params.authKey._hash), e.data.params.dcId);
@@ -517,14 +537,120 @@ function authenticationWebWorker() {
             maxConcurrentDownloads: 1,
           });
           client.addEventHandler((evt) => {
-            self.postMessage({ type: 1, params: {state: evt.state, className: evt.className }});
+            try {
+              self.postMessage({ type: 1, params: { state: evt.state, className: evt.className, data: evt.toJSON() }});
+            } catch (err) {
+              self.postMessage({ type: 1, params: { state: evt.state, className: evt.className }});
+            }
           });
           client.connect()
           .then(() => {
-            self.postMessage({ type: 0 });
+            self.postMessage({ type: 0, params: {} });
           })
           .catch(err => {
             self.postMessage({ type: -1, params: err });
+          });
+          break;
+        case 2:
+          client.invoke(
+            new telegram.Api.auth.SendCode({
+              phoneNumber: e.data.params.phoneNumber,
+              apiId: e.data.params.apiId,
+              apiHash: e.data.params.apiHash,
+              settings: new telegram.Api.CodeSettings(e.data.params.settings),
+            })
+          )
+          .then((result) => {
+            self.postMessage({ type: 2, params: result });
+          })
+          .catch((err) => {
+            self.postMessage({ type: -2, params: err.errorMessage });
+          });
+          break;
+        case 3:
+          client.invoke(
+            new telegram.Api.auth.SignIn({
+              phoneNumber: e.data.params.phoneNumber,
+              phoneCodeHash: e.data.params.phoneCodeHash,
+              phoneCode: e.data.params.phoneCode,
+            })
+          )
+          .then((result) => {
+            const sess = {
+              dcId: session.dcId,
+              serverAddress: session.serverAddress,
+              port: session.port,
+              authKey: session.getAuthKey(session.dcId)
+            }
+            self.postMessage({ type: 3, params: { result: result.toJSON(), session: sess } });
+          })
+          .catch((err) => {
+            self.postMessage({ type: -3, params: err.errorMessage });
+          });
+          break;
+        case 4:
+          client.signInWithPassword(
+            {
+              apiId: e.data.params.apiId,
+              apiHash: e.data.params.apiHash,
+            },
+            {
+              password: (hint) => {
+                return Promise.resolve(e.data.params.password);
+              },
+              onError: (err) => {
+                self.postMessage({ type: -4, params: err.errorMessage || err.toString() });
+                return true;
+              }
+            }
+          )
+          .then((result) => {
+            const sess = {
+              dcId: session.dcId,
+              serverAddress: session.serverAddress,
+              port: session.port,
+              authKey: session.getAuthKey(session.dcId)
+            }
+            self.postMessage({ type: 4, params: { result: result.toJSON(), session: sess } });
+          })
+          .catch((err) => {
+            self.postMessage({ type: -4, params: err.errorMessage || err.toString() });
+          });
+          break;
+        case 5:
+          client.invoke(
+            new telegram.Api.auth.ExportLoginToken({
+              apiId: e.data.params.apiId,
+              apiHash: e.data.params.apiHash,
+              exceptIds: e.data.params.exceptIds,
+            })
+          )
+          .then((result) => {
+            self.postMessage({ type: 5, params: result });
+          })
+          .catch((err) => {
+            self.postMessage({ type: -5, params: err.errorMessage });
+          });
+          break;
+        case 6:
+          client.invoke(
+            new telegram.Api.auth.ExportLoginToken({
+              apiId: e.data.params.apiId,
+              apiHash: e.data.params.apiHash,
+              exceptIds: e.data.params.exceptIds,
+            })
+          )
+          .then((result) => {
+            const sess = {
+              dcId: session.dcId,
+              serverAddress: session.serverAddress,
+              port: session.port,
+              authKey: session.getAuthKey(session.dcId)
+            }
+            self.postMessage({ type: 6, params: { result: result.toJSON(), session: sess } });
+          })
+          .catch((err) => {
+            self.postMessage({ type: -6, params: err.errorMessage });
           });
           break;
       }

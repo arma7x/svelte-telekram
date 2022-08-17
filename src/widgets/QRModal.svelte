@@ -7,6 +7,8 @@
   import { SoftwareKey, Separator } from '../components';
   import { TelegramKeyHash, Api, client } from '../utils/bootstrap';
 
+  import { dispatchMessageToClient, dispatchMessageToWorker } from '../stores/telegram';
+
   export let title: string = 'Log-In via QR Code';
   export let onBackspace: Function = (evt) => {};
   export let onOpened: Function = () => {};
@@ -27,42 +29,48 @@
 
   let navInstance = createKaiNavigator(navOptions);
 
-  async function export_login_token() {
-    if (regenerate != null) {
-      clearTimeout(regenerate);
-      regenerate = null;
+  function handleWebWorkerMessage(data: any) {
+    switch (data.type) {
+      case 5:
+        console.log('exportLoginToken:', data.params);
+        if (regenerate != null) {
+          clearTimeout(regenerate);
+          regenerate = null;
+        }
+        if (qrcode) {
+          qrcode.clear();
+        }
+        const container = document.getElementById('qr-container');
+        container.textContent = '';
+        const _data = `tg://login?token=${btoa(String.fromCharCode.apply(null, data.params.token))}`;
+        qrcode = new QRCode(container, {
+          text: _data,
+          width: 200,
+          height: 200,
+          colorDark : "#000000",
+          colorLight : "#ffffff",
+          correctLevel : QRCode.CorrectLevel.H
+        });
+        regenerate = setTimeout(() => {
+          exportLoginToken();
+        }, 31000);
+        break;
+      case -5:
+        console.error('exportLoginToken:', data.params);
+        break;
     }
-    if (qrcode) {
-      qrcode.clear();
-    }
-    const container = document.getElementById('qr-container');
-    container.textContent = '';
+  }
 
-    try {
-      const result = await client.invoke(
-        new Api.auth.ExportLoginToken({
-          apiId: parseInt(TelegramKeyHash.api_id),
-          apiHash: TelegramKeyHash.api_hash,
-          exceptIds: [],
-        })
-      );
-      console.log(result);
-      const data = `tg://login?token=${btoa(String.fromCharCode.apply(null, result.token))}`;
-      qrcode = new QRCode(container, {
-        text: data,
-        width: 200,
-        height: 200,
-        colorDark : "#000000",
-        colorLight : "#ffffff",
-        correctLevel : QRCode.CorrectLevel.H
-      });
-    } catch (err) {
-      console.log(err);
+  function exportLoginToken() {
+    const params = {
+      type: 5,
+      params: {
+        apiId: TelegramKeyHash.api_id,
+        apiHash: TelegramKeyHash.api_hash,
+        exceptIds: [],
+      }
     }
-    regenerate = setTimeout(() => {
-      export_login_token();
-    }, 31000);
-
+    dispatchMessageToWorker.emit('message', params);
   }
 
   onMount(() => {
@@ -77,7 +85,8 @@
       }
     });
     onOpened();
-    export_login_token();
+    dispatchMessageToClient.addListener('message', handleWebWorkerMessage);
+    exportLoginToken();
   })
 
   onDestroy(() => {
@@ -87,6 +96,7 @@
     navInstance.detachListener();
     softwareKey.$destroy();
     onClosed();
+    dispatchMessageToClient.removeListener('message', handleWebWorkerMessage);
   })
 
 </script>

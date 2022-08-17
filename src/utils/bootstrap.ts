@@ -3,7 +3,7 @@ declare var idb:any;
 
 import TelegramKeyHash from '../telegram_key';
 
-const { Api, TelegramClient } = telegram;
+const { Api, TelegramClient, AuthKey } = telegram;
 const { StoreSession } = telegram.sessions;
 const session = new StoreSession("gramjs");
 const client: typeof TelegramClient = new TelegramClient(session, TelegramKeyHash.api_id, TelegramKeyHash.api_hash, {
@@ -20,6 +20,8 @@ const cachedDatabase = idb.openDB('telekram', 2, {
 
 export {
   Api,
+  AuthKey,
+  TelegramClient,
   client,
   TelegramKeyHash,
   session,

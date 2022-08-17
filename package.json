@@ -38,6 +38,7 @@
     "@zerodevx/svelte-toast": "^0.6.3",
     "buffer": "^6.0.3",
     "dompurify": "^2.3.10",
+    "events": "^3.3.0",
     "sirv-cli": "^1.0.0",
     "sprintf-js": "^1.1.2",
     "svelte-navigator": "^3.1.5"
