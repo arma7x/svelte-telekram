@@ -451,7 +451,8 @@ function authorizedWebWorker() {
           const session = new telegram.sessions.MemorySession();
           if (e.data.params) {
             session.setDC(e.data.params.dcId, e.data.params.serverAddress, e.data.params.port);
-            session.setAuthKey(new telegram.AuthKey(e.data.params.authKey._key, e.data.params.authKey._hash), e.data.params.dcId);
+            if (e.data.params.authKey)
+              session.setAuthKey(new telegram.AuthKey(e.data.params.authKey._key, e.data.params.authKey._hash), e.data.params.dcId);
           }
           client = new telegram.TelegramClient(session, ${TelegramKeyHash.api_id}, '${TelegramKeyHash.api_hash}', {
             maxConcurrentDownloads: 1,
@@ -531,7 +532,8 @@ function authenticationWebWorker() {
           session = new telegram.sessions.MemorySession();
           if (e.data.params && e.data.params.dcId && e.data.params.serverAddress && e.data.params.port) {
             session.setDC(e.data.params.dcId, e.data.params.serverAddress, e.data.params.port);
-            // session.setAuthKey(new telegram.AuthKey(e.data.params.authKey._key, e.data.params.authKey._hash), e.data.params.dcId);
+            if (e.data.params.authKey)
+              session.setAuthKey(new telegram.AuthKey(e.data.params.authKey._key, e.data.params.authKey._hash), e.data.params.dcId);
           }
           client = new telegram.TelegramClient(session, ${TelegramKeyHash.api_id}, '${TelegramKeyHash.api_hash}', {
             maxConcurrentDownloads: 1,
@@ -666,6 +668,7 @@ function authenticationWebWorker() {
       dcId: session.dcId,
       serverAddress: session.serverAddress,
       port: session.port,
+      authKey: session.getAuthKey(session.dcId)
     }
   });
   return worker;

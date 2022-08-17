@@ -33,6 +33,7 @@
   let uncachedThumbnails;
   let unauthorizedUser;
 
+  let webWorkerStatus: bool = false;
   let name: string = 'Telekram';
   let phoneNumber = '';
   let phoneCode = '';
@@ -318,6 +319,8 @@
 
   // EVENT 2
   function sendCode() {
+    if (!webWorkerStatus)
+      return;
     const params = {
       type: 2,
       params: {
@@ -338,6 +341,8 @@
 
   // EVENT 3
   function signIn() {
+    if (!webWorkerStatus)
+      return;
     const params = {
       type: 3,
       params: {
@@ -353,6 +358,8 @@
 
   // EVENT 4
   function signIn2FA() {
+    if (!webWorkerStatus)
+      return;
     password2FA = new TextInputDialog({
       target: document.body,
       props: {
@@ -396,6 +403,8 @@
 
   // EVENT 5
   function signInQR() {
+    if (!webWorkerStatus)
+      return;
     setTimeout(() => {
       qrModal = new QRModal({
         target: document.body,
@@ -420,6 +429,8 @@
 
   // EVENT 6
   async function exportLoginToken() {
+    if (!webWorkerStatus)
+      return;
     const params = {
       type: 6,
       params: {
@@ -535,6 +546,10 @@
           break;
         case 1:
           console.log('authenticationWebWorker.client.event:', data.params);
+          if (data.params.state && data.params.state === 1)
+            webWorkerStatus = true;
+          else if (data.params.state && data.params.state === -1)
+            webWorkerStatus = false;
           if (data.params.data && data.params.data.className === "UpdateLoginToken") {
             exportLoginToken();
             if (qrModal) {
@@ -725,7 +740,7 @@
 <main id="home-screen" data-pad-top="28" data-pad-bottom="30">
   {#if authStatus === false }
   {#if phoneCodeHash === null}
-  <TextInputField className="{navClass}" label="Phone Number" placeholder="Phone Number" value={phoneNumber} type="tel" onInput="{onInputPhoneNumber}" {onFocus} {onBlur} />
+  <TextInputField className="{navClass}" label="Phone Number" placeholder="{webWorkerStatus ? 'Phone Number' : 'Connecting...'}" value={phoneNumber} type="tel" onInput="{onInputPhoneNumber}" {onFocus} {onBlur} />
   <Button className="{navClass}" text="Send Code" onClick={sendCode}>
     <span slot="leftWidget" class="kai-icon-arrow" style="margin:0px 5px;-moz-transform: scale(-1, 1);-webkit-transform: scale(-1, 1);-o-transform: scale(-1, 1);-ms-transform: scale(-1, 1);transform: scale(-1, 1);"></span>
     <span slot="rightWidget" class="kai-icon-arrow" style="margin:0px 5px;"></span>
