@@ -82,7 +82,7 @@ export async function isUserAuthorized() {
             console.log('Err', e.data.params.toString());
             break;
           case 0:
-            console.log('Connected to web worker');
+            console.log('Connected to authorizedWebWorker');
             break;
           case 1:
             downloadedMediaEmitter.update(n => e.data);
@@ -102,6 +102,14 @@ export async function isUserAuthorized() {
       window['authenticationWebWorker'] = authenticationWebWorker();
       window['authenticationWebWorker'].onmessage = (e) => {
         authenticationEmitter.update(n => e.data);
+        switch (e.data.type) {
+          case -1:
+            console.log('Err', e.data.params.toString());
+            break;
+          case 0:
+            console.log('Connected to authorizedWebWorker');
+            break;
+        }
       }
     }
   } catch (err) {
@@ -435,7 +443,7 @@ function authorizedWebWorker() {
           client.connect()
           .then(() => {
             retrieveChats();
-            self.postMessage({ type: e.data.type, params: 1 });
+            self.postMessage({ type: 0 });
           })
           .catch(err => {
             self.postMessage({ type: -1, params: err });
@@ -480,6 +488,7 @@ function authenticationWebWorker() {
    * 0    connect
    * -100 disconnect
    * -1   common errors
+   * 1    client.addEventHandler
    * N    success N, error -N and N must >= 2
    */
   const script = `
@@ -508,11 +517,11 @@ function authenticationWebWorker() {
             maxConcurrentDownloads: 1,
           });
           client.addEventHandler((evt) => {
-            console.log('authenticationWebWorker.client.addEventHandler:', evt.className);
+            self.postMessage({ type: 1, params: {state: evt.state, className: evt.className }});
           });
           client.connect()
           .then(() => {
-            self.postMessage({ type: e.data.type, params: 1 });
+            self.postMessage({ type: 0 });
           })
           .catch(err => {
             self.postMessage({ type: -1, params: err });

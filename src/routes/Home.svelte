@@ -32,6 +32,7 @@
   let unconnectionStatus;
   let uncachedThumbnails;
   let unauthorizedUser;
+  let unauthenticationEmitter;
 
   let name: string = 'Telekram';
   let phoneNumber = '';
@@ -612,6 +613,10 @@
       user = data;
     });
 
+    unauthenticationEmitter = authenticationEmitter.subscribe(data => {
+      console.log('authenticationEmitter:', data);
+    });
+
   });
 
   onDestroy(() => {
@@ -627,6 +632,8 @@
       uncachedThumbnails();
     if (unauthorizedUser)
       unauthorizedUser();
+    if (unauthenticationEmitter)
+      unauthenticationEmitter();
   });
 
 </script>
