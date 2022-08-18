@@ -1,7 +1,7 @@
 <script lang="ts">
   import { onMount, onDestroy } from 'svelte';
   import { createKaiNavigator, KaiNavigator } from '../../../utils/navigation';
-  import { strippedPhotoToJpg } from '../../../utils/misc';
+  import { strippedPhotoToJpg, humanFileSize } from '../../../utils/misc';
 
   import { Buffer} from 'buffer';
   import { downloadedMediaEmitter } from '../../../stores/telegram';
@@ -14,6 +14,8 @@
 
   let undownloadedMediaEmitter;
   let thumb: string;
+  let size: strinng;
+  let downloaded: bool = false;
 
   function actionMenu() {
     //if (window['authorizedWebWorker']) {
@@ -45,9 +47,11 @@
     });
     let byte;
     if (message.media.className === 'MessageMediaPhoto') {
-      byte = message.media.photo.sizes[0].originalArgs.bytes
+      byte = message.media.photo.sizes[0].originalArgs.bytes;
+      size = humanFileSize(message.media.photo.sizes[message.media.photo.sizes .length - 1].size, true);
     } else if (message.media.className === 'MessageMediaDocument') {
-      byte = message.media.document.thumbs[0].originalArgs.bytes
+      byte = message.media.document.thumbs[0].originalArgs.bytes;
+      size = humanFileSize(message.media.document.size.toJSNumber(), true);
     }
     const arrBuff = strippedPhotoToJpg(Buffer.from(byte));
     const reader = new FileReader();
@@ -65,12 +69,34 @@
 </script>
 
 <svelte:options accessors immutable={true}/>
+
 <div class="media-container">
-  <img style="max-width:50px;height:auto;" src="{thumb}" />
+  <img src="{thumb}" />
+  <small>
+    <div>{#if !downloaded}<img alt="download" src="/icons/download.svg" width="10px" height="10px" />&nbsp;{/if}Photo</div>
+    <div>{size}</div>
+  </small>
 </div>
 
 <style>
 .media-container {
   text-align: start;
+  display: flex;
+  flex-direction: row;
+}
+
+.media-container > img {
+  width: auto;
+  height: 30px;
+}
+
+.media-container > small {
+  margin: 0 0 0 4px;
+  padding: 0px;
+  font-size: 12px;
+  color: #6A6A6A;
+  text-align: start;
+  vertical-align: middle;
+  overflow: hidden;
 }
 </style>
