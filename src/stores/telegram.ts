@@ -1,6 +1,6 @@
 import { get, writable } from 'svelte/store';
 import EventEmitter from 'events';
-import { TelegramKeyHash, Api, client, session, cachedDatabase } from '../utils/bootstrap';
+import { UA, TelegramKeyHash, Api, client, session, cachedDatabase } from '../utils/bootstrap';
 
 export const connectionStatus = writable(false);
 export const authorizedStatus = writable(false);
@@ -338,6 +338,9 @@ function authorizedWebWorker() {
     importScripts('${window.location.origin}/js/polyfill.min.js');
     importScripts('${window.location.origin}/js/telegram.js');
 
+    const UA = ${JSON.stringify(UA)};
+    console.log(UA);
+
     let _importLoginToken;
     let clients;
     let chats = {};
@@ -459,6 +462,9 @@ function authorizedWebWorker() {
           }
           client = new telegram.TelegramClient(session, ${TelegramKeyHash.api_id}, '${TelegramKeyHash.api_hash}', {
             maxConcurrentDownloads: 1,
+            deviceModel: UA.deviceModel,
+            systemVersion: UA.systemVersion,
+            appVersion: UA.appVersion,
           });
           client.addEventHandler((evt) => {
             console.log('authorizedWebWorker.client.addEventHandler:', evt.className);
@@ -518,6 +524,9 @@ function authenticationWebWorker() {
     importScripts('${window.location.origin}/js/polyfill.min.js');
     importScripts('${window.location.origin}/js/telegram.js');
 
+    const UA = ${JSON.stringify(UA)};
+    console.log(UA);
+
     let clients;
     let session;
 
@@ -540,6 +549,9 @@ function authenticationWebWorker() {
           }
           client = new telegram.TelegramClient(session, ${TelegramKeyHash.api_id}, '${TelegramKeyHash.api_hash}', {
             maxConcurrentDownloads: 1,
+            deviceModel: UA.deviceModel,
+            systemVersion: UA.systemVersion,
+            appVersion: UA.appVersion,
           });
           client.addEventHandler((evt) => {
             try {
