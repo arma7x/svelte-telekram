@@ -339,7 +339,6 @@ function authorizedWebWorker() {
     importScripts('${window.location.origin}/js/telegram.js');
 
     const UA = ${JSON.stringify(UA)};
-    console.log(UA);
 
     let _importLoginToken;
     let clients;
@@ -525,7 +524,6 @@ function authenticationWebWorker() {
     importScripts('${window.location.origin}/js/telegram.js');
 
     const UA = ${JSON.stringify(UA)};
-    console.log(UA);
 
     let clients;
     let session;
