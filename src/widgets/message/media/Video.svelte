@@ -3,6 +3,7 @@
   import { createKaiNavigator, KaiNavigator } from '../../../utils/navigation';
   import { strippedPhotoToJpg } from '../../../utils/misc';
 
+  import { Buffer} from 'buffer';
   import { downloadedMediaEmitter } from '../../../stores/telegram';
 
   export let chat: any = {};

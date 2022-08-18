@@ -18,6 +18,7 @@
   export let replyTo: any;
   export let short: bool = false;
   export let scrollable: bool = false;
+  export let replyThreadId: any;
 
   let navOptions = {
     softkeyLeftListener: function(evt) {},
