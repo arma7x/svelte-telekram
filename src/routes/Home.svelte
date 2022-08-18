@@ -374,7 +374,6 @@
           password2FA.$destroy();
         },
         onEnter: (evt, password) => {
-          console.log('onEnter signIn2FA', new Date().getTime());
           const params = {
             type: 4,
             params: {
@@ -428,7 +427,7 @@
   }
 
   // EVENT 6
-  async function exportLoginToken() {
+  function exportLoginToken() {
     if (!webWorkerStatus)
       return;
     const params = {
@@ -444,20 +443,19 @@
     dispatchMessageToWorker.emit('message', params);
   }
 
-  // EVENT 7 // TODO
-  async function importLoginToken(token) {
-    try {
-      const result = await client.invoke(
-        new Api.auth.ImportLoginToken({
-          token: token, //Buffer.from("arbitrary data here"),
-        })
-      );
-      console.log(result);
-      isUserAuthorized();
-      phoneCodeHash = null;
-    } catch (err) {
-      console.log(err);
+  // EVENT 7
+  function importLoginToken(token) {
+    if (!webWorkerStatus)
+      return;
+    const params = {
+      type: 7,
+      params: {
+        token: token
+      }
     }
+    if (loadingBar == null)
+      showLoadingBar();
+    dispatchMessageToWorker.emit('message', params);
   }
 
   function resetSignIn() {
@@ -568,6 +566,7 @@
           if (loadingBar)
             loadingBar.$destroy();
           console.error('sendCode:', data.params);
+          toastMessage(data.params || "ERROR SEND CODE");
           break;
         case 3:
           if (loadingBar)
@@ -594,6 +593,7 @@
           console.error('signIn:', data.params);
           if (data.params !== 'SESSION_PASSWORD_NEEDED') {
             console.error('signIn:', data.params);
+            toastMessage(data.params || "ERROR SIGN IN");
             return;
           }
           signIn2FA();
@@ -601,7 +601,7 @@
         case 4:
           if (loadingBar)
             loadingBar.$destroy();
-          console.log('signIn2FA:', data.params, new Date().getTime());
+          console.log('signIn2FA:', data.params);
           if (password2FA) {
             password2FA.$destroy();
           }
@@ -623,7 +623,8 @@
         case -4:
           if (loadingBar)
             loadingBar.$destroy();
-          console.error('signIn2FA:', data.params, new Date().getTime());
+          console.error('signIn2FA:', data.params);
+          toastMessage(data.params || "ERROR SIGN IN 2FA");
           break;
         case 6:
           if (loadingBar)
@@ -644,9 +645,11 @@
               alert('Please re-launch the app');
               window.close();
             }
-          } else if (data.params.result.className.toLocaleLowerCase() === 'auth.LoginTokenMigrateTo'.toLocaleLowerCase()) {
-            // result.token // importLoginToken // TODO
-            console.log('TODO');
+          } else if (['auth.logintoken', 'auth.logintokensuccess', 'auth.logintokenmigrateto'].indexOf(data.params.result.className.toLocaleLowerCase() > -1)) {
+            importLoginToken(data.params.result.token);
+          } else {
+            console.error('importLoginToken', data.params.result);
+            toastMessage(data.params.result.className || "ERROR IMPORT LOGIN TOKEN");
           }
           break;
         case -6:
@@ -655,9 +658,33 @@
           console.log('exportLoginToken:', data.params);
           if (data.params !== 'SESSION_PASSWORD_NEEDED') {
             console.error('exportLoginToken:', data.params);
+            toastMessage(data.params || "ERROR EXPORT LOGIN TOKEN");
             return;
           }
           signIn2FA();
+          break;
+        case 7:
+          console.log('importLoginToken:', data.params);
+          resetCursor();
+          phoneCodeHash = null;
+          if (data.params.session) {
+            const authKey = new AuthKey(data.params.session.authKey._key, data.params.session.authKey._hash);
+            session.setDC(data.params.session.dcId, data.params.session.serverAddress, data.params.session.port);
+            session.setAuthKey(authKey);
+            session.authKey = authKey;
+            const typedArray = authKey.getKey();
+            const arr = Array.from ? Array.from(typedArray) : [].map.call(typedArray, (v => v));
+            const str = JSON.stringify(arr);
+            window.localStorage.setItem('gramjs:authKey', `{ "type": "Buffer", "data": ${str} }`);
+            alert('Please re-launch the app');
+            window.close();
+          }
+          break;
+        case -7:
+          if (loadingBar)
+            loadingBar.$destroy();
+          console.error('importLoginToken:', data.params);
+          toastMessage(data.params || "ERROR IMPORT LOGIN TOKEN");
           break;
       }
     } catch (err) {

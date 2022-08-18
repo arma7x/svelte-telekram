@@ -123,6 +123,8 @@ export async function isUserAuthorized() {
           case -5:
           case 6:
           case -6:
+          case 7:
+          case -7:
             dispatchMessageToClient.emit('message', e.data);
             break;
         }
@@ -336,6 +338,7 @@ function authorizedWebWorker() {
     importScripts('${window.location.origin}/js/polyfill.min.js');
     importScripts('${window.location.origin}/js/telegram.js');
 
+    let _importLoginToken;
     let clients;
     let chats = {};
     let downloadMediaTask = [];
@@ -649,10 +652,31 @@ function authenticationWebWorker() {
               port: session.port,
               authKey: session.getAuthKey(session.dcId)
             }
+            _importLoginToken = result.token || null;
             self.postMessage({ type: 6, params: { result: result.toJSON(), session: sess } });
           })
           .catch((err) => {
             self.postMessage({ type: -6, params: err.errorMessage });
+          });
+          break;
+        case 7:
+          client.invoke(
+            new telegram.Api.auth.ImportLoginToken({
+              token: _importLoginToken,
+            })
+          )
+          .then((result) => {
+            _importLoginToken = null;
+            const sess = {
+              dcId: session.dcId,
+              serverAddress: session.serverAddress,
+              port: session.port,
+              authKey: session.getAuthKey(session.dcId)
+            }
+            self.postMessage({ type: 7, params: { result: result.toJSON(), session: sess } });
+          })
+          .catch((err) => {
+            self.postMessage({ type: -7, params: err.errorMessage });
           });
           break;
       }
