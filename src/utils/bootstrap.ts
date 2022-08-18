@@ -19,13 +19,10 @@ function parseUA(a) {
   try {
     if (a.indexOf('KAIOS/') > -1) {
       version = a.substring(a.indexOf('KAIOS/'))
-      console.log(1, version)
     } else if (a.indexOf('Firefox/') > -1) {
       version = a.substring(a.indexOf('Firefox/'))
-      console.log(2, version)
     } else if (a.indexOf('Gecko/') > -1) {
       version = a.substring(a.indexOf('Gecko/'))
-      console.log(3, version)
     } else if (a.indexOf('rv:') > -1) {
       let idx = a.indexOf('rv:')
       if (idx != -1) {
@@ -34,7 +31,6 @@ function parseUA(a) {
         v = v.substring(0, idx2)
         if (v != '')
           version = v
-        console.log(4, version)
       }
     }
   } catch (err) {}
