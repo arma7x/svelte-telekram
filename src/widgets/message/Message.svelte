@@ -281,16 +281,16 @@
       <small class="pinned"><img alt="pinned" src="/icons/pinned.svg" width="10px" height="10px" />;&nbsp;</small>
       {/if}
       {#if message.views}
-      <small class="views"><img alt="views" src="/icons/eye.svg" width="10px" height="10px" />{message.views}&nbsp;</small>
+      <small class="views"><img alt="views" src="/icons/eye.svg" width="10px" height="10px" />&nbsp;{message.views}&nbsp;</small>
       {/if}
       {#if message.editDate && message.editHide == false}
       <small class="edited"><img alt="edited" src="/icons/edited.svg" width="10px" height="10px" />&nbsp;</small>
       {/if}
       {#if message.replies && message.replies.replies > 0}
-      <small class="reply"><img alt="reply" src="/icons/reply.svg" width="10px" height="10px" />{message.replies.replies}&nbsp;</small>
+      <small class="reply"><img alt="reply" src="/icons/reply.svg" width="10px" height="10px" />&nbsp;{message.replies.replies}&nbsp;</small>
       {/if}
       {#if message.forwards && message.forwards > 0}
-      <small class="forwards"><img alt="forwards" src="/icons/forward.svg" width="10px" height="10px" />{message.forwards}&nbsp;</small>
+      <small class="forwards"><img alt="forwards" src="/icons/forward.svg" width="10px" height="10px" />&nbsp;{message.forwards}&nbsp;</small>
       {/if}
       <small class="time">{getTime(message)}</small>
     </div>
