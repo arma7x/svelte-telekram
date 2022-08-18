@@ -1,7 +1,9 @@
 <script lang="ts">
   import { onMount, onDestroy } from 'svelte';
   import { createKaiNavigator, KaiNavigator } from '../../../utils/navigation';
+  import { strippedPhotoToJpg } from '../../../utils/misc';
 
+  import { Buffer} from 'buffer';
   import { downloadedMediaEmitter } from '../../../stores/telegram';
 
   export let chat: any = {};
@@ -11,20 +13,20 @@
   export let refetchMessage: Function = (id: number) => {}
 
   let undownloadedMediaEmitter;
-
-  let src: any;
+  let thumb: string;
 
   function actionMenu() {
-    if (window['authorizedWebWorker']) {
-      window['authorizedWebWorker'].postMessage({
-        type: 1,
-        params: {
-          chatId: chat.id.value.toString(),
-          messageId: message.id,
-        }
-      });
-    }
+    //if (window['authorizedWebWorker']) {
+      //window['authorizedWebWorker'].postMessage({
+        //type: 1,
+        //params: {
+          //chatId: chat.id.value.toString(),
+          //messageId: message.id,
+        //}
+      //});
+    //}
   }
+
   onMount(() => {
     registerCallButtonHandler(message.id.toString(), actionMenu);
     undownloadedMediaEmitter = downloadedMediaEmitter.subscribe(evt => {
@@ -41,6 +43,18 @@
         }
       }
     });
+    let byte;
+    if (message.media.className === 'MessageMediaPhoto') {
+      byte = message.media.photo.sizes[0].originalArgs.bytes
+    } else if (message.media.className === 'MessageMediaDocument') {
+      byte = message.media.document.thumbs[0].originalArgs.bytes
+    }
+    const arrBuff = strippedPhotoToJpg(Buffer.from(byte));
+    const reader = new FileReader();
+    reader.readAsDataURL(new Blob([arrBuff], {type : 'image/jpeg'}));
+    reader.onloadend = () => {
+      thumb = reader.result;
+    }
   })
 
   onDestroy(() => {
@@ -52,10 +66,7 @@
 
 <svelte:options accessors immutable={true}/>
 <div class="media-container">
-  {#if src}
-    <img style="max-width:170px;height:auto;" src="{src}" />
-  {/if}
-  <span style="color:#A20000;">Unsupported Media: Photo</span>
+  <img style="max-width:50px;height:auto;" src="{thumb}" />
 </div>
 
 <style>

@@ -13,19 +13,18 @@
   export let refetchMessage: Function = (id: number) => {}
 
   let undownloadedMediaEmitter;
-
-  let src: any;
+  let thumb: string;
 
   function actionMenu() {
-    if (window['authorizedWebWorker']) {
-      window['authorizedWebWorker'].postMessage({
-        type: 1,
-        params: {
-          chatId: chat.id.value.toString(),
-          messageId: message.id,
-        }
-      });
-    }
+    //if (window['authorizedWebWorker']) {
+      //window['authorizedWebWorker'].postMessage({
+        //type: 1,
+        //params: {
+          //chatId: chat.id.value.toString(),
+          //messageId: message.id,
+        //}
+      //});
+    //}
   }
 
   onMount(async () => {
@@ -47,7 +46,7 @@
     const reader = new FileReader();
     reader.readAsDataURL(new Blob([arrBuff], {type : 'image/jpeg'}));
     reader.onloadend = () => {
-      console.log(reader.result);
+      thumb = reader.result;
     }
   })
 
@@ -60,10 +59,7 @@
 
 <svelte:options accessors immutable={true}/>
 <div class="media-container">
-  {#if src}
-    <video style="max-width:170px;height:auto;" src="{src}" type="{message.media.document.mimeType}" autoplay loop></video>
-  {/if}
-  <span style="color:#A20000;">Unsupported Media: Video</span>
+  <img style="max-width:50px;height:auto;" src="{thumb}" />
 </div>
 
 <style>
