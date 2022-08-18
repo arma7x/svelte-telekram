@@ -447,7 +447,7 @@ function authorizedWebWorker() {
         case -100:
           client.disconnect()
           .then(() => {
-            self.postMessage({ type: -100 });
+            self.postMessage({ type: -100, params: {} });
           }).catch(() => {
             self.postMessage({ type: -1, params: err });
           });
@@ -533,7 +533,7 @@ function authenticationWebWorker() {
         case -100:
           client.disconnect()
           .then(() => {
-            self.postMessage({ type: -100 });
+            self.postMessage({ type: -100, params: {} });
           }).catch(() => {
             self.postMessage({ type: -1, params: err });
           });
