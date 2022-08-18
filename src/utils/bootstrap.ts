@@ -51,10 +51,13 @@ const client: typeof TelegramClient = new TelegramClient(session, TelegramKeyHas
 });
 client.setLogLevel('none');
 
-const cachedDatabase = idb.openDB('telekram', 2, {
-  upgrade: (db) => {
-    db.createObjectStore('profilePhotos');
-    db.createObjectStore('chatPreferences');
+const cachedDatabase = idb.openDB('telekram', 3, {
+  upgrade: (db, oldVersion, newVersion) => {
+    const tables = ['profilePhotos', 'chatPreferences', 'mediaAttachments'];
+    tables.forEach(n => {
+      if (!db.objectStoreNames.contains(n))
+        db.createObjectStore(n);
+    });
   },
 });
 
