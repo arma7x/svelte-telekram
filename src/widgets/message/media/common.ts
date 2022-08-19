@@ -58,27 +58,23 @@ async function isMediaCached(fileId) {
   return Promise.resolve(keys.indexOf(fileId) > -1);
 }
 
-async function getCachedMedia() {
-  let media = await (await cachedDatabase).get('mediaAttachments', fileId);
-  if (media) {
-    try {
-      const reader = new FileReader();
+async function getCachedMedia(fileId, message) {
+  return new Promise(async (resolve, reject) => {
+    let bytes = await (await cachedDatabase).get('mediaAttachments', fileId);
+    if (bytes) {
       let mime = message.media.photo ? 'image/jpeg' : message.media.document.mimeType;
-      reader.readAsDataURL(new Blob([media], {type : mime}));
-      reader.onloadend = () => {
-        console.log(reader.result);
-      }
-    } catch (err) {
-      console.log(err);
+      resolve(new Blob([bytes], {type : mime}));
+      // URL.revokeObjectURL()
+      // URL.createObjectURL()
+    } else {
+      reject(null);
     }
-    downloaded = true;
-  } else {
-    downloaded = false;
-  }
+  });
 }
 
 export  {
   isMediaCached,
+  getCachedMedia,
   strippedPhotoToJpg,
   humanFileSize,
 }

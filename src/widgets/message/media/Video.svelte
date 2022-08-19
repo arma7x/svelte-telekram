@@ -18,6 +18,8 @@
   let fileId: string;
 
   function actionMenu() {
+    if (downloaded)
+      return;
     if (window['authorizedWebWorker']) {
       window['authorizedWebWorker'].postMessage({
         type: 1,
@@ -31,7 +33,7 @@
   }
 
   async function handleDownloadedMedia(evt) {
-    if (evt.hash && evt.hash === chat.id.value.toString() + '_' + message.id.toString()) {
+    if (evt.hash && evt.hash === fileId) {
       if (evt.done != null) {
         downloaded = await isMediaCached(fileId);
       } else if (evt.progress) {

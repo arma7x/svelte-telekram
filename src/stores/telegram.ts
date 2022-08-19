@@ -387,7 +387,7 @@ function authorizedWebWorker() {
         return;
       const task = downloadMediaTask[0];
       // console.log(chats[task.chatId], task.chatId, task.messageId);
-      const hash = task.chatId + '_' + task.messageId.toString();
+      const hash = task.fileId;
       let bytes;
       client.getMessages(chats[task.chatId].entity, { limit: 1, ids: task.messageId })
       .then((msg) => {

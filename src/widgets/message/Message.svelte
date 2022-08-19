@@ -135,6 +135,9 @@
           media = Video;
           break;
         case 'image/jpeg':
+        case 'image/png':
+        case 'image/gif':
+        case 'image/webp':
           media = Photo;
           break;
         case 'text/plain':

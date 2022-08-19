@@ -18,6 +18,8 @@
   let fileId: string;
 
   function actionMenu() {
+    if (downloaded)
+      return;
     if (window['authorizedWebWorker']) {
       window['authorizedWebWorker'].postMessage({
         type: 1,
@@ -31,7 +33,7 @@
   }
 
   async function handleDownloadedMedia(evt) {
-    if (evt.hash && evt.hash === chat.id.value.toString() + '_' + message.id.toString()) {
+    if (evt.hash && evt.hash === fileId) {
       if (evt.done != null) {
         downloaded = await isMediaCached(fileId);
       } else if (evt.progress) {
@@ -54,7 +56,8 @@
     let byte;
     if (message.media.className === 'MessageMediaPhoto') {
       byte = message.media.photo.sizes[0].originalArgs.bytes;
-      size = humanFileSize(message.media.photo.sizes[message.media.photo.sizes .length - 1].size, true);
+      let i = message.media.photo.sizes[message.media.photo.sizes.length - 1];
+      size = humanFileSize(i.size ? i.size : i.sizes[i.sizes.length - 1], true);
     } else if (message.media.className === 'MessageMediaDocument') {
       byte = message.media.document.thumbs[0].originalArgs.bytes;
       size = humanFileSize(message.media.document.size.toJSNumber(), true);
