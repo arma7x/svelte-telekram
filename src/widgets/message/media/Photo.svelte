@@ -45,6 +45,12 @@
       } else if (evt.error) {
         console.log(evt.error);
         downloading = 0;
+      } else if (evt.init) {
+        if (evt.init === 1) {
+          downloading = 0.1;
+        } else {
+          downloading = 0;
+        }
       }
     }
   }

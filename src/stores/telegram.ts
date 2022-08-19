@@ -506,9 +506,14 @@ function authorizedWebWorker() {
         case 1:
           // const chatId = telegram.helpers.returnBigInt(e.data.params.chatId);
           if (chats[e.data.params.chatId] && queuedTask.indexOf(e.data.params.fileId) === -1) {
+            self.postMessage({ type: 1, hash: e.data.params.fileId, init: 1 });
             downloadMediaTask.push(e.data.params);
             if (downloadMediaTask.length === 1)
               executeDownloadMediaTask();
+          } else if (queuedTask.indexOf(e.data.params.fileId) > -1) {
+            self.postMessage({ type: 1, hash: e.data.params.fileId, init: 1 });
+          } else {
+            self.postMessage({ type: 1, hash: e.data.params.fileId, init: -1 });
           }
           break;
         case 2:
