@@ -31,6 +31,15 @@
     }
   }
 
+  async function checkFile() {
+    const keys = await (await cachedDatabase).getAllKeys('mediaAttachments');
+    if (keys.indexOf(fileId) > -1) {
+      downloaded = true;
+    } else {
+      downloaded = false;
+    }
+  }
+
   async function getDownloadedMedia() {
     let media = await (await cachedDatabase).get('mediaAttachments', fileId);
     if (media) {
@@ -53,7 +62,8 @@
   function handleDownloadedMedia(evt) {
     if (evt.hash && evt.hash === chat.id.value.toString() + '_' + message.id.toString()) {
       if (evt.done != null) {
-        getDownloadedMedia();
+        checkFile();
+        //getDownloadedMedia();
       } else if (evt.progress) {
         console.log(evt.progress);
       } else if (evt.error) {
@@ -68,7 +78,8 @@
     } else if (message.media.document) {
       fileId = message.media.document.id.toString();
     }
-    getDownloadedMedia();
+    checkFile();
+    // getDownloadedMedia();
     registerCallButtonHandler(message.id.toString(), actionMenu);
     downloadedMediaEmitter.addListener('message', handleDownloadedMedia);
     size = humanFileSize(message.media.document.size.toJSNumber(), true);
