@@ -1,8 +1,7 @@
 <script lang="ts">
   import { onMount, onDestroy } from 'svelte';
   import { createKaiNavigator, KaiNavigator } from '../../../utils/navigation';
-  import { strippedPhotoToJpg, humanFileSize } from '../../../utils/misc';
-  import { cachedDatabase } from '../../../utils/bootstrap';
+  import { strippedPhotoToJpg, humanFileSize, isMediaCached, getCachedMedia } from './common';
 
   import { Buffer} from 'buffer';
   import { downloadedMediaEmitter } from '../../../stores/telegram';
@@ -31,39 +30,10 @@
     }
   }
 
-  async function checkFile() {
-    const keys = await (await cachedDatabase).getAllKeys('mediaAttachments');
-    if (keys.indexOf(fileId) > -1) {
-      downloaded = true;
-    } else {
-      downloaded = false;
-    }
-  }
-
-  async function getDownloadedMedia() {
-    let media = await (await cachedDatabase).get('mediaAttachments', fileId);
-    if (media) {
-      try {
-        const reader = new FileReader();
-        let mime = message.media.photo ? 'image/jpeg' : message.media.document.mimeType;
-        reader.readAsDataURL(new Blob([media], {type : mime}));
-        reader.onloadend = () => {
-          console.log(reader.result);
-        }
-      } catch (err) {
-        console.log(err);
-      }
-      downloaded = true;
-    } else {
-      downloaded = false;
-    }
-  }
-
-  function handleDownloadedMedia(evt) {
+  async function handleDownloadedMedia(evt) {
     if (evt.hash && evt.hash === chat.id.value.toString() + '_' + message.id.toString()) {
       if (evt.done != null) {
-        checkFile();
-        // getDownloadedMedia();
+        downloaded = await isMediaCached(fileId);
       } else if (evt.progress) {
         console.log(evt.progress);
       } else if (evt.error) {
@@ -72,14 +42,13 @@
     }
   }
 
-  onMount(() => {
+  onMount(async () => {
     if (message.media.photo) {
       fileId = message.media.photo.id.toString();
     } else if (message.media.document) {
       fileId = message.media.document.id.toString();
     }
-    checkFile();
-    // getDownloadedMedia();
+    downloaded = await isMediaCached(fileId);
     registerCallButtonHandler(message.id.toString(), actionMenu);
     downloadedMediaEmitter.addListener('message', handleDownloadedMedia);
     let byte;
@@ -107,7 +76,7 @@
 <svelte:options accessors immutable={true}/>
 
 <div class="media-container">
-  <img src="{thumb}" />
+  <img alt="thumb" src="{thumb}" />
   <small>
     <div>{#if !downloaded}<img alt="download" src="/icons/download.svg" width="10px" height="10px" />&nbsp;{/if}Photo</div>
     <div>{size}</div>
