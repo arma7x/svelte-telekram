@@ -13,11 +13,13 @@
   export let refetchMessage: Function = (id: number) => {}
 
   let thumb: string;
-  let size: strinng;
+  let size: string;
   let downloaded: bool = false;
   let fileId: string;
+  let downloading: number = 0;
 
   function actionMenu() {
+    // TODO, Action Menu: View(downloaded === true), Save to Storage(downloaded === true), Download(downloaded === false)
     if (downloaded)
       return;
     if (window['authorizedWebWorker']) {
@@ -36,10 +38,13 @@
     if (evt.hash && evt.hash === fileId) {
       if (evt.done != null) {
         downloaded = await isMediaCached(fileId);
+        downloading = 0;
       } else if (evt.progress) {
-        console.log(evt.progress);
+        downloading = Math.round((evt.progress.received / evt.progress.total) * 100);
+        console.log(evt.progress.received, evt.progress.total, downloading);
       } else if (evt.error) {
         console.log(evt.error);
+        downloading = 0;
       }
     }
   }
@@ -81,7 +86,7 @@
 <div class="media-container">
   <img alt="thumb" src="{thumb}" />
   <small>
-    <div>{#if !downloaded}<img alt="download" src="/icons/download.svg" width="10px" height="10px" />&nbsp;{/if}Photo</div>
+    <div>{#if downloading > 0}{downloading}%{/if}{#if !downloaded && downloading === 0}<img alt="download" src="/icons/download.svg" width="10px" height="10px" />&nbsp;{/if}Photo</div>
     <div>{size}</div>
   </small>
 </div>

@@ -354,6 +354,7 @@ function authorizedWebWorker() {
 
     let clients;
     let chats = {};
+    let queuedTask = [];
     let downloadMediaTask = [];
     let downloadProfilePhotoTask = [];
     let ready = false;
@@ -385,6 +386,7 @@ function authorizedWebWorker() {
       if (downloadMediaTask.length <= 0)
         return;
       const task = downloadMediaTask[0];
+      queuedTask.push(task.fileId);
       // console.log(chats[task.chatId], task.chatId, task.messageId);
       const hash = task.fileId;
       let bytes;
@@ -410,6 +412,7 @@ function authorizedWebWorker() {
         self.postMessage({ type: 1, hash: hash, error: err });
       })
       .finally(() => {
+        queuedTask.splice(queuedTask.indexOf(task.fileId), 1);
         setTimeout(() => {
           downloadMediaTask.splice(0, 1);
           executeDownloadMediaTask();
@@ -502,7 +505,7 @@ function authorizedWebWorker() {
           break;
         case 1:
           // const chatId = telegram.helpers.returnBigInt(e.data.params.chatId);
-          if (chats[e.data.params.chatId]) {
+          if (chats[e.data.params.chatId] && queuedTask.indexOf(e.data.params.fileId) === -1) {
             downloadMediaTask.push(e.data.params);
             if (downloadMediaTask.length === 1)
               executeDownloadMediaTask();
