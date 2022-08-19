@@ -16,6 +16,7 @@ const client: typeof TelegramClient = new TelegramClient(session, TelegramKeyHas
 });
 client.setLogLevel('none');
 
+// Duplicate same instance in authorizedWebWorker
 const cachedDatabase = idb.openDB('telekram', 3, {
   upgrade: (db, oldVersion, newVersion) => {
     const tables = ['profilePhotos', 'chatPreferences', 'mediaAttachments'];
@@ -27,7 +28,7 @@ const cachedDatabase = idb.openDB('telekram', 3, {
 });
 
 export {
-  UA
+  UA,
   Api,
   AuthKey,
   TelegramClient,

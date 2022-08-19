@@ -7,7 +7,7 @@ export const authorizedStatus = writable(false);
 export const authorizedUser = writable([]);
 export const chatCollections = writable([]);
 export const cachedThumbnails = writable({});
-export const downloadedMediaEmitter = writable({});
+export const downloadedMediaEmitter = new EventEmitter();
 export const dispatchMessageToClient = new EventEmitter();
 export const dispatchMessageToWorker = new EventEmitter();
 
@@ -91,7 +91,8 @@ export async function isUserAuthorized() {
             console.log('Connected to authorizedWebWorker');
             break;
           case 1:
-            downloadedMediaEmitter.update(n => e.data);
+            // downloadedMediaEmitter.update(n => e.data);
+            downloadedMediaEmitter.emit('message', e.data);
             break;
           case 2:
             const base64 = await bufferToBase64(e.data.result);
@@ -337,8 +338,19 @@ function authorizedWebWorker() {
   const script = `
     importScripts('${window.location.origin}/js/polyfill.min.js');
     importScripts('${window.location.origin}/js/telegram.js');
+    importScripts('${window.location.origin}/js/idb.js');
 
     const UA = ${JSON.stringify(UA)};
+
+    const cachedDatabase = idb.openDB('telekram', 3, {
+      upgrade: (db, oldVersion, newVersion) => {
+        const tables = ['profilePhotos', 'chatPreferences', 'mediaAttachments'];
+        tables.forEach(n => {
+          if (!db.objectStoreNames.contains(n))
+            db.createObjectStore(n);
+        });
+      },
+    });
 
     let _importLoginToken;
     let clients;
@@ -375,16 +387,28 @@ function authorizedWebWorker() {
         return;
       const task = downloadMediaTask[0];
       // console.log(chats[task.chatId], task.chatId, task.messageId);
+      const hash = task.chatId + '_' + task.messageId.toString();
+      let bytes;
       client.getMessages(chats[task.chatId].entity, { limit: 1, ids: task.messageId })
       .then((msg) => {
-        return client.downloadMedia(msg[0].media);
+        return client.downloadMedia(msg[0].media, {
+          progressCallback: (received, total) => {
+            self.postMessage({ type: 1, hash: hash, progress: { received: received.toJSNumber(), total: total.toJSNumber() } });
+          }
+        });
       })
-      .then((bytes) => {
-        const hash = task.chatId + task.messageId.toString();
-        self.postMessage({ type: 1, hash: hash, result: bytes });
+      .then((_bytes) => {
+        bytes = _bytes;
+        return cachedDatabase;
+      })
+      .then(db => {
+        return db.put('mediaAttachments', bytes, task.fileId);
+      })
+      .then(fileId => {
+        self.postMessage({ type: 1, hash: hash, done: fileId });
       })
       .catch(err => {
-        self.postMessage({ type: -1, params: err });
+        self.postMessage({ type: 1, hash: hash, error: err });
       })
       .finally(() => {
         setTimeout(() => {

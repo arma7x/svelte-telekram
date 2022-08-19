@@ -2,6 +2,7 @@
   import { onMount, onDestroy } from 'svelte';
   import { createKaiNavigator, KaiNavigator } from '../../../utils/navigation';
   import { strippedPhotoToJpg, humanFileSize } from '../../../utils/misc';
+  import { cachedDatabase } from '../../../utils/bootstrap';
 
   import { Buffer} from 'buffer';
   import { downloadedMediaEmitter } from '../../../stores/telegram';
@@ -12,39 +13,64 @@
   export let registerCallButtonHandler: Function = (id, callback) => {}
   export let refetchMessage: Function = (id: number) => {}
 
-  let undownloadedMediaEmitter;
   let thumb: string;
   let size: strinng;
   let downloaded: bool = false;
+  let fileId: string;
 
   function actionMenu() {
-    //if (window['authorizedWebWorker']) {
-      //window['authorizedWebWorker'].postMessage({
-        //type: 1,
-        //params: {
-          //chatId: chat.id.value.toString(),
-          //messageId: message.id,
-        //}
-      //});
-    //}
+    if (window['authorizedWebWorker']) {
+      window['authorizedWebWorker'].postMessage({
+        type: 1,
+        params: {
+          chatId: chat.id.value.toString(),
+          messageId: message.id,
+          fileId: fileId
+        }
+      });
+    }
+  }
+
+  async function getDownloadedMedia() {
+    let media = await (await cachedDatabase).get('mediaAttachments', fileId);
+    if (media) {
+      try {
+        const reader = new FileReader();
+        let mime = message.media.photo ? 'image/jpeg' : message.media.document.mimeType;
+        reader.readAsDataURL(new Blob([media], {type : mime}));
+        reader.onloadend = () => {
+          console.log(reader.result);
+        }
+      } catch (err) {
+        console.log(err);
+      }
+      downloaded = true;
+    } else {
+      downloaded = false;
+    }
+  }
+
+  function handleDownloadedMedia(evt) {
+    if (evt.hash && evt.hash === chat.id.value.toString() + '_' + message.id.toString()) {
+      if (evt.done != null) {
+        getDownloadedMedia();
+      } else if (evt.progress) {
+        console.log(evt.progress);
+      } else if (evt.error) {
+        console.log(evt.error);
+      }
+    }
   }
 
   onMount(() => {
+    if (message.media.photo) {
+      fileId = message.media.photo.id.toString();
+    } else if (message.media.document) {
+      fileId = message.media.document.id.toString();
+    }
+    getDownloadedMedia();
     registerCallButtonHandler(message.id.toString(), actionMenu);
-    undownloadedMediaEmitter = downloadedMediaEmitter.subscribe(evt => {
-      if (evt.hash && evt.hash === chat.id.value.toString() + message.id.toString()) {
-        try {
-          const reader = new FileReader();
-          let mime = message.media.photo ? 'image/jpeg' : message.media.document.mimeType;
-          reader.readAsDataURL(new Blob([evt.result], {type : mime}));
-          reader.onloadend = () => {
-            src = reader.result;
-          }
-        } catch (err) {
-          console.log(err);
-        }
-      }
-    });
+    downloadedMediaEmitter.addListener('message', handleDownloadedMedia);
     let byte;
     if (message.media.className === 'MessageMediaPhoto') {
       byte = message.media.photo.sizes[0].originalArgs.bytes;
@@ -62,8 +88,7 @@
   })
 
   onDestroy(() => {
-    if (undownloadedMediaEmitter)
-      undownloadedMediaEmitter();
+    downloadedMediaEmitter.removeListener('message', handleDownloadedMedia);
   });
 
 </script>
