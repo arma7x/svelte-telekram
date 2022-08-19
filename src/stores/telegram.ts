@@ -352,7 +352,6 @@ function authorizedWebWorker() {
       },
     });
 
-    let _importLoginToken;
     let clients;
     let chats = {};
     let downloadMediaTask = [];
@@ -549,6 +548,7 @@ function authenticationWebWorker() {
 
     const UA = ${JSON.stringify(UA)};
 
+    let _importLoginToken;
     let clients;
     let session;
 
