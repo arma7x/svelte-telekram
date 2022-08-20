@@ -7,14 +7,7 @@
 
   import { cachedThumbnails, getAuthorizedUser } from '../../stores/telegram';
 
-  import Dummy from './media/Dummy.svelte';
-  import Sticker from './media/Sticker.svelte';
-  import Video from './media/Video.svelte';
-  import Photo from './media/Photo.svelte';
-  import Text from './media/Text.svelte';
-  import Audio from './media/Audio.svelte';
-  import Poll from './media/Poll.svelte';
-  import Geo from './media/Geo.svelte';
+  import { Audio, GeoLive, Photo, Geo, Poll, Venue, Sticker, Video, Game, Invoice, Text, WebPage, Dummy, Unsupported } from './media';
 
   export let key: any = '';
   export let chat: any = {};
@@ -151,15 +144,26 @@
           media = Dummy;
           // console.log(msg.media);
       }
-    } else if (msg.media.className === "MessageMediaPoll"){
+    } else if (msg.media.className === "MessageMediaPoll") {
       media = Poll;
-    } else if (msg.media.className === "MessageMediaPhoto"){
+    } else if (msg.media.className === "MessageMediaPhoto") {
       media = Photo;
-    } else if (msg.media.className === "MessageMediaGeo"){
+    } else if (msg.media.className === "MessageMediaGeo") {
       media = Geo;
+    } else if (msg.media.className === "MessageMediaGame") {
+      media = Game;
+    } else if (msg.media.className === "MessageMediaGeoLive") {
+      media = GeoLive;
+    } else if (msg.media.className === "MessageMediaInvoice") {
+      media = Invoice;
+    } else if (msg.media.className === "MessageMediaVenue") {
+      media = Venue;
+    } else if (msg.media.className === "MessageMediaWebPage") {
+      media = WebPage;
+    } else if (msg.media.className === "MessageMediaUnsupported") {
+      media = Unsupported;
     } else {
       media = Dummy;
-      // console.log(message.media);
     }
     return media;
   }
