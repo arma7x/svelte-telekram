@@ -34,6 +34,7 @@
   },
   "dependencies": {
     "@babel/runtime": "^7.18.6",
+    "@mozilla/readability": "^0.4.2",
     "@mtproto/core": "6.2.0",
     "@zerodevx/svelte-toast": "^0.6.3",
     "buffer": "^6.0.3",

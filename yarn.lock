@@ -932,6 +932,11 @@
     "@jridgewell/resolve-uri" "^3.0.3"
     "@jridgewell/sourcemap-codec" "^1.4.10"
 
+"@mozilla/readability@^0.4.2":
+  version "0.4.2"
+  resolved "https://registry.yarnpkg.com/@mozilla/readability/-/readability-0.4.2.tgz#a425f3dccdbe777d45a4e791bd703ebe633ebb87"
+  integrity sha512-48MJXzi4Dhy2fJ3lGjmwdEJKoMmn3oiYew9n/1OW6cZy78hAzRIyDJDBCGrg4PBFDyY4xos+H4LCFn5QVRDcfw==
+
 "@mtproto/core@6.2.0":
   version "6.2.0"
   resolved "https://registry.yarnpkg.com/@mtproto/core/-/core-6.2.0.tgz#0066ede068086f8022f6fad03865372c6452fa10"
