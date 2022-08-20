@@ -1,4 +1,4 @@
-import './polyfill.min.js';
+import '../public/js/polyfill.min.js';
 import App from './App.svelte';
 
 const app = new App({
