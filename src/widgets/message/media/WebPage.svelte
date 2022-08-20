@@ -67,6 +67,7 @@
           title: title,
           body: template,
           html: true,
+          softKeyCenterText: '',
           softKeyRightText: 'Close',
           onSoftkeyLeft: (evt) => {},
           onSoftkeyRight: (evt) => {
