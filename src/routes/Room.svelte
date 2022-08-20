@@ -177,28 +177,27 @@
           onSoftkeyLeft: async (evt, value) => {
             const msg = value.trim();
             if (msg.length > 0) {
-              // console.log(location.state.entity.id.value, msg);
-              // console.time('sendMessage');
+              const _start = new Date().getTime();
               sendMessageDialog.$destroy();
-                let result;
-                if (messageEntity && edit) {
-                  result = await client.editMessage(chat, { message: messageEntity.id, text: msg });
-                } else if (messageEntity) {
-                  result = await messageEntity.reply({message: msg});
+              let result;
+              if (messageEntity && edit) {
+                result = await client.editMessage(chat, { message: messageEntity.id, text: msg });
+              } else if (messageEntity) {
+                result = await messageEntity.reply({message: msg});
+              } else {
+                result = await client.sendMessage(chat, {message: msg});
+              }
+              const tmessages = await client.getMessages(chat, {ids:result.id})
+              if (tmessages.length > 0) {
+                if (edit && messageMetadata[tmessages[0].id.toString()]) {
+                  const idx = messageMetadata[tmessages[0].id.toString()].index;
+                  messages[idx] = tmessages[0];
+                  messages = [...messages];
                 } else {
-                  result = await client.sendMessage(chat, {message: msg});
+                  pushMessageToMerge(tmessages[0]);
                 }
-                const tmessages = await client.getMessages(chat, {ids:result.id})
-                if (tmessages.length > 0) {
-                  if (edit && messageMetadata[tmessages[0].id.toString()]) {
-                    const idx = messageMetadata[tmessages[0].id.toString()].index;
-                    messages[idx] = tmessages[0];
-                    messages = [...messages];
-                  } else {
-                    pushMessageToMerge(tmessages[0]);
-                  }
-                }
-              // console.timeEnd('sendMessage');
+              }
+              console.log(`sendMessage: ${new Date().getTime() - _start}ms`);
             }
           },
           onSoftkeyRight: (evt, value) => {
@@ -554,7 +553,7 @@
   }
 
   async function buildIndex(_messages) {
-    console.time('buildIndex');
+    const _start_ = new Date().getTime();
     forwardedUsersIndex = [];
     forwardedChannelsIndex = [];
     const httpTasks = [];
@@ -641,8 +640,7 @@
     });
 
     if (fetchReply.length > 0) {
-      const lbl = `fetchReply ${fetchReply.length}`
-      console.time(lbl);
+      const _start = new Date().getTime();
       try {
         const fmessages = await client.getMessages(chat, {ids:fetchReply});
         fetchReply.forEach((id, index) => {
@@ -651,12 +649,11 @@
       } catch (err) {
         console.log('fetchReply:', err);
       }
-      console.timeEnd(lbl);
+      console.log(`fetchReply: ${new Date().getTime() - _start}ms`);
     }
 
     if (fetchForwardedUsers.length > 0) {
-      const lbl = `fetchForwardedUsers ${fetchForwardedUsers.length}`;
-      console.time(lbl);
+      const _start = new Date().getTime();
       try {
         const users = await client.invoke(new Api.users.GetUsers({ id: fetchForwardedUsers }));
         users.forEach(u => {
@@ -689,12 +686,11 @@
       } catch (err) {
         console.log('fetchForwardedUsers:', err);
       }
-      console.timeEnd(lbl);
+      console.log(`fetchForwardedUsers: ${new Date().getTime() - _start}ms`);
     }
 
     if (fetchForwardedChannels.length > 0) {
-      const lbl = `fetchForwardedChannels ${fetchForwardedChannels.length}`
-      console.time(lbl);
+      const _start = new Date().getTime();
       try {
         const channels = await client.invoke(new Api.channels.GetChannels({ id: fetchForwardedChannels }));
         channels.chats.forEach(c => {
@@ -726,10 +722,10 @@
       } catch (err) {
         console.log('fetchForwardedChannels:', err);
       }
-      console.timeEnd(lbl);
+      console.log(`fetchForwardedChannels: ${new Date().getTime() - _start}ms`);
     }
     runTask(httpTasks, websocketTasks); // non-blocking
-    console.timeEnd('buildIndex');
+    console.log(`buildIndex: ${new Date().getTime() - _start_}ms`);
     return _messages;
   }
 

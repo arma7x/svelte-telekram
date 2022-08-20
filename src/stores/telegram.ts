@@ -145,7 +145,7 @@ export async function isUserAuthorized() {
 
 export async function retrieveChats() {
   try {
-    const start = new Date().getTime();
+    const _start = new Date().getTime();
     const user = await getAuthorizedUser();
     const chats = await client.getDialogs({
       offsetPeer: new Api.InputPeerSelf(),
@@ -153,7 +153,7 @@ export async function retrieveChats() {
       excludePinned: true,
       folderId: 0,
     });
-    console.log(`retrieveChats: ${new Date().getTime() - start}ms`);
+    console.log(`retrieveChats: ${new Date().getTime() - _start}ms`);
     const httpTasks = [];
     const websocketTasks = [];
     const chatPreferencesTask = {};
