@@ -39,7 +39,7 @@
             } else if (scope.selected.title === 'Open in Reader View') {
               getReaderable();
             } else if (scope.selected.title === 'Open in Instant View') {
-              getWebPage();
+              getInstantView();
             }
           },
           onBackspace: (evt, scope) => {
@@ -118,7 +118,7 @@
     xhttp.send();
   }
 
-  function getWebPage() {
+  function getInstantView() {
     // TODO
     console.log(message.media.webpage.cachedPage.blocks);
   }
@@ -139,10 +139,10 @@
     <h5 class="site-name">{message.media.webpage.siteName}</h5>
     {/if}
     {#if message.media.webpage.title}
-    <p class="title">{message.media.webpage.title.length > 30 ? message.media.webpage.title.substring(0, 20) + '...' : message.media.webpage.title}</p>
+    <p class="title">{message.media.webpage.title.length > 20 ? message.media.webpage.title.substring(0, 20) + '...' : message.media.webpage.title}</p>
     {/if}
     {#if message.media.webpage.description}
-    <p class="description">{message.media.webpage.description.length > 160 ? message.media.webpage.description.substring(0, 50) + '...' : message.media.webpage.description}</p>
+    <p class="description">{message.media.webpage.description.length > 50 ? message.media.webpage.description.substring(0, 50) + '...' : message.media.webpage.description}</p>
     {/if}
   </div>
 </div>
