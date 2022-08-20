@@ -4,8 +4,9 @@
   import { Api, client } from '../../../utils/bootstrap';
   import { Readability, isProbablyReaderable } from '@mozilla/readability';
   import DOMPurify from 'dompurify';
-  import { OptionMenu, Dialog } from '../../../components';
+  import { OptionMenu } from '../../../components';
   import InstantView from './InstantView.svelte';
+  import ReaderView from './ReaderView.svelte';
 
   export let chat: any = {};
   export let message: any = {};
@@ -14,7 +15,7 @@
   export let refetchMessage: Function = (id: number) => {}
 
   let menu: OptionMenu;
-  let reader: Dialog;
+  let reader: ReaderView;
   let instantView: InstantView;
 
   function actionMenu() {
@@ -63,18 +64,10 @@
 
   function openReader(title, template) {
     setTimeout(() => {
-      reader = new Dialog({
+      reader = new ReaderView({
         target: document.body,
         props: {
-          title: title,
-          body: template,
-          html: true,
-          softKeyCenterText: '',
-          softKeyRightText: 'Close',
-          onSoftkeyLeft: (evt) => {},
-          onSoftkeyRight: (evt) => {
-            reader.$destroy();
-          },
+          template: template,
           onEnter: (evt) => {},
           onBackspace: (evt) => {
             evt.preventDefault();

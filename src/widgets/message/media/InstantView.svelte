@@ -173,6 +173,7 @@
     background-color: rgba(0, 0, 0, 0.6);
   }
   .kai-option-menu > .kai-option-menu-content {
+    padding: 5px;
     display: flex;
     flex-direction: column;
     width: 100%;
