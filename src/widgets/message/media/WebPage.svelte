@@ -20,7 +20,7 @@
 
   function actionMenu() {
     setTimeout(() => {
-      let _menu = [{ title: 'Open in In-App Browser' }, { title: 'Open in Browser' }, { title: 'Open in Reader View' }];
+      let _menu = [{ title: 'Open in In-App Browser' }, { title: 'Open in Browser' }, { title: 'Open with Reader View' }];
       if (message.media.webpage.cachedPage) {
         _menu = [{ title: 'Open in Instant View' }, ..._menu];
       }
@@ -39,7 +39,7 @@
               window.open(message.media.webpage.url);
             } else if (scope.selected.title === 'Open in Browser') {
               window.open(message.media.webpage.url, '_blank').focus();
-            } else if (scope.selected.title === 'Open in Reader View') {
+            } else if (scope.selected.title === 'Open with Reader View') {
               getReaderable();
             } else if (scope.selected.title === 'Open in Instant View') {
               getInstantView();
