@@ -18,28 +18,30 @@
 
   let softwareKey: SoftwareKey;
 
+  let nodeRef;
+
   export function setTitleText(text) {
     title = text;
   }
 
   let navOptions = {
     arrowUpListener: function(evt) {
-      document.getElementsByClassName('kai-dialog-body')[0].scrollTop -= 20;
+      nodeRef.scrollTop -= 20;
       evt.preventDefault();
       evt.stopPropagation();
     },
     arrowDownListener: function(evt) {
-      document.getElementsByClassName('kai-dialog-body')[0].scrollTop += 20;
+      nodeRef.scrollTop += 20;
       evt.preventDefault();
       evt.stopPropagation();
     },
     arrowLeftListener: function(evt) {
-      document.getElementsByClassName('kai-dialog-body')[0].scrollLeft -= 20;
+      nodeRef.scrollLeft -= 20;
       evt.preventDefault();
       evt.stopPropagation();
     },
     arrowRightListener: function(evt) {
-      document.getElementsByClassName('kai-dialog-body')[0].scrollLeft += 20;
+      nodeRef.scrollLeft += 20;
       evt.preventDefault();
       evt.stopPropagation();
     },
@@ -95,9 +97,9 @@
   <div class="kai-dialog-content">
     <div class="kai-dialog-header">{title}</div>
     {#if html}
-    <div class="kai-dialog-body">{@html body}</div>
+    <div bind:this={nodeRef} class="kai-dialog-body">{@html body}</div>
     {:else}
-    <div class="kai-dialog-body">{body}</div>
+    <div bind:this={nodeRef} class="kai-dialog-body">{body}</div>
     {/if}
   </div>
 </div>
