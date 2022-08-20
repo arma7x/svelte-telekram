@@ -36,7 +36,7 @@
 
   function actionMenu() {
     setTimeout(() => {
-      let _menu = [{ title: 'Open in In-App Browser' }, { title: 'Open in Browser' }, { title: 'Open with Reader View' }];
+      let _menu = [{ title: 'Open with Reader View' }, { title: 'Open in In-App Browser' }, { title: 'Open in Browser' }];
       if (message.media.webpage.cachedPage) {
         _menu = [{ title: 'Open in Instant View' }, ..._menu];
       }
