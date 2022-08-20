@@ -16,7 +16,7 @@
   let size: string;
   let downloaded: bool = false;
   let fileId: string;
-  let downloading: number = 0;
+  let downloading: number = -1;
 
   function actionMenu() {
     // TODO, Action Menu: View(downloaded === true), Save to Storage(downloaded === true), Download(downloaded === false)
@@ -38,18 +38,18 @@
     if (evt.hash && evt.hash === fileId) {
       if (evt.done != null) {
         downloaded = await isMediaCached(fileId);
-        downloading = 0;
+        downloading = -1;
       } else if (evt.progress) {
         downloading = Math.round((evt.progress.received / evt.progress.total) * 100);
         console.log(evt.progress.received, evt.progress.total, downloading);
       } else if (evt.error) {
         console.log(evt.error);
-        downloading = 0;
+        downloading = -1;
       } else if (evt.init) {
         if (evt.init === 1) {
-          downloading = 0.1;
-        } else {
           downloading = 0;
+        } else {
+          downloading = -1;
         }
       }
     }
@@ -84,7 +84,7 @@
 <div class="media-container">
   <img alt="thumb" src="{thumb}" />
   <small>
-    <div>{#if downloading > 0}{downloading}%{/if}{#if !downloaded && downloading === 0}<img alt="download" src="/icons/download.svg" width="10px" height="10px" />&nbsp;{/if}Video</div>
+    <div>{#if downloading > -1}{downloading}%{/if}{#if !downloaded && downloading === -1}<img alt="download" src="/icons/download.svg" width="10px" height="10px" />&nbsp;{/if}Video</div>
     <div>{size}</div>
   </small>
 </div>
