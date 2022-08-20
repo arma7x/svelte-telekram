@@ -67,19 +67,13 @@
           title: title,
           body: template,
           html: true,
-          softKeyCenterText: 'Close',
-          onSoftkeyLeft: (evt) => {
-            console.log('onSoftkeyLeft');
-          },
+          softKeyRightText: 'Close',
+          onSoftkeyLeft: (evt) => {},
           onSoftkeyRight: (evt) => {
-            console.log('onSoftkeyRight');
-          },
-          onEnter: (evt) => {
-            console.log('onEnter');
             reader.$destroy();
           },
+          onEnter: (evt) => {},
           onBackspace: (evt) => {
-            console.log('onBackspace');
             evt.preventDefault();
             evt.stopPropagation();
             reader.$destroy();
