@@ -11,6 +11,10 @@ export const downloadedMediaEmitter = new EventEmitter();
 export const dispatchMessageToClient = new EventEmitter();
 export const dispatchMessageToWorker = new EventEmitter();
 
+downloadedMediaEmitter.setMaxListeners(100);
+dispatchMessageToClient.setMaxListeners(100);
+dispatchMessageToWorker.setMaxListeners(100);
+
 client.addEventHandler((evt) => {
   switch (evt.className) {
     case "UpdateNotifySettings":
