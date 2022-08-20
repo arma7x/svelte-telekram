@@ -153,7 +153,6 @@ export async function retrieveChats() {
       excludePinned: true,
       folderId: 0,
     });
-    console.log(`retrieveChats: ${new Date().getTime() - _start}ms`);
     const httpTasks = [];
     const websocketTasks = [];
     const chatPreferencesTask = {};
@@ -192,6 +191,7 @@ export async function retrieveChats() {
       });
     });
     chatCollections.update(n => chats);
+    console.log(`retrieveChats: ${new Date().getTime() - _start}ms`);
     runTask(httpTasks, websocketTasks, chatPreferencesTask);
     return chats;
   } catch (err) {

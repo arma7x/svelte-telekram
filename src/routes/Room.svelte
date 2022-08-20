@@ -818,13 +818,12 @@
               // Skip for channel, only group or private chat
               if (!(location.state.entity.className === 'Channel' && !location.state.entity.megagroup)) {
                 if (!cachedForwardedUsers[evt.message.senderId.value.toString()]) {
-                  const lbl = `fetchuncachedforwardsuser ${evt.message.senderId.value.toString()}`;
-                  console.time(lbl);
+                  const _start = new Date().getTime()
                   const users = await client.invoke(new Api.users.GetUsers({ id: [evt.message.senderId.value.toString()] }));
                   if (users.length > 0) {
                     cachedForwardedUsers[users[0].id.toString()] = users[0];
                   }
-                  console.timeEnd(lbl);
+                  console.log(`fetchuncachedforwardsuser: ${new Date().getTime() - _start}ms`);
                 }
               }
               pushMessageToMerge(evt.message);
@@ -897,7 +896,7 @@
   async function fetchMessages(entity, scrollAt) {
     console.log('\n');
     console.log('%cSTART', 'background: #222; color: #bada55');
-    console.time('fetchMessages');
+    const _start = new Date().getTime();
     try {
       const chats = await getChatCollection();
       chat = chats.find(chat => {
@@ -955,7 +954,7 @@
     } catch (err) {
       console.log('fetchMessages:', err);
     }
-    console.timeEnd('fetchMessages');
+    console.log(`fetchMessages: ${new Date().getTime() - _start}ms`);
     console.log('%cFINISH', 'background: #222; color: #bada55');
   }
 
