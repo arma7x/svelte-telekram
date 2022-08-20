@@ -5,6 +5,7 @@
   import { Readability, isProbablyReaderable } from '@mozilla/readability';
   import DOMPurify from 'dompurify';
   import { OptionMenu, Dialog } from '../../../components';
+  import InstantView from './InstantView.svelte';
 
   export let chat: any = {};
   export let message: any = {};
@@ -14,19 +15,20 @@
 
   let menu: OptionMenu;
   let reader: Dialog;
+  let instantView: InstantView;
 
   function actionMenu() {
     setTimeout(() => {
-      let menu = [{ title: 'Open in In-App Browser' }, { title: 'Open in Browser' }, { title: 'Open in Reader View' }];
+      let _menu = [{ title: 'Open in In-App Browser' }, { title: 'Open in Browser' }, { title: 'Open in Reader View' }];
       if (message.media.webpage.cachedPage) {
-        menu = [{ title: 'Open in Instant View' }, ...menu];
+        _menu = [{ title: 'Open in Instant View' }, ..._menu];
       }
       menu = new OptionMenu({
         target: document.body,
         props: {
           title: 'Action Menu',
           focusIndex: 0,
-          options: menu,
+          options: _menu,
           softKeyCenterText: 'select',
           onSoftkeyRight: (evt, scope) => {},
           onSoftkeyLeft: (evt, scope) => {},
@@ -119,8 +121,27 @@
   }
 
   function getInstantView() {
-    // TODO
-    console.log(message.media.webpage.cachedPage.blocks);
+    setTimeout(() => {
+      instantView = new InstantView({
+        target: document.body,
+        props: {
+          blocks: message.media.webpage.cachedPage.blocks,
+          onEnter: (evt, scope) => {},
+          onBackspace: (evt, scope) => {
+            evt.preventDefault();
+            evt.stopPropagation();
+            instantView.$destroy();
+          },
+          onOpened: () => {
+            parentNavInstance.detachListener();
+          },
+          onClosed: (scope) => {
+            parentNavInstance.attachListener();
+            instantView = null;
+          }
+        }
+      });
+    }, 100);
   }
 
   onMount(() => {
