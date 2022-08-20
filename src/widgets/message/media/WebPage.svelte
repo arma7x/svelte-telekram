@@ -101,8 +101,9 @@
           if (isProbablyReaderable(doc)) {
             const result = new Readability(doc).parse();
             result.content = result.content.replace(/<img .*?>/g,"");
+            result.content = `<h4 style="margin-top:0px;padding-top:0px;">${message.media.webpage.title}</h4>` + result.content;
             const sanitizedContent = DOMPurify.sanitize(result.content);
-            openReader(message.media.webpage.title, sanitizedContent);
+            openReader('Reader View', sanitizedContent);
           } else {
             console.log('notReaderable');
           }
@@ -119,7 +120,7 @@
 
   function getWebPage() {
     // TODO
-    console.log(message.media.webpage.cachedPage);
+    console.log(message.media.webpage.cachedPage.blocks);
   }
 
   onMount(() => {
