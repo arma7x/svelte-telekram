@@ -112,9 +112,11 @@
         try {
           const doc = parser.parseFromString(xhttp.responseText, "text/html");
           if (isProbablyReaderable(doc)) {
+            const url = new URL(message.media.webpage.url);
             const result = new Readability(doc).parse();
-            result.content = result.content.replace(/<img .*?>/g,"");
-            result.content = `<h4 style="margin-top:0px;padding-top:0px;">${message.media.webpage.title}</h4>` + result.content;
+            result.content = result.content.replace(/(<img[^>]*?) *\/?>/g, '$1 style="width:100%;height:auto;" />');
+            result.content = result.content.replaceAll(document.location.origin, url.origin);
+            result.content = `<style>img{}</style><h4 style="margin-top:0px;padding-top:0px;">${message.media.webpage.title}</h4>` + result.content;
             const sanitizedContent = DOMPurify.sanitize(result.content);
             openReader('Reader View', sanitizedContent);
             if (loadingBar)
