@@ -69,13 +69,13 @@
 
 <style>
   .kai-option-menu {
+    padding: 4px;
     width: 100%;
     min-height: calc(100% - 26px);
     position: fixed;
-    background-color: rgba(0, 0, 0, 0.6);
+    background-color: #ffffff;
   }
   .kai-option-menu > .kai-option-menu-content {
-    padding: 5px;
     display: flex;
     flex-direction: column;
     width: 100%;

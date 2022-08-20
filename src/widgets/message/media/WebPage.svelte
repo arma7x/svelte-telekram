@@ -4,7 +4,7 @@
   import { Api, client } from '../../../utils/bootstrap';
   import { Readability, isProbablyReaderable } from '@mozilla/readability';
   import DOMPurify from 'dompurify';
-  import { OptionMenu } from '../../../components';
+  import { OptionMenu, LoadingBar } from '../../../components';
   import InstantView from './InstantView.svelte';
   import ReaderView from './ReaderView.svelte';
 
@@ -14,9 +14,25 @@
   export let registerCallButtonHandler: Function = (id, callback) => {}
   export let refetchMessage: Function = (id: number) => {}
 
+  let loadingBar: LoadingBar;
   let menu: OptionMenu;
   let reader: ReaderView;
   let instantView: InstantView;
+
+  function showLoadingBar() {
+    loadingBar = new LoadingBar({
+      target: document.body,
+      props: {
+        onOpened: () => {
+          parentNavInstance.detachListener();
+        },
+        onClosed: () => {
+          parentNavInstance.attachListener();
+          loadingBar = null;
+        }
+      }
+    });
+  }
 
   function actionMenu() {
     setTimeout(() => {
@@ -87,6 +103,8 @@
   }
 
   function getReaderable() {
+    if (loadingBar == null)
+      showLoadingBar();
     const xhttp = new XMLHttpRequest({ mozSystem: true });
     xhttp.onreadystatechange = function() {
       if (xhttp.readyState == 4 && xhttp.status == 200) {
@@ -99,14 +117,22 @@
             result.content = `<h4 style="margin-top:0px;padding-top:0px;">${message.media.webpage.title}</h4>` + result.content;
             const sanitizedContent = DOMPurify.sanitize(result.content);
             openReader('Reader View', sanitizedContent);
+            if (loadingBar)
+              loadingBar.$destroy();
           } else {
             console.log('notReaderable');
+          if (loadingBar)
+            loadingBar.$destroy();
           }
         } catch (e) {
           console.log(e);
+          if (loadingBar)
+            loadingBar.$destroy();
         }
       } else if (xhttp.readyState == 4 && xhttp.status != 200) {
         console.log(xhttp.status);
+        if (loadingBar)
+          loadingBar.$destroy();
       }
     };
     xhttp.open("GET", `https://api.codetabs.com/v1/proxy/?quest=${message.media.webpage.url}`, true);
