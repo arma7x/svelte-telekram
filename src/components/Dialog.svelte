@@ -5,6 +5,7 @@
 
   export let title: string = 'Dialog';
   export let body: string = '';
+  export let html: bool = false;
   export let softKeyLeftText: string = '';
   export let softKeyCenterText: string = 'Close';
   export let softKeyRightText: string = '';
@@ -93,7 +94,11 @@
 <div class="kai-dialog">
   <div class="kai-dialog-content">
     <div class="kai-dialog-header">{title}</div>
+    {#if html}
+    <div class="kai-dialog-body">{@html body}</div>
+    {:else}
     <div class="kai-dialog-body">{body}</div>
+    {/if}
   </div>
 </div>
 

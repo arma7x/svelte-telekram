@@ -277,7 +277,7 @@
     {#if message.media }
       <svelte:component this={resolveMediaWidget(message)} {chat} {message} {parentNavInstance} {registerCallButtonHandler} {refetchMessage}/>
     {/if}
-    {#if message.message }
+    {#if message.message && (message.media ? message.media.webpage == null : true) }
       <p>{message.message.length > 80 && short ? message.message.substring(0, 80) + '...' : message.message}</p>
     {/if}
     <div class="indicator">
