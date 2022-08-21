@@ -8,20 +8,20 @@
   export let registerCallButtonHandler: Function = (id, callback) => {}
   export let refetchMessage: Function = (id: number) => {}
 
-  function actionMenu() {
-    console.log('Clicked:', message.id.toString());
-  }
+  function actionMenu() {}
 
   onMount(() => {
     registerCallButtonHandler(message.id.toString(), actionMenu);
   })
+
+  onDestroy(() => {})
 
 </script>
 
 <svelte:options accessors immutable={true}/>
 
 <div class="media-container">
-  <span style="color:#A20000;">WIP: {message.media.className}</span>
+  <span style="color:#A20000;">Unsupported: Game</span>
 </div>
 
 <style>

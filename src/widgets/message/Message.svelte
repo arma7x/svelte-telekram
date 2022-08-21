@@ -7,7 +7,7 @@
 
   import { cachedThumbnails, getAuthorizedUser } from '../../stores/telegram';
 
-  import { Audio, GeoLive, Photo, Geo, Poll, Venue, Sticker, Video, Game, Invoice, Text, WebPage, Dummy, Unsupported } from './media';
+  import { Audio, GeoLive, Photo, Geo, Poll, Venue, Sticker, Video, Game, Invoice, Dice, Contact, WebPage, Doc, Dummy, Unsupported } from './media';
 
   export let key: any = '';
   export let chat: any = {};
@@ -133,16 +133,12 @@
         case 'image/webp':
           media = Photo;
           break;
-        case 'text/plain':
-          media = Text;
-          break;
         case 'audio/mpeg':
         case 'audio/ogg':
           media = Audio;
           break;
         default:
-          media = Dummy;
-          // console.log(msg.media);
+          media = Doc;
       }
     } else if (msg.media.className === "MessageMediaPoll") {
       media = Poll;
@@ -160,6 +156,10 @@
       media = Venue;
     } else if (msg.media.className === "MessageMediaWebPage") {
       media = WebPage;
+    } else if (msg.media.className === "MessageMediaContact") {
+      media = Contact;
+    } else if (msg.media.className === "MessageMediaDice") {
+      media = Dice;
     } else if (msg.media.className === "MessageMediaUnsupported") {
       media = Unsupported;
     } else {
@@ -281,6 +281,9 @@
       <p>{message.message.length > 80 && short ? message.message.substring(0, 80) + '...' : message.message}</p>
     {/if}
     <div class="indicator">
+      {#if message.media && message.media.webpage}
+      <small class="buttons"><img alt="buttons" src="/icons/globe.svg" width="10px" height="10px" />&nbsp;</small>
+      {/if}
       {#if message.replyMarkup && message.replyMarkup.rows}
       <small class="buttons"><img alt="buttons" src="/icons/keyboard.svg" width="10px" height="10px" />&nbsp;</small>
       {/if}

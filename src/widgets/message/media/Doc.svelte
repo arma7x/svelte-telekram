@@ -1,18 +1,15 @@
 <script lang="ts">
   import { onMount, onDestroy } from 'svelte';
   import { createKaiNavigator, KaiNavigator } from '../../../utils/navigation';
-  import { strippedPhotoToJpg, humanFileSize, isMediaCached, getCachedMedia } from './common';
-
-  import { Buffer} from 'buffer';
+  import { humanFileSize, isMediaCached, getCachedMedia } from './common';
   import { downloadedMediaEmitter } from '../../../stores/telegram';
 
   export let chat: any = {};
-  export let message: any = {}; //.media.photo or .media.document
+  export let message: any = {};
   export let parentNavInstance: typeof KaiNavigator;
   export let registerCallButtonHandler: Function = (id, callback) => {}
   export let refetchMessage: Function = (id: number) => {}
 
-  let thumb: string = '/icons/document.svg';
   let size: string;
   let downloaded: bool = false;
   let fileId: string;
@@ -54,46 +51,35 @@
     }
   }
 
+  function getFileType(string) {
+    try {
+      return message.media.document.attributes[0].fileName;
+    } catch (err) {}
+    const strings = string.split('/');
+    string = strings[strings.length - 1];
+    return string.charAt(0).toUpperCase() + string.slice(1);
+  }
+
   onMount(async () => {
-    if (message.media.photo) {
-      fileId = message.media.photo.id.toString();
-    } else if (message.media.document) {
-      fileId = message.media.document.id.toString();
-    }
+    fileId = message.media.document.id.toString();
     downloaded = await isMediaCached(fileId);
     registerCallButtonHandler(message.id.toString(), actionMenu);
     downloadedMediaEmitter.addListener('message', handleDownloadedMedia);
-    let byte;
-    if (message.media.className === 'MessageMediaPhoto') {
-      byte = message.media.photo.sizes[0].originalArgs.bytes;
-      let i = message.media.photo.sizes[message.media.photo.sizes.length - 1];
-      size = humanFileSize(i.size ? i.size : i.sizes[i.sizes.length - 1], true);
-    } else if (message.media.className === 'MessageMediaDocument') {
-      byte = message.media.document.thumbs[0].originalArgs.bytes;
-      size = humanFileSize(message.media.document.size.toJSNumber(), true);
-    }
-    try {
-      const arrBuff = strippedPhotoToJpg(Buffer.from(byte));
-      const reader = new FileReader();
-      reader.readAsDataURL(new Blob([arrBuff], {type : 'image/jpeg'}));
-      reader.onloadend = () => {
-        thumb = reader.result;
-      }
-    } catch (err) {}
+    size = humanFileSize(message.media.document.size.toJSNumber(), true);
   })
 
   onDestroy(() => {
     downloadedMediaEmitter.removeListener('message', handleDownloadedMedia);
-  });
+  })
 
 </script>
 
 <svelte:options accessors immutable={true}/>
 
 <div class="media-container">
-  <img alt="thumb" src="{thumb}" />
+  <img alt="thumb" src="/icons/document.svg" />
   <small>
-    <div>{#if downloading > -1}{downloading}%&nbsp;{/if}{#if !downloaded && downloading === -1}<img alt="download" src="/icons/download.svg" width="10px" height="10px" />&nbsp;{/if}Photo</div>
+    <div>{#if downloading > -1}{downloading}%&nbsp;{/if}{#if !downloaded && downloading === -1}<img alt="download" src="/icons/download.svg" width="10px" height="10px" />&nbsp;{/if}{getFileType(message.media.document.mimeType)}</div>
     <div>{size}</div>
   </small>
 </div>

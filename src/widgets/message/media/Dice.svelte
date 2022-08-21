@@ -21,7 +21,7 @@
 
 <svelte:options accessors immutable={true}/>
 <div class="media-container">
-  <span style="color:#A20000;">Unsupported Media: GeoLive</span>
+  <span style="color:#A20000;">Unsupported Media: Dice</span>
 </div>
 
 <style>

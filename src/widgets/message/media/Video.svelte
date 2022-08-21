@@ -12,7 +12,7 @@
   export let registerCallButtonHandler: Function = (id, callback) => {}
   export let refetchMessage: Function = (id: number) => {}
 
-  let thumb: string;
+  let thumb: string = '/icons/document.svg';
   let size: string;
   let downloaded: bool = false;
   let fileId: string;
@@ -41,7 +41,6 @@
         downloading = -1;
       } else if (evt.progress) {
         downloading = Math.round((evt.progress.received / evt.progress.total) * 100);
-        console.log(evt.progress.received, evt.progress.total, downloading);
       } else if (evt.error) {
         console.log(evt.error);
         downloading = -1;
@@ -56,21 +55,19 @@
   }
 
   onMount(async () => {
-    if (message.media.photo) {
-      fileId = message.media.photo.id.toString();
-    } else if (message.media.document) {
-      fileId = message.media.document.id.toString();
-    }
+    fileId = message.media.document.id.toString();
     downloaded = await isMediaCached(fileId);
     registerCallButtonHandler(message.id.toString(), actionMenu);
     downloadedMediaEmitter.addListener('message', handleDownloadedMedia);
     size = humanFileSize(message.media.document.size.toJSNumber(), true);
-    const arrBuff = strippedPhotoToJpg(Buffer.from(message.media.document.thumbs[0].originalArgs.bytes));
-    const reader = new FileReader();
-    reader.readAsDataURL(new Blob([arrBuff], {type : 'image/jpeg'}));
-    reader.onloadend = () => {
-      thumb = reader.result;
-    }
+    try {
+      const arrBuff = strippedPhotoToJpg(Buffer.from(message.media.document.thumbs[0].originalArgs.bytes));
+      const reader = new FileReader();
+      reader.readAsDataURL(new Blob([arrBuff], {type : 'image/jpeg'}));
+      reader.onloadend = () => {
+        thumb = reader.result;
+      }
+    } catch (err) {}
   })
 
   onDestroy(() => {
@@ -84,7 +81,7 @@
 <div class="media-container">
   <img alt="thumb" src="{thumb}" />
   <small>
-    <div>{#if downloading > -1}{downloading}%{/if}{#if !downloaded && downloading === -1}<img alt="download" src="/icons/download.svg" width="10px" height="10px" />&nbsp;{/if}Video</div>
+    <div>{#if downloading > -1}{downloading}%&nbsp;{/if}{#if !downloaded && downloading === -1}<img alt="download" src="/icons/download.svg" width="10px" height="10px" />&nbsp;{/if}Video</div>
     <div>{size}</div>
   </small>
 </div>

@@ -8,8 +8,10 @@ import Sticker from "./Sticker.svelte"
 import Video from "./Video.svelte"
 import Game from "./Game.svelte"
 import Invoice from "./Invoice.svelte"
-import Text from "./Text.svelte"
+import Dice from "./Dice.svelte"
+import Contact from "./Contact.svelte"
 import WebPage from "./WebPage.svelte"
+import Doc from "./Doc.svelte"
 import Dummy from "./Dummy.svelte"
 import Unsupported from "./Unsupported.svelte"
 
@@ -23,8 +25,10 @@ export {
   Video,
   Game,
   Invoice,
-  Text,
+  Dice,
+  Contact,
   WebPage,
+  Doc,
   Dummy,
   Unsupported
 }
