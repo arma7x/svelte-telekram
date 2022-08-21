@@ -17,9 +17,9 @@ const client: typeof TelegramClient = new TelegramClient(session, TelegramKeyHas
 client.setLogLevel('none');
 
 // Duplicate same instance in authorizedWebWorker
-const cachedDatabase = idb.openDB('telekram', 3, {
+const cachedDatabase = idb.openDB('telekram', 4, {
   upgrade: (db, oldVersion, newVersion) => {
-    const tables = ['profilePhotos', 'chatPreferences', 'mediaAttachments'];
+    const tables = ['profilePhotos', 'chatPreferences', 'mediaAttachments', 'offlineWebpages'];
     tables.forEach(n => {
       if (!db.objectStoreNames.contains(n))
         db.createObjectStore(n);

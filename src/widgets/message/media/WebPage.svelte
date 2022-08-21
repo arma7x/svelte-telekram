@@ -1,7 +1,7 @@
 <script lang="ts">
   import { onMount, onDestroy } from 'svelte';
   import { createKaiNavigator, KaiNavigator } from '../../../utils/navigation';
-  import { Api, client } from '../../../utils/bootstrap';
+  import { Api, client, cachedDatabase } from '../../../utils/bootstrap';
   import { Readability, isProbablyReaderable } from '@mozilla/readability';
   import DOMPurify from 'dompurify';
   import { OptionMenu, LoadingBar } from '../../../components';
@@ -102,11 +102,18 @@
     }, 100);
   }
 
-  function getReaderable() {
+  async function getReaderable() {
+    const webpageId = message.media.webpage.id.value.toString()
+    let cached = await (await cachedDatabase).get('offlineWebpages', webpageId);
+    if (cached != null) {
+      const sanitizedContent = DOMPurify.sanitize(cached);
+      openReader('Reader View', sanitizedContent);
+      return;
+    }
     if (loadingBar == null)
       showLoadingBar();
     const xhttp = new XMLHttpRequest({ mozSystem: true });
-    xhttp.onreadystatechange = function() {
+    xhttp.onreadystatechange = async function() {
       if (xhttp.readyState == 4 && xhttp.status == 200) {
         const parser = new DOMParser();
         try {
@@ -117,6 +124,7 @@
             result.content = result.content.replace(/(<img[^>]*?) *\/?>/g, '$1 style="width:100%;height:auto;" />');
             result.content = result.content.replaceAll(document.location.origin, url.origin);
             result.content = `<style>img{}</style><h4 style="margin-top:0px;padding-top:0px;">${message.media.webpage.title}</h4>` + result.content;
+            await (await cachedDatabase).put('offlineWebpages', result.content, webpageId);
             const sanitizedContent = DOMPurify.sanitize(result.content);
             openReader('Reader View', sanitizedContent);
             if (loadingBar)
