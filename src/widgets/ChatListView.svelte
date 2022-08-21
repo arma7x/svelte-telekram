@@ -87,7 +87,8 @@
   }
 
   .kai-list-view > .kai-list-view-content > small {
-    padding: 0px;
+    margin-top: -3px;
+    padding: 0px 0px 3px 0px;
     font-size: 12px;
     color: #6A6A6A;
     text-align: start;
@@ -108,7 +109,7 @@
     background-color: #c0c0c0;
     font-weight: bold;
     border-radius: 5px;
-    padding: 3px 3px 0 3px;
+    padding: 2px 3px 0 2px;
   }
 
   .kai-list-view.focus,
