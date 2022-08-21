@@ -5,7 +5,7 @@
   import { Readability, isProbablyReaderable } from '@mozilla/readability';
   import DOMPurify from 'dompurify';
   import { OptionMenu, LoadingBar } from '../../../components';
-  import InstantView from './InstantView.svelte';
+  // import InstantView from './InstantView.svelte';
   import ReaderView from './ReaderView.svelte';
 
   export let chat: any = {};
@@ -17,7 +17,7 @@
   let loadingBar: LoadingBar;
   let menu: OptionMenu;
   let reader: ReaderView;
-  let instantView: InstantView;
+  // let instantView: InstantView;
 
   function showLoadingBar() {
     loadingBar = new LoadingBar({
@@ -150,27 +150,27 @@
   }
 
   function getInstantView() {
-    setTimeout(() => {
-      instantView = new InstantView({
-        target: document.body,
-        props: {
-          blocks: message.media.webpage.cachedPage.blocks,
-          onEnter: (evt, scope) => {},
-          onBackspace: (evt, scope) => {
-            evt.preventDefault();
-            evt.stopPropagation();
-            instantView.$destroy();
-          },
-          onOpened: () => {
-            parentNavInstance.detachListener();
-          },
-          onClosed: (scope) => {
-            parentNavInstance.attachListener();
-            instantView = null;
-          }
-        }
-      });
-    }, 100);
+    //setTimeout(() => {
+      //instantView = new InstantView({
+        //target: document.body,
+        //props: {
+          //blocks: message.media.webpage.cachedPage.blocks,
+          //onEnter: (evt, scope) => {},
+          //onBackspace: (evt, scope) => {
+            //evt.preventDefault();
+            //evt.stopPropagation();
+            //instantView.$destroy();
+          //},
+          //onOpened: () => {
+            //parentNavInstance.detachListener();
+          //},
+          //onClosed: (scope) => {
+            //parentNavInstance.attachListener();
+            //instantView = null;
+          //}
+        //}
+      //});
+    //}, 100);
   }
 
   onMount(() => {
