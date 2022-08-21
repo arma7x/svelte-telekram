@@ -1,6 +1,63 @@
 import { Buffer} from 'buffer';
 import { cachedDatabase } from '../../../utils/bootstrap';
 
+function resolveTextWidget(text) {
+  let component = '';
+  switch (text.className) {
+    case 'TextEmpty':
+      component = '';
+      break;
+    case 'TextPlain':
+      component = text.text;
+      break;
+    case 'TextBold':
+      component = `<b>${resolveTextWidget(text.text)}</b>`;
+      break;
+    case 'TextItalic':
+      component = `<i>${resolveTextWidget(text.text)}</i>`;
+      break;
+    case 'TextUnderline':
+      component = `<span class="text-decoration: underline;">${resolveTextWidget(text.text)}</span>`;
+      break;
+    case 'TextStrike':
+      component = `<span class="text-decoration: line-through">${resolveTextWidget(text.text)}</span>`;
+      break;
+    case 'TextFixed':
+      component = `<span>${resolveTextWidget(text.text)}</span>`;
+      break;
+    case 'TextUrl':
+      component = `<a href="${text.url}">${resolveTextWidget(text.text)}</a>`;
+      break;
+    case 'TextEmail':
+      component = `<a href="mailto:${text.email}">${resolveTextWidget(text.text)}</a>`;
+      break;
+    case 'TextConcat':
+      text.texts.forEach(_text => {
+        component += resolveTextWidget(_text);
+      });
+      break;
+    case 'TextSubscript':
+      component = `<span>${resolveTextWidget(text.text)}</span>`;
+      break;
+    case 'TextSuperscript':
+      component = `<span>${resolveTextWidget(text.text)}</span>`;
+      break;
+    case 'TextMarked':
+      component = `<span>${resolveTextWidget(text.text)}</span>`;
+      break;
+    case 'TextPhone':
+      component = `<a href="tel:${text.email}">${resolveTextWidget(text.text)}</a>`;
+      break;
+    case 'TextImage':
+      component = 'TextImage';
+      break;
+    case 'TextAnchor':
+      component = `<a href="#${text.name}">${resolveTextWidget(text.text)}</a>`;
+      break;
+  }
+  return component;
+}
+
 // https://github.com/gram-js/gramjs/issues/223
 function strippedPhotoToJpg(stripped) {
 
@@ -73,6 +130,7 @@ async function getCachedMedia(fileId, message) {
 }
 
 export  {
+  resolveTextWidget,
   isMediaCached,
   getCachedMedia,
   strippedPhotoToJpg,

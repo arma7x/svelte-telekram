@@ -4,7 +4,7 @@
   export let block: any = {};
 
   onMount(() => {
-
+    console.log(block);
   })
 
   onDestroy(() => {
@@ -21,6 +21,7 @@
 
 <style>
 .block-container {
+  margin: 0 0 5px 0;
   text-align: start;
 }
 </style>

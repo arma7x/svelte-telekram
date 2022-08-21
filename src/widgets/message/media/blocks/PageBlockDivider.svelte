@@ -15,12 +15,13 @@
 
 <svelte:options accessors immutable={true}/>
 
-<div class="block-container">
-  <span style="color:#A20000;">WIP: {block.className}</span>
-</div>
+<div class="block-container"></div>
 
 <style>
 .block-container {
+  width: 100%;
+  border-top: 3px solid #bbb;
+  margin: 0 0 5px 0;
   text-align: start;
 }
 </style>

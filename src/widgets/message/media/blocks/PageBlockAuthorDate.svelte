@@ -3,8 +3,12 @@
 
   export let block: any = {};
 
-  onMount(() => {
+  function getPublishedDate() {
+    return new Date(block.publishedDate * 1000).toString();
+  }
 
+  onMount(() => {
+    console.log();
   })
 
   onDestroy(() => {
@@ -16,11 +20,12 @@
 <svelte:options accessors immutable={true}/>
 
 <div class="block-container">
-  <span style="color:#A20000;">WIP: {block.className}</span>
+  <small>Publishe Date: {getPublishedDate()}</small>
 </div>
 
 <style>
 .block-container {
+  margin: 0 0 10px 0;
   text-align: start;
 }
 </style>
