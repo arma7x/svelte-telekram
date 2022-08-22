@@ -1,13 +1,10 @@
 <script lang="ts">
-  import DOMPurify from 'dompurify';
   import { onMount, onDestroy, beforeUpdate } from 'svelte';
   import { createKaiNavigator, KaiNavigator } from '../../utils/navigation';
+  import * as Media from './media';
 
   import { Api, client } from '../../utils/bootstrap';
-
   import { cachedThumbnails, getAuthorizedUser } from '../../stores/telegram';
-
-  import * as Media from './media';
 
   export let key: any = '';
   export let chat: any = {};
