@@ -5,7 +5,6 @@
   import { Readability, isProbablyReaderable } from '@mozilla/readability';
   import DOMPurify from 'dompurify';
   import { OptionMenu, LoadingBar } from '../../../components';
-  // import InstantView from './InstantView.svelte';
   import ReaderView from './ReaderView.svelte';
 
   export let chat: any = {};
@@ -17,7 +16,6 @@
   let loadingBar: LoadingBar;
   let menu: OptionMenu;
   let reader: ReaderView;
-  // let instantView: InstantView;
 
   function showLoadingBar() {
     loadingBar = new LoadingBar({
@@ -37,9 +35,6 @@
   function actionMenu() {
     setTimeout(() => {
       let _menu = [{ title: 'Open with Reader View' }, { title: 'Open in In-App Browser' }, { title: 'Open in Browser' }];
-      //if (message.media.webpage.cachedPage) {
-      //  _menu = [{ title: 'Open in Instant View' }, ..._menu];
-      //}
       menu = new OptionMenu({
         target: document.body,
         props: {
@@ -57,8 +52,6 @@
               window.open(message.media.webpage.url, '_blank').focus();
             } else if (scope.selected.title === 'Open with Reader View') {
               getReaderable();
-            } else if (scope.selected.title === 'Open in Instant View') {
-              getInstantView();
             }
           },
           onBackspace: (evt, scope) => {
@@ -147,30 +140,6 @@
     };
     xhttp.open("GET", `https://api.codetabs.com/v1/proxy/?quest=${message.media.webpage.url}`, true);
     xhttp.send();
-  }
-
-  function getInstantView() {
-    //setTimeout(() => {
-      //instantView = new InstantView({
-        //target: document.body,
-        //props: {
-          //blocks: message.media.webpage.cachedPage.blocks,
-          //onEnter: (evt, scope) => {},
-          //onBackspace: (evt, scope) => {
-            //evt.preventDefault();
-            //evt.stopPropagation();
-            //instantView.$destroy();
-          //},
-          //onOpened: () => {
-            //parentNavInstance.detachListener();
-          //},
-          //onClosed: (scope) => {
-            //parentNavInstance.attachListener();
-            //instantView = null;
-          //}
-        //}
-      //});
-    //}, 100);
   }
 
   onMount(() => {
