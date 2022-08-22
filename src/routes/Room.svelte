@@ -6,7 +6,7 @@
 
   import { retrieveChats, getChatCollection, runTask, getAuthorizedUser } from '../stores/telegram';
 
-  import { Dummy, Message, MessageService } from '../widgets/message';
+  import * as Message from '../widgets/message';
   import { TextAreaDialog, OptionMenu, Dialog } from '../components';
   import Replies from '../widgets/Replies.svelte';
 
@@ -544,12 +544,9 @@
   }
 
   function resolveMessageWidget(m) {
-    if (m.className === "MessageService") {
-      return MessageService;
-    } else if (m.className === "Message") {
-      return Message;
-    }
-    return Dummy;
+    if (Message[m.className])
+      return Message[m.className];
+    return Message.Dummy;
   }
 
   async function buildIndex(_messages) {

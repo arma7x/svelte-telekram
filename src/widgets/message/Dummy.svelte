@@ -22,15 +22,13 @@
 
   let navInstance = createKaiNavigator(navOptions);
 
-  onMount(() => {
-    // console.log(message);
-  });
+  onMount(() => {});
 
 </script>
 
 <div data-key="{key}" class="kai-list-view {className ? className : ''}" on:click={onClick}>
   <div class="kai-list-view-content">
-    <p>WIP: {message.action.className}</p>
+    <p>Unsupported: {message.action.className}</p>
   </div>
 </div>
 
