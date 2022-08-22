@@ -109,7 +109,7 @@
     background-color: #c0c0c0;
     font-weight: bold;
     border-radius: 5px;
-    padding: 2px 3px 3px 2px;
+    padding: 0px 2px 1px 2px;
   }
 
   .kai-list-view.focus,
