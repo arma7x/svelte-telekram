@@ -15,17 +15,17 @@
 
 </script>
 
-<div class="Dummy">
+<div class="MessageActionSecureValuesSentMe">
   <p>WIP: {message.action.className}</p>
 </div>
 
 <style>
-  .Dummy {
+  .MessageActionSecureValuesSentMe {
     box-sizing: border-box;
     margin: 0px;
     padding: 0px;
   }
-  .Dummy > p {
+  .MessageActionSecureValuesSentMe > p {
     margin: 0px;
     padding: 0px;
     font-style: italic;

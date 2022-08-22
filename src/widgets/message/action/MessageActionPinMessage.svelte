@@ -15,17 +15,17 @@
 
 </script>
 
-<div class="Dummy">
+<div class="MessageActionPinMessage">
   <p>WIP: {message.action.className}</p>
 </div>
 
 <style>
-  .Dummy {
+  .MessageActionPinMessage {
     box-sizing: border-box;
     margin: 0px;
     padding: 0px;
   }
-  .Dummy > p {
+  .MessageActionPinMessage > p {
     margin: 0px;
     padding: 0px;
     font-style: italic;

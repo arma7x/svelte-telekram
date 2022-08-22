@@ -15,17 +15,17 @@
 
 </script>
 
-<div class="Dummy">
+<div class="MessageActionWebViewDataSent">
   <p>WIP: {message.action.className}</p>
 </div>
 
 <style>
-  .Dummy {
+  .MessageActionWebViewDataSent {
     box-sizing: border-box;
     margin: 0px;
     padding: 0px;
   }
-  .Dummy > p {
+  .MessageActionWebViewDataSent > p {
     margin: 0px;
     padding: 0px;
     font-style: italic;

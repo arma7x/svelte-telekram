@@ -15,17 +15,17 @@
 
 </script>
 
-<div class="Dummy">
+<div class="MessageActionChatAddUser">
   <p>WIP: {message.action.className}</p>
 </div>
 
 <style>
-  .Dummy {
+  .MessageActionChatAddUser {
     box-sizing: border-box;
     margin: 0px;
     padding: 0px;
   }
-  .Dummy > p {
+  .MessageActionChatAddUser > p {
     margin: 0px;
     padding: 0px;
     font-style: italic;

@@ -15,12 +15,12 @@
 
 </script>
 
-<div class="Dummy">
+<div class="MessageActionChatJoinedByLink">
   <p>WIP: {message.action.className}</p>
 </div>
 
 <style>
-  .Dummy {
+  .MessageActionChatJoinedByLink {
     box-sizing: border-box;
     margin: 0px;
     padding: 0px;

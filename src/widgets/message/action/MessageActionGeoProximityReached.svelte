@@ -15,17 +15,17 @@
 
 </script>
 
-<div class="Dummy">
-  <p>WIP: {message.action.className}</p>
+<div class="MessageActionGeoProximityReached">
+  <p>MessageActionGeoProximityReached: {message.action.className}</p>
 </div>
 
 <style>
-  .Dummy {
+  .MessageActionGeoProximityReached {
     box-sizing: border-box;
     margin: 0px;
     padding: 0px;
   }
-  .Dummy > p {
+  .MessageActionGeoProximityReached > p {
     margin: 0px;
     padding: 0px;
     font-style: italic;
