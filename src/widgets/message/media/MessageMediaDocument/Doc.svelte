@@ -1,8 +1,8 @@
 <script lang="ts">
   import { onMount, onDestroy } from 'svelte';
-  import { createKaiNavigator, KaiNavigator } from '../../../utils/navigation';
-  import { humanFileSize, isMediaCached, getCachedMedia } from './common';
-  import { downloadedMediaEmitter } from '../../../stores/telegram';
+  import { createKaiNavigator, KaiNavigator } from '../../../../utils/navigation';
+  import { humanFileSize, isMediaCached, getCachedMedia } from '../common';
+  import { downloadedMediaEmitter } from '../../../../stores/telegram';
 
   export let chat: any = {};
   export let message: any = {};

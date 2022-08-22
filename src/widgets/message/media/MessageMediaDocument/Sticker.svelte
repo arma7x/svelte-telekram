@@ -1,6 +1,6 @@
 <script lang="ts">
   import { onMount, onDestroy } from 'svelte';
-  import { createKaiNavigator, KaiNavigator } from '../../../utils/navigation';
+  import { createKaiNavigator, KaiNavigator } from '../../../../utils/navigation';
 
   export let chat: any = {};
   export let message: any = {};

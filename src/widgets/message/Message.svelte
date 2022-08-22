@@ -7,7 +7,7 @@
 
   import { cachedThumbnails, getAuthorizedUser } from '../../stores/telegram';
 
-  import { Audio, GeoLive, Photo, Geo, Poll, Venue, Sticker, Video, Game, Invoice, Dice, Contact, WebPage, Doc, Dummy, Unsupported } from './media';
+  import * as Media from './media';
 
   export let key: any = '';
   export let chat: any = {};
@@ -122,48 +122,28 @@
     if (msg.media.className === 'MessageMediaDocument') {
       switch (msg.media.document.mimeType) {
         case 'application/x-tgsticker':
-          media = Sticker;
+          media = Media.MessageMediaDocument.Sticker;
           break;
         case 'video/mp4':
-          media = Video;
+          media = Media.MessageMediaDocument.Video;
           break;
         case 'image/jpeg':
         case 'image/png':
         case 'image/gif':
         case 'image/webp':
-          media = Photo;
+          media = Media.MessageMediaPhoto;
           break;
         case 'audio/mpeg':
         case 'audio/ogg':
-          media = Audio;
+          media = Media.MessageMediaDocument.Audio;
           break;
         default:
-          media = Doc;
+          media = Media.MessageMediaDocument.Doc;
       }
-    } else if (msg.media.className === "MessageMediaPoll") {
-      media = Poll;
-    } else if (msg.media.className === "MessageMediaPhoto") {
-      media = Photo;
-    } else if (msg.media.className === "MessageMediaGeo") {
-      media = Geo;
-    } else if (msg.media.className === "MessageMediaGame") {
-      media = Game;
-    } else if (msg.media.className === "MessageMediaGeoLive") {
-      media = GeoLive;
-    } else if (msg.media.className === "MessageMediaInvoice") {
-      media = Invoice;
-    } else if (msg.media.className === "MessageMediaVenue") {
-      media = Venue;
-    } else if (msg.media.className === "MessageMediaWebPage") {
-      media = WebPage;
-    } else if (msg.media.className === "MessageMediaContact") {
-      media = Contact;
-    } else if (msg.media.className === "MessageMediaDice") {
-      media = Dice;
-    } else if (msg.media.className === "MessageMediaUnsupported") {
-      media = Unsupported;
+    } else if (Media[msg.media.className]) {
+      media = Media[msg.media.className];
     } else {
-      media = Dummy;
+      media = Media.Dummy;
     }
     return media;
   }

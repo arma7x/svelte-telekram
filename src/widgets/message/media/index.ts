@@ -1,34 +1,31 @@
-import Audio from "./Audio.svelte"
-import GeoLive from "./GeoLive.svelte"
-import Photo from "./Photo.svelte"
-import Geo from "./Geo.svelte"
-import Poll from "./Poll.svelte"
-import Venue from "./Venue.svelte"
-import Sticker from "./Sticker.svelte"
-import Video from "./Video.svelte"
-import Game from "./Game.svelte"
-import Invoice from "./Invoice.svelte"
-import Dice from "./Dice.svelte"
-import Contact from "./Contact.svelte"
-import WebPage from "./WebPage.svelte"
-import Doc from "./Doc.svelte"
+import * as MessageMediaDocument from "./MessageMediaDocument"
+import MessageMediaGeoLive from "./MessageMediaGeoLive.svelte"
+import MessageMediaEmpty from "./MessageMediaEmpty.svelte"
+import MessageMediaPhoto from "./MessageMediaPhoto.svelte"
+import MessageMediaGeo from "./MessageMediaGeo.svelte"
+import MessageMediaPoll from "./MessageMediaPoll.svelte"
+import MessageMediaVenue from "./MessageMediaVenue.svelte"
+import MessageMediaGame from "./MessageMediaGame.svelte"
+import MessageMediaInvoice from "./MessageMediaInvoice.svelte"
+import MessageMediaDice from "./MessageMediaDice.svelte"
+import MessageMediaContact from "./MessageMediaContact.svelte"
+import MessageMediaWebPage from "./MessageMediaWebPage.svelte"
+import MessageMediaUnsupported from "./MessageMediaUnsupported.svelte"
 import Dummy from "./Dummy.svelte"
-import Unsupported from "./Unsupported.svelte"
 
 export {
-  Audio,
-  GeoLive,
-  Photo,
-  Geo, Poll,
-  Venue,
-  Sticker,
-  Video,
-  Game,
-  Invoice,
-  Dice,
-  Contact,
-  WebPage,
-  Doc,
+  MessageMediaDocument,
+  MessageMediaGeoLive,
+  MessageMediaEmpty,
+  MessageMediaPhoto,
+  MessageMediaGeo,
+  MessageMediaPoll,
+  MessageMediaVenue,
+  MessageMediaGame,
+  MessageMediaInvoice,
+  MessageMediaDice,
+  MessageMediaContact,
+  MessageMediaWebPage,
+  MessageMediaUnsupported,
   Dummy,
-  Unsupported
 }
