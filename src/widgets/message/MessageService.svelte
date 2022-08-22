@@ -1,10 +1,7 @@
 <script lang="ts">
   import { onMount, onDestroy } from 'svelte';
   import { createKaiNavigator } from '../../utils/navigation';
-
-  import MessageActionChannelCreate from "./action/MessageActionChannelCreate.svelte";
-  import MessageActionChatEditPhoto from "./action/MessageActionChatEditPhoto.svelte";
-  import Dummy from "./action/Dummy.svelte";
+  import * as Actions from "./action";
 
   export let key: any = '';
   export let chat: any = {};
@@ -21,22 +18,15 @@
   export let replyThreadId: any;
 
   let navOptions = {
-    softkeyLeftListener: function(evt) {},
-    softkeyRightListener: function(evt) {},
-    enterListener: function(evt) {},
-    backspaceListener: function(evt) {}
+    softkeyLeftListener: function(evt) {}, softkeyRightListener: function(evt) {}, enterListener: function(evt) {}, backspaceListener: function(evt) {}
   };
 
   let navInstance = createKaiNavigator(navOptions);
 
   function resolveActionWidget(msg) {
-    switch (msg.action.className) {
-      case 'MessageActionChannelCreate':
-        return MessageActionChannelCreate;
-      case 'MessageActionChatEditPhoto':
-        return MessageActionChatEditPhoto;
-    }
-    return Dummy;
+    if (Actions[msg.action.className])
+      return Actions[msg.action.className];
+    return Actions.Dummy;
   }
 
   onMount(() => {
