@@ -1,16 +1,19 @@
 <script lang="ts">
   import { onMount, onDestroy } from 'svelte';
-  import { createKaiNavigator, KaiNavigator } from '../../../../utils/navigation';
-  import { strippedPhotoToJpg, humanFileSize, isMediaCached, getCachedMedia } from '../common';
-
   import { Buffer } from 'buffer';
+  import { saveAs } from 'file-saver';
+  import { createKaiNavigator, KaiNavigator } from '../../../../utils/navigation';
+  import { strippedPhotoToJpg, humanFileSize, isMediaCached, getCachedMedia, removeCachedMedia } from '../common';
   import { downloadedMediaEmitter } from '../../../../stores/telegram';
+  import { OptionMenu } from '../../../../components';
 
   export let chat: any = {};
   export let message: any = {};
   export let parentNavInstance: typeof KaiNavigator;
   export let registerCallButtonHandler: Function = (id, callback) => {}
   export let refetchMessage: Function = (id: number) => {}
+
+  let action: OptionMenu;
 
   let thumb: string = '/icons/document.svg';
   let size: string;
@@ -19,19 +22,71 @@
   let downloading: number = -1;
 
   function actionMenu() {
-    // TODO, Action Menu: View(downloaded === true), Save to Storage(downloaded === true), Download(downloaded === false)
-    if (downloaded)
-      return;
-    if (window['authorizedWebWorker']) {
-      window['authorizedWebWorker'].postMessage({
-        type: 1,
-        params: {
-          chatId: chat.id.value.toString(),
-          messageId: message.id,
-          fileId: fileId
-        }
-      });
+    let menu = [];
+    if (downloaded) {
+      menu = [{ title: 'Open' }, { title: 'Save to Storage' }, { title: 'Remove from cache' }];
+    } else {
+      menu = [{ title: 'Download' }];
     }
+    action = new OptionMenu({
+      target: document.body,
+      props: {
+        title: 'Media Menu',
+        focusIndex: 0,
+        options: menu,
+        softKeyCenterText: 'select',
+        onSoftkeyRight: (evt, scope) => {},
+        onSoftkeyLeft: (evt, scope) => {},
+        onEnter: async (evt, scope) => {
+          action.$destroy();
+          if (scope.selected.title === 'Download' && downloading === -1) {
+            if (window['authorizedWebWorker']) {
+              window['authorizedWebWorker'].postMessage({
+                type: 1,
+                params: {
+                  chatId: chat.id.value.toString(),
+                  messageId: message.id,
+                  fileId: fileId
+                }
+              });
+            }
+          } else if (scope.selected.title ===  'Remove from cache') {
+            try {
+              await removeCachedMedia(fileId);
+              downloaded = false;
+              downloading = -1;
+              downloadedMediaEmitter.addListener('message', handleDownloadedMedia);
+            } catch(err) {}
+          } else if (scope.selected.title ===  'Save to Storage') {
+            try {
+              const blob = await getCachedMedia(fileId, message);
+              let mime = message.media.photo ? 'image/jpeg' : message.media.document.mimeType;
+              let fn = message.media.document.attributes ? message.media.document.attributes.fileName : null;
+              if (fn == null) {
+                const s = mime.split('/');
+                fn = new Date().getTime().toString() + '.' + s[s.length - 1];
+              }
+              const file = new File([blob], fn, { type: mime });
+              saveAs(file);
+            } catch(err) {
+              console.log(err);
+            }
+          }
+        },
+        onBackspace: (evt, scope) => {
+          evt.preventDefault();
+          evt.stopPropagation();
+          action.$destroy();
+        },
+        onOpened: () => {
+          parentNavInstance.detachListener();
+        },
+        onClosed: (scope) => {
+          parentNavInstance.attachListener();
+          action = null;
+        }
+      }
+    });
   }
 
   async function handleDownloadedMedia(evt) {
@@ -58,7 +113,8 @@
     fileId = message.media.document.id.toString();
     downloaded = await isMediaCached(fileId);
     registerCallButtonHandler(message.id.toString(), actionMenu);
-    downloadedMediaEmitter.addListener('message', handleDownloadedMedia);
+    if (!downloaded)
+      downloadedMediaEmitter.addListener('message', handleDownloadedMedia);
     size = humanFileSize(message.media.document.size.toJSNumber(), true);
     try {
       const arrBuff = strippedPhotoToJpg(Buffer.from(message.media.document.thumbs[0].originalArgs.bytes));

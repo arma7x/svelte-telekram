@@ -72,9 +72,14 @@ async function getCachedMedia(fileId, message) {
   });
 }
 
+async function removeCachedMedia(fileId) {
+  return await (await cachedDatabase).delete('mediaAttachments', fileId);
+}
+
 export  {
   isMediaCached,
   getCachedMedia,
+  removeCachedMedia,
   strippedPhotoToJpg,
   humanFileSize,
 }
