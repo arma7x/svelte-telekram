@@ -1,10 +1,13 @@
 declare var telegram:any;
 declare var idb:any;
 
-import { parseUA } from './misc';
+import { parseUserAgent } from './misc';
 import TelegramKeyHash from '../telegram_key';
 
-const UA = parseUA(navigator.userAgent);
+const APP_VERSION = "1.0.0";
+const UA = parseUserAgent(navigator.userAgent);
+UA['appVersion'] = APP_VERSION;
+
 const { Api, TelegramClient, AuthKey } = telegram;
 const { StoreSession } = telegram.sessions;
 const session = new StoreSession("gramjs");

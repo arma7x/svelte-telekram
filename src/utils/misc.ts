@@ -1,5 +1,7 @@
-function parseUA(a) {
-  let model = 'KaiOS';
+declare var navigator:any;
+
+function parseUserAgent(a) {
+  let model = navigator.appCodeName;
   try {
     let idx = a.indexOf('Mobile;')
     if (idx != -1) {
@@ -31,9 +33,9 @@ function parseUA(a) {
       }
     }
   } catch (err) {}
-  return { deviceModel: model, systemVersion: version, appVersion: "1.0.0" }
+  return { deviceModel: model, systemVersion: version }
 }
 
 export  {
-  parseUA,
+  parseUserAgent,
 }
