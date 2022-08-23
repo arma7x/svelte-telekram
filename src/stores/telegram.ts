@@ -743,3 +743,13 @@ function authenticationWebWorker() {
   });
   return worker;
 }
+
+document.addEventListener("visibilitychange", () => {
+  try {
+    if (document.visibilityState === 'visible') {
+      client.invoke(new Api.account.UpdateStatus({ offline: false }));
+    } else {
+      client.invoke(new Api.account.UpdateStatus({ offline: true }));
+    }
+  } catch (err) {}
+});
