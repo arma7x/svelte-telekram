@@ -809,6 +809,7 @@
           break;
         case 'UpdateNewChannelMessage':
         case 'UpdateNewMessage':
+          client.invoke(new Api.messages.receivedMessages({ maxId: evt.message.id }));
           var entities = Array.from(evt._entities.entries());
           for (let i in entities) {
             if (entities[i][1].id.toString() === location.state.entity.id.value.toString()) {

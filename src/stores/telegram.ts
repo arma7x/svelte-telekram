@@ -37,6 +37,9 @@ client.addEventHandler((evt) => {
     // case "UpdateMessagePoll":
     case "Updates":
       retrieveChats();
+      if (['UpdateNewMessage', 'UpdateNewChannelMessage'].indexOf(evt.className) > -1) {
+        client.invoke(new Api.messages.receivedMessages({ maxId: evt.message.id }));
+      }
       break
     case "UpdatesTooLong":
       isUserAuthorized();
