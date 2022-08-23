@@ -144,7 +144,10 @@
     },
     backspaceListener: function(evt) {
       evt.preventDefault();
-      navigate(-1);
+      retrieveChats()
+      .finally(() => {
+        navigate(-1);
+      });
     }
   };
 
@@ -988,7 +991,6 @@
     //}
     navInstance.detachListener();
     client.removeEventHandler(clientListener);
-    retrieveChats();
   });
 
 </script>
