@@ -15,8 +15,10 @@
 
 </script>
 
+<svelte:options accessors immutable={true}/>
+
 <div class="MessageActionBotAllowed">
-  <p>WIP: {message.action.className}</p>
+  <p>Bot allowed</p>
 </div>
 
 <style>

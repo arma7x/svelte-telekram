@@ -16,7 +16,7 @@
 </script>
 
 <div class="MessageActionChatEditTitle">
-  <p>WIP: {message.action.className}</p>
+  <p>Title updated, {message.action.title}</p>
 </div>
 
 <style>

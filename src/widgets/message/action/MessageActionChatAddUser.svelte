@@ -3,20 +3,42 @@
   import { onMount, onDestroy } from 'svelte';
   import { createKaiNavigator, KaiNavigator } from '../../../utils/navigation';
 
+  import { Api, client } from '../../../utils/bootstrap';
+
   export let chat: any = {};
   export let message: any = {};
   export let parentNavInstance: typeof KaiNavigator;
   export let registerCallButtonHandler: Function = (id, callback) => {}
   export let refetchMessage: Function = (id: number) => {}
 
+  let username: bool|string = false;
+
   onMount(() => {
-    // console.log(message);
+    client.invoke(new Api.users.GetUsers({ id: message.action.users }))
+    .then(users => {
+      if (users.length > 0) {
+        let u = '';
+        if (users[0].firstName)
+          u = users[0].firstName;
+        if (users[0].lastName)
+          u += ' ' + users[0].lastName;
+        if (u == '' && users[0].username)
+          u = users[0].username;
+        u = u == '' ? false : u;
+        username = u;
+      }
+    })
+    .catch(err => {
+      console.log("MessageActionChatAddUser:", err);
+    });
   });
 
 </script>
 
+<svelte:options accessors immutable={true}/>
+
 <div class="MessageActionChatAddUser">
-  <p>WIP: {message.action.className}</p>
+  <p>User added{#if username}, {username}{/if}</p>
 </div>
 
 <style>

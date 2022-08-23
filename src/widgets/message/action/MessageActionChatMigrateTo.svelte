@@ -16,7 +16,7 @@
 </script>
 
 <div class="MessageActionChatMigrateTo">
-  <p>WIP: {message.action.className}</p>
+  <p>Chat migrate to channel</p>
 </div>
 
 <style>

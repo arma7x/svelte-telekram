@@ -16,7 +16,7 @@
 </script>
 
 <div class="MessageActionChatJoinedByRequest">
-  <p>WIP: {message.action.className}</p>
+  <p>Joined by request</p>
 </div>
 
 <style>

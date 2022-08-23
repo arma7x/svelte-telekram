@@ -12,9 +12,10 @@
 
   let src: string = '';
 
-  onMount(async () => {
-    const cached = await getCachedThumbnails()
-    src = cached[message.action.photo.id.toString()];
+  onMount(() => {
+    const cached = getCachedThumbnails()
+    if (cached[message.action.photo.id.toString()])
+      src = cached[message.action.photo.id.toString()];
   });
 
 </script>
@@ -22,7 +23,7 @@
 <svelte:options accessors immutable={true}/>
 
 <div class="MessageActionChatEditPhoto">
-  <p>Channel photo updated</p>
+  <p>Photo updated</p>
   <img alt="icon" src={src}/>
 </div>
 

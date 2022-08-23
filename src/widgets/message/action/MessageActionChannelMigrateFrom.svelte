@@ -15,8 +15,10 @@
 
 </script>
 
+<svelte:options accessors immutable={true}/>
+
 <div class="MessageActionChannelMigrateFrom">
-  <p>WIP: {message.action.className}</p>
+  <p>Channel migrate from {message.action.title}</p>
 </div>
 
 <style>

@@ -16,7 +16,7 @@
 </script>
 
 <div class="MessageActionChatJoinedByLink">
-  <p>WIP: {message.action.className}</p>
+  <p>Joined by link</p>
 </div>
 
 <style>

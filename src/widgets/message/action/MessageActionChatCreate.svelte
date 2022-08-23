@@ -15,8 +15,10 @@
 
 </script>
 
+<svelte:options accessors immutable={true}/>
+
 <div class="MessageActionChatCreate">
-  <p>WIP: {message.action.className}</p>
+  <p>Chat created</p>
 </div>
 
 <style>

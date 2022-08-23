@@ -16,7 +16,7 @@
 </script>
 
 <div class="MessageActionWebViewDataSent">
-  <p>WIP: {message.action.className}</p>
+  <p>{message.action.className}</p>
 </div>
 
 <style>

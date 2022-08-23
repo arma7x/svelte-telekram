@@ -16,7 +16,7 @@
 </script>
 
 <div class="MessageActionSecureValuesSentMe">
-  <p>WIP: {message.action.className}</p>
+  <p>{message.action.className}</p>
 </div>
 
 <style>

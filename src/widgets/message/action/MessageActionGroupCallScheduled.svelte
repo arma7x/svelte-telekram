@@ -9,14 +9,20 @@
   export let registerCallButtonHandler: Function = (id, callback) => {}
   export let refetchMessage: Function = (id: number) => {}
 
+  let dt: bool|string = false;
   onMount(() => {
     // console.log(message);
+    try {
+      dt = new Date(message.action.scheduleDate * 1000).toLocaleString();
+    } catch (err) {
+      console.log("MessageActionGroupCallScheduled", err);
+    }
   });
 
 </script>
 
 <div class="MessageActionGroupCallScheduled">
-  <p>WIP: {message.action.className}</p>
+  <p>{message.action.className}{#if dt}: {dt}{/if}</p>
 </div>
 
 <style>

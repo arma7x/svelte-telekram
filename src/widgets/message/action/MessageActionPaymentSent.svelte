@@ -16,7 +16,7 @@
 </script>
 
 <div class="MessageActionPaymentSent">
-  <p>WIP: {message.action.className}</p>
+  <p>{message.action.className}: {message.action.currency}{message.action.totalAmount}</p>
 </div>
 
 <style>

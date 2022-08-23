@@ -16,7 +16,7 @@
 </script>
 
 <div class="MessageActionContactSignUp">
-  <p>WIP: {message.action.className}</p>
+  <p>Contact sign up</p>
 </div>
 
 <style>

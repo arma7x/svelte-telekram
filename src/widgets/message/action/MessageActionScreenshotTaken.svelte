@@ -16,7 +16,7 @@
 </script>
 
 <div class="MessageActionScreenshotTaken">
-  <p>WIP: {message.action.className}</p>
+  <p>{message.action.className}</p>
 </div>
 
 <style>

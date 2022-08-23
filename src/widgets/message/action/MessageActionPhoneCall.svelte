@@ -16,7 +16,7 @@
 </script>
 
 <div class="MessageActionPhoneCall">
-  <p>WIP: {message.action.className}</p>
+  <p>{message.action.className}</p>
 </div>
 
 <style>

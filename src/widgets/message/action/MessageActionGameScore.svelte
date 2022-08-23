@@ -16,7 +16,7 @@
 </script>
 
 <div class="MessageActionGameScore">
-  <p>WIP: {message.action.className}</p>
+  <p>{message.action.className}: {message.action.score}</p>
 </div>
 
 <style>

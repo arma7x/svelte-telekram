@@ -16,7 +16,7 @@
 </script>
 
 <div class="MessageActionGeoProximityReached">
-  <p>MessageActionGeoProximityReached: {message.action.className}</p>
+  <p>{message.action.className}: {message.action.distance}</p>
 </div>
 
 <style>
