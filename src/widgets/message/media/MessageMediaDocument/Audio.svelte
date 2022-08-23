@@ -1,6 +1,7 @@
 <script lang="ts">
   import { onMount, onDestroy } from 'svelte';
   import { saveAs } from 'file-saver';
+  import * as Mime from 'mime-types';
   import { createKaiNavigator, KaiNavigator } from '../../../../utils/navigation';
   import { humanFileSize, isMediaCached, getCachedMedia, removeCachedMedia } from '../common';
   import { downloadedMediaEmitter } from '../../../../stores/telegram';
@@ -59,10 +60,18 @@
             try {
               const blob = await getCachedMedia(fileId, message);
               let mime = message.media.photo ? 'image/jpeg' : message.media.document.mimeType;
-              let fn = message.media.document.attributes ? message.media.document.attributes.fileName : null;
+              let fn = null;
+              if (message.media.document) {
+                for (let j in message.media.document.attributes) {
+                  const a = message.media.document.attributes[j];
+                  if (a.className && a.className === "DocumentAttributeFilename") {
+                    fn = a.fileName;
+                    break;
+                  }
+                }
+              }
               if (fn == null) {
-                const s = mime.split('/');
-                fn = new Date().getTime().toString() + '.' + s[s.length - 1];
+                fn = new Date().getTime().toString() + '.' + Mime.extension(mime);
               }
               const file = new File([blob], fn, { type: mime });
               saveAs(file);
