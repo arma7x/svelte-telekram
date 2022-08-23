@@ -1,3 +1,6 @@
+declare var navigator:any;
+declare var window:any;
+
 import { get, writable } from 'svelte/store';
 import EventEmitter from 'events';
 import { UA, TelegramKeyHash, Api, client, session, cachedDatabase } from '../utils/bootstrap';

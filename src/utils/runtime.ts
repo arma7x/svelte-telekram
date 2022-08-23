@@ -1,3 +1,6 @@
+declare var navigator:any;
+declare var String:any;
+
 import '../../public/js/polyfill.min.js';
 
 if (navigator.mozSetMessageHandler != null) {
