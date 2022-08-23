@@ -38,7 +38,7 @@ client.addEventHandler((evt) => {
     case "Updates":
       retrieveChats();
       if (['UpdateNewMessage', 'UpdateNewChannelMessage'].indexOf(evt.className) > -1) {
-        client.invoke(new Api.messages.receivedMessages({ maxId: evt.message.id }));
+        client.invoke(new Api.messages.ReceivedMessages({ maxId: evt.message.id }));
       }
       break
     case "UpdatesTooLong":
