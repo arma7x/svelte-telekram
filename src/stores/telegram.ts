@@ -756,3 +756,33 @@ document.addEventListener("visibilitychange", () => {
     }
   } catch (err) {}
 });
+
+if ('serviceWorker' in navigator) {
+  navigator.serviceWorker.addEventListener('message', (event) => {
+    console.log(event);
+  });
+  navigator.serviceWorker.register('/sw.js')
+  .then((swReg) => {
+    console.log('Service Worker registered');
+  })
+  .catch((error) => {
+    console.error('Service Worker', error);
+  });
+} else {
+  console.warn('Service Worker not supported');
+}
+
+if ('mozSetMessageHandler' in navigator) {
+  navigator.mozSetMessageHandler('serviceworker-notification', (activityRequest) => {
+    if (window.navigator.mozApps) {
+      let request = window.navigator.mozApps.getSelf();
+      request.onsuccess = () => {
+        if (request.result) {
+          request.result.launch();
+        }
+      };
+    } else {
+      window.open(document.location.origin, '_blank');
+    }
+  });
+}

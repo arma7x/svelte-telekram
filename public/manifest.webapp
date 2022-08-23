@@ -28,6 +28,9 @@
     "systemXHR": {
       "description": "Required to load remote content"
     },
+    "serviceworker": {
+      "description": "Needed for assocating service worker"
+    },
     "desktop-notification": {
       "description": "Required for displaying alerts when app is on background"
     }
