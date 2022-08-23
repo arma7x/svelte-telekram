@@ -4,7 +4,7 @@
   import { saveAs } from 'file-saver';
   import * as Mime from 'mime-types';
   import { createKaiNavigator, KaiNavigator } from '../../../utils/navigation';
-  import { strippedPhotoToJpg, humanFileSize, isMediaCached, getCachedMedia } from './common';
+  import { strippedPhotoToJpg, humanFileSize, isMediaCached, getCachedMedia, removeCachedMedia } from './common';
   import { downloadedMediaEmitter } from '../../../stores/telegram';
   import { OptionMenu } from '../../../components';
 
@@ -57,7 +57,9 @@
               downloaded = false;
               downloading = -1;
               downloadedMediaEmitter.addListener('message', handleDownloadedMedia);
-            } catch(err) {}
+            } catch(err) {
+              console.log(err);
+            }
           } else if (scope.selected.title ===  'Save to Storage') {
             try {
               const blob = await getCachedMedia(fileId, message);
