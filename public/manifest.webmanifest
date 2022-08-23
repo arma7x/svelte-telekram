@@ -38,8 +38,16 @@
     "permissions": {
       "systemXHR": {
         "description": "Required to load remote content"
+      },
+      "desktop-notification": {
+        "description": "Required for displaying alerts when app is on background"
       }
     },
+    "messages": [
+      {
+        "serviceworker-notification": "/index.html"
+      }
+    ],
     "dependencies": {},
     "locales": {
       "en-US": {
