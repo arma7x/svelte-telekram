@@ -4,7 +4,7 @@
 
   import { Api, client, cachedDatabase } from '../utils/bootstrap';
 
-  import { retrieveChats, getChatCollection, runTask, getAuthorizedUser } from '../stores/telegram';
+  import { shouldGetDialogs, getDialogs, getDialogList, runTask, getAuthorizedUser } from '../stores/telegram';
 
   import * as Message from '../widgets/message';
   import { TextAreaDialog, OptionMenu, Dialog } from '../components';
@@ -143,11 +143,9 @@
       }
     },
     backspaceListener: function(evt) {
+      shouldGetDialogs.update(n => true);
       evt.preventDefault();
-      retrieveChats()
-      .finally(() => {
-        navigate(-1);
-      });
+      navigate(-1);
     }
   };
 
@@ -899,7 +897,7 @@
     console.log('%cSTART', 'background: #222; color: #bada55');
     const _start = new Date().getTime();
     try {
-      const chats = await getChatCollection();
+      const chats = await getDialogList();
       chat = chats.find(chat => {
         return chat.entity.id.value == entity.id.value;
       });

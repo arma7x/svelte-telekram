@@ -11,7 +11,7 @@
   import ArchivedChats from '../widgets/ArchivedChats.svelte';
   import ContactList from '../widgets/ContactList.svelte';
 
-  import { connect, connectionStatus, authorizedStatus, isUserAuthorized, authorizedUser, chatCollections, cachedThumbnails, dispatchMessageToClient, dispatchMessageToWorker } from '../stores/telegram';
+  import { connect, connectionStatus, authorizationStatus, isUserAuthorized, getDialogs, shouldGetDialogs, authorizedUser, dialogList, cachedThumbnails, dispatchMessageToClient, dispatchMessageToWorker, getShouldGetDialogs } from '../stores/telegram';
 
   const navClass: string = 'homeNav';
 
@@ -27,8 +27,8 @@
   let archivedChatListMenu: ArchivedChats;
   let contactListMenu: ContactList;
 
-  let unchatCollections;
-  let unauthorizedStatus;
+  let undialogList;
+  let unauthorizationStatus;
   let unconnectionStatus;
   let uncachedThumbnails;
   let unauthorizedUser;
@@ -700,7 +700,7 @@
 
     // client.addEventHandler(eventHandler);
 
-    unchatCollections = chatCollections.subscribe(chats => {
+    undialogList = dialogList.subscribe(chats => {
       if (client.connected) {
         sortChats(chats);
       }
@@ -710,7 +710,7 @@
       // console.log(status);
     });
 
-    unauthorizedStatus = authorizedStatus.subscribe(status => {
+    unauthorizationStatus = authorizationStatus.subscribe(status => {
       authStatus = status;
       if (status) {
         softwareKey.setLeftText('Menu');
@@ -744,15 +744,19 @@
 
     dispatchMessageToClient.addListener('message', handleWebWorkerMessage);
 
+    if (getShouldGetDialogs()) {
+      getDialogs();
+      shouldGetDialogs.update(n => false);
+    }
   });
 
   onDestroy(() => {
     client.removeEventHandler(eventHandler);
     navInstance.detachListener();
-    if (unchatCollections)
-      unchatCollections();
-    if (unauthorizedStatus)
-      unauthorizedStatus();
+    if (undialogList)
+      undialogList();
+    if (unauthorizationStatus)
+      unauthorizationStatus();
     if (unconnectionStatus)
       unconnectionStatus();
     if (uncachedThumbnails)

@@ -5,10 +5,11 @@ import { get, writable } from 'svelte/store';
 import EventEmitter from 'events';
 import { UA, TelegramKeyHash, Api, client, session, cachedDatabase } from '../utils/bootstrap';
 
+export const shouldGetDialogs = writable(false);
 export const connectionStatus = writable(false);
-export const authorizedStatus = writable(false);
+export const authorizationStatus = writable(false);
 export const authorizedUser = writable([]);
-export const chatCollections = writable([]);
+export const dialogList = writable([]);
 export const cachedThumbnails = writable({});
 export const downloadedMediaEmitter = new EventEmitter();
 export const dispatchMessageToClient = new EventEmitter();
@@ -39,7 +40,7 @@ client.addEventHandler((evt) => {
     case "UpdateReadChannelDiscussionOutbox":
     // case "UpdateMessagePoll":
     case "Updates":
-      retrieveChats();
+      getDialogs();
       if (['UpdateNewMessage', 'UpdateNewChannelMessage'].indexOf(evt.className) > -1) {
         client.invoke(new Api.messages.ReceivedMessages({ maxId: evt.message.id }));
       }
@@ -83,10 +84,10 @@ export async function fetchUser() {
 export async function isUserAuthorized() {
   try {
     const authorized = await client.isUserAuthorized();
-    authorizedStatus.update(n => authorized);
+    authorizationStatus.update(n => authorized);
     if (authorized) {
       await fetchUser();
-      retrieveChats();
+      getDialogs();
       if (window['authenticationWebWorker']) {
         window['authenticationWebWorker'].postMessage({ type: -100 })
         window['authenticationWebWorker'].terminate();
@@ -149,7 +150,7 @@ export async function isUserAuthorized() {
   }
 }
 
-export async function retrieveChats() {
+export async function getDialogs() {
   try {
     const _start = new Date().getTime();
     const user = await getAuthorizedUser();
@@ -196,8 +197,8 @@ export async function retrieveChats() {
         return text[0];
       });
     });
-    chatCollections.update(n => chats);
-    console.log(`retrieveChats: ${new Date().getTime() - _start}ms`);
+    dialogList.update(n => chats);
+    console.log(`getDialogs: ${new Date().getTime() - _start}ms`);
     runTask(httpTasks, websocketTasks, chatPreferencesTask);
     return chats;
   } catch (err) {
@@ -205,8 +206,12 @@ export async function retrieveChats() {
   }
 }
 
-export function getChatCollection() {
-  return get(chatCollections)
+export function getShouldGetDialogs() {
+  return get(shouldGetDialogs)
+}
+
+export function getDialogList() {
+  return get(dialogList)
 }
 
 export function getCachedThumbnails() {
@@ -369,7 +374,7 @@ function authorizedWebWorker() {
     let downloadProfilePhotoTask = [];
     let ready = false;
 
-    function retrieveChats() {
+    function getDialogs() {
       client.getDialogs({
         offsetPeer: new telegram.Api.InputPeerSelf(),
         limit: 100,
@@ -506,7 +511,7 @@ function authorizedWebWorker() {
           });
           client.connect()
           .then(() => {
-            retrieveChats();
+            getDialogs();
             self.postMessage({ type: 0, params: {} });
           })
           .catch(err => {
