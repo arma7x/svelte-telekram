@@ -1,5 +1,5 @@
 <script lang="ts">
-  import { onMount, onDestroy } from 'svelte';
+  import { onMount, onDestroy, beforeUpdate } from 'svelte';
   import { Buffer } from 'buffer';
   import { saveAs } from 'file-saver';
   import * as Mime from 'mime-types';
@@ -120,7 +120,8 @@
     }
   }
 
-  onMount(async () => {
+  beforeUpdate(async () => {
+    downloadedMediaEmitter.removeListener('message', handleDownloadedMedia);
     if (message.media.photo) {
       fileId = message.media.photo.id.toString();
     } else if (message.media.document) {
@@ -147,7 +148,9 @@
         thumb = reader.result;
       }
     } catch (err) {}
-  })
+  });
+
+  onMount(async () => {})
 
   onDestroy(() => {
     downloadedMediaEmitter.removeListener('message', handleDownloadedMedia);

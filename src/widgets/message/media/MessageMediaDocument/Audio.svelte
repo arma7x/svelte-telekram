@@ -1,5 +1,5 @@
 <script lang="ts">
-  import { onMount, onDestroy } from 'svelte';
+  import { onMount, onDestroy, beforeUpdate } from 'svelte';
   import { saveAs } from 'file-saver';
   import * as Mime from 'mime-types';
   import { createKaiNavigator, KaiNavigator } from '../../../../utils/navigation';
@@ -122,7 +122,8 @@
     return string.charAt(0).toUpperCase() + string.slice(1);
   }
 
-  onMount(async () => {
+  beforeUpdate(async () => {
+    downloadedMediaEmitter.removeListener('message', handleDownloadedMedia);
     fileId = message.media.document.id.toString();
     downloaded = await isMediaCached(fileId);
     registerCallButtonHandler(message.id.toString(), actionMenu);
@@ -130,6 +131,8 @@
       downloadedMediaEmitter.addListener('message', handleDownloadedMedia);
     size = humanFileSize(message.media.document.size.toJSNumber(), true);
   })
+
+  onMount(async () => {})
 
   onDestroy(() => {
     downloadedMediaEmitter.removeListener('message', handleDownloadedMedia);

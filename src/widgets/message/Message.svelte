@@ -31,6 +31,8 @@
   let fullName: string = '';
   let forwardedPrefix: string = '';
   let showFull: bool = false;
+  let hasMedia: bool = false;
+  let mediaWidget;
 
   let navOptions = {
     arrowUpListener: function(evt) {
@@ -148,15 +150,22 @@
 
   onMount(() => {
     // console.log(message.id, `short:${!short}`, `scrollable:${scrollable}`, `pinned:${message.pinned}`, `out:${message.out}`, `post:${message.post}`, `ttlPeriod:${message.ttlPeriod}`, `mentioned:${message.mentioned}`, `fromScheduled:${message.fromScheduled}`, message.buttons);
+  });
+
+  beforeUpdate(async () => {
     if (!short && scrollable) {
       showFull = true;
       parentNavInstance.detachListener();
       navInstance.attachListener();
     }
-  });
-
-  beforeUpdate(async () => {
     try {
+      if (message.media) {
+        hasMedia = true;
+        mediaWidget = resolveMediaWidget(message);
+      } else {
+        hasMedia = false;
+        mediaWidget = null;
+      }
       if (message.message.length > 80 && short)
         expandable = true;
       let _hasAvatar;
@@ -252,8 +261,8 @@
       {/if}
       </div>
     {/if}
-    {#if message.media }
-      <svelte:component this={resolveMediaWidget(message)} {chat} {message} {parentNavInstance} {registerCallButtonHandler} {refetchMessage}/>
+    {#if hasMedia }
+      <svelte:component this={mediaWidget} {chat} {message} {parentNavInstance} {registerCallButtonHandler} {refetchMessage}/>
     {/if}
     {#if message.message && (message.media ? message.media.webpage == null : true) }
       <p>{message.message.length > 80 && short ? message.message.substring(0, 80) + '...' : message.message}</p>
