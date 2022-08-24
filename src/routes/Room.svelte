@@ -271,8 +271,10 @@
               navInstance.navigateListNav(-1);
             }
             for (let i in messages) {
-              if (pops.indexOf(parseInt(i)) === -1) {
-                temp.push(messages[i]);
+              if (!isNaN(parseInt(i))) {
+                if (pops.indexOf(parseInt(i)) === -1) {
+                  temp.push(messages[i]);
+                }
               }
             }
             if (temp.length > 0) {
@@ -670,20 +672,20 @@
             // console.log(u); // no username
           }
         });
-        forwardedUsersIndex.forEach(i => {
-          _messages[i].fwdFrom.sender = cachedForwardedUsers[_messages[i].fwdFrom.fromId.userId.toString()];
-          if (!(_messages[i].fwdFrom.sender.username == null && _messages[i].fwdFrom.sender.phone == null) && _messages[i].fwdFrom.sender.photo != null) {
-            _messages[i].iconRef = _messages[i].fwdFrom.sender.photo.photoId.toString();
-          } else if (_messages[i].fwdFrom.sender.photo != null) {
-            _messages[i].iconRef = _messages[i].fwdFrom.sender.photo.photoId.toString();
-          }
-        });
-        fetchForwardedUsers = [];
       } catch (err) {
         console.log('fetchForwardedUsers:', err);
       }
       console.log(`fetchForwardedUsers: ${new Date().getTime() - _start}ms`);
     }
+    forwardedUsersIndex.forEach(i => {
+      _messages[i].fwdFrom.sender = cachedForwardedUsers[_messages[i].fwdFrom.fromId.userId.toString()];
+      if (!(_messages[i].fwdFrom.sender.username == null && _messages[i].fwdFrom.sender.phone == null) && _messages[i].fwdFrom.sender.photo != null) {
+        _messages[i].iconRef = _messages[i].fwdFrom.sender.photo.photoId.toString();
+      } else if (_messages[i].fwdFrom.sender.photo != null) {
+        _messages[i].iconRef = _messages[i].fwdFrom.sender.photo.photoId.toString();
+      }
+    });
+    fetchForwardedUsers = [];
 
     if (fetchForwardedChannels.length > 0) {
       const _start = new Date().getTime();
@@ -706,20 +708,21 @@
             })
           }
         });
-        forwardedChannelsIndex.forEach(i => {
-          _messages[i].fwdFrom.sender = cachedForwardedChannels[_messages[i].fwdFrom.fromId.channelId.toString()];
-          if (!(_messages[i].fwdFrom.sender.username == null && _messages[i].fwdFrom.sender.phone == null) && _messages[i].fwdFrom.sender.photo != null) {
-            _messages[i].iconRef = _messages[i].fwdFrom.sender.photo.photoId.toString();
-          } else if (_messages[i].fwdFrom.sender.photo != null) {
-            _messages[i].iconRef = _messages[i].fwdFrom.sender.photo.photoId.toString();
-          }
-        });
-        fetchForwardedChannels = [];
       } catch (err) {
         console.log('fetchForwardedChannels:', err);
       }
       console.log(`fetchForwardedChannels: ${new Date().getTime() - _start}ms`);
     }
+    forwardedChannelsIndex.forEach(i => {
+      _messages[i].fwdFrom.sender = cachedForwardedChannels[_messages[i].fwdFrom.fromId.channelId.toString()];
+      if (!(_messages[i].fwdFrom.sender.username == null && _messages[i].fwdFrom.sender.phone == null) && _messages[i].fwdFrom.sender.photo != null) {
+        _messages[i].iconRef = _messages[i].fwdFrom.sender.photo.photoId.toString();
+      } else if (_messages[i].fwdFrom.sender.photo != null) {
+        _messages[i].iconRef = _messages[i].fwdFrom.sender.photo.photoId.toString();
+      }
+    });
+    fetchForwardedChannels = [];
+
     runTask(httpTasks, websocketTasks); // non-blocking
     console.log(`buildIndex: ${new Date().getTime() - _start_}ms`);
     return _messages;
@@ -856,8 +859,10 @@
             }
           });
           for (let i in messages) {
-            if (pops.indexOf(parseInt(i)) === -1) {
-              temp.push(messages[i]);
+            if (!isNaN(parseInt(i))) {
+              if (pops.indexOf(parseInt(i)) === -1) {
+                temp.push(messages[i]);
+              }
             }
           }
           if (temp.length > 0) {
