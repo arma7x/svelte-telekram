@@ -3,7 +3,6 @@
   import { createKaiNavigator } from '../../utils/navigation';
   import * as Actions from "./action";
 
-  export let location: any;
   export let key: any = '';
   export let chat: any = {};
   export let message: any = {};
