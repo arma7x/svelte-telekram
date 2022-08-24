@@ -83,8 +83,7 @@
           if (navInstance.verticalNavIndex == 1) {
             if (!ready)
               return;
-            console.log('\n');
-            console.log('%cSTART', 'background: #222; color: #bada55');
+            const start = new Date().getTime();
             const msg = messages[navInstance.verticalNavIndex - 1];
             const query = { limit: 50, maxId: msg.id }
             const newMessages = await client.getMessages(chat, query);
@@ -97,7 +96,7 @@
                 navInstance.navigateListNav(1);
               }, 200);
             }
-            console.log('%cFINISH', 'background: #222; color: #bada55');
+            console.log(`Fetch Prev: ${new Date().getTime() - start}ms`);
           }
         }
       } catch (err) {
@@ -126,8 +125,7 @@
         } else {
           if (!ready)
             return;
-          console.log('\n');
-          console.log('%cSTART', 'background: #222; color: #bada55');
+          const start = new Date().getTime();
           const msg = messages[navInstance.verticalNavIndex];
           const query = { limit: 50, minId: msg.id }
           const newMessages = await client.getMessages(chat, query);
@@ -136,7 +134,7 @@
             const temp = [...messages, ...newMessages];
             messages = await buildIndex(temp);
           }
-          console.log('%cFINISH', 'background: #222; color: #bada55');
+          console.log(`Fetch Next: ${new Date().getTime() - start}ms`);
         }
       } catch (err) {
         console.log('arrowDownListener:', err);

@@ -13,6 +13,7 @@ const cachedDatabase = idb.openDB('telekram', 4, {
 
 self.addEventListener('install', function(event) {
   console.log('[SW] on install');
+  event.waitUntil(self.skipWaiting());
 });
 
 self.addEventListener('activate', function(event) {
@@ -21,7 +22,7 @@ self.addEventListener('activate', function(event) {
 });
 
 self.addEventListener('fetch', function(event) {
-  console.log('[SW] on fetch');
+  // console.log('[SW] on fetch');
 });
 
 self.addEventListener('push', function(event) {
