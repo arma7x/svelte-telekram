@@ -177,6 +177,7 @@
 
 .media-container > img {
   width: auto;
+  max-width: 70%;
   height: 30px;
 }
 

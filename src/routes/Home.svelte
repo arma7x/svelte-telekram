@@ -1,5 +1,4 @@
 <script lang="ts">
-  import { Route, navigate as goto } from "svelte-navigator";
   import { createKaiNavigator } from '../utils/navigation';
   import { ListView, LoadingBar, Button, TextInputField, Toast, Toaster, SoftwareKey, TextInputDialog, OptionMenu } from '../components';
   import { onMount, onDestroy } from 'svelte';
@@ -509,7 +508,7 @@
       let pref = await (await cachedDatabase).get('chatPreferences', chat.entity.id.value.toString());
       scrollAt = pref['scrollAt'];
     } catch(err) {}
-    goto('room', { state: { name, entity: chat.entity.toJSON(), scrollAt } });
+    navigate('room', { state: { name, entity: chat.entity.toJSON(), scrollAt } });
 
   }
 

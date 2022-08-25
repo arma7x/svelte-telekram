@@ -323,18 +323,12 @@
   function showReplyButtons(msg) {
     try {
       const buttons = [];
+      // ReplyKeyboardHide | ReplyKeyboardForceReply | ReplyKeyboardMarkup.row | ReplyInlineMarkup.row
       msg.replyMarkup.rows.forEach(row => {
         row.buttons.forEach(button => {
           buttons.push({ title: button.text, subtitle: null, button: button });
         });
       });
-      //msg.buttons.forEach(row => {
-        //row.forEach(button => {
-          //console.log(button);
-          //buttons.push({ title: button.button.text, subtitle: button.inlineQuery, button: button.button });
-        //});
-      //});
-      //return
       replyButtons = new OptionMenu({
         target: document.body,
         props: {
@@ -346,9 +340,16 @@
           onSoftkeyLeft: (evt, scope) => {},
           onEnter: async (evt, scope) => {
             replyButtons.$destroy();
+            // https://gram.js.org/beta/classes/Api.Message.html#click
             const result = await msg.click(scope.selected.button);
-            if (result)
+            if (result) {
+              if (result.className && result.className === "messages.BotCallbackAnswer") {
+                console.log(result.message);
+                return;
+              }
+              console.log(result);
               pushMessageToMerge(result);
+            }
           },
           onBackspace: (evt, scope) => {
             evt.preventDefault();
@@ -377,7 +378,12 @@
         menu.push({ title: 'Media Menu' });
       }
       if (msg.replyMarkup && msg.replyMarkup.rows) {
-        menu.push({ title: 'Show Reply Buttons' });
+        let show = true;
+        if (['ReplyKeyboardHide', 'ReplyKeyboardForceReply', 'ReplyKeyboardMarkup'].indexOf(msg.replyMarkup.className) > -1 && msg.replyMarkup.selective) {
+          show = false;
+        }
+        if (show)
+          menu.push({ title: 'Show Reply Buttons' });
       }
       menu.push({ title: 'Show Full' });
       const isReply = getReplyHeader(msg);
@@ -826,7 +832,7 @@
                   console.log(`fetchuncachedforwardsuser: ${new Date().getTime() - _start}ms`);
                 }
               }
-              pushMessageToMerge(evt.message);
+              console.log(4);
               break;
             }
           }
@@ -933,12 +939,7 @@
       // console.log('isChannel:', chat.isChannel, ', isGroup:', chat.isGroup, ', isUser:', chat.isUser);
       muteUntil = chat.entity.__muted || false;
       // console.log('muteUntil:', muteUntil);
-      let params = { limit: 50 };
-      // TOFIX: unstable
-      if (scrollAt) {
-        //params['maxId'] = scrollAt - 100;
-        //params['limit'] = 50;
-      }
+      let params = { limit: 100 };
       const newMessages = await client.getMessages(chat.entity, params);
       newMessages.reverse();
       messages = await buildIndex(newMessages);
