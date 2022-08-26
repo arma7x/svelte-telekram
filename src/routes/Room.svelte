@@ -939,7 +939,7 @@
       // console.log('isChannel:', chat.isChannel, ', isGroup:', chat.isGroup, ', isUser:', chat.isUser);
       muteUntil = chat.entity.__muted || false;
       // console.log('muteUntil:', muteUntil);
-      let params = { limit: 50 };
+      let params = { limit: 100 };
       const newMessages = await client.getMessages(chat.entity, params);
       newMessages.reverse();
       messages = await buildIndex(newMessages);
