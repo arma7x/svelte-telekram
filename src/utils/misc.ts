@@ -33,7 +33,7 @@ function parseUserAgent(a) {
       }
     }
   } catch (err) {}
-  return { deviceModel: model, systemVersion: version }
+  return { deviceModel: model, systemVersion: version, appVersion: "1.0.0" }
 }
 
 export  {

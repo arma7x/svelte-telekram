@@ -42,7 +42,8 @@ client.addEventHandler((evt) => {
     case "Updates":
       getDialogs();
       if (['UpdateNewMessage', 'UpdateNewChannelMessage'].indexOf(evt.className) > -1) {
-        client.invoke(new Api.messages.ReceivedMessages({ maxId: evt.message.id }));
+        // Disable for testing
+        // client.invoke(new Api.messages.ReceivedMessages({ maxId: evt.message.id }));
       }
       break
     case "UpdatesTooLong":
@@ -111,6 +112,28 @@ export async function isUserAuthorized() {
             updateThumbCached(e.data.hash.photoId, base64);
             break;
         }
+      }
+      try {
+        let pushSubscription = await (await cachedDatabase).get('appPreferences', 'pushSubscription');
+        if (pushSubscription == null) {
+          await unsubscribePush();
+          pushSubscription = await subscribePush();
+          pushSubscription = pushSubscription.toJSON();
+          delete pushSubscription['expirationTime'];
+          const result = await registerDevice(client, pushSubscription);
+          console.log('registerDevice result:', result);
+        } else {
+          let updatedPushSubscription = await (await cachedDatabase).get('appPreferences', 'updatedPushSubscription');
+          if (updatedPushSubscription != null) {
+            let result = await unregisterDevice(client, pushSubscription);
+            console.log('unregisterDevice result:', result);
+            result = await registerDevice(client, updatedPushSubscription);
+            console.log('registerDevice result:', result);
+            (await cachedDatabase).delete('appPreferences', 'updatedPushSubscription');
+          }
+        }
+      } catch (err) {
+        console.error(err);
       }
     } else {
       await client.disconnect();
@@ -765,9 +788,8 @@ document.addEventListener("visibilitychange", () => {
   } catch (err) {}
 });
 
-// Notification.requestPermission().catch(err => console.log(err))
 
-function subscribePush() {
+export function subscribePush(): Promise<any> {
   return new Promise((resolve, reject) => {
     Notification.requestPermission()
     .then((result) => {
@@ -794,7 +816,7 @@ function subscribePush() {
 //}, 3000);
 
 
-function unsubscribePush() {
+export function unsubscribePush(): Promise<any> {
   return new Promise((resolve, reject) => {
     getPushSubscription()
     .then((subscription) => {
@@ -816,7 +838,7 @@ function unsubscribePush() {
 //}, 3000);
 
 
-function getPushSubscription() {
+export function getPushSubscription(): Promise<any> {
   return new Promise((resolve, reject) => {
     navigator.serviceWorker.ready
     .then((reg) => {
@@ -837,13 +859,28 @@ function getPushSubscription() {
 // getPushSubscription().then(res => console.log(res)).catch(err => console.error(err));
 //}, 3000);
 
-function registerDevice(client, subscription) {
-  // save subscription to appPreferences.pushSubscription
+async function registerDevice(client, subscription) {
+  console.log('registerDevice:', subscription);
+  const result = await client.invoke(new Api.account.RegisterDevice({
+    tokenType: 10,
+    token: JSON.stringify(subscription),
+    otherUids: [],
+    appSandbox: false,
+    secret: client.session.getAuthKey().getKey(),
+  }));
+  (await cachedDatabase).put('appPreferences', subscription, 'pushSubscription');
+  return result;
 }
 
-// subscription is old appPreferences.pushSubscription
-function unregisterDevice(subscription) {
-
+async function unregisterDevice(client, subscription) {
+  console.log('unregisterDevice:', subscription);
+  const result = await client.invoke(new Api.account.UnregisterDevice({
+    tokenType: 10,
+    token: JSON.stringify(subscription),
+    otherUids: [],
+  }));
+  (await cachedDatabase).delete('appPreferences', 'pushSubscription');
+  return result;
 }
 
 if ('serviceWorker' in navigator) {
@@ -853,6 +890,9 @@ if ('serviceWorker' in navigator) {
   navigator.serviceWorker.register('/sw.js')
   .then((swReg) => {
     console.log('Service Worker registered');
+    if (navigator.serviceWorker.controller) {
+      navigator.serviceWorker.controller.postMessage(1);
+    }
   })
   .catch((error) => {
     console.error('Service Worker', error);

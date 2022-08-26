@@ -27,6 +27,12 @@ self.addEventListener('fetch', (event) => {
 
 self.addEventListener('push', (event) => {
   console.log('[SW] on push');
+  fireNotification();
+});
+
+self.addEventListener('message', (event) => {
+  console.log('[SW] on message:', event.data);
+  fireNotification('Test', 'This is for testing purpose');
 });
 
 self.addEventListener('notificationclick', (event) => {
@@ -59,7 +65,31 @@ self.addEventListener('notificationclose', (event) => {
 
 // https://developer.mozilla.org/en-US/docs/Web/API/ServiceWorkerGlobalScope/pushsubscriptionchange_event
 self.addEventListener('pushsubscriptionchange', (event) => {
-  // self.registration.pushManager
-  // save new subscription to appPreferences.updatePushSubscription
-  console.log('[SW] on notificationclose', event);
+  console.log('[SW] on pushsubscriptionchange', event);
+  const result = self.registration.pushManager.subscribe({userVisibleOnly: true})
+  .then((subscription) => {
+    const subscriptionObj = subscription.toJSON();
+    delete subscriptionObj['expirationTime'];
+    return Promise.all([cachedDatabase, Promise.resolve(subscriptionObj)]);
+  })
+  .then(values => {
+    return values[0].put('appPreferences', values[1], 'updatedPushSubscription');
+  })
+  .then(key => {
+    console.log('[SW]@pushsubscriptionchange:', key);
+    fireNotification('System Update', 'Please re-launch app to apply new push notification subscription');
+  })
+  .catch(err => {
+    console.error('[SW]@pushsubscriptionchange:', err);
+    fireNotification('System Update', 'Unable to resubscribe for push notification');
+  });
+  event.waitUntil(result);
 });
+
+function fireNotification(title, body, requireInteraction = false, actions = []) {
+  let notificationPromise = self.registration.showNotification(title || 'TeleKram', {
+    body: body || 'Hello from TeleKram',
+    requireInteraction: requireInteraction,
+    actions: actions
+  });
+}
