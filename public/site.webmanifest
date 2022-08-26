@@ -1,0 +1,10 @@
+{
+  "name": "TeleKram",
+  "short_name": "TeleKram",
+  "start_url": "/index.html",
+  "description": "A Telegram client for KaiOS using Svelte and TypeScript.",
+  "theme_color": "#431F7F",
+  "background_color": "#431F7F",
+  "display": "standalone",
+  "gcm_sender_id": "122867383838"
+}
