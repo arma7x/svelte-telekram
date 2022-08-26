@@ -1,9 +1,9 @@
 importScripts('/js/polyfill.min.js');
 importScripts('/js/idb.js');
 
-const cachedDatabase = idb.openDB('telekram', 4, {
+const cachedDatabase = idb.openDB('telekram', 5, {
   upgrade: (db, oldVersion, newVersion) => {
-    const tables = ['profilePhotos', 'chatPreferences', 'mediaAttachments', 'offlineWebpages'];
+    const tables = ['profilePhotos', 'chatPreferences', 'mediaAttachments', 'offlineWebpages', 'appPreferences'];
     tables.forEach(n => {
       if (!db.objectStoreNames.contains(n))
         db.createObjectStore(n);
@@ -11,25 +11,25 @@ const cachedDatabase = idb.openDB('telekram', 4, {
   },
 });
 
-self.addEventListener('install', function(event) {
+self.addEventListener('install', (event) => {
   console.log('[SW] on install');
   event.waitUntil(self.skipWaiting());
 });
 
-self.addEventListener('activate', function(event) {
+self.addEventListener('activate', (event) => {
   console.log('[SW] on activate')
   event.waitUntil(self.clients.claim());
 });
 
-self.addEventListener('fetch', function(event) {
+self.addEventListener('fetch', (event) => {
   // console.log('[SW] on fetch');
 });
 
-self.addEventListener('push', function(event) {
+self.addEventListener('push', (event) => {
   console.log('[SW] on push');
 });
 
-self.addEventListener('notificationclick', function(event) {
+self.addEventListener('notificationclick', (event) => {
   console.log('[SW] on notificationclick');
   event.notification.close();
   if (event.action === 'open') {
@@ -53,6 +53,13 @@ self.addEventListener('notificationclick', function(event) {
   }
 });
 
-self.addEventListener('notificationclose', function(event) {
+self.addEventListener('notificationclose', (event) => {
   console.log('[SW] on notificationclose');
+});
+
+// https://developer.mozilla.org/en-US/docs/Web/API/ServiceWorkerGlobalScope/pushsubscriptionchange_event
+self.addEventListener('pushsubscriptionchange', (event) => {
+  // self.registration.pushManager
+  // save new subscription to appPreferences.updatePushSubscription
+  console.log('[SW] on notificationclose', event);
 });

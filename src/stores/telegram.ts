@@ -357,9 +357,9 @@ function authorizedWebWorker() {
 
     const UA = ${JSON.stringify(UA)};
 
-    const cachedDatabase = idb.openDB('telekram', 4, {
+    const cachedDatabase = idb.openDB('telekram', 5, {
       upgrade: (db, oldVersion, newVersion) => {
-        const tables = ['profilePhotos', 'chatPreferences', 'mediaAttachments', 'offlineWebpages'];
+        const tables = ['profilePhotos', 'chatPreferences', 'mediaAttachments', 'offlineWebpages', 'appPreferences'];
         tables.forEach(n => {
           if (!db.objectStoreNames.contains(n))
             db.createObjectStore(n);
@@ -764,6 +764,87 @@ document.addEventListener("visibilitychange", () => {
     }
   } catch (err) {}
 });
+
+// Notification.requestPermission().catch(err => console.log(err))
+
+function subscribePush() {
+  return new Promise((resolve, reject) => {
+    Notification.requestPermission()
+    .then((result) => {
+      if (result === 'granted')
+        return navigator.serviceWorker.ready;
+      return Promise.reject('Denied');
+    })
+    .then((reg) => {
+      return reg.pushManager.subscribe({userVisibleOnly: true});
+    })
+    .then((subscription) => {
+      if (subscription)
+        resolve(subscription);
+      else
+        reject(subscription);
+    })
+    .catch((err) => {
+      reject(err);
+    });
+  });
+}
+//setTimeout(() => {
+//  subscribePush().then(res => console.log(res)).catch(err => console.log(err));
+//}, 3000);
+
+
+function unsubscribePush() {
+  return new Promise((resolve, reject) => {
+    getPushSubscription()
+    .then((subscription) => {
+      if (!subscription)
+        reject('Please subscribe');
+      else
+        return subscription.unsubscribe();
+    })
+    .then((result) => {
+      resolve(result)
+    })
+    .catch((err) => {
+      reject(err);
+    });
+  });
+}
+//setTimeout(() => {
+//  unsubscribePush().then(res => console.log(res)).catch(err => console.log(err));
+//}, 3000);
+
+
+function getPushSubscription() {
+  return new Promise((resolve, reject) => {
+    navigator.serviceWorker.ready
+    .then((reg) => {
+      return reg.pushManager.getSubscription()
+    })
+    .then((subscription) => {
+      if (!subscription)
+        reject('Please subscribe');
+      else
+        resolve(subscription);
+    })
+    .catch((err) => {
+      reject(err);
+    });
+  });
+}
+//setTimeout(() => {
+// getPushSubscription().then(res => console.log(res)).catch(err => console.error(err));
+//}, 3000);
+
+function registerDevice(client, subscription) {
+  // save subscription to appPreferences.pushSubscription
+}
+
+// subscription is old appPreferences.pushSubscription
+function unregisterDevice(subscription) {
+
+}
 
 if ('serviceWorker' in navigator) {
   navigator.serviceWorker.addEventListener('message', (event) => {
