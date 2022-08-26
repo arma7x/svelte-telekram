@@ -40,3 +40,36 @@ export {
   session,
   cachedDatabase
 }
+
+if ('serviceWorker' in navigator) {
+  navigator.serviceWorker.addEventListener('message', (event) => {
+    console.log(event);
+  });
+  navigator.serviceWorker.register('/sw.js')
+  .then((swReg) => {
+    console.log('Service Worker registered');
+    if (navigator.serviceWorker.controller) {
+      navigator.serviceWorker.controller.postMessage(1);
+    }
+  })
+  .catch((error) => {
+    console.error('Service Worker', error);
+  });
+} else {
+  console.warn('Service Worker not supported');
+}
+
+if ('mozSetMessageHandler' in navigator) {
+  navigator.mozSetMessageHandler('serviceworker-notification', (activityRequest) => {
+    if (window.navigator.mozApps) {
+      let request = window.navigator.mozApps.getSelf();
+      request.onsuccess = () => {
+        if (request.result) {
+          request.result.launch();
+        }
+      };
+    } else {
+      window.open(document.location.origin, '_blank');
+    }
+  });
+}
