@@ -138,6 +138,8 @@ export async function isUserAuthorized() {
         console.error(err);
       }
     } else {
+      await (await cachedDatabase).delete('appPreferences', 'pushSubscription');
+      await (await cachedDatabase).delete('appPreferences', 'updatedPushSubscription');
       await client.disconnect();
       if (window['authorizedWebWorker']) {
         window['authorizedWebWorker'].postMessage({ type: -100 })
@@ -738,7 +740,7 @@ function authenticationWebWorker() {
             self.postMessage({ type: 6, params: { result: result.toJSON(), session: sess } });
           })
           .catch((err) => {
-            self.postMessage({ type: -6, params: err.errorMessage });
+            self.postMessage({ type: -6, params: err.errorMessage }); // TODO DEBUG
           });
           break;
         case 7:
@@ -861,7 +863,7 @@ export function getPushSubscription(): Promise<any> {
 // getPushSubscription().then(res => console.log(res)).catch(err => console.error(err));
 //}, 3000);
 
-async function registerDevice(client, subscription) {
+export async function registerDevice(client, subscription) {
   console.log('registerDevice:', subscription);
   const result = await client.invoke(new Api.account.RegisterDevice({
     tokenType: 10,
@@ -874,7 +876,7 @@ async function registerDevice(client, subscription) {
   return result;
 }
 
-async function unregisterDevice(client, subscription) {
+export async function unregisterDevice(client, subscription) {
   console.log('unregisterDevice:', subscription);
   const result = await client.invoke(new Api.account.UnregisterDevice({
     tokenType: 10,

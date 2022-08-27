@@ -11,7 +11,7 @@
   import ArchivedChats from '../widgets/ArchivedChats.svelte';
   import ContactList from '../widgets/ContactList.svelte';
 
-  import { connect, connectionStatus, authorizationStatus, isUserAuthorized, getDialogs, shouldGetDialogs, authorizedUser, dialogList, cachedThumbnails, dispatchMessageToClient, dispatchMessageToWorker, getShouldGetDialogs } from '../stores/telegram';
+  import { connect, connectionStatus, authorizationStatus, isUserAuthorized, getDialogs, shouldGetDialogs, authorizedUser, dialogList, cachedThumbnails, dispatchMessageToClient, dispatchMessageToWorker, getShouldGetDialogs, unsubscribePush, unregisterDevice } from '../stores/telegram';
 
   const navClass: string = 'homeNav';
 
@@ -465,6 +465,13 @@
 
   async function signOut() {
     try {
+      let pushSubscription = await (await cachedDatabase).get('appPreferences', 'pushSubscription');
+      if (pushSubscription != null) {
+        await unregisterDevice(client, pushSubscription);
+        try {
+          await unsubscribePush();
+        } catch (err) {}
+      }
       const result = await client.invoke(new Api.auth.LogOut({}));
       isUserAuthorized();
       phoneCodeHash = null;
@@ -512,15 +519,6 @@
       console.log(err);
     }
     goto('room', { state: { name, entity: chat.entity.toJSON(), scrollAt } });
-  }
-
-  function eventHandler(evt) {
-    if (evt.className === "UpdateLoginToken") {
-      exportLoginToken();
-      if (qrModal) {
-        qrModal.$destroy();
-      }
-    }
   }
 
   function getThumb(chat) {
@@ -650,7 +648,7 @@
             importLoginToken(data.params.result.token);
           } else {
             console.error('importLoginToken', data.params.result);
-            toastMessage(data.params.result.className || "ERROR IMPORT LOGIN TOKEN");
+            toastMessage(data.params.result.className || "ERROR IMPORT LOGIN TOKEN"); // TODO DEBUG
           }
           break;
         case -6:
@@ -659,7 +657,7 @@
           console.log('exportLoginToken:', data.params);
           if (data.params !== 'SESSION_PASSWORD_NEEDED') {
             console.error('exportLoginToken:', data.params);
-            toastMessage(data.params || "ERROR EXPORT LOGIN TOKEN");
+            toastMessage(data.params || "ERROR EXPORT LOGIN TOKEN"); // TODO DEBUG
             return;
           }
           signIn2FA();
@@ -698,8 +696,6 @@
     appBar.setTitleText(name);
     softwareKey.setText({ left: '', center: 'SELECT', right: '' });
     navInstance.attachListener();
-
-    // client.addEventHandler(eventHandler);
 
     undialogList = dialogList.subscribe(chats => {
       if (client.connected) {
@@ -752,7 +748,6 @@
   });
 
   onDestroy(() => {
-    client.removeEventHandler(eventHandler);
     navInstance.detachListener();
     if (undialogList)
       undialogList();
