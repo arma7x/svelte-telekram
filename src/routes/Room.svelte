@@ -833,7 +833,7 @@
                   console.log(`fetchuncachedforwardsuser: ${new Date().getTime() - _start}ms`);
                 }
               }
-              console.log(4);
+              pushMessageToMerge(evt.message);
               break;
             }
           }
