@@ -116,7 +116,9 @@ export async function isUserAuthorized() {
       try {
         let pushSubscription = await (await cachedDatabase).get('appPreferences', 'pushSubscription');
         if (pushSubscription == null) {
-          await unsubscribePush();
+          try {
+            await unsubscribePush();
+          } catch(err){}
           pushSubscription = await subscribePush();
           pushSubscription = pushSubscription.toJSON();
           delete pushSubscription['expirationTime'];

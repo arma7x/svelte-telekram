@@ -1,5 +1,6 @@
 declare var telegram:any;
 declare var idb:any;
+declare var window:any;
 
 import { parseUserAgent } from './misc';
 import TelegramKeyHash from '../telegram_key';
@@ -41,15 +42,19 @@ export {
   cachedDatabase
 }
 
+let LAST_ONLINE_TIMER;
+
 if ('serviceWorker' in navigator) {
-  navigator.serviceWorker.addEventListener('message', (event) => {
-    console.log(event);
-  });
-  navigator.serviceWorker.register('/sw.js')
+  navigator.serviceWorker.register('/sw.js?v=1')
   .then((swReg) => {
-    console.log('Service Worker registered');
     if (navigator.serviceWorker.controller) {
-      navigator.serviceWorker.controller.postMessage(1);
+      navigator.serviceWorker.controller.postMessage({ type: 1, time: new Date().getTime() });
+      LAST_ONLINE_TIMER = setInterval(() => {
+        navigator.serviceWorker.controller.postMessage({ type: 1, time: new Date().getTime() });
+      }, 5000);
+      navigator.serviceWorker.addEventListener('message', (event) => {
+        console.log("[SW]addEventListener:", event.data);
+      });
     }
   })
   .catch((error) => {
@@ -73,3 +78,20 @@ if ('mozSetMessageHandler' in navigator) {
     }
   });
 }
+
+document.addEventListener("visibilitychange", () => {
+  console.log('visibilitychange', 'LAST_ONLINE_TIMER', document.visibilityState);
+  if (document.visibilityState === 'visible') {
+    if (navigator.serviceWorker.controller) {
+      navigator.serviceWorker.controller.postMessage({ type: 1, time: new Date().getTime() });
+      LAST_ONLINE_TIMER = setInterval(() => {
+        navigator.serviceWorker.controller.postMessage({ type: 1, time: new Date().getTime() });
+      }, 5000);
+    }
+  } else {
+    if (LAST_ONLINE_TIMER) {
+      clearInterval(LAST_ONLINE_TIMER);
+      LAST_ONLINE_TIMER = null;
+    }
+  }
+});
