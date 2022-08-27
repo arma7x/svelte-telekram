@@ -3,7 +3,7 @@ console.log('SERVICE WORKER');
 importScripts('/js/polyfill.min.js');
 importScripts('/js/idb.js');
 
-let lastOnline = 0;
+let visibilityState = 'visible';
 
 const cachedDatabase = idb.openDB('telekram', 5, {
   upgrade: (db, oldVersion, newVersion) => {
@@ -36,13 +36,13 @@ self.addEventListener('push', (event) => {
   clients.matchAll({type: 'window'})
   .then((clientList) => {
     console.log('matched clients', clientList)
-    hasActiveWindows = clientList.length > 0
-    if (hasActiveWindows) {
-      console.log('Supress notification because some instance is alive')
+    hasActiveWindows = clientList.length > 0;
+    if (visibilityState !== 'visible') {
+      fireNotification(obj);
       return;
     }
-    if (parseInt((new Date().getTime() - lastOnline) / 1000) < 5) {
-      console.log('Supress notification because lastOnline < 5 seconds')
+    if (hasActiveWindows) {
+      console.log('Supress notification because some instance is alive')
       return;
     }
     fireNotification(obj);
@@ -57,9 +57,9 @@ self.addEventListener('message', (event) => {
   switch (event.data.type) {
     case 0: // clearNotification
       break;
-    case 1: // lastOnline
-      lastOnline = event.data.time;
-      console.log('lastOnline at:', lastOnline);
+    case 1: // visibilityState
+      visibilityState = event.data.visibilityState;
+      console.log('visibilityState :', visibilityState);
       break;
   }
 });
