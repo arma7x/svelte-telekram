@@ -123,14 +123,14 @@ export async function isUserAuthorized() {
           pushSubscription = pushSubscription.toJSON();
           delete pushSubscription['expirationTime'];
           const result = await registerDevice(client, pushSubscription);
-          console.log('registerDevice result:', result);
+          // console.log('registerDevice result:', result);
         } else {
           let updatedPushSubscription = await (await cachedDatabase).get('appPreferences', 'updatedPushSubscription');
           if (updatedPushSubscription != null) {
             let result = await unregisterDevice(client, pushSubscription);
-            console.log('unregisterDevice result:', result);
+            // console.log('unregisterDevice result:', result);
             result = await registerDevice(client, updatedPushSubscription);
-            console.log('registerDevice result:', result);
+            // console.log('registerDevice result:', result);
             (await cachedDatabase).delete('appPreferences', 'updatedPushSubscription');
           }
         }
@@ -815,10 +815,6 @@ export function subscribePush(): Promise<any> {
     });
   });
 }
-//setTimeout(() => {
-//  subscribePush().then(res => console.log(res)).catch(err => console.log(err));
-//}, 3000);
-
 
 export function unsubscribePush(): Promise<any> {
   return new Promise((resolve, reject) => {
@@ -837,10 +833,6 @@ export function unsubscribePush(): Promise<any> {
     });
   });
 }
-//setTimeout(() => {
-//  unsubscribePush().then(res => console.log(res)).catch(err => console.log(err));
-//}, 3000);
-
 
 export function getPushSubscription(): Promise<any> {
   return new Promise((resolve, reject) => {
@@ -859,12 +851,9 @@ export function getPushSubscription(): Promise<any> {
     });
   });
 }
-//setTimeout(() => {
-// getPushSubscription().then(res => console.log(res)).catch(err => console.error(err));
-//}, 3000);
 
 export async function registerDevice(client, subscription) {
-  console.log('registerDevice:', subscription);
+  // console.log('registerDevice:', subscription);
   const result = await client.invoke(new Api.account.RegisterDevice({
     tokenType: 10,
     token: JSON.stringify(subscription),
@@ -877,7 +866,7 @@ export async function registerDevice(client, subscription) {
 }
 
 export async function unregisterDevice(client, subscription) {
-  console.log('unregisterDevice:', subscription);
+  // console.log('unregisterDevice:', subscription);
   const result = await client.invoke(new Api.account.UnregisterDevice({
     tokenType: 10,
     token: JSON.stringify(subscription),
@@ -890,22 +879,22 @@ export async function unregisterDevice(client, subscription) {
 export async function manuallySubscribePushNotification(client) {
   try {
     (await cachedDatabase).delete('appPreferences', 'updatedPushSubscription');
-    console.log('=> delete.updatedPushSubscription');
+    // console.log('=> delete.updatedPushSubscription');
     let pushSubscription = await (await cachedDatabase).get('appPreferences', 'pushSubscription');
     if (pushSubscription == null) {
       await unregisterDevice(client, pushSubscription);
-      console.log('=> unregisterDevice');
+      // console.log('=> unregisterDevice');
     }
     try {
       await unsubscribePush();
-      console.log('=> unsubscribePush');
+      // console.log('=> unsubscribePush');
     } catch(err){}
     pushSubscription = await subscribePush();
     pushSubscription = pushSubscription.toJSON();
     delete pushSubscription['expirationTime'];
-    console.log('=> subscribePush');
+    // console.log('=> subscribePush');
     await registerDevice(client, pushSubscription);
-    console.log('=> registerDevice');
+    // console.log('=> registerDevice');
     return Promise.resolve(true);
   } catch (err) {
     return Promise.reject(err);
