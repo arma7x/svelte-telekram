@@ -121,7 +121,6 @@
   }
 
   beforeUpdate(async () => {
-    downloadedMediaEmitter.removeListener('message', handleDownloadedMedia);
     if (message.media.photo) {
       fileId = message.media.photo.id.toString();
     } else if (message.media.document) {
@@ -129,8 +128,11 @@
     }
     downloaded = await isMediaCached(fileId);
     registerCallButtonHandler(message.id.toString(), actionMenu);
-    if (!downloaded)
+    if (!downloaded) {
       downloadedMediaEmitter.addListener('message', handleDownloadedMedia);
+    } else {
+      downloadedMediaEmitter.removeListener('message', handleDownloadedMedia);
+    }
     let byte;
     if (message.media.className === 'MessageMediaPhoto') {
       byte = message.media.photo.sizes[0].originalArgs.bytes;

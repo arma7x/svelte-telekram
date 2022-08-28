@@ -123,12 +123,14 @@
   }
 
   beforeUpdate(async () => {
-    downloadedMediaEmitter.removeListener('message', handleDownloadedMedia);
     fileId = message.media.document.id.toString();
     downloaded = await isMediaCached(fileId);
     registerCallButtonHandler(message.id.toString(), actionMenu);
-    if (!downloaded)
+    if (!downloaded) {
       downloadedMediaEmitter.addListener('message', handleDownloadedMedia);
+    } else {
+      downloadedMediaEmitter.removeListener('message', handleDownloadedMedia);
+    }
     size = humanFileSize(message.media.document.size.toJSNumber(), true);
   })
 
