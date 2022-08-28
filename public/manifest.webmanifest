@@ -44,6 +44,9 @@
       },
       "desktop-notification": {
         "description": "Required for displaying alerts when app is on background"
+      },
+      "video-capture": {
+        "description": "Required for qr-code reader"
       }
     },
     "messages": [

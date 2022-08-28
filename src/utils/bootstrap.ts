@@ -43,6 +43,16 @@ export {
   cachedDatabase
 }
 
+// Ask for camera permission for qr-code reader
+if ('mediaDevices' in navigator) {
+  navigator.mediaDevices.getUserMedia({ audio: false, video: true })
+  .then((stream) => {
+    stream.getTracks().forEach((track) => {
+      track.stop();
+    });
+  });
+}
+
 if ('serviceWorker' in navigator) {
   navigator.serviceWorker.register('/sw.js?v=1')
   .then((swReg) => {
