@@ -11,7 +11,7 @@
   import ArchivedChats from '../widgets/ArchivedChats.svelte';
   import ContactList from '../widgets/ContactList.svelte';
 
-  import { connect, connectionStatus, authorizationStatus, isUserAuthorized, getDialogs, shouldGetDialogs, authorizedUser, dialogList, cachedThumbnails, dispatchMessageToClient, dispatchMessageToWorker, getShouldGetDialogs, unsubscribePush, unregisterDevice } from '../stores/telegram';
+  import { connect, connectionStatus, authorizationStatus, isUserAuthorized, getDialogs, shouldGetDialogs, authorizedUser, dialogList, cachedThumbnails, dispatchMessageToClient, dispatchMessageToWorker, getShouldGetDialogs, unsubscribePush, unregisterDevice, manuallySubscribePushNotification } from '../stores/telegram';
 
   const navClass: string = 'homeNav';
 
@@ -207,6 +207,7 @@
           { title: 'Settings' },
           { title: 'Logout' },
           { title: 'Exit' },
+          { title: 'manuallySubscribePushNotification' },
         ],
         softKeyCenterText: 'select',
         onSoftkeyRight: (evt, scope) => {},
@@ -219,6 +220,14 @@
             signOut();
           } else if (scope.selected.title === 'Exit') {
             window.close();
+          } else if (scope.selected.title === 'manuallySubscribePushNotification') {
+            try {
+              const result = await manuallySubscribePushNotification(client);
+              console.log('manuallySubscribePushNotification', result);
+            } catch (err) {
+              console.log(err);
+              console.log('manuallySubscribePushNotification', err);
+            }
           }
         },
         onBackspace: (evt, scope) => {

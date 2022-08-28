@@ -886,3 +886,28 @@ export async function unregisterDevice(client, subscription) {
   (await cachedDatabase).delete('appPreferences', 'pushSubscription');
   return result;
 }
+
+export async function manuallySubscribePushNotification(client) {
+  try {
+    (await cachedDatabase).delete('appPreferences', 'updatedPushSubscription');
+    console.log('=> delete.updatedPushSubscription');
+    let pushSubscription = await (await cachedDatabase).get('appPreferences', 'pushSubscription');
+    if (pushSubscription == null) {
+      await unregisterDevice(client, pushSubscription);
+      console.log('=> unregisterDevice');
+    }
+    try {
+      await unsubscribePush();
+      console.log('=> unsubscribePush');
+    } catch(err){}
+    pushSubscription = await subscribePush();
+    pushSubscription = pushSubscription.toJSON();
+    delete pushSubscription['expirationTime'];
+    console.log('=> subscribePush');
+    await registerDevice(client, pushSubscription);
+    console.log('=> registerDevice');
+    return Promise.resolve(true);
+  } catch (err) {
+    return Promise.reject(err);
+  }
+}
