@@ -4,9 +4,12 @@
   import { ListView, LoadingBar, Button, TextInputField, Toast, Toaster, SoftwareKey, TextInputDialog, OptionMenu } from '../components';
   import { onMount, onDestroy } from 'svelte';
 
+  import { base64url } from "rfc4648";
+  import { Buffer } from 'buffer';
   import { TelegramKeyHash, Api, AuthKey, client, session, cachedDatabase } from '../utils/bootstrap';
 
   import QRModal from '../widgets/QRModal.svelte';
+  import QRScanner from '../widgets/QRScanner.svelte';
   import ChatListView from '../widgets/ChatListView.svelte';
   import ArchivedChats from '../widgets/ArchivedChats.svelte';
   import ContactList from '../widgets/ContactList.svelte';
@@ -22,6 +25,7 @@
   let loadingBar: LoadingBar;
   let inputSoftwareKey: SoftwareKey;
   let qrModal: QRModal;
+  let qrScanner: QRScanner;
   let password2FA: TextInputDialog;
   let authorizedMenu: OptionMenu;
   let archivedChatListMenu: ArchivedChats;
@@ -205,6 +209,7 @@
           { title: 'New Contact' },
           { title: 'Contacts' },
           { title: 'Settings' },
+          { title: 'Link Device' },
           { title: 'Logout' },
           { title: 'Exit' },
         ],
@@ -215,6 +220,8 @@
           authorizedMenu.$destroy();
           if (scope.selected.title === 'Contacts') {
             getContacts();
+          } else if (scope.selected.title === 'Link Device') {
+            linkDevice();
           } else if (scope.selected.title === 'Logout') {
             signOut();
           } else if (scope.selected.title === 'Exit') {
@@ -458,6 +465,23 @@
     dispatchMessageToWorker.emit('message', params);
   }
 
+  // EVENT 8
+  async function acceptLoginToken(token) {
+    try {
+      console.log(0, token);
+      token = token.padRight(token.length + (4 - token.length % 4) % 4, '=');
+      console.log(1, token);
+      console.log(2, base64url.parse(token));
+      return; // TODO DEBUG
+      const result = await client.invoke(new Api.auth.AcceptLoginToken({ token: Buffer.from(base64url.parse(token)) }));
+      console.log(result);
+      toastMessage('Success');
+    } catch (err) {
+      console.log(err);
+      toastMessage(err.errorMessage || "ERROR ACCEPT LOGIN TOKEN");
+    }
+  }
+
   function resetSignIn() {
     phoneCodeHash = null;
     resetCursor();
@@ -478,6 +502,31 @@
     } catch (err) {
       console.log(err);
     }
+  }
+
+  function linkDevice() {
+    qrScanner = new QRScanner({
+      target: document.body,
+      props: {
+        title: 'Link Device',
+        onBackspace: (evt) => {
+          evt.preventDefault();
+          evt.stopPropagation();
+          qrScanner.$destroy();
+        },
+        onOpened: () => {
+          navInstance.detachListener();
+        },
+        onClosed: () => {
+          navInstance.attachListener();
+          qrScanner = null;
+        },
+        callback: (token) => {
+          qrScanner.$destroy();
+          acceptLoginToken(token);
+        }
+      }
+    });
   }
 
   function sortChats(chats) {

@@ -17,3 +17,13 @@ if (!String.prototype.replaceAll) {
     return this.replace(new RegExp(str, 'g'), newStr);
   };
 }
+
+if (!String.prototype.padRight) {
+  String.prototype.padRight = function(n, pad) {
+    let t = this;
+    if(n > this.length)
+      for(let i = 0; i < n-this.length; i++)
+        t += pad;
+    return t;
+  }
+}
