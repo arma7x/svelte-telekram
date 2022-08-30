@@ -14,7 +14,7 @@
   import ArchivedChats from '../widgets/ArchivedChats.svelte';
   import ContactList from '../widgets/ContactList.svelte';
 
-  import { connect, connectionStatus, authorizationStatus, isUserAuthorized, getDialogs, shouldGetDialogs, authorizedUser, dialogList, cachedThumbnails, dispatchMessageToClient, dispatchMessageToWorker, getShouldGetDialogs, unsubscribePush, unregisterDevice } from '../stores/telegram';
+  import { connect, connectionStatus, authorizationStatus, isUserAuthorized, getDialogs, shouldGetDialogs, authorizedUser, dialogList, cachedThumbnails, dispatchMessageToClient, dispatchMessageToWorker, getShouldGetDialogs, unsubscribePush, unregisterDevice, manuallySubscribePushNotification } from '../stores/telegram';
 
   const navClass: string = 'homeNav';
 
@@ -210,6 +210,7 @@
           { title: 'Contacts' },
           { title: 'Settings' },
           { title: 'Link Device' },
+          { title: 'Subscribe Notification' },
           { title: 'Logout' },
           { title: 'Exit' },
         ],
@@ -222,6 +223,8 @@
             getContacts();
           } else if (scope.selected.title === 'Link Device') {
             linkDevice();
+          } else if (scope.selected.title === 'Subscribe Notification') {
+            manuallySubscribePushNotification();
           } else if (scope.selected.title === 'Logout') {
             signOut();
           } else if (scope.selected.title === 'Exit') {
@@ -471,9 +474,9 @@
       console.log(0, token);
       token = token.padRight(token.length + (4 - token.length % 4) % 4, '=');
       console.log(1, token);
-      console.log(2, base64url.parse(token));
-      return; // TODO DEBUG
-      const result = await client.invoke(new Api.auth.AcceptLoginToken({ token: Buffer.from(base64url.parse(token)) }));
+      console.log(2, base64url.parse(token), Buffer.from(token, "base64"));
+      //return; // TODO DEBUG
+      const result = await client.invoke(new Api.auth.AcceptLoginToken({ token: Buffer.from(token, "base64") }));
       console.log(result);
       toastMessage('Success');
     } catch (err) {
