@@ -783,6 +783,8 @@
   }
 
   async function clientListener(evt) {
+    if (chat.entity.__isSavedMessages)
+      return;
     try {
       console.log('Room :', location.state.entity.id.value.toString(), evt.className, evt);
       switch (evt.className) {
