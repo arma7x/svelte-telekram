@@ -4,7 +4,7 @@
   import { saveAs } from 'file-saver';
   import * as Mime from 'mime-types';
   import { createKaiNavigator, KaiNavigator } from '../../../../utils/navigation';
-  import { strippedPhotoToJpg, humanFileSize, isMediaCached, getCachedMedia, removeCachedMedia } from '../common';
+  import { openFile, strippedPhotoToJpg, humanFileSize, isMediaCached, getCachedMedia, removeCachedMedia } from '../common';
   import { downloadedMediaEmitter } from '../../../../stores/telegram';
   import { OptionMenu } from '../../../../components';
 
@@ -40,7 +40,13 @@
         onSoftkeyLeft: (evt, scope) => {},
         onEnter: async (evt, scope) => {
           action.$destroy();
-          if (scope.selected.title === 'Download' && downloading === -1) {
+          if (scope.selected.title === 'Open') {
+            try {
+              await openFile(fileId, message);
+            } catch (err) {
+              console.log(err);
+            }
+          } else if (scope.selected.title === 'Download' && downloading === -1) {
             if (window['authorizedWebWorker']) {
               window['authorizedWebWorker'].postMessage({
                 type: 1,

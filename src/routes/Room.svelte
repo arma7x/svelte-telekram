@@ -557,6 +557,7 @@
   }
 
   async function buildIndex(_messages) {
+    console.log(_messages[0]);
     const _start_ = new Date().getTime();
     forwardedUsersIndex = [];
     forwardedChannelsIndex = [];

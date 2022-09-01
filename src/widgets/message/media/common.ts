@@ -1,5 +1,34 @@
+declare var navigator:any;
+
 import { Buffer} from 'buffer';
 import { cachedDatabase } from '../../../utils/bootstrap';
+
+async function openFile(fileId, message) {
+  const blob = await getCachedMedia(fileId, message);
+  let mime = message.media.photo ? 'image/jpeg' : message.media.document.mimeType;
+  if (navigator.b2g) {
+    return new Promise((resolve, reject) => {
+      const activity = new WebActivity("open", { blob: blob, type: mime });
+      activity.start()
+      .then(() => {
+        resolve();
+      })
+      .catch(err => {
+        reject(err.toString());
+      });
+    });
+  } else {
+    return new Promise((resolve, reject) => {
+      const activity = new MozActivity({ name: "open", data: { blob: blob, type: mime }});
+      activity.onsuccess = () => {
+        resolve();
+      }
+      activity.onerror = (err) => {
+        reject(err.target.error.name);
+      }
+    });
+  }
+}
 
 // https://github.com/gram-js/gramjs/issues/223
 function strippedPhotoToJpg(stripped) {
@@ -77,6 +106,7 @@ async function removeCachedMedia(fileId) {
 }
 
 export  {
+  openFile,
   isMediaCached,
   getCachedMedia,
   removeCachedMedia,
