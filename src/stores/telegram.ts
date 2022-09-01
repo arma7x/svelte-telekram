@@ -38,12 +38,11 @@ client.addEventHandler((evt) => {
     case "UpdateReadFeaturedStickers":
     case "UpdateReadChannelDiscussionInbox":
     case "UpdateReadChannelDiscussionOutbox":
-    // case "UpdateMessagePoll":
+    case "UpdateMessagePoll":
     case "Updates":
       getDialogs();
       if (['UpdateNewMessage', 'UpdateNewChannelMessage'].indexOf(evt.className) > -1) {
-        // Disable for testing
-        // client.invoke(new Api.messages.ReceivedMessages({ maxId: evt.message.id }));
+        client.invoke(new Api.messages.ReceivedMessages({ maxId: evt.message.id }));
       }
       break
     case "UpdatesTooLong":

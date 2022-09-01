@@ -557,7 +557,6 @@
   }
 
   async function buildIndex(_messages) {
-    console.log(_messages[0]);
     const _start_ = new Date().getTime();
     forwardedUsersIndex = [];
     forwardedChannelsIndex = [];
@@ -820,8 +819,7 @@
           break;
         case 'UpdateNewChannelMessage':
         case 'UpdateNewMessage':
-          // Disable for testing
-          // client.invoke(new Api.messages.ReceivedMessages({ maxId: evt.message.id }));
+          client.invoke(new Api.messages.ReceivedMessages({ maxId: evt.message.id }));
           var entities = Array.from(evt._entities.entries());
           for (let i in entities) {
             if (entities[i][1].id.toString() === location.state.entity.id.value.toString()) {
