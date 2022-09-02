@@ -224,7 +224,13 @@
           } else if (scope.selected.title === 'Link Device') {
             linkDevice();
           } else if (scope.selected.title === 'Subscribe Notification') {
-            manuallySubscribePushNotification();
+            manuallySubscribePushNotification(client)
+            .then(() => {
+              alert('Success');
+            })
+            .catch((err) => {
+              alert('Fail: ' + err.toString());
+            });
           } else if (scope.selected.title === 'Logout') {
             signOut();
           } else if (scope.selected.title === 'Exit') {
