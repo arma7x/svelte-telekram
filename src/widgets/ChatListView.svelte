@@ -34,7 +34,7 @@
   </div>
   <div class="kai-list-view-indicator">
     {#if chat.unreadCount}
-      <span class="badge">{chat.unreadCount}</span>
+      <span class="badge" style="background-color:{chat.entity.__muted ? '#c0c0c0' : '#008000'};">{chat.unreadCount}</span>
     {/if}
     <span class="kai-icon-arrow"></span>
   </div>
@@ -106,10 +106,9 @@
 
   .kai-list-view > .kai-list-view-indicator > .badge {
     color: #fff;
-    background-color: #c0c0c0;
     font-weight: bold;
     border-radius: 5px;
-    padding: 0px 2px 1px 2px;
+    padding: 0px 3px 1px 2px;
   }
 
   .kai-list-view.focus,
