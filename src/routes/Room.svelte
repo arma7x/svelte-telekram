@@ -343,8 +343,11 @@
             // https://gram.js.org/beta/classes/Api.Message.html#click
             const result = await msg.click(scope.selected.button);
             if (result) {
-              if (result.className && result.className === "messages.BotCallbackAnswer") {
-                console.log(result.message);
+              if (result.className && result.className === "messages.BotCallbackAnswer" && result.message) {
+                alert(result.message);
+                return;
+              } else if (result.className && result.className === "messages.BotCallbackAnswer" && result.url) {
+                alert(result.url); // TODO: init chat with bot
                 return;
               }
               console.log(result);
