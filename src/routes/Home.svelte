@@ -532,6 +532,10 @@
     });
   }
 
+  function openSMS() {
+    window.open('sms://+1');
+  }
+
   function sortChats(chats) {
     try {
       archivedChatListName = [];
@@ -830,6 +834,10 @@
   </Button>
   {:else}
   <TextInputField className="{navClass}" label="Login Code" placeholder="Login Code" value={phoneCode} type="tel" onInput="{onInputPhoneCode}" {onFocus} {onBlur} />
+  <Button className="{navClass}" text="Open SMS" onClick={openSMS}>
+    <span slot="leftWidget" class="kai-icon-arrow" style="margin:0px 5px;-moz-transform: scale(-1, 1);-webkit-transform: scale(-1, 1);-o-transform: scale(-1, 1);-ms-transform: scale(-1, 1);transform: scale(-1, 1);"></span>
+    <span slot="rightWidget" class="kai-icon-arrow" style="margin:0px 5px;"></span>
+  </Button>
   <Button className="{navClass}" text="Sign In" onClick={signIn}>
     <span slot="leftWidget" class="kai-icon-arrow" style="margin:0px 5px;-moz-transform: scale(-1, 1);-webkit-transform: scale(-1, 1);-o-transform: scale(-1, 1);-ms-transform: scale(-1, 1);transform: scale(-1, 1);"></span>
     <span slot="rightWidget" class="kai-icon-arrow" style="margin:0px 5px;"></span>
