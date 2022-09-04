@@ -149,6 +149,15 @@
   }
 
   onMount(() => {
+    // MessageEntityMention
+    // MessageEntityBotCommand
+    // MessageEntityUrl
+    // MessageEntityEmail
+    // MessageEntityTextUrl
+    // MessageEntityMentionName
+    // InputMessageEntityMentionName
+    // MessageEntityPhone
+    // console.log(message.id, message.entities);
     // console.log(message.id, `short:${!short}`, `scrollable:${scrollable}`, `pinned:${message.pinned}`, `out:${message.out}`, `post:${message.post}`, `ttlPeriod:${message.ttlPeriod}`, `mentioned:${message.mentioned}`, `fromScheduled:${message.fromScheduled}`, message.buttons);
   });
 

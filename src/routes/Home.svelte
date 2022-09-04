@@ -580,6 +580,7 @@
     } catch(err) {
       console.log(err);
     }
+    // console.log(chat.entity, chat.entity.bot, chat.entity.botNochats);
     goto('room', { state: { name, entity: chat.entity.toJSON(), scrollAt } });
   }
 

@@ -1,4 +1,5 @@
 <script lang="ts">
+  import { navigate as goto } from 'svelte-navigator';
   import { createKaiNavigator, KaiNavigator } from '../utils/navigation';
   import { onMount, onDestroy, afterUpdate } from 'svelte';
 
@@ -19,6 +20,7 @@
   let contextMenu: OptionMenu;
   let deleteMessageDialog: Dialog;
   let replyButtons: OptionMenu;
+  let entitiesMenu: OptionMenu;
 
   let fetchForwardedUsers = [];
   let forwardedUsersIndex = [];
@@ -377,10 +379,52 @@
     }
   }
 
+  // TODO
+  function showEntities(entities) {
+    entitiesMenu = new OptionMenu({
+      target: document.body,
+      props: {
+        title: 'Entities',
+        focusIndex: 0,
+        options: entities,
+        softKeyCenterText: 'select',
+        onSoftkeyRight: (evt, scope) => {},
+        onSoftkeyLeft: (evt, scope) => {},
+        onEnter: async (evt, scope) => {
+          entitiesMenu.$destroy();
+          console.log(scope.selected);
+        },
+        onBackspace: (evt, scope) => {
+          evt.preventDefault();
+          evt.stopPropagation();
+          entitiesMenu.$destroy();
+        },
+        onOpened: () => {
+          navInstance.detachListener();
+        },
+        onClosed: (scope) => {
+          navInstance.attachListener();
+          entitiesMenu = null;
+        }
+      }
+    });
+  }
+
   async function openContextMenu(msg, index) {
+    let len = 0;
+    let entities = [];
+    msg.entities.forEach(e => {
+      if (['MessageEntityMention', 'MessageEntityBotCommand', 'MessageEntityUrl', 'MessageEntityEmail', 'MessageEntityTextUrl', 'MessageEntityMentionName', 'InputMessageEntityMentionName', 'MessageEntityPhone'].indexOf(e.className) > -1) {
+        len += e.length;
+        entities.push({ title: msg.message.substring(e.offset, len), subtitle: e.className });
+      }
+    });
     try {
       const user = await getAuthorizedUser();
       let menu = [];
+      if (entities.length > 0) {
+        menu.push({ title: 'Entities' });
+      }
       if (msg.media) {
         menu.push({ title: 'Media Menu' });
       }
@@ -439,7 +483,9 @@
           onEnter: (evt, scope) => {
             contextMenu.$destroy();
             setTimeout(async () => {
-              if (scope.selected.title === 'Media Menu') {
+              if (scope.selected.title ==='Entities') {
+                showEntities(entities);
+              } else if (scope.selected.title === 'Media Menu') {
                 if (msg && msg.id.toString()) {
                   if (messageMetadata[msg.id.toString()]) {
                     const cb = messageMetadata[msg.id.toString()].callback;
@@ -989,6 +1035,37 @@
     navInstance.attachListener();
     client.addEventHandler(clientListener);
     ready = true;
+
+    // TODO
+    //setTimeout(async () => {
+      //try {
+        //// https://t.me/BotFather
+        //// https://t.me/waktusolatmybot
+        //let url = new URL('https://t.me/BotFather');
+        //let pathName = url.pathname.split('/');
+        //const entity = await client.getEntity(pathName[pathName.length - 1]);
+         //console.log(entity, entity.bot, entity.botNochats);
+        //let name = '';
+        //if (entity.firstName)
+          //name = entity.firstName;
+        //if (entity.lastName)
+          //name += ' ' + entity.lastName;
+        //if (name === '' && entity.username)
+          //name = entity.username;
+        //else if (name === '' && entity.phone)
+          //name = entity.phone;
+        //else if (name === '')
+          //name = entity.id.value.toString();
+        //location.state.name = name;
+        //location.state.entity = entity
+        //location.state.scrollAt = null
+        //appBar.setTitleText(location.state.name || name);
+        //messages = [];
+        //fetchMessages(location.state.entity, location.state.scrollAt);
+      //} catch (err) {
+        //console.log(err);
+      //}
+    //}, 5000);
   });
 
   onDestroy(async () => {
