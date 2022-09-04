@@ -1,4 +1,6 @@
 declare var navigator:any;
+declare var WebActivity:any;
+declare var MozActivity:any;
 
 import { Buffer} from 'buffer';
 import { cachedDatabase } from '../../../utils/bootstrap';
@@ -11,7 +13,7 @@ async function openFile(fileId, message) {
       const activity = new WebActivity("open", { blob: blob, type: mime });
       activity.start()
       .then(() => {
-        resolve();
+        resolve(null);
       })
       .catch(err => {
         reject(err.toString());
@@ -21,7 +23,7 @@ async function openFile(fileId, message) {
     return new Promise((resolve, reject) => {
       const activity = new MozActivity({ name: "open", data: { blob: blob, type: mime }});
       activity.onsuccess = () => {
-        resolve();
+        resolve(null);
       }
       activity.onerror = (err) => {
         reject(err.target.error.name);
