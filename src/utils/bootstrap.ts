@@ -14,7 +14,6 @@ const current = window.localStorage.getItem('APP_VERSION');
 if (current == null || current !== APP_VERSION) {
   window.localStorage.setItem('APP_VERSION', APP_VERSION);
   window.localStorage.removeItem('GramJs:apiCache');
-  // window.localStorage.removeItem('gramjs:authKey');
 }
 
 const { Api, TelegramClient, AuthKey } = telegram;
