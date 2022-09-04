@@ -38,7 +38,7 @@
 <svelte:options accessors immutable={true}/>
 
 <div class="MessageActionChatDeleteUser">
-  <p>User deleted{#if username}, {username}{/if}</p>
+  <p>{#if username}{username} {/if}joined the group</p>
 </div>
 
 <style>
