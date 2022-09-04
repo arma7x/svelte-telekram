@@ -10,6 +10,12 @@ const APP_VERSION = "1.0.0";
 const UA = parseUserAgent(navigator.userAgent);
 UA['appVersion'] = APP_VERSION;
 
+const current = window.localStorage.getItem('APP_VERSION');
+if (current == null || current !== APP_VERSION) {
+  window.localStorage.setItem('APP_VERSION', APP_VERSION);
+  window.localStorage.removeItem('gramjs:authKey');
+}
+
 const { Api, TelegramClient, AuthKey } = telegram;
 const { StoreSession } = telegram.sessions;
 const session = new StoreSession("gramjs");
