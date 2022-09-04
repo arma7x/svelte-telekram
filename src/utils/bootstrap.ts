@@ -6,14 +6,15 @@ declare var navigator:any;
 import { parseUserAgent } from './misc';
 import TelegramKeyHash from '../telegram_key';
 
-const APP_VERSION = "1.0.0";
+const APP_VERSION = "1.1.0";
 const UA = parseUserAgent(navigator.userAgent);
 UA['appVersion'] = APP_VERSION;
 
 const current = window.localStorage.getItem('APP_VERSION');
 if (current == null || current !== APP_VERSION) {
   window.localStorage.setItem('APP_VERSION', APP_VERSION);
-  window.localStorage.removeItem('gramjs:authKey');
+  window.localStorage.removeItem('GramJs:apiCache');
+  // window.localStorage.removeItem('gramjs:authKey');
 }
 
 const { Api, TelegramClient, AuthKey } = telegram;
