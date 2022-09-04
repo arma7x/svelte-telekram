@@ -83,20 +83,22 @@
           if (navInstance.verticalNavIndex == 1) {
             if (!ready)
               return;
-            const start = new Date().getTime();
-            const msg = messages[navInstance.verticalNavIndex - 1];
-            const query = { limit: 50, maxId: msg.id }
-            const newMessages = await client.getMessages(chat, query);
-            if (newMessages.length > 0) {
-              newMessages.reverse();
-              const temp = [...newMessages, ...messages];
-              messages = await buildIndex(temp);
-              navInstance.verticalNavIndex = newMessages.length - 1;
-              setTimeout(() => {
-                navInstance.navigateListNav(1);
-              }, 200);
+            if (window.confirm('Fetch previous messages ?')) {
+              const start = new Date().getTime();
+              const msg = messages[navInstance.verticalNavIndex - 1];
+              const query = { limit: 50, maxId: msg.id }
+              const newMessages = await client.getMessages(chat, query);
+              if (newMessages.length > 0) {
+                newMessages.reverse();
+                const temp = [...newMessages, ...messages];
+                messages = await buildIndex(temp);
+                navInstance.verticalNavIndex = newMessages.length - 1;
+                setTimeout(() => {
+                  navInstance.navigateListNav(1);
+                }, 200);
+              }
+              console.log(`Fetch previous: ${new Date().getTime() - start}ms`);
             }
-            console.log(`Fetch Prev: ${new Date().getTime() - start}ms`);
           }
         }
       } catch (err) {
@@ -125,16 +127,18 @@
         } else {
           if (!ready)
             return;
-          const start = new Date().getTime();
-          const msg = messages[navInstance.verticalNavIndex];
-          const query = { limit: 50, minId: msg.id }
-          const newMessages = await client.getMessages(chat, query);
-          if (newMessages.length > 0) {
-            newMessages.reverse();
-            const temp = [...messages, ...newMessages];
-            messages = await buildIndex(temp);
+          if (window.confirm('Fetch newest messages ?')) {
+            const start = new Date().getTime();
+            const msg = messages[navInstance.verticalNavIndex];
+            const query = { limit: 50, minId: msg.id }
+            const newMessages = await client.getMessages(chat, query);
+            if (newMessages.length > 0) {
+              newMessages.reverse();
+              const temp = [...messages, ...newMessages];
+              messages = await buildIndex(temp);
+            }
+            console.log(`Fetch newest: ${new Date().getTime() - start}ms`);
           }
-          console.log(`Fetch Next: ${new Date().getTime() - start}ms`);
         }
       } catch (err) {
         console.log('arrowDownListener:', err);
