@@ -24,14 +24,15 @@
 
   let fetchForwardedUsers = [];
   let forwardedUsersIndex = [];
-  const cachedForwardedUsers = {};
+  let cachedForwardedUsers = {};
 
   let fetchForwardedChannels = [];
   let forwardedChannelsIndex = [];
-  const cachedForwardedChannels = {};
+  let cachedForwardedChannels = {};
 
   let messagesToMerge = [];
 
+  let roomStack = [];
   let padTop: bool = true;
   let ready: bool = false;
   let chat: any;
@@ -147,9 +148,30 @@
       }
     },
     backspaceListener: function(evt) {
-      shouldGetDialogs.update(n => true);
       evt.preventDefault();
-      navigate(-1);
+      if (roomStack.length > 0) {
+        const prev = roomStack.pop();
+        const { appBar } = getAppProp();
+        location.state.name = prev.name;
+        location.state.entity = prev.entity
+        location.state.scrollAt = prev.scrollAt
+        appBar.setTitleText(location.state.name || prev.name);
+        fetchForwardedUsers = [];
+        forwardedUsersIndex = [];
+        cachedForwardedUsers = {};
+        fetchForwardedChannels = [];
+        forwardedChannelsIndex = [];
+        cachedForwardedChannels = {};
+        messagesToMerge = [];
+        messageMetadata = {};
+        pollMetadata = {};
+        replyIndex = {};
+        messages = [];
+        fetchMessages(location.state.entity, location.state.scrollAt);
+      } else {
+        shouldGetDialogs.update(n => true);
+        navigate(-1);
+      }
     }
   };
 
@@ -162,7 +184,7 @@
       pref['scrollAt'] = msg.id;
       (await cachedDatabase).put('chatPreferences', pref, chatId);
     } catch (err) {
-      console.log('updateScrollAt:', err);
+      // console.log('updateScrollAt:', err);
     }
   }
 
@@ -380,6 +402,47 @@
   }
 
   // TODO
+  async function openRoom(value: any) {
+    try {
+      roomStack.push({ name: location.state.name, entity: location.state.entity, scrollAt: location.state.scrollAt });
+      const { appBar } = getAppProp();
+      const entity = await client.getEntity(value);
+      // console.log(entity, entity.bot, entity.botNochats);
+      let name = '';
+      if (entity.firstName)
+        name = entity.firstName;
+      if (entity.lastName)
+        name += ' ' + entity.lastName;
+      if (name === '' && entity.username)
+        name = entity.username;
+      else if (name === '' && entity.phone)
+        name = entity.phone;
+      else if (name === '')
+        name = entity.id.value.toString();
+      location.state.name = name;
+      location.state.entity = entity
+      location.state.scrollAt = null
+      appBar.setTitleText(location.state.name || name);
+      fetchForwardedUsers = [];
+      forwardedUsersIndex = [];
+      cachedForwardedUsers = {};
+      fetchForwardedChannels = [];
+      forwardedChannelsIndex = [];
+      cachedForwardedChannels = {};
+      messagesToMerge = [];
+      messageMetadata = {};
+      pollMetadata = {};
+      replyIndex = {};
+      messages = [];
+      fetchMessages(location.state.entity, location.state.scrollAt);
+      // console.log(roomStack);
+    } catch (err) {
+      roomStack.pop();
+      // console.log('openRoom:', err);
+    }
+  }
+
+  // TODO
   function showEntities(entities) {
     entitiesMenu = new OptionMenu({
       target: document.body,
@@ -392,7 +455,25 @@
         onSoftkeyLeft: (evt, scope) => {},
         onEnter: async (evt, scope) => {
           entitiesMenu.$destroy();
-          console.log(scope.selected);
+          if (scope.selected.args.className === 'MessageEntityMention') {
+            openRoom(scope.selected.title.replace('@', ''));
+          } else if (scope.selected.args.className === 'MessageEntityBotCommand') {
+            console.log(scope.selected.title);
+          } else if (scope.selected.args.className === 'MessageEntityUrl') {
+            if (scope.selected.title.indexOf('https://t.me/') > -1) {
+              openRoom(scope.selected.title.replace('https://t.me/', ''));
+            } else {
+              window.open(scope.selected.title);
+            }
+          } else if (scope.selected.args.className === 'MessageEntityEmail') {
+            window.open(`mailto:${scope.selected.title}`);
+          } else if (scope.selected.args.className === 'MessageEntityTextUrl') {
+            window.open(scope.selected.args.url);
+          } else if (['MessageEntityMentionName', 'InputMessageEntityMentionName'].indexOf(scope.selected.args.className) > -1) {
+            openRoom(scope.selected.args.userId);
+          } else if (scope.selected.args.className === 'MessageEntityPhone') {
+            window.open(`tel:${scope.selected.title}`);
+          }
         },
         onBackspace: (evt, scope) => {
           evt.preventDefault();
@@ -413,12 +494,18 @@
   async function openContextMenu(msg, index) {
     let len = 0;
     let entities = [];
-    msg.entities.forEach(e => {
-      if (['MessageEntityMention', 'MessageEntityBotCommand', 'MessageEntityUrl', 'MessageEntityEmail', 'MessageEntityTextUrl', 'MessageEntityMentionName', 'InputMessageEntityMentionName', 'MessageEntityPhone'].indexOf(e.className) > -1) {
-        len += e.length;
-        entities.push({ title: msg.message.substring(e.offset, len), subtitle: e.className });
-      }
-    });
+    if (msg.entities) {
+      msg.entities.forEach((e, i) => {
+        if (['MessageEntityMention', 'MessageEntityBotCommand', 'MessageEntityUrl', 'MessageEntityEmail', 'MessageEntityTextUrl', 'MessageEntityMentionName', 'InputMessageEntityMentionName', 'MessageEntityPhone'].indexOf(e.className) > -1) {
+          len += e.length + i;
+          let str = msg.message.substring(e.offset, len).trim();
+          str = str.replaceAll('\n', ' ').trim();
+          if (str.indexOf(' ') > -1)
+            str = str.substring(0, str.indexOf(' '));
+          entities.push({ title: str, subtitle: e.className, args: e });
+        }
+      });
+    }
     try {
       const user = await getAuthorizedUser();
       let menu = [];
@@ -976,7 +1063,7 @@
           chat.isGroup = false;
           chat.isUser = true;
         } else {
-          const result = await client.invoke(new Api.users.GetChannels({
+          const result = await client.invoke(new Api.channels.GetChannels({
             id: [entity.id.value]
           }));
           chat.entity = result[0];
@@ -992,7 +1079,10 @@
         }
       }
       // console.log('isChannel:', chat.isChannel, ', isGroup:', chat.isGroup, ', isUser:', chat.isUser);
-      muteUntil = chat.entity.__muted || false;
+      if (chat.entity == null)
+        chat.entity = entity;
+      if (chat.entity)
+        muteUntil = chat.entity.__muted || false;
       // console.log('muteUntil:', muteUntil);
       let params = { limit: 100 };
       const newMessages = await client.getMessages(chat.entity, params);
@@ -1035,40 +1125,9 @@
     navInstance.attachListener();
     client.addEventHandler(clientListener);
     ready = true;
-
-    // TODO
-    //setTimeout(async () => {
-      //try {
-        //// https://t.me/BotFather
-        //// https://t.me/waktusolatmybot
-        //let url = new URL('https://t.me/BotFather');
-        //let pathName = url.pathname.split('/');
-        //const entity = await client.getEntity(pathName[pathName.length - 1]);
-         //console.log(entity, entity.bot, entity.botNochats);
-        //let name = '';
-        //if (entity.firstName)
-          //name = entity.firstName;
-        //if (entity.lastName)
-          //name += ' ' + entity.lastName;
-        //if (name === '' && entity.username)
-          //name = entity.username;
-        //else if (name === '' && entity.phone)
-          //name = entity.phone;
-        //else if (name === '')
-          //name = entity.id.value.toString();
-        //location.state.name = name;
-        //location.state.entity = entity
-        //location.state.scrollAt = null
-        //appBar.setTitleText(location.state.name || name);
-        //messages = [];
-        //fetchMessages(location.state.entity, location.state.scrollAt);
-      //} catch (err) {
-        //console.log(err);
-      //}
-    //}, 5000);
   });
 
-  onDestroy(async () => {
+  onDestroy(() => {
     //const { appBar } = getAppProp();
     //if (!appBar.getVisibility()) {
       //padTop = appBar.toggleVisibility();
