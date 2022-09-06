@@ -135,7 +135,6 @@
       evt.preventDefault();
       if (roomStack.length > 0) {
         const prev = roomStack.pop();
-        console.log('scrollAtscrollAt pop', prev.scrollAt);
         const { appBar } = getAppProp();
         location.state.name = prev.name;
         location.state.entity = prev.entity
