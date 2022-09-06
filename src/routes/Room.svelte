@@ -442,7 +442,15 @@
           if (scope.selected.args.className === 'MessageEntityMention') {
             openRoom(scope.selected.title.replace('@', ''));
           } else if (scope.selected.args.className === 'MessageEntityBotCommand') {
-            console.log(scope.selected.title);
+            try {
+              const result = await client.sendMessage(chat, {message: scope.selected.title});
+              const tmessages = await client.getMessages(chat, {ids: result.id})
+              if (tmessages.length > 0) {
+                pushMessageToMerge(tmessages[0]);
+              }
+            } catch (err) {
+              console.log('MessageEntityBotCommand:', err);
+            }
           } else if (scope.selected.args.className === 'MessageEntityUrl') {
             if (scope.selected.title.indexOf('https://t.me/') > -1) {
               openRoom(scope.selected.title.replace('https://t.me/', ''));
