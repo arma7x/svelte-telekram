@@ -390,8 +390,8 @@
   async function openRoom(value: any) {
     try {
       roomStack.push({ name: location.state.name, entity: location.state.entity, scrollAt: scrollAt });
-      const { appBar } = getAppProp();
       const entity = await client.getEntity(value);
+      const { appBar } = getAppProp();
       let name = '';
       if (entity.firstName)
         name = entity.firstName;
