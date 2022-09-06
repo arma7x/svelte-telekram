@@ -489,12 +489,7 @@
     if (msg.entities) {
       msg.entities.forEach((e, i) => {
         if (['MessageEntityMention', 'MessageEntityBotCommand', 'MessageEntityUrl', 'MessageEntityEmail', 'MessageEntityTextUrl', 'MessageEntityMentionName', 'InputMessageEntityMentionName', 'MessageEntityPhone'].indexOf(e.className) > -1) {
-          len += e.length + i;
-          let str = msg.message.substring(e.offset, len).trim();
-          str = str.replaceAll('\n', ' ').trim();
-          if (str.indexOf(' ') > -1)
-            str = str.substring(0, str.indexOf(' '));
-          entities.push({ title: str, subtitle: e.className, args: e });
+          entities.push({ title: msg.message.substring(e.offset, e.offset + e.length), subtitle: e.className, args: e });
         }
       });
     }
