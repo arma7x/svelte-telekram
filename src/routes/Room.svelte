@@ -139,7 +139,7 @@
         location.state.name = prev.name;
         location.state.entity = prev.entity
         location.state.scrollAt = prev.scrollAt
-        appBar.setTitleText(location.state.name || prev.name);
+        appBar.setTitleText(location.state.name);
         fetchForwardedUsers = [];
         forwardedUsersIndex = [];
         cachedForwardedUsers = {};
