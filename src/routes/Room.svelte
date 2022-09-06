@@ -360,7 +360,11 @@
                 alert(result.message);
                 return;
               } else if (result.className && result.className === "messages.BotCallbackAnswer" && result.url) {
-                alert(result.url); // TODO: init chat with bot
+                if (result.url.indexOf('https://t.me/') > -1) {
+                  openRoom(result.url.replace('https://t.me/', ''));
+                } else {
+                  window.open(result.url);
+                }
                 return;
               }
               console.log(result);
@@ -386,7 +390,6 @@
     }
   }
 
-  // TODO
   async function openRoom(value: any) {
     try {
       roomStack.push({ name: location.state.name, entity: location.state.entity, scrollAt: scrollAt });
@@ -424,7 +427,6 @@
     }
   }
 
-  // TODO
   function showEntities(entities) {
     entitiesMenu = new OptionMenu({
       target: document.body,
