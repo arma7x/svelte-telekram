@@ -15,9 +15,9 @@ export const downloadedMediaEmitter = new EventEmitter();
 export const dispatchMessageToClient = new EventEmitter();
 export const dispatchMessageToWorker = new EventEmitter();
 
-downloadedMediaEmitter.setMaxListeners(100);
-dispatchMessageToClient.setMaxListeners(100);
-dispatchMessageToWorker.setMaxListeners(100);
+downloadedMediaEmitter.setMaxListeners(1000);
+dispatchMessageToClient.setMaxListeners(1000);
+dispatchMessageToWorker.setMaxListeners(1000);
 
 client.addEventHandler((evt) => {
   switch (evt.className) {
@@ -477,19 +477,19 @@ function authorizedWebWorker() {
         self.postMessage({ type: 2, hash: task, result: buffer });
       })
       .catch(err => {
-        console.log(task.chatId, chats[task.chatId], Object.keys(chats).length) // TODO, check private channel
+        // console.log(task.chatId, chats[task.chatId], Object.keys(chats).length) // TODO, check private channel
         if (task.origin && chats[task.origin.chatId]) {
           client.getMessages(chats[task.origin.chatId], {ids:[task.origin.messageId]})
           .then((messages) => {
-            console.log(messages[0].sender);
+            // console.log(messages[0].sender);
             return client.downloadProfilePhoto(messages[0].sender);
           })
           .then((_buffer) => {
-            console.log('Success:', task.origin.chatId, task.origin.messageId);
+            // console.log('Success:', task.origin.chatId, task.origin.messageId);
             self.postMessage({ type: 2, hash: task, result: _buffer });
           })
           .catch((_err) => {
-            console.log('Fail:', task.origin.chatId, task.origin.messageId);
+            // console.log('Fail:', task.origin.chatId, task.origin.messageId);
             self.postMessage({ type: -1, params: _err });
           })
           .finally(() => {
@@ -533,7 +533,7 @@ function authorizedWebWorker() {
             appVersion: UA.appVersion,
           });
           client.addEventHandler((evt) => {
-            console.log('authorizedWebWorker.client.addEventHandler:', evt.className);
+            // console.log('authorizedWebWorker.client.addEventHandler:', evt.className);
           });
           client.connect()
           .then(() => {
@@ -852,7 +852,6 @@ export function getPushSubscription(): Promise<any> {
 }
 
 export async function registerDevice(client, subscription) {
-  // console.log('registerDevice:', subscription);
   const result = await client.invoke(new Api.account.RegisterDevice({
     tokenType: 10,
     token: JSON.stringify(subscription),
@@ -865,7 +864,6 @@ export async function registerDevice(client, subscription) {
 }
 
 export async function unregisterDevice(client, subscription) {
-  // console.log('unregisterDevice:', subscription);
   const result = await client.invoke(new Api.account.UnregisterDevice({
     tokenType: 10,
     token: JSON.stringify(subscription),
@@ -878,22 +876,17 @@ export async function unregisterDevice(client, subscription) {
 export async function manuallySubscribePushNotification(client) {
   try {
     (await cachedDatabase).delete('appPreferences', 'updatedPushSubscription');
-    // console.log('=> delete.updatedPushSubscription');
     let pushSubscription = await (await cachedDatabase).get('appPreferences', 'pushSubscription');
     if (pushSubscription == null) {
       await unregisterDevice(client, pushSubscription);
-      // console.log('=> unregisterDevice');
     }
     try {
       await unsubscribePush();
-      // console.log('=> unsubscribePush');
     } catch(err){}
     pushSubscription = await subscribePush();
     pushSubscription = pushSubscription.toJSON();
     delete pushSubscription['expirationTime'];
-    // console.log('=> subscribePush');
     await registerDevice(client, pushSubscription);
-    // console.log('=> registerDevice');
     return Promise.resolve(true);
   } catch (err) {
     return Promise.reject(err);

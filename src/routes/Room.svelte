@@ -33,7 +33,7 @@
   let messagesToMerge = [];
 
   let roomStack = [];
-  let padTop: bool = true;
+  let scrollAt = 0;
   let ready: bool = false;
   let chat: any;
   let name: string = 'Room';
@@ -66,14 +66,6 @@
     },
     arrowUpListener: async (evt) => {
       try {
-        //const { appBar } = getAppProp();
-        //if (appBar.getVisibility()) {
-          //padTop = appBar.toggleVisibility();
-          //const main = document.getElementsByTagName('main');
-          //const style = window.getComputedStyle(main[0]);
-          //main[0].style.setProperty('top', `calc(${style.top} - 28px)`);
-          //main[0].style.setProperty('height', `calc(${style.height} + 28px)`);
-        //}
         if (ready && navInstance.verticalNavIndex !== 0) {
           evt.preventDefault();
           navInstance.navigateListNav(-1);
@@ -110,14 +102,6 @@
     },
     arrowDownListener: async (evt) => {
       try {
-        //const { appBar } = getAppProp();
-        //if (!appBar.getVisibility()) {
-          //padTop = appBar.toggleVisibility();
-          //const main = document.getElementsByTagName('main');
-          //const style = window.getComputedStyle(main[0]);
-          //main[0].style.setProperty('top', `calc(${style.top} + 28px)`);
-          //main[0].style.setProperty('height', `calc(${style.height} - 28px)`);
-        //}
         if (ready && navInstance.verticalNavIndex !== Object.keys(messageMetadata).length - 1) {
           evt.preventDefault();
           navInstance.navigateListNav(1);
@@ -151,6 +135,7 @@
       evt.preventDefault();
       if (roomStack.length > 0) {
         const prev = roomStack.pop();
+        console.log('scrollAtscrollAt pop', prev.scrollAt);
         const { appBar } = getAppProp();
         location.state.name = prev.name;
         location.state.entity = prev.entity
@@ -178,6 +163,7 @@
   let navInstance = createKaiNavigator(navOptions);
 
   async function updateScrollAt(msg) {
+    scrollAt = msg.id;
     try {
       const chatId = chat.entity.id.value.toString();
       let pref = await (await cachedDatabase).get('chatPreferences', chatId);
@@ -404,10 +390,9 @@
   // TODO
   async function openRoom(value: any) {
     try {
-      roomStack.push({ name: location.state.name, entity: location.state.entity, scrollAt: location.state.scrollAt });
+      roomStack.push({ name: location.state.name, entity: location.state.entity, scrollAt: scrollAt });
       const { appBar } = getAppProp();
       const entity = await client.getEntity(value);
-      // console.log(entity, entity.bot, entity.botNochats);
       let name = '';
       if (entity.firstName)
         name = entity.firstName;
@@ -435,10 +420,8 @@
       replyIndex = {};
       messages = [];
       fetchMessages(location.state.entity, location.state.scrollAt);
-      // console.log(roomStack);
     } catch (err) {
       roomStack.pop();
-      // console.log('openRoom:', err);
     }
   }
 
@@ -1043,8 +1026,7 @@
     return -1;
   }
 
-  async function fetchMessages(entity, scrollAt) {
-    console.log('\n');
+  async function fetchMessages(entity, _scrollAt) {
     console.log('%cSTART', 'background: #222; color: #bada55');
     const _start = new Date().getTime();
     try {
@@ -1089,15 +1071,18 @@
       newMessages.reverse();
       messages = await buildIndex(newMessages);
       let cursor = messages.findIndex((msg) => {
-        return msg.id == scrollAt;
+        return msg.id == _scrollAt;
       });
       if (cursor)
         cursor++;
+      navInstance.verticalNavIndex = -1;
       navInstance.navigateListNav(1);
       setTimeout(() => {
         navInstance.navigateListNav(cursor || Object.keys(messageMetadata).length);
-        if (messages[navInstance.verticalNavIndex] && messages[navInstance.verticalNavIndex].markAsRead)
+        if (messages[navInstance.verticalNavIndex] && messages[navInstance.verticalNavIndex].markAsRead) {
           messages[navInstance.verticalNavIndex].markAsRead();
+          scrollAt = messages[navInstance.verticalNavIndex].id;
+        }
       }, 100);
     } catch (err) {
       console.log('fetchMessages:', err);
@@ -1128,14 +1113,6 @@
   });
 
   onDestroy(() => {
-    //const { appBar } = getAppProp();
-    //if (!appBar.getVisibility()) {
-      //padTop = appBar.toggleVisibility();
-      //const main = document.getElementsByTagName('main');
-      //const style = window.getComputedStyle(main[0]);
-      //main[0].style.setProperty('top', `calc(${style.top} + 28px)`);
-      //main[0].style.setProperty('height', `calc(${style.height} - 28px)`);
-    //}
     navInstance.detachListener();
     client.removeEventHandler(clientListener);
   });
@@ -1144,7 +1121,7 @@
 
 <svelte:options accessors immutable={true}/>
 
-<main id="room-screen" data-pad-top="{padTop ? '50' : '0'}" data-pad-bottom="30">
+<main id="room-screen" data-pad-top="50" data-pad-bottom="30">
   {#if ready }
   {#each messages as message}
     {#if message && message.id && messageMetadata[message.id.toString()] && messageMetadata[message.id.toString()].deleted === false}
