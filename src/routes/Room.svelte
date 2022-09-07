@@ -356,19 +356,24 @@
             // https://gram.js.org/beta/classes/Api.Message.html#click
             const result = await msg.click(scope.selected.button);
             if (result) {
+              console.log(result);
               if (result.className && result.className === "messages.BotCallbackAnswer" && result.message) {
                 alert(result.message);
-                return;
-              } else if (result.className && result.className === "messages.BotCallbackAnswer" && result.url) {
-                if (result.url.indexOf('https://t.me/') > -1) {
-                  openRoom(result.url.replace('https://t.me/', ''));
+              } else if ((result.className && result.className === "messages.BotCallbackAnswer" && result.url) || typeof result === 'string') {
+                const url = result.url || result;
+                if (url.indexOf('https://t.me/') > -1 || url.indexOf('https://telegram.me/') > -1) {
+                  const pathname = new URL(url).pathname.split('/');
+                  if (pathname.length > 1) {
+                    openRoom(pathname[1]);
+                  } else {
+                    window.open(url);
+                  }
                 } else {
-                  window.open(result.url);
+                  window.open(url);
                 }
-                return;
+              } else if (result.className && result.className === "Message") {
+                pushMessageToMerge(result);
               }
-              console.log(result);
-              pushMessageToMerge(result);
             }
           },
           onBackspace: (evt, scope) => {
@@ -392,8 +397,10 @@
 
   async function openRoom(value: any) {
     try {
-      roomStack.push({ name: location.state.name, entity: location.state.entity, scrollAt: scrollAt });
       const entity = await client.getEntity(value);
+      if (entity.id.value.toString() === location.state.entity.id.value.toString())
+        return;
+      roomStack.push({ name: location.state.name, entity: location.state.entity, scrollAt: scrollAt });
       const { appBar } = getAppProp();
       let name = '';
       if (entity.firstName)
@@ -452,8 +459,13 @@
               console.log('MessageEntityBotCommand:', err);
             }
           } else if (scope.selected.args.className === 'MessageEntityUrl') {
-            if (scope.selected.title.indexOf('https://t.me/') > -1) {
-              openRoom(scope.selected.title.replace('https://t.me/', ''));
+            if (scope.selected.title.indexOf('https://t.me/') > -1 || scope.selected.title.indexOf('https://telegram.me/') > -1) {
+              const pathname = new URL(scope.selected.title).pathname.split('/');
+              if (pathname.length > 1) {
+                openRoom(pathname[1]);
+              } else {
+                window.open(url);
+              }
             } else {
               window.open(scope.selected.title);
             }
