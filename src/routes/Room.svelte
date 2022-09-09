@@ -361,7 +361,7 @@
                 alert(result.message);
               } else if ((result.className && result.className === "messages.BotCallbackAnswer" && result.url) || typeof result === 'string') {
                 const url = result.url || result;
-                if (url.indexOf('https://t.me/') > -1 || url.indexOf('https://telegram.me/') > -1) {
+                if (url.indexOf('://t.me/') > -1 || url.indexOf('://telegram.me/') > -1) {
                   const pathname = new URL(url).pathname.split('/');
                   if (pathname.length > 1) {
                     openRoom(pathname[1]);
@@ -459,7 +459,7 @@
               console.log('MessageEntityBotCommand:', err);
             }
           } else if (scope.selected.args.className === 'MessageEntityUrl') {
-            if (scope.selected.title.indexOf('https://t.me/') > -1 || scope.selected.title.indexOf('https://telegram.me/') > -1) {
+            if (scope.selected.title.indexOf('://t.me/') > -1 || scope.selected.title.indexOf('://telegram.me/') > -1) {
               const pathname = new URL(scope.selected.title).pathname.split('/');
               if (pathname.length > 1) {
                 openRoom(pathname[1]);
