@@ -81,7 +81,7 @@
             if (window.confirm('Fetch previous messages ?')) {
               const start = new Date().getTime();
               const msg = messages[navInstance.verticalNavIndex - 1];
-              const query = { limit: 50, maxId: msg.id }
+              const query = { limit: 20, maxId: msg.id }
               const newMessages = await client.getMessages(chat, query);
               if (newMessages.length > 0) {
                 newMessages.reverse();
@@ -117,7 +117,7 @@
           if (window.confirm('Fetch newest messages ?')) {
             const start = new Date().getTime();
             const msg = messages[navInstance.verticalNavIndex];
-            const query = { limit: 50, minId: msg.id }
+            const query = { limit: 20, minId: msg.id }
             const newMessages = await client.getMessages(chat, query);
             if (newMessages.length > 0) {
               newMessages.reverse();
@@ -1082,10 +1082,21 @@
       if (chat.entity)
         muteUntil = chat.entity.__muted || false;
       // console.log('muteUntil:', muteUntil);
-      let params = { limit: 100 };
-      const newMessages = await client.getMessages(chat.entity, params);
-      newMessages.reverse();
-      messages = await buildIndex(newMessages);
+      let latestMessages = [];
+      let msgToscrollAt = [];
+      if (_scrollAt != null) {
+        msgToscrollAt = await client.getMessages(chat.entity, { limit: 1, ids: [_scrollAt] });
+      }
+      if (msgToscrollAt.length == 0 || (msgToscrollAt.length == 1 && msgToscrollAt[0] == null)) {
+        latestMessages = await client.getMessages(chat.entity, { limit: 20 });
+      } else {
+        const minId = await client.getMessages(chat.entity, { limit: 10, minId: _scrollAt, reverse: true });
+        minId.reverse();
+        const maxId = await client.getMessages(chat.entity, { limit: 10, maxId: _scrollAt });
+        latestMessages = [...minId, ...msgToscrollAt, ...maxId];
+      }
+      latestMessages.reverse();
+      messages = await buildIndex(latestMessages);
       let cursor = messages.findIndex((msg) => {
         return msg.id == _scrollAt;
       });
