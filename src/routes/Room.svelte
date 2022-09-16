@@ -55,12 +55,22 @@
         return;
       // send attachment + bot command
     },
-    enterListener: function(evt) {
+    enterListener: async function(evt) {
       if (!ready && chat == null)
         return;
       if (location.state.entity.className === 'Channel' && !location.state.entity.megagroup && location.state.entity.creator) {
         openSendMessage(null)
-      } else {
+      } else if (location.state.entity.bot && messages.length == 0) {
+        try {
+          const result = await client.sendMessage(chat, {message: "/start"});
+          const tmessages = await client.getMessages(chat, {ids: result.id})
+          if (tmessages.length > 0) {
+            pushMessageToMerge(tmessages[0]);
+          }
+        } catch (err) {
+          alert(err.errorMessage);
+        }
+      } else if (location.state.entity.className !== 'Channel' ) {
         openSendMessage(null)
       }
     },
@@ -1045,6 +1055,7 @@
   }
 
   async function fetchMessages(entity, _scrollAt) {
+    const { softwareKey } = getAppProp();
     console.log('%cSTART', 'background: #222; color: #bada55');
     const _start = new Date().getTime();
     try {
@@ -1078,7 +1089,7 @@
           }
         }
       }
-      // console.log('isChannel:', chat.isChannel, ', isGroup:', chat.isGroup, ', isUser:', chat.isUser);
+      // console.log('isChannel:', chat.isChannel, ', isGroup:', chat.isGroup, ', isUser:', chat.isUser, chat);
       if (chat.entity == null)
         chat.entity = entity;
       if (chat.entity)
@@ -1097,8 +1108,20 @@
         const maxId = await client.getMessages(chat.entity, { limit: 10, maxId: _scrollAt });
         latestMessages = [...minId, ...msgToscrollAt, ...maxId];
       }
+
       latestMessages.reverse();
       messages = await buildIndex(latestMessages);
+
+      if (location.state.entity.className === 'Channel' && !location.state.entity.megagroup && location.state.entity.creator) {
+        softwareKey.setText({ left: 'Action', center: 'BROADCAST', right: '📎' });
+      } else if (location.state.entity.className === 'Channel' && !location.state.entity.megagroup && !location.state.entity.creator) {
+        softwareKey.setText({ left: '', center: '', right: '' });
+      } else if (location.state.entity.bot && messages.length == 0) {
+        softwareKey.setText({ left: 'Action', center: 'START', right: '📎' });
+      } else {
+        softwareKey.setText({ left: 'Action', center: 'SEND', right: '📎' });
+      }
+
       let cursor = messages.findIndex((msg) => {
         return msg.id == _scrollAt;
       });
@@ -1129,13 +1152,6 @@
     const { appBar, softwareKey } = getAppProp();
     appBar.setTitleText(location.state.name || name);
     fetchMessages(location.state.entity, location.state.scrollAt);
-    if (location.state.entity.className === 'Channel' && !location.state.entity.megagroup && location.state.entity.creator) {
-      softwareKey.setText({ left: 'Action', center: 'BROADCAST', right: '📎' });
-    } else if (location.state.entity.className === 'Channel' && !location.state.entity.megagroup && !location.state.entity.creator) {
-      softwareKey.setText({ left: '', center: '', right: '' });
-    } else {
-      softwareKey.setText({ left: 'Action', center: 'SEND', right: '📎' });
-    }
     navInstance.attachListener();
     client.addEventHandler(clientListener);
     ready = true;
