@@ -801,14 +801,14 @@
         const users = await client.invoke(new Api.users.GetUsers({ id: fetchForwardedUsers }));
         users.forEach(u => {
           cachedForwardedUsers[u.id.toString()] = u;
-          if (!(u.username == null && u.phone == null) && u.photo != null) {
+          if (!(u.username == null && u.phone == null) && u.photo != null && u.photo.photoId) {
             httpTasks.push({
               url: `https://api.codetabs.com/v1/proxy/?quest=https://t.me/${u.phone === "42777" ? 'telegram' : u.username}`,
               photoId: u.photo.photoId.toString(),
               chat: u,
               //origin: { chat, message }, // TODO
             })
-          } else if (u.photo != null) {
+          } else if (u.photo != null && u.photo.photoId) {
             websocketTasks.push({
               photoId: u.photo.photoId.toString(),
               chat: u,
@@ -838,14 +838,14 @@
         const channels = await client.invoke(new Api.channels.GetChannels({ id: fetchForwardedChannels }));
         channels.chats.forEach(c => {
           cachedForwardedChannels[c.id.toString()] = c;
-          if (!(c.username == null && c.phone == null) && c.photo != null) {
+          if (!(c.username == null && c.phone == null) && c.photo != null && c.photo.photoId) {
             httpTasks.push({
               url: `https://api.codetabs.com/v1/proxy/?quest=https://t.me/${c.phone === "42777" ? 'telegram' : c.username}`,
               photoId: c.photo.photoId.toString(),
               chat: c,
               //origin: { chat, message }, // TODO
             })
-          } else if (c.photo != null) {
+          } else if (c.photo != null && c.photo.photoId) {
             websocketTasks.push({
               photoId: c.photo.photoId.toString(),
               chat: c,
@@ -860,9 +860,9 @@
     }
     forwardedChannelsIndex.forEach(i => {
       _messages[i].fwdFrom.sender = cachedForwardedChannels[_messages[i].fwdFrom.fromId.channelId.toString()];
-      if (!(_messages[i].fwdFrom.sender.username == null && _messages[i].fwdFrom.sender.phone == null) && _messages[i].fwdFrom.sender.photo != null) {
+      if (!(_messages[i].fwdFrom.sender.username == null && _messages[i].fwdFrom.sender.phone == null) && _messages[i].fwdFrom.sender.photo != null && _messages[i].fwdFrom.sender.photo.photoId) {
         _messages[i].iconRef = _messages[i].fwdFrom.sender.photo.photoId.toString();
-      } else if (_messages[i].fwdFrom.sender.photo != null) {
+      } else if (_messages[i].fwdFrom.sender.photo != null && _messages[i].fwdFrom.sender.photo.photoId) {
         _messages[i].iconRef = _messages[i].fwdFrom.sender.photo.photoId.toString();
       }
     });
