@@ -123,6 +123,8 @@
               newMessages.reverse();
               const temp = [...messages, ...newMessages];
               messages = await buildIndex(temp);
+            } else {
+              alert('No new messages');
             }
             console.log(`Fetch newest: ${new Date().getTime() - start}ms`);
           }
