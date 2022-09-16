@@ -60,6 +60,8 @@
         return;
       if (location.state.entity.className === 'Channel' && !location.state.entity.megagroup && location.state.entity.creator) {
         openSendMessage(null)
+      } else if (location.state.entity.className === 'Channel' && !location.state.entity.megagroup && !location.state.entity.creator && location.state.entity.left) {
+        alert("WIP");
       } else if (location.state.entity.bot && messages.length == 0) {
         try {
           const result = await client.sendMessage(chat, {message: "/start"});
@@ -1089,12 +1091,12 @@
           }
         }
       }
-      // console.log('isChannel:', chat.isChannel, ', isGroup:', chat.isGroup, ', isUser:', chat.isUser, chat);
+      // console.log('isChannel:', chat.isChannel, ', isGroup:', chat.isGroup, ', isUser:', chat.isUser, chat, location.state.entity);
+      // console.log('muteUntil:', muteUntil);
       if (chat.entity == null)
         chat.entity = entity;
       if (chat.entity)
         muteUntil = chat.entity.__muted || false;
-      // console.log('muteUntil:', muteUntil);
       let latestMessages = [];
       let msgToscrollAt = [];
       if (_scrollAt != null) {
@@ -1115,7 +1117,10 @@
       if (location.state.entity.className === 'Channel' && !location.state.entity.megagroup && location.state.entity.creator) {
         softwareKey.setText({ left: 'Action', center: 'BROADCAST', right: '📎' });
       } else if (location.state.entity.className === 'Channel' && !location.state.entity.megagroup && !location.state.entity.creator) {
-        softwareKey.setText({ left: '', center: '', right: '' });
+        if (location.state.entity.left)
+          softwareKey.setText({ left: '', center: 'JOIN', right: '' });
+        else
+          softwareKey.setText({ left: '', center: '', right: '' });
       } else if (location.state.entity.bot && messages.length == 0) {
         softwareKey.setText({ left: 'Action', center: 'START', right: '📎' });
       } else {
