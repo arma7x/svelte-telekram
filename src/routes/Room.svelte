@@ -61,7 +61,9 @@
       if (location.state.entity.className === 'Channel' && !location.state.entity.megagroup && location.state.entity.creator) {
         openSendMessage(null)
       } else if (location.state.entity.className === 'Channel' && !location.state.entity.megagroup && !location.state.entity.creator && location.state.entity.left) {
-        alert("WIP");
+        alert("WIP JOIN");
+      } else if (location.state.entity.className === 'Channel' && !location.state.entity.megagroup && !location.state.entity.creator && !location.state.entity.left) {
+        alert("WIP LEAVE");
       } else if (location.state.entity.bot && messages.length == 0) {
         try {
           const result = await client.sendMessage(chat, {message: "/start"});
@@ -1118,9 +1120,9 @@
         softwareKey.setText({ left: 'Action', center: 'BROADCAST', right: '📎' });
       } else if (location.state.entity.className === 'Channel' && !location.state.entity.megagroup && !location.state.entity.creator) {
         if (location.state.entity.left)
-          softwareKey.setText({ left: '', center: 'JOIN', right: '' });
+          softwareKey.setText({ left: 'Action', center: 'JOIN', right: '' });
         else
-          softwareKey.setText({ left: '', center: '', right: '' });
+          softwareKey.setText({ left: 'Action', center: 'LEAVE', right: '' });
       } else if (location.state.entity.bot && messages.length == 0) {
         softwareKey.setText({ left: 'Action', center: 'START', right: '📎' });
       } else {
