@@ -103,6 +103,26 @@ async function getCachedMedia(fileId, message) {
   });
 }
 
+function getDocumentName(message) {
+  try {
+    let filename = null;
+    if (message.media.document) {
+      for (let j in message.media.document.attributes) {
+        const a = message.media.document.attributes[j];
+        if (a.className && a.className === "DocumentAttributeFilename") {
+          filename = a.fileName;
+          break;
+        }
+      }
+    }
+    if (filename)
+      return filename;
+  } catch (err) {}
+  let strings = message.media.document.mimeType.split('/');
+  strings = strings[strings.length - 1];
+  return strings.charAt(0).toUpperCase() + strings.slice(1);
+}
+
 async function removeCachedMedia(fileId) {
   return await (await cachedDatabase).delete('mediaAttachments', fileId);
 }
@@ -114,4 +134,5 @@ export  {
   removeCachedMedia,
   strippedPhotoToJpg,
   humanFileSize,
+  getDocumentName,
 }

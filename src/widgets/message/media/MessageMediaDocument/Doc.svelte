@@ -3,7 +3,7 @@
   import { saveAs } from 'file-saver';
   import * as Mime from 'mime-types';
   import { createKaiNavigator, KaiNavigator } from '../../../../utils/navigation';
-  import { openFile, humanFileSize, isMediaCached, getCachedMedia, removeCachedMedia } from '../common';
+  import { openFile, humanFileSize, isMediaCached, getCachedMedia, removeCachedMedia, getDocumentName } from '../common';
   import { downloadedMediaEmitter } from '../../../../stores/telegram';
   import { OptionMenu } from '../../../../components';
 
@@ -122,26 +122,6 @@
     }
   }
 
-  function getFileType(string) {
-    try {
-      let filename = null;
-      if (message.media.document) {
-        for (let j in message.media.document.attributes) {
-          const a = message.media.document.attributes[j];
-          if (a.className && a.className === "DocumentAttributeFilename") {
-            filename = a.fileName;
-            break;
-          }
-        }
-      }
-      if (filename)
-        return filename;
-    } catch (err) {}
-    const strings = string.split('/');
-    string = strings[strings.length - 1];
-    return string.charAt(0).toUpperCase() + string.slice(1);
-  }
-
   beforeUpdate(async () => {
     fileId = message.media.document.id.toString();
     downloaded = await isMediaCached(fileId);
@@ -168,7 +148,7 @@
 <div class="media-container">
   <img alt="thumb" src="/icons/document.svg" />
   <small>
-    <div>{#if downloading > -1}{downloading}%&nbsp;{/if}{#if !downloaded && downloading === -1}<img alt="download" src="/icons/download.svg" width="10px" height="10px" />&nbsp;{/if}{getFileType(message.media.document.mimeType)}</div>
+    <div>{#if downloading > -1}{downloading}%&nbsp;{/if}{#if !downloaded && downloading === -1}<img alt="download" src="/icons/download.svg" width="10px" height="10px" />&nbsp;{/if}{getDocumentName(message)}</div>
     <div>{size}</div>
   </small>
 </div>

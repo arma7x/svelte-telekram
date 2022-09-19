@@ -4,7 +4,7 @@
   import { saveAs } from 'file-saver';
   import * as Mime from 'mime-types';
   import { createKaiNavigator, KaiNavigator } from '../../../../utils/navigation';
-  import { openFile, strippedPhotoToJpg, humanFileSize, isMediaCached, getCachedMedia, removeCachedMedia } from '../common';
+  import { openFile, strippedPhotoToJpg, humanFileSize, isMediaCached, getCachedMedia, removeCachedMedia, getDocumentName } from '../common';
   import { downloadedMediaEmitter } from '../../../../stores/telegram';
   import { OptionMenu } from '../../../../components';
 
@@ -158,7 +158,7 @@
 <div class="media-container">
   <img alt="thumb" src="{thumb}" />
   <small>
-    <div>{#if downloading > -1}{downloading}%&nbsp;{/if}{#if !downloaded && downloading === -1}<img alt="download" src="/icons/download.svg" width="10px" height="10px" />&nbsp;{/if}Video</div>
+    <div>{#if downloading > -1}{downloading}%&nbsp;{/if}{#if !downloaded && downloading === -1}<img alt="download" src="/icons/download.svg" width="10px" height="10px" />&nbsp;{/if}{getDocumentName(message)}</div>
     <div>{size}</div>
   </small>
 </div>
