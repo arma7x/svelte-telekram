@@ -654,7 +654,7 @@
           replies.forEach(message => {
             const sender = message.sender || message.__sender;
             if (!(location.state.entity.className === 'Channel' && !location.state.entity.megagroup)) {
-              if (sender && !(sender.username == null && sender.phone == null) && sender.photo != null) {
+              if (sender && !(sender.username == null && sender.phone == null) && sender.photo != null && sender.photo.photoId) {
                 message.iconRef = sender.photo.photoId.toString();
                 httpTasks.push({
                   url: `https://api.codetabs.com/v1/proxy/?quest=https://t.me/${sender.phone === "42777" ? 'telegram' : sender.username}`,
@@ -662,7 +662,7 @@
                   chat: sender,
                   origin: { chat, message },
                 });
-              } else if (sender && sender.photo != null) {
+              } else if (sender && sender.photo != null && sender.photo.photoId) {
                 message.iconRef = sender.photo.photoId.toString();
                 websocketTasks.push({
                   photoId: sender.photo.photoId.toString(),
@@ -747,7 +747,7 @@
 
           const sender = message.sender || message.__sender;
           if (!(location.state.entity.className === 'Channel' && !location.state.entity.megagroup)) {
-            if (sender && !(sender.username == null && sender.phone == null) && sender.photo != null) {
+            if (sender && !(sender.username == null && sender.phone == null) && sender.photo != null && sender.photo.photoId) {
               message.iconRef = sender.photo.photoId.toString();
               httpTasks.push({
                 url: `https://api.codetabs.com/v1/proxy/?quest=https://t.me/${sender.phone === "42777" ? 'telegram' : sender.username}`,
@@ -755,7 +755,7 @@
                 chat: sender,
                 origin: { chat, message },
               });
-            } else if (sender && sender.photo != null) {
+            } else if (sender && sender.photo != null && sender.photo.photoId) {
               message.iconRef = sender.photo.photoId.toString();
               websocketTasks.push({
                 photoId: sender.photo.photoId.toString(),
@@ -839,7 +839,7 @@
     }
     forwardedUsersIndex.forEach(i => {
       _messages[i].fwdFrom.sender = cachedForwardedUsers[_messages[i].fwdFrom.fromId.userId.toString()];
-      if (!(_messages[i].fwdFrom.sender.username == null && _messages[i].fwdFrom.sender.phone == null) && _messages[i].fwdFrom.sender.photo != null) {
+      if (!(_messages[i].fwdFrom.sender.username == null && _messages[i].fwdFrom.sender.phone == null) && _messages[i].fwdFrom.sender.photo != null && _messages[i].fwdFrom.sender.photo.photoId) {
         _messages[i].iconRef = _messages[i].fwdFrom.sender.photo.photoId.toString();
       } else if (_messages[i].fwdFrom.sender.photo != null) {
         _messages[i].iconRef = _messages[i].fwdFrom.sender.photo.photoId.toString();
