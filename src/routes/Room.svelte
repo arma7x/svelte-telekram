@@ -63,12 +63,21 @@
           openSendMessage(null)
         } else if (location.state.entity.left) {
           alert("WIP SUB");
+          const channels = await client.invoke(new Api.channels.GetChannels({ id: [location.state.entity.id.value] }));
+          console.log(channels.chats[0]);
+          // await client.invoke(new Api.channels.JoinChannel({ channel: channels.chats[0] }))
         } else if (!location.state.entity.left) {
           alert("WIP UNSUB");
+          const channels = await client.invoke(new Api.channels.GetChannels({ id: [location.state.entity.id.value] }));
+          console.log(channels.chats[0]);
+          // await client.invoke(new Api.channels.LeaveChannel({ channel: channels.chats[0] }))
         }
       } else if (location.state.entity.className === 'Channel' && location.state.entity.megagroup) { // Group
         if (location.state.entity.left) {
           alert("WIP JOIN");
+          const channels = await client.invoke(new Api.channels.GetChannels({ id: [location.state.entity.id.value] }));
+          console.log(channels.chats[0]);
+          // await client.invoke(new Api.channels.JoinChannel({ channel: channels.chats[0] }))
         } else if (!location.state.entity.left) {
           openSendMessage(null)
         }
@@ -1092,7 +1101,7 @@
           const result = await client.invoke(new Api.channels.GetChannels({
             id: [entity.id.value]
           }));
-          chat.entity = result[0];
+          chat.entity = result.chats[0];
           if (entity.megagroup) {
             chat.isChannel = true;
             chat.isGroup = true;
