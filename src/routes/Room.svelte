@@ -58,12 +58,20 @@
     enterListener: async function(evt) {
       if (!ready && chat == null)
         return;
-      if (location.state.entity.className === 'Channel' && !location.state.entity.megagroup && location.state.entity.creator) {
-        openSendMessage(null)
-      } else if (location.state.entity.className === 'Channel' && !location.state.entity.megagroup && !location.state.entity.creator && location.state.entity.left) {
-        alert("WIP JOIN");
-      } else if (location.state.entity.className === 'Channel' && !location.state.entity.megagroup && !location.state.entity.creator && !location.state.entity.left) {
-        alert("WIP LEAVE");
+      if (location.state.entity.className === 'Channel' && !location.state.entity.megagroup) { // Channel
+        if (location.state.entity.creator) {
+          openSendMessage(null)
+        } else if (location.state.entity.left) {
+          alert("WIP SUB");
+        } else if (!location.state.entity.left) {
+          alert("WIP UNSUB");
+        }
+      } else if (location.state.entity.className === 'Channel' && location.state.entity.megagroup) { // Group
+        if (location.state.entity.left) {
+          alert("WIP JOIN");
+        } else if (!location.state.entity.left) {
+          openSendMessage(null)
+        }
       } else if (location.state.entity.bot && messages.length == 0) {
         try {
           const result = await client.sendMessage(chat, {message: "/start"});
@@ -548,7 +556,9 @@
       if (msg.replies && msg.replies.replies > 0) {
         menu.push({ title: 'Discussion' });
       }
-      menu.push({ title: 'Reply' });
+      if ((chat.entity.className === 'Channel' && chat.entity.creator) || (chat.entity.className === 'Channel' && chat.entity.megagroup && !chat.entity.left) || chat.entity.className === 'User') {
+        menu.push({ title: 'Reply' });
+      }
       const sender = msg.sender || msg.__sender;
       if (sender && sender.id.value.toString() === user[0].id.value.toString()) {
         if ((new Date().getTime() - new Date(msg.date * 1000).getTime() < 172800000 || chat.entity.__isSavedMessages) && msg.fwdFrom == null) {
@@ -564,10 +574,12 @@
       if (!msg.pinned && ((chat.entity.className === 'Channel' && chat.entity.creator) || chat.entity.className === 'User')) {
         menu.push({ title: 'Pin' });
       }
-      if (muteUntil === false) {
-        menu.push({ title: 'Mute Chat' });
-      } else {
-        menu.push({ title: 'Unmute Chat' });
+      if ((chat.entity.className === 'Channel' && !chat.entity.left) || chat.entity.className === 'User') {
+        if (muteUntil === false) {
+          menu.push({ title: 'Mute Chat' });
+        } else {
+          menu.push({ title: 'Unmute Chat' });
+        }
       }
       if (chat.entity.className === 'Channel') {
         menu.push({ title: 'Report' });
@@ -1115,13 +1127,20 @@
       latestMessages.reverse();
       messages = await buildIndex(latestMessages);
 
-      if (location.state.entity.className === 'Channel' && !location.state.entity.megagroup && location.state.entity.creator) {
-        softwareKey.setText({ left: 'Action', center: 'BROADCAST', right: '📎' });
-      } else if (location.state.entity.className === 'Channel' && !location.state.entity.megagroup && !location.state.entity.creator) {
-        if (location.state.entity.left)
+      if (location.state.entity.className === 'Channel' && !location.state.entity.megagroup) { // Channel
+        if (location.state.entity.creator) {
+          softwareKey.setText({ left: 'Action', center: 'BROADCAST', right: '📎' });
+        } else if (location.state.entity.left) {
+          softwareKey.setText({ left: 'Action', center: 'SUB', right: '' });
+        } else if (!location.state.entity.left) {
+          softwareKey.setText({ left: 'Action', center: 'UNSUB', right: '' });
+        }
+      } else if (location.state.entity.className === 'Channel' && location.state.entity.megagroup) { // Group
+        if (location.state.entity.left) {
           softwareKey.setText({ left: 'Action', center: 'JOIN', right: '' });
-        else
-          softwareKey.setText({ left: 'Action', center: 'LEAVE', right: '' });
+        } else if (!location.state.entity.left) {
+          softwareKey.setText({ left: 'Action', center: 'SEND', right: '📎' });
+        }
       } else if (location.state.entity.bot && messages.length == 0) {
         softwareKey.setText({ left: 'Action', center: 'START', right: '📎' });
       } else {
