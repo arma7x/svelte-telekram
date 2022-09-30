@@ -62,22 +62,13 @@
         if (location.state.entity.creator) {
           openSendMessage(null)
         } else if (location.state.entity.left) {
-          alert("WIP SUB");
-          const channels = await client.invoke(new Api.channels.GetChannels({ id: [location.state.entity.id.value] }));
-          console.log(channels.chats[0]);
-          // await client.invoke(new Api.channels.JoinChannel({ channel: channels.chats[0] }))
+          joinChannel();
         } else if (!location.state.entity.left) {
-          alert("WIP UNSUB");
-          const channels = await client.invoke(new Api.channels.GetChannels({ id: [location.state.entity.id.value] }));
-          console.log(channels.chats[0]);
-          // await client.invoke(new Api.channels.LeaveChannel({ channel: channels.chats[0] }))
+          leaveChannel();
         }
       } else if (location.state.entity.className === 'Channel' && location.state.entity.megagroup) { // Group
         if (location.state.entity.left) {
-          alert("WIP JOIN");
-          const channels = await client.invoke(new Api.channels.GetChannels({ id: [location.state.entity.id.value] }));
-          console.log(channels.chats[0]);
-          // await client.invoke(new Api.channels.JoinChannel({ channel: channels.chats[0] }))
+          joinChannel();
         } else if (!location.state.entity.left) {
           openSendMessage(null)
         }
@@ -202,6 +193,63 @@
       (await cachedDatabase).put('chatPreferences', pref, chatId);
     } catch (err) {
       // console.log('updateScrollAt:', err);
+    }
+  }
+
+  async function joinChannel() {
+    try {
+      const { softwareKey } = getAppProp();
+      const channels = await client.invoke(new Api.channels.GetChannels({ id: [location.state.entity.id.value] }));
+      console.log(channels.chats[0]);
+      await client.invoke(new Api.channels.JoinChannel({ channel: channels.chats[0] }));
+      location.state.entity.left = true;
+      if (location.state.entity.className === 'Channel' && !location.state.entity.megagroup) { // Channel
+        if (location.state.entity.creator) {
+          softwareKey.setText({ left: 'Action', center: 'BROADCAST', right: '📎' });
+        } else if (location.state.entity.left) {
+          softwareKey.setText({ left: 'Action', center: 'SUB', right: '' });
+        } else if (!location.state.entity.left) {
+          softwareKey.setText({ left: 'Action', center: 'UNSUB', right: '' });
+        }
+      } else if (location.state.entity.className === 'Channel' && location.state.entity.megagroup) { // Group
+        if (location.state.entity.left) {
+          softwareKey.setText({ left: 'Action', center: 'JOIN', right: '' });
+        } else if (!location.state.entity.left) {
+          softwareKey.setText({ left: 'Action', center: 'SEND', right: '📎' });
+        }
+      }
+    } catch (err) {
+      console.log('joinChannel', err);
+    }
+  }
+
+  async function leaveChannel() {
+    if (!confirm('Are you sure to leave ?')) {
+      return;
+    }
+    try {
+      const { softwareKey } = getAppProp();
+      const channels = await client.invoke(new Api.channels.GetChannels({ id: [location.state.entity.id.value] }));
+      console.log(channels.chats[0]);
+      await client.invoke(new Api.channels.LeaveChannel({ channel: channels.chats[0] }))
+      location.state.entity.left = true;
+      if (location.state.entity.className === 'Channel' && !location.state.entity.megagroup) { // Channel
+        if (location.state.entity.creator) {
+          softwareKey.setText({ left: 'Action', center: 'BROADCAST', right: '📎' });
+        } else if (location.state.entity.left) {
+          softwareKey.setText({ left: 'Action', center: 'SUB', right: '' });
+        } else if (!location.state.entity.left) {
+          softwareKey.setText({ left: 'Action', center: 'UNSUB', right: '' });
+        }
+      } else if (location.state.entity.className === 'Channel' && location.state.entity.megagroup) { // Group
+        if (location.state.entity.left) {
+          softwareKey.setText({ left: 'Action', center: 'JOIN', right: '' });
+        } else if (!location.state.entity.left) {
+          softwareKey.setText({ left: 'Action', center: 'SEND', right: '📎' });
+        }
+      }
+    } catch (err) {
+      console.log('leaveChannel', err);
     }
   }
 
@@ -593,6 +641,9 @@
       if (chat.entity.className === 'Channel') {
         menu.push({ title: 'Report' });
       }
+      if (chat.entity.className === 'Channel' && chat.entity.megagroup && !chat.entity.left && !location.state.entity.creator) {
+        menu.push({ title: 'Leave Group' });
+      }
       contextMenu = new OptionMenu({
         target: document.body,
         props: {
@@ -638,6 +689,8 @@
                 showReplyButtons(msg);
               } else if (scope.selected.title === 'Show Reply Header') {
                 showReplies(getReplyHeader(msg), true);
+              } else if (scope.selected.title === 'Leave Group') {
+                leaveChannel();
               }
             }, 200);
           },
