@@ -103,7 +103,7 @@
             if (window.confirm('Fetch previous messages ?')) {
               const start = new Date().getTime();
               const msg = messages[navInstance.verticalNavIndex - 1];
-              const query = { limit: 20, maxId: msg.id }
+              const query = { limit: 50, maxId: msg.id }
               const newMessages = await client.getMessages(chat, query);
               if (newMessages.length > 0) {
                 newMessages.reverse();
@@ -139,7 +139,7 @@
           if (window.confirm('Fetch newest messages ?')) {
             const start = new Date().getTime();
             const msg = messages[navInstance.verticalNavIndex];
-            const query = { limit: 20, minId: msg.id, reverse: true }
+            const query = { limit: 50, minId: msg.id, reverse: true }
             const newMessages = await client.getMessages(chat, query);
             if (newMessages.length > 0) {
               const temp = [...messages, ...newMessages];
