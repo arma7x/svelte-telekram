@@ -41,18 +41,15 @@ function isElementInViewport(el, marginTop = 0, marginBottom = 0) {
     marginBottom = parseFloat(el.parentElement.getAttribute("data-pad-bottom"));
   const rect = el.getBoundingClientRect();
   return (
-      rect.top >= 0 + marginTop &&
-      rect.left >= 0 &&
-      rect.bottom <= ((window.innerHeight || document.documentElement.clientHeight) - marginBottom) && /* or $(window).height() */
-      rect.right <= (window.innerWidth || document.documentElement.clientWidth) /* or $(window).width() */
+    rect.top >= 0 + marginTop &&
+    rect.left >= 0 &&
+    rect.bottom <= ((window.innerHeight || document.documentElement.clientHeight) - marginBottom) && /* or $(window).height() */
+    rect.right <= (window.innerWidth || document.documentElement.clientWidth) /* or $(window).width() */
   );
 }
 
-function dispatchScroll(target,newScrollTop) {
-  target.scrollTop = newScrollTop;
-  const e = document.createEvent("UIEvents");
-  e.initUIEvent("scroll", true, true, window, 1);
-  target.dispatchEvent(e);
+function dispatchScroll(target, newScrollTop) {
+  target.scroll({ top: newScrollTop, behavior: 'smooth' });
 }
 
 class KaiNavigator {
