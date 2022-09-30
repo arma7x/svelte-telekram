@@ -200,9 +200,8 @@
     try {
       const { softwareKey } = getAppProp();
       const channels = await client.invoke(new Api.channels.GetChannels({ id: [location.state.entity.id.value] }));
-      console.log(channels.chats[0]);
       await client.invoke(new Api.channels.JoinChannel({ channel: channels.chats[0] }));
-      location.state.entity.left = true;
+      location.state.entity.left = false;
       if (location.state.entity.className === 'Channel' && !location.state.entity.megagroup) { // Channel
         if (location.state.entity.creator) {
           softwareKey.setText({ left: 'Action', center: 'BROADCAST', right: '📎' });
@@ -230,7 +229,6 @@
     try {
       const { softwareKey } = getAppProp();
       const channels = await client.invoke(new Api.channels.GetChannels({ id: [location.state.entity.id.value] }));
-      console.log(channels.chats[0]);
       await client.invoke(new Api.channels.LeaveChannel({ channel: channels.chats[0] }))
       location.state.entity.left = true;
       if (location.state.entity.className === 'Channel' && !location.state.entity.megagroup) { // Channel
