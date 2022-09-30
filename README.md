@@ -8,6 +8,7 @@ A Telegram client for KaiOS using Svelte and TypeScript.
 
 ### Deploying to a device
 
+0. Read this https://github.com/arma7x/svelte-telekram/issues/2
 1. Connect your device to your computer and make sure it appears in WebIDE.
 2. `npm run build`
 3. In WebIDE, load the `/public` folder as a packaged app.
