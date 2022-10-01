@@ -49,7 +49,11 @@ function isElementInViewport(el, marginTop = 0, marginBottom = 0) {
 }
 
 function dispatchScroll(target, newScrollTop) {
-  target.scroll({ top: newScrollTop, behavior: 'smooth' });
+  try {
+    setTimeout(() => {
+      target.scroll({ top: newScrollTop, behavior: 'smooth' });
+    }, 100);
+  } catch (err) {}
 }
 
 class KaiNavigator {
