@@ -59,7 +59,11 @@ client.addEventHandler((evt) => {
   }
 });
 
-export function connect() {
+export function initilize() {
+  let tm = setTimeout(() => {
+    alert("Please re-launch the app");
+    window.close();
+  }, 60000);
   return client.connect()
   .then(() => {
     connectionStatus.update(n => true);
@@ -67,10 +71,13 @@ export function connect() {
   })
   .catch(err => {
     connectionStatus.update(n => false);
+  })
+  .finally(() => {
+    clearTimeout(tm);
   });
 }
 
-connect();
+initilize();
 
 export async function fetchUser() {
   const result = await client.invoke(
