@@ -49,11 +49,14 @@ function isElementInViewport(el, marginTop = 0, marginBottom = 0) {
 }
 
 function dispatchScroll(target, newScrollTop) {
-  try {
-    setTimeout(() => {
-      target.scroll({ top: newScrollTop, behavior: 'smooth' });
-    }, 100);
-  } catch (err) {}
+  target.scroll({ top: newScrollTop, behavior: 'smooth' });
+}
+
+function dispatchFocus(target, newScrollTop) {
+  target.scrollTop = newScrollTop;
+  const e = document.createEvent("UIEvents");
+  e.initUIEvent("scroll", true, true, window, 1);
+  target.dispatchEvent(e);
 }
 
 class KaiNavigator {
@@ -144,6 +147,11 @@ class KaiNavigator {
       if (cursor.parentElement.getAttribute("data-pad-bottom"))
         marginBottom = parseFloat(cursor.parentElement.getAttribute("data-pad-bottom"));
       dispatchScroll(cursor.parentElement, cursor.offsetTop - ((cursor.parentElement.clientHeight - marginTop - marginBottom) / 2));
+      setTimeout(() => {
+        if (!isElementInViewport(cursor)) {
+          dispatchFocus(cursor.parentElement, cursor.offsetTop - ((cursor.parentElement.clientHeight - marginTop - marginBottom) / 2));
+        }
+      }, 150);
     }
     if (['INPUT', 'TEXTAREA'].indexOf(document.activeElement.tagName) > -1) {
       if (document.activeElement instanceof HTMLElement) {
