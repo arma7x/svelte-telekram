@@ -1220,7 +1220,7 @@
           messages[navInstance.verticalNavIndex].markAsRead();
           scrollAt = messages[navInstance.verticalNavIndex].id;
         }
-      }, 100);
+      }, 300);
     } catch (err) {
       console.log('fetchMessages:', err);
     }
