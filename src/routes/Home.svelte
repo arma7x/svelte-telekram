@@ -560,13 +560,15 @@
         }
       });
       chatList = tempChatList;
-      //setTimeout(() => {
-        //navInstance.navigateListNav(1);
-        //setTimeout(() => {
-          //navInstance.navigateListNav(-1);
-        //}, 100);
-        //console.log(1);
-      //}, 100);
+      if (window['HOME_LOADED'] == null) {
+        setTimeout(() => {
+          navInstance.navigateListNav(1);
+          setTimeout(() => {
+            navInstance.navigateListNav(-1);
+          }, 200);
+        }, 200);
+        window['HOME_LOADED'] = true;
+      }
     } catch(err) {
       console.log(err.toString());
     }
