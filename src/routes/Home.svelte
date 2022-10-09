@@ -1,7 +1,7 @@
 <script lang="ts">
   import { navigate as goto } from 'svelte-navigator';
   import { createKaiNavigator } from '../utils/navigation';
-  import { ListView, LoadingBar, Button, TextInputField, Toast, Toaster, SoftwareKey, TextInputDialog, OptionMenu } from '../components';
+  import { ListView, LoadingBar, Button, TextInputField, Toast, Toaster, SoftwareKey, TextInputDialog, OptionMenu, MultiSelector } from '../components';
   import { onMount, onDestroy } from 'svelte';
 
   import { base64url } from "rfc4648";
@@ -30,6 +30,7 @@
   let authorizedMenu: OptionMenu;
   let archivedChatListMenu: ArchivedChats;
   let contactListMenu: ContactList;
+  let clearCacheSelector: MultiSelector;
 
   let undialogList;
   let unauthorizationStatus;
@@ -199,6 +200,60 @@
     }
   }
 
+  function clearCache() {
+    clearCacheSelector = new MultiSelector({
+      target: document.body,
+      props: {
+        title: 'Clear Cache',
+        focusIndex: 0,
+        options: [
+          { title: 'Profile Photos', checked: false },
+          { title: 'Chat Preferences', checked: false },
+          { title: 'Media Attachments', checked: false },
+          { title: 'Offline Webpages', checked: false }
+        ],
+        softKeyLeftText: 'Cancel',
+        softKeyRightText: 'Done',
+        softKeyCenterTextSelect: 'select',
+        softKeyCenterTextDeselect: 'deselect',
+        onSoftkeyLeft: (evt, scope) => {
+          evt.preventDefault();
+          evt.stopPropagation();
+          clearCacheSelector.$destroy();
+        },
+        onSoftkeyRight: (evt, scope) => {
+          scope.options.forEach(item => {
+            if (item.checked) {
+              let splits = item.title.split(' ');
+              splits[0] = splits[0].charAt(0).toLowerCase() + splits[0].slice(1);
+              cachedDatabase
+              .then(db => {
+                db.clear(splits.join(''));
+              }).catch(err => {
+                console.log(err);
+              });
+            }
+          });
+          evt.preventDefault();
+          evt.stopPropagation();
+          clearCacheSelector.$destroy();
+        },
+        onBackspace: (evt, scope) => {
+          evt.preventDefault();
+          evt.stopPropagation();
+          clearCacheSelector.$destroy();
+        },
+        onOpened: () => {
+          navInstance.detachListener();
+        },
+        onClosed: (scope) => {
+          navInstance.attachListener();
+          clearCacheSelector = null;
+        }
+      }
+    });
+  }
+
   async function openAuthorizedMenu() {
     authorizedMenu = new OptionMenu({
       target: document.body,
@@ -209,8 +264,9 @@
           { title: 'New Contact' },
           { title: 'Contacts' },
           { title: 'Settings' },
-          { title: 'Link Device' },
+          // { title: 'Link Device' },
           { title: 'Subscribe Notification' },
+          { title: 'Clear Cache' },
           { title: 'Logout' },
           { title: 'Exit' },
         ],
@@ -231,6 +287,8 @@
             .catch((err) => {
               alert('Fail: ' + err.toString());
             });
+          } else if (scope.selected.title  === 'Clear Cache') {
+            clearCache();
           } else if (scope.selected.title === 'Logout') {
             signOut();
           } else if (scope.selected.title === 'Exit') {
