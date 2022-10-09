@@ -473,7 +473,7 @@
     }
   }
 
-  async function openRoom(value: any) {
+  async function openRoom(value: any, scrollTo: number|null) {
     try {
       const entity = await client.getEntity(value);
       if (entity.id.value.toString() === location.state.entity.id.value.toString())
@@ -492,8 +492,8 @@
       else if (name === '')
         name = entity.id.value.toString();
       location.state.name = name;
-      location.state.entity = entity
-      location.state.scrollAt = null
+      location.state.entity = entity;
+      location.state.scrollAt = scrollTo || null;
       appBar.setTitleText(location.state.name || name);
       fetchForwardedUsers = [];
       forwardedUsersIndex = [];
@@ -537,12 +537,26 @@
               console.log('MessageEntityBotCommand:', err);
             }
           } else if (scope.selected.args.className === 'MessageEntityUrl') {
-            if (scope.selected.title.indexOf('://t.me/') > -1 || scope.selected.title.indexOf('://telegram.me/') > -1) {
-              const pathname = new URL(scope.selected.title).pathname.split('/');
-              if (pathname.length > 1) {
-                openRoom(pathname[1]);
+            const parsed = new URL(scope.selected.title);
+            if (parsed.hostname.indexOf('t.me') > -1 || parsed.hostname.indexOf('telegram.me') > -1) {
+              if (parsed.pathname == '/') {
+                const t_entity = parsed.hostname.split('.');
+                if (t_entity.length === 3) {
+                  openRoom(t_entity[0]);
+                } else {
+                  window.open(scope.selected.title);
+                }
               } else {
-                window.open(url);
+                const t_entity = parsed.pathname.split('/');
+                console.log('t_entity', t_entity);
+                if (t_entity.length == 2) {
+                  openRoom(t_entity[1], null);
+                } else if (t_entity.length == 3) {
+                  const scrollTo = parseInt(t_entity[2]);
+                  openRoom(t_entity[1], isNaN(scrollTo) ? null : scrollTo);
+                } else {
+                  window.open(scope.selected.title);
+                }
               }
             } else {
               window.open(scope.selected.title);

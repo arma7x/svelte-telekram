@@ -575,7 +575,7 @@
   }
 
   async function openRoom(name, chat) {
-    let scrollAt;
+    let scrollAt = null;
     try {
       let pref = await (await cachedDatabase).get('chatPreferences', chat.entity.id.value.toString());
       scrollAt = pref['scrollAt'];
