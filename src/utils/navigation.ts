@@ -146,10 +146,13 @@ class KaiNavigator {
         marginTop = parseFloat(cursor.parentElement.getAttribute("data-pad-top"));
       if (cursor.parentElement.getAttribute("data-pad-bottom"))
         marginBottom = parseFloat(cursor.parentElement.getAttribute("data-pad-bottom"));
-      dispatchScroll(cursor.parentElement, cursor.offsetTop - ((cursor.parentElement.clientHeight - marginTop - marginBottom) / 2));
+      let offsetTop = cursor.offsetTop - ((cursor.parentElement.clientHeight - marginTop - marginBottom) / 2);
+      if ((cursor.clientHeight / cursor.parentElement.clientHeight) >= 0.7)
+        offsetTop = cursor.offsetTop;
+      dispatchScroll(cursor.parentElement, offsetTop);
       setTimeout(() => {
         if (!isElementInViewport(cursor)) {
-          dispatchFocus(cursor.parentElement, cursor.offsetTop - ((cursor.parentElement.clientHeight - marginTop - marginBottom) / 2));
+          dispatchFocus(cursor.parentElement, offsetTop);
         }
       }, 150);
     }
