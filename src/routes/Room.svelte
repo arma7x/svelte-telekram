@@ -434,21 +434,10 @@
             // https://gram.js.org/beta/classes/Api.Message.html#click
             const result = await msg.click(scope.selected.button);
             if (result) {
-              console.log(result);
               if (result.className && result.className === "messages.BotCallbackAnswer" && result.message) {
                 alert(result.message);
               } else if ((result.className && result.className === "messages.BotCallbackAnswer" && result.url) || typeof result === 'string') {
-                const url = result.url || result;
-                if (url.indexOf('://t.me/') > -1 || url.indexOf('://telegram.me/') > -1) {
-                  const pathname = new URL(url).pathname.split('/');
-                  if (pathname.length > 1) {
-                    openRoom(pathname[1]);
-                  } else {
-                    window.open(url);
-                  }
-                } else {
-                  window.open(url);
-                }
+                handleTelegramLink(result.url || result);
               } else if (result.className && result.className === "Message") {
                 pushMessageToMerge(result);
               }
@@ -470,6 +459,40 @@
       });
     } catch (err) {
       console.log('showReplyButtons:', err);
+    }
+  }
+
+  function handleTelegramLink(url) {
+    const parsed = new URL(url);
+    if (parsed.hostname.indexOf('t.me') > -1) {
+      const t_entity = parsed.hostname.split('.');
+      if (t_entity.length === 3) {
+        if (parsed.pathname == '/') {
+          openRoom(t_entity[0]);
+        } else {
+          const t_pathname = parsed.pathname.split('/');
+          if (t_pathname.length == 2) {
+            const scrollTo = parseInt(t_pathname[1]);
+            openRoom(t_entity[0], isNaN(scrollTo) ? null : scrollTo);
+          } else {
+            openRoom(t_entity[0]);
+          }
+        }
+      } else if (t_entity.length === 2 || parsed.hostname.indexOf('telegram.me') > -1) {
+        const t_entity = parsed.pathname.split('/');
+        if (t_entity.length == 2) {
+          openRoom(t_entity[1]);
+        } else if (t_entity.length == 3) {
+          const scrollTo = parseInt(t_entity[2]);
+          openRoom(t_entity[1], isNaN(scrollTo) ? null : scrollTo);
+        } else {
+          window.open(url);
+        }
+      } else {
+        window.open(url);
+      }
+    } else {
+      window.open(url);
     }
   }
 
@@ -537,30 +560,7 @@
               console.log('MessageEntityBotCommand:', err);
             }
           } else if (scope.selected.args.className === 'MessageEntityUrl') {
-            const parsed = new URL(scope.selected.title);
-            if (parsed.hostname.indexOf('t.me') > -1 || parsed.hostname.indexOf('telegram.me') > -1) {
-              if (parsed.pathname == '/') {
-                const t_entity = parsed.hostname.split('.');
-                if (t_entity.length === 3) {
-                  openRoom(t_entity[0]);
-                } else {
-                  window.open(scope.selected.title);
-                }
-              } else {
-                const t_entity = parsed.pathname.split('/');
-                console.log('t_entity', t_entity);
-                if (t_entity.length == 2) {
-                  openRoom(t_entity[1], null);
-                } else if (t_entity.length == 3) {
-                  const scrollTo = parseInt(t_entity[2]);
-                  openRoom(t_entity[1], isNaN(scrollTo) ? null : scrollTo);
-                } else {
-                  window.open(scope.selected.title);
-                }
-              }
-            } else {
-              window.open(scope.selected.title);
-            }
+            handleTelegramLink(scope.selected.title);
           } else if (scope.selected.args.className === 'MessageEntityEmail') {
             window.open(`mailto:${scope.selected.title}`);
           } else if (scope.selected.args.className === 'MessageEntityTextUrl') {
