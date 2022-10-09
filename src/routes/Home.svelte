@@ -565,8 +565,8 @@
           navInstance.navigateListNav(1);
           setTimeout(() => {
             navInstance.navigateListNav(-1);
-          }, 200);
-        }, 200);
+          }, 100);
+        }, 100);
         window['HOME_LOADED'] = true;
       }
     } catch(err) {
