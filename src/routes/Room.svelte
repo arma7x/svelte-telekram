@@ -109,7 +109,7 @@
                 newMessages.reverse();
                 const temp = [...newMessages, ...messages];
                 messages = await buildIndex(temp);
-                navInstance.verticalNavIndex = newMessages.length - 1;
+                navInstance.verticalNavIndex = newMessages.length;
                 setTimeout(() => {
                   navInstance.navigateListNav(1);
                 }, 200);
