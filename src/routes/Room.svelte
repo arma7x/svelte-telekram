@@ -604,7 +604,7 @@
         menu.push({ title: 'Entities' });
       }
       if (msg.media) {
-        menu.push({ title: 'Media Menu' });
+        menu.push({ title: 'Message Media' });
       }
       if (msg.replyMarkup && msg.replyMarkup.rows) {
         let show = true;
@@ -670,7 +670,7 @@
             setTimeout(async () => {
               if (scope.selected.title ==='Entities') {
                 showEntities(entities);
-              } else if (scope.selected.title === 'Media Menu') {
+              } else if (scope.selected.title === 'Message Media') {
                 if (msg && msg.id.toString()) {
                   if (messageMetadata[msg.id.toString()]) {
                     const cb = messageMetadata[msg.id.toString()].callback;
