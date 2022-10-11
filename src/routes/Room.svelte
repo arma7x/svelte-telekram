@@ -924,12 +924,14 @@
       console.log(`fetchForwardedUsers: ${new Date().getTime() - _start}ms`);
     }
     forwardedUsersIndex.forEach(i => {
-      _messages[i].fwdFrom.sender = cachedForwardedUsers[_messages[i].fwdFrom.fromId.userId.toString()];
-      if (!(_messages[i].fwdFrom.sender.username == null && _messages[i].fwdFrom.sender.phone == null) && _messages[i].fwdFrom.sender.photo != null && _messages[i].fwdFrom.sender.photo.photoId) {
-        _messages[i].iconRef = _messages[i].fwdFrom.sender.photo.photoId.toString();
-      } else if (_messages[i].fwdFrom.sender.photo != null) {
-        _messages[i].iconRef = _messages[i].fwdFrom.sender.photo.photoId.toString();
-      }
+      try {
+        _messages[i].fwdFrom.sender = cachedForwardedUsers[_messages[i].fwdFrom.fromId.userId.toString()];
+        if (!(_messages[i].fwdFrom.sender.username == null && _messages[i].fwdFrom.sender.phone == null) && _messages[i].fwdFrom.sender.photo != null && _messages[i].fwdFrom.sender.photo.photoId) {
+          _messages[i].iconRef = _messages[i].fwdFrom.sender.photo.photoId.toString();
+        } else if (_messages[i].fwdFrom.sender.photo != null) {
+          _messages[i].iconRef = _messages[i].fwdFrom.sender.photo.photoId.toString();
+        }
+      } catch (err) {}
     });
     fetchForwardedUsers = [];
 
@@ -960,12 +962,14 @@
       console.log(`fetchForwardedChannels: ${new Date().getTime() - _start}ms`);
     }
     forwardedChannelsIndex.forEach(i => {
-      _messages[i].fwdFrom.sender = cachedForwardedChannels[_messages[i].fwdFrom.fromId.channelId.toString()];
-      if (!(_messages[i].fwdFrom.sender.username == null && _messages[i].fwdFrom.sender.phone == null) && _messages[i].fwdFrom.sender.photo != null && _messages[i].fwdFrom.sender.photo.photoId) {
-        _messages[i].iconRef = _messages[i].fwdFrom.sender.photo.photoId.toString();
-      } else if (_messages[i].fwdFrom.sender.photo != null && _messages[i].fwdFrom.sender.photo.photoId) {
-        _messages[i].iconRef = _messages[i].fwdFrom.sender.photo.photoId.toString();
-      }
+      try {
+        _messages[i].fwdFrom.sender = cachedForwardedChannels[_messages[i].fwdFrom.fromId.channelId.toString()];
+        if (!(_messages[i].fwdFrom.sender.username == null && _messages[i].fwdFrom.sender.phone == null) && _messages[i].fwdFrom.sender.photo != null && _messages[i].fwdFrom.sender.photo.photoId) {
+          _messages[i].iconRef = _messages[i].fwdFrom.sender.photo.photoId.toString();
+        } else if (_messages[i].fwdFrom.sender.photo != null && _messages[i].fwdFrom.sender.photo.photoId) {
+          _messages[i].iconRef = _messages[i].fwdFrom.sender.photo.photoId.toString();
+        }
+      } catch (err) {}
     });
     fetchForwardedChannels = [];
 
