@@ -239,10 +239,6 @@ export async function getDialogs() {
   }
 }
 
-export function getShouldGetDialogs() {
-  return get(shouldGetDialogs)
-}
-
 export function getDialogList() {
   return get(dialogList)
 }

@@ -1,5 +1,6 @@
 <script lang="ts">
   import { navigate as goto } from 'svelte-navigator';
+  import { get } from 'svelte/store';
   import { createKaiNavigator } from '../utils/navigation';
   import { ListView, LoadingBar, Button, TextInputField, Toast, Toaster, SoftwareKey, TextInputDialog, OptionMenu, MultiSelector } from '../components';
   import { onMount, onDestroy } from 'svelte';
@@ -14,7 +15,7 @@
   import ArchivedChats from '../widgets/ArchivedChats.svelte';
   import ContactList from '../widgets/ContactList.svelte';
 
-  import { connect, connectionStatus, authorizationStatus, isUserAuthorized, getDialogs, shouldGetDialogs, authorizedUser, dialogList, cachedThumbnails, dispatchMessageToClient, dispatchMessageToWorker, getShouldGetDialogs, unsubscribePush, unregisterDevice, manuallySubscribePushNotification } from '../stores/telegram';
+  import { connect, connectionStatus, authorizationStatus, isUserAuthorized, getDialogs, shouldGetDialogs, authorizedUser, dialogList, cachedThumbnails, dispatchMessageToClient, dispatchMessageToWorker, unsubscribePush, unregisterDevice, manuallySubscribePushNotification } from '../stores/telegram';
 
   const navClass: string = 'homeNav';
 
@@ -864,7 +865,7 @@
 
     dispatchMessageToClient.addListener('message', handleWebWorkerMessage);
 
-    if (getShouldGetDialogs()) {
+    if (get(shouldGetDialogs)) {
       getDialogs();
       shouldGetDialogs.update(n => false);
     }

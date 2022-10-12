@@ -14689,9 +14689,6 @@ var app = (function () {
 	  return _getDialogs.apply(this, arguments);
 	}
 
-	function getShouldGetDialogs() {
-	  return get_store_value(shouldGetDialogs);
-	}
 	function getDialogList() {
 	  return get_store_value(dialogList);
 	}
@@ -29063,7 +29060,7 @@ var app = (function () {
 	  var child_ctx = ctx.slice();
 	  child_ctx[62] = list[i];
 	  return child_ctx;
-	} // (912:2) {:else}
+	} // (913:2) {:else}
 
 
 	function create_else_block_1(ctx) {
@@ -29203,11 +29200,11 @@ var app = (function () {
 	    block,
 	    id: create_else_block_1.name,
 	    type: "else",
-	    source: "(912:2) {:else}",
+	    source: "(913:2) {:else}",
 	    ctx
 	  });
 	  return block;
-	} // (882:2) {#if authStatus === false }
+	} // (883:2) {#if authStatus === false }
 
 
 	function create_if_block$b(ctx) {
@@ -29316,11 +29313,11 @@ var app = (function () {
 	    block,
 	    id: create_if_block$b.name,
 	    type: "if",
-	    source: "(882:2) {#if authStatus === false }",
+	    source: "(883:2) {#if authStatus === false }",
 	    ctx
 	  });
 	  return block;
-	} // (913:2) {#if archivedChatList.length > 0 }
+	} // (914:2) {#if archivedChatList.length > 0 }
 
 
 	function create_if_block_2$2(ctx) {
@@ -29389,11 +29386,11 @@ var app = (function () {
 	    block,
 	    id: create_if_block_2$2.name,
 	    type: "if",
-	    source: "(913:2) {#if archivedChatList.length > 0 }",
+	    source: "(914:2) {#if archivedChatList.length > 0 }",
 	    ctx
 	  });
 	  return block;
-	} // (915:6) 
+	} // (916:6) 
 
 
 	function create_leftWidget_slot_6(ctx) {
@@ -29412,10 +29409,10 @@ var app = (function () {
 	      set_style(img, "border-radius", "50%");
 	      set_style(img, "border", "2px solid #fff");
 	      if (!src_url_equal(img.src, img_src_value = "/icons/archived.png")) attr_dev(img, "src", img_src_value);
-	      add_location(img, file$V, 914, 58, 36637);
+	      add_location(img, file$V, 915, 58, 36652);
 	      attr_dev(span, "slot", "leftWidget");
 	      set_style(span, "padding-right", "4px");
-	      add_location(span, file$V, 914, 6, 36585);
+	      add_location(span, file$V, 915, 6, 36600);
 	    },
 	    m: function mount(target, anchor) {
 	      insert_dev(target, span, anchor);
@@ -29429,11 +29426,11 @@ var app = (function () {
 	    block,
 	    id: create_leftWidget_slot_6.name,
 	    type: "slot",
-	    source: "(915:6) ",
+	    source: "(916:6) ",
 	    ctx
 	  });
 	  return block;
-	} // (918:2) {#each chatList as chat}
+	} // (919:2) {#each chatList as chat}
 
 
 	function create_each_block$2(ctx) {
@@ -29521,11 +29518,11 @@ var app = (function () {
 	    block,
 	    id: create_each_block$2.name,
 	    type: "each",
-	    source: "(918:2) {#each chatList as chat}",
+	    source: "(919:2) {#each chatList as chat}",
 	    ctx
 	  });
 	  return block;
-	} // (893:2) {:else}
+	} // (894:2) {:else}
 
 
 	function create_else_block$3(ctx) {
@@ -29701,11 +29698,11 @@ var app = (function () {
 	    block,
 	    id: create_else_block$3.name,
 	    type: "else",
-	    source: "(893:2) {:else}",
+	    source: "(894:2) {:else}",
 	    ctx
 	  });
 	  return block;
-	} // (883:2) {#if phoneCodeHash === null}
+	} // (884:2) {#if phoneCodeHash === null}
 
 
 	function create_if_block_1$7(ctx) {
@@ -29851,11 +29848,11 @@ var app = (function () {
 	    block,
 	    id: create_if_block_1$7.name,
 	    type: "if",
-	    source: "(883:2) {#if phoneCodeHash === null}",
+	    source: "(884:2) {#if phoneCodeHash === null}",
 	    ctx
 	  });
 	  return block;
-	} // (896:4) 
+	} // (897:4) 
 
 
 	function create_leftWidget_slot_5(ctx) {
@@ -29871,7 +29868,7 @@ var app = (function () {
 	      set_style(span, "-o-transform", "scale(-1, 1)");
 	      set_style(span, "-ms-transform", "scale(-1, 1)");
 	      set_style(span, "transform", "scale(-1, 1)");
-	      add_location(span, file$V, 895, 4, 34880);
+	      add_location(span, file$V, 896, 4, 34895);
 	    },
 	    m: function mount(target, anchor) {
 	      insert_dev(target, span, anchor);
@@ -29884,11 +29881,11 @@ var app = (function () {
 	    block,
 	    id: create_leftWidget_slot_5.name,
 	    type: "slot",
-	    source: "(896:4) ",
+	    source: "(897:4) ",
 	    ctx
 	  });
 	  return block;
-	} // (897:4) 
+	} // (898:4) 
 
 
 	function create_rightWidget_slot_5(ctx) {
@@ -29899,7 +29896,7 @@ var app = (function () {
 	      attr_dev(span, "slot", "rightWidget");
 	      attr_dev(span, "class", "kai-icon-arrow");
 	      set_style(span, "margin", "0px 5px");
-	      add_location(span, file$V, 896, 4, 35103);
+	      add_location(span, file$V, 897, 4, 35118);
 	    },
 	    m: function mount(target, anchor) {
 	      insert_dev(target, span, anchor);
@@ -29912,11 +29909,11 @@ var app = (function () {
 	    block,
 	    id: create_rightWidget_slot_5.name,
 	    type: "slot",
-	    source: "(897:4) ",
+	    source: "(898:4) ",
 	    ctx
 	  });
 	  return block;
-	} // (900:4) 
+	} // (901:4) 
 
 
 	function create_leftWidget_slot_4(ctx) {
@@ -29932,7 +29929,7 @@ var app = (function () {
 	      set_style(span, "-o-transform", "scale(-1, 1)");
 	      set_style(span, "-ms-transform", "scale(-1, 1)");
 	      set_style(span, "transform", "scale(-1, 1)");
-	      add_location(span, file$V, 899, 4, 35265);
+	      add_location(span, file$V, 900, 4, 35280);
 	    },
 	    m: function mount(target, anchor) {
 	      insert_dev(target, span, anchor);
@@ -29945,11 +29942,11 @@ var app = (function () {
 	    block,
 	    id: create_leftWidget_slot_4.name,
 	    type: "slot",
-	    source: "(900:4) ",
+	    source: "(901:4) ",
 	    ctx
 	  });
 	  return block;
-	} // (901:4) 
+	} // (902:4) 
 
 
 	function create_rightWidget_slot_4(ctx) {
@@ -29960,7 +29957,7 @@ var app = (function () {
 	      attr_dev(span, "slot", "rightWidget");
 	      attr_dev(span, "class", "kai-icon-arrow");
 	      set_style(span, "margin", "0px 5px");
-	      add_location(span, file$V, 900, 4, 35488);
+	      add_location(span, file$V, 901, 4, 35503);
 	    },
 	    m: function mount(target, anchor) {
 	      insert_dev(target, span, anchor);
@@ -29973,11 +29970,11 @@ var app = (function () {
 	    block,
 	    id: create_rightWidget_slot_4.name,
 	    type: "slot",
-	    source: "(901:4) ",
+	    source: "(902:4) ",
 	    ctx
 	  });
 	  return block;
-	} // (904:4) 
+	} // (905:4) 
 
 
 	function create_leftWidget_slot_3(ctx) {
@@ -29993,7 +29990,7 @@ var app = (function () {
 	      set_style(span, "-o-transform", "scale(-1, 1)");
 	      set_style(span, "-ms-transform", "scale(-1, 1)");
 	      set_style(span, "transform", "scale(-1, 1)");
-	      add_location(span, file$V, 903, 4, 35654);
+	      add_location(span, file$V, 904, 4, 35669);
 	    },
 	    m: function mount(target, anchor) {
 	      insert_dev(target, span, anchor);
@@ -30006,11 +30003,11 @@ var app = (function () {
 	    block,
 	    id: create_leftWidget_slot_3.name,
 	    type: "slot",
-	    source: "(904:4) ",
+	    source: "(905:4) ",
 	    ctx
 	  });
 	  return block;
-	} // (905:4) 
+	} // (906:4) 
 
 
 	function create_rightWidget_slot_3(ctx) {
@@ -30021,7 +30018,7 @@ var app = (function () {
 	      attr_dev(span, "slot", "rightWidget");
 	      attr_dev(span, "class", "kai-icon-arrow");
 	      set_style(span, "margin", "0px 5px");
-	      add_location(span, file$V, 904, 4, 35877);
+	      add_location(span, file$V, 905, 4, 35892);
 	    },
 	    m: function mount(target, anchor) {
 	      insert_dev(target, span, anchor);
@@ -30034,11 +30031,11 @@ var app = (function () {
 	    block,
 	    id: create_rightWidget_slot_3.name,
 	    type: "slot",
-	    source: "(905:4) ",
+	    source: "(906:4) ",
 	    ctx
 	  });
 	  return block;
-	} // (886:4) 
+	} // (887:4) 
 
 
 	function create_leftWidget_slot_2(ctx) {
@@ -30054,7 +30051,7 @@ var app = (function () {
 	      set_style(span, "-o-transform", "scale(-1, 1)");
 	      set_style(span, "-ms-transform", "scale(-1, 1)");
 	      set_style(span, "transform", "scale(-1, 1)");
-	      add_location(span, file$V, 885, 4, 33920);
+	      add_location(span, file$V, 886, 4, 33935);
 	    },
 	    m: function mount(target, anchor) {
 	      insert_dev(target, span, anchor);
@@ -30067,11 +30064,11 @@ var app = (function () {
 	    block,
 	    id: create_leftWidget_slot_2.name,
 	    type: "slot",
-	    source: "(886:4) ",
+	    source: "(887:4) ",
 	    ctx
 	  });
 	  return block;
-	} // (887:4) 
+	} // (888:4) 
 
 
 	function create_rightWidget_slot_2(ctx) {
@@ -30082,7 +30079,7 @@ var app = (function () {
 	      attr_dev(span, "slot", "rightWidget");
 	      attr_dev(span, "class", "kai-icon-arrow");
 	      set_style(span, "margin", "0px 5px");
-	      add_location(span, file$V, 886, 4, 34143);
+	      add_location(span, file$V, 887, 4, 34158);
 	    },
 	    m: function mount(target, anchor) {
 	      insert_dev(target, span, anchor);
@@ -30095,11 +30092,11 @@ var app = (function () {
 	    block,
 	    id: create_rightWidget_slot_2.name,
 	    type: "slot",
-	    source: "(887:4) ",
+	    source: "(888:4) ",
 	    ctx
 	  });
 	  return block;
-	} // (890:4) 
+	} // (891:4) 
 
 
 	function create_leftWidget_slot_1(ctx) {
@@ -30115,7 +30112,7 @@ var app = (function () {
 	      set_style(span, "-o-transform", "scale(-1, 1)");
 	      set_style(span, "-ms-transform", "scale(-1, 1)");
 	      set_style(span, "transform", "scale(-1, 1)");
-	      add_location(span, file$V, 889, 4, 34318);
+	      add_location(span, file$V, 890, 4, 34333);
 	    },
 	    m: function mount(target, anchor) {
 	      insert_dev(target, span, anchor);
@@ -30128,11 +30125,11 @@ var app = (function () {
 	    block,
 	    id: create_leftWidget_slot_1.name,
 	    type: "slot",
-	    source: "(890:4) ",
+	    source: "(891:4) ",
 	    ctx
 	  });
 	  return block;
-	} // (891:4) 
+	} // (892:4) 
 
 
 	function create_rightWidget_slot_1(ctx) {
@@ -30143,7 +30140,7 @@ var app = (function () {
 	      attr_dev(span, "slot", "rightWidget");
 	      attr_dev(span, "class", "kai-icon-arrow");
 	      set_style(span, "margin", "0px 5px");
-	      add_location(span, file$V, 890, 4, 34541);
+	      add_location(span, file$V, 891, 4, 34556);
 	    },
 	    m: function mount(target, anchor) {
 	      insert_dev(target, span, anchor);
@@ -30156,11 +30153,11 @@ var app = (function () {
 	    block,
 	    id: create_rightWidget_slot_1.name,
 	    type: "slot",
-	    source: "(891:4) ",
+	    source: "(892:4) ",
 	    ctx
 	  });
 	  return block;
-	} // (909:4) 
+	} // (910:4) 
 
 
 	function create_leftWidget_slot(ctx) {
@@ -30176,7 +30173,7 @@ var app = (function () {
 	      set_style(span, "-o-transform", "scale(-1, 1)");
 	      set_style(span, "-ms-transform", "scale(-1, 1)");
 	      set_style(span, "transform", "scale(-1, 1)");
-	      add_location(span, file$V, 908, 4, 36059);
+	      add_location(span, file$V, 909, 4, 36074);
 	    },
 	    m: function mount(target, anchor) {
 	      insert_dev(target, span, anchor);
@@ -30189,11 +30186,11 @@ var app = (function () {
 	    block,
 	    id: create_leftWidget_slot.name,
 	    type: "slot",
-	    source: "(909:4) ",
+	    source: "(910:4) ",
 	    ctx
 	  });
 	  return block;
-	} // (910:4) 
+	} // (911:4) 
 
 
 	function create_rightWidget_slot(ctx) {
@@ -30204,7 +30201,7 @@ var app = (function () {
 	      attr_dev(span, "slot", "rightWidget");
 	      attr_dev(span, "class", "kai-icon-arrow");
 	      set_style(span, "margin", "0px 5px");
-	      add_location(span, file$V, 909, 4, 36282);
+	      add_location(span, file$V, 910, 4, 36297);
 	    },
 	    m: function mount(target, anchor) {
 	      insert_dev(target, span, anchor);
@@ -30217,7 +30214,7 @@ var app = (function () {
 	    block,
 	    id: create_rightWidget_slot.name,
 	    type: "slot",
-	    source: "(910:4) ",
+	    source: "(911:4) ",
 	    ctx
 	  });
 	  return block;
@@ -30248,7 +30245,7 @@ var app = (function () {
 	      attr_dev(main, "data-pad-top", "28");
 	      attr_dev(main, "data-pad-bottom", "30");
 	      attr_dev(main, "class", "svelte-k2v3lx");
-	      add_location(main, file$V, 880, 0, 33509);
+	      add_location(main, file$V, 881, 0, 33524);
 	    },
 	    l: function claim(nodes) {
 	      throw new Error("options.hydrate only works if the component was compiled with the `hydratable: true` option");
@@ -31262,7 +31259,7 @@ var app = (function () {
 	    });
 	    dispatchMessageToClient.addListener('message', handleWebWorkerMessage);
 
-	    if (getShouldGetDialogs()) {
+	    if (get_store_value(shouldGetDialogs)) {
 	      getDialogs();
 	      shouldGetDialogs.update(n => false);
 	    }
@@ -31294,6 +31291,7 @@ var app = (function () {
 	  $$self.$capture_state = () => ({
 	    __awaiter,
 	    goto: navigate,
+	    get: get_store_value,
 	    createKaiNavigator,
 	    ListView,
 	    LoadingBar,
@@ -31330,7 +31328,6 @@ var app = (function () {
 	    cachedThumbnails,
 	    dispatchMessageToClient,
 	    dispatchMessageToWorker,
-	    getShouldGetDialogs,
 	    unsubscribePush,
 	    unregisterDevice,
 	    manuallySubscribePushNotification,
@@ -62315,7 +62312,7 @@ var app = (function () {
 	  var child_ctx = ctx.slice();
 	  child_ctx[52] = list[i];
 	  return child_ctx;
-	} // (1362:2) {:else}
+	} // (1363:2) {:else}
 
 
 	function create_else_block(ctx) {
@@ -62325,7 +62322,7 @@ var app = (function () {
 	      div = element("div");
 	      div.textContent = "Loading";
 	      set_style(div, "margin-top", "45%");
-	      add_location(div, file$1, 1362, 4, 61676);
+	      add_location(div, file$1, 1363, 4, 61709);
 	    },
 	    m: function mount(target, anchor) {
 	      insert_dev(target, div, anchor);
@@ -62341,11 +62338,11 @@ var app = (function () {
 	    block,
 	    id: create_else_block.name,
 	    type: "else",
-	    source: "(1362:2) {:else}",
+	    source: "(1363:2) {:else}",
 	    ctx
 	  });
 	  return block;
-	} // (1356:2) {#if ready }
+	} // (1357:2) {#if ready }
 
 
 	function create_if_block(ctx) {
@@ -62446,11 +62443,11 @@ var app = (function () {
 	    block,
 	    id: create_if_block.name,
 	    type: "if",
-	    source: "(1356:2) {#if ready }",
+	    source: "(1357:2) {#if ready }",
 	    ctx
 	  });
 	  return block;
-	} // (1358:4) {#if message && message.id && messageMetadata[message.id.toString()] && messageMetadata[message.id.toString()].deleted === false}
+	} // (1359:4) {#if message && message.id && messageMetadata[message.id.toString()] && messageMetadata[message.id.toString()].deleted === false}
 
 
 	function create_if_block_1(ctx) {
@@ -62581,11 +62578,11 @@ var app = (function () {
 	    block,
 	    id: create_if_block_1.name,
 	    type: "if",
-	    source: "(1358:4) {#if message && message.id && messageMetadata[message.id.toString()] && messageMetadata[message.id.toString()].deleted === false}",
+	    source: "(1359:4) {#if message && message.id && messageMetadata[message.id.toString()] && messageMetadata[message.id.toString()].deleted === false}",
 	    ctx
 	  });
 	  return block;
-	} // (1357:2) {#each messages as message}
+	} // (1358:2) {#each messages as message}
 
 
 	function create_each_block(ctx) {
@@ -62673,7 +62670,7 @@ var app = (function () {
 	    block,
 	    id: create_each_block.name,
 	    type: "each",
-	    source: "(1357:2) {#each messages as message}",
+	    source: "(1358:2) {#each messages as message}",
 	    ctx
 	  });
 	  return block;
@@ -62704,7 +62701,7 @@ var app = (function () {
 	      attr_dev(main, "data-pad-top", "50");
 	      attr_dev(main, "data-pad-bottom", "30");
 	      attr_dev(main, "class", "svelte-yfuvl7");
-	      add_location(main, file$1, 1354, 0, 61131);
+	      add_location(main, file$1, 1355, 0, 61164);
 	    },
 	    l: function claim(nodes) {
 	      throw new Error("options.hydrate only works if the component was compiled with the `hydratable: true` option");
@@ -64363,6 +64360,7 @@ var app = (function () {
 	    navInstance.attachListener();
 	    client.addEventHandler(clientListener);
 	    $$invalidate(0, ready = true);
+	    console.log(location.state);
 	  });
 	  onDestroy(() => {
 	    navInstance.detachListener();
