@@ -29409,10 +29409,10 @@ var app = (function () {
 	      set_style(img, "border-radius", "50%");
 	      set_style(img, "border", "2px solid #fff");
 	      if (!src_url_equal(img.src, img_src_value = "/icons/archived.png")) attr_dev(img, "src", img_src_value);
-	      add_location(img, file$V, 915, 58, 36652);
+	      add_location(img, file$V, 915, 58, 36649);
 	      attr_dev(span, "slot", "leftWidget");
 	      set_style(span, "padding-right", "4px");
-	      add_location(span, file$V, 915, 6, 36600);
+	      add_location(span, file$V, 915, 6, 36597);
 	    },
 	    m: function mount(target, anchor) {
 	      insert_dev(target, span, anchor);
@@ -29868,7 +29868,7 @@ var app = (function () {
 	      set_style(span, "-o-transform", "scale(-1, 1)");
 	      set_style(span, "-ms-transform", "scale(-1, 1)");
 	      set_style(span, "transform", "scale(-1, 1)");
-	      add_location(span, file$V, 896, 4, 34895);
+	      add_location(span, file$V, 896, 4, 34892);
 	    },
 	    m: function mount(target, anchor) {
 	      insert_dev(target, span, anchor);
@@ -29896,7 +29896,7 @@ var app = (function () {
 	      attr_dev(span, "slot", "rightWidget");
 	      attr_dev(span, "class", "kai-icon-arrow");
 	      set_style(span, "margin", "0px 5px");
-	      add_location(span, file$V, 897, 4, 35118);
+	      add_location(span, file$V, 897, 4, 35115);
 	    },
 	    m: function mount(target, anchor) {
 	      insert_dev(target, span, anchor);
@@ -29929,7 +29929,7 @@ var app = (function () {
 	      set_style(span, "-o-transform", "scale(-1, 1)");
 	      set_style(span, "-ms-transform", "scale(-1, 1)");
 	      set_style(span, "transform", "scale(-1, 1)");
-	      add_location(span, file$V, 900, 4, 35280);
+	      add_location(span, file$V, 900, 4, 35277);
 	    },
 	    m: function mount(target, anchor) {
 	      insert_dev(target, span, anchor);
@@ -29957,7 +29957,7 @@ var app = (function () {
 	      attr_dev(span, "slot", "rightWidget");
 	      attr_dev(span, "class", "kai-icon-arrow");
 	      set_style(span, "margin", "0px 5px");
-	      add_location(span, file$V, 901, 4, 35503);
+	      add_location(span, file$V, 901, 4, 35500);
 	    },
 	    m: function mount(target, anchor) {
 	      insert_dev(target, span, anchor);
@@ -29990,7 +29990,7 @@ var app = (function () {
 	      set_style(span, "-o-transform", "scale(-1, 1)");
 	      set_style(span, "-ms-transform", "scale(-1, 1)");
 	      set_style(span, "transform", "scale(-1, 1)");
-	      add_location(span, file$V, 904, 4, 35669);
+	      add_location(span, file$V, 904, 4, 35666);
 	    },
 	    m: function mount(target, anchor) {
 	      insert_dev(target, span, anchor);
@@ -30018,7 +30018,7 @@ var app = (function () {
 	      attr_dev(span, "slot", "rightWidget");
 	      attr_dev(span, "class", "kai-icon-arrow");
 	      set_style(span, "margin", "0px 5px");
-	      add_location(span, file$V, 905, 4, 35892);
+	      add_location(span, file$V, 905, 4, 35889);
 	    },
 	    m: function mount(target, anchor) {
 	      insert_dev(target, span, anchor);
@@ -30051,7 +30051,7 @@ var app = (function () {
 	      set_style(span, "-o-transform", "scale(-1, 1)");
 	      set_style(span, "-ms-transform", "scale(-1, 1)");
 	      set_style(span, "transform", "scale(-1, 1)");
-	      add_location(span, file$V, 886, 4, 33935);
+	      add_location(span, file$V, 886, 4, 33932);
 	    },
 	    m: function mount(target, anchor) {
 	      insert_dev(target, span, anchor);
@@ -30079,7 +30079,7 @@ var app = (function () {
 	      attr_dev(span, "slot", "rightWidget");
 	      attr_dev(span, "class", "kai-icon-arrow");
 	      set_style(span, "margin", "0px 5px");
-	      add_location(span, file$V, 887, 4, 34158);
+	      add_location(span, file$V, 887, 4, 34155);
 	    },
 	    m: function mount(target, anchor) {
 	      insert_dev(target, span, anchor);
@@ -30112,7 +30112,7 @@ var app = (function () {
 	      set_style(span, "-o-transform", "scale(-1, 1)");
 	      set_style(span, "-ms-transform", "scale(-1, 1)");
 	      set_style(span, "transform", "scale(-1, 1)");
-	      add_location(span, file$V, 890, 4, 34333);
+	      add_location(span, file$V, 890, 4, 34330);
 	    },
 	    m: function mount(target, anchor) {
 	      insert_dev(target, span, anchor);
@@ -30140,7 +30140,7 @@ var app = (function () {
 	      attr_dev(span, "slot", "rightWidget");
 	      attr_dev(span, "class", "kai-icon-arrow");
 	      set_style(span, "margin", "0px 5px");
-	      add_location(span, file$V, 891, 4, 34556);
+	      add_location(span, file$V, 891, 4, 34553);
 	    },
 	    m: function mount(target, anchor) {
 	      insert_dev(target, span, anchor);
@@ -30173,7 +30173,7 @@ var app = (function () {
 	      set_style(span, "-o-transform", "scale(-1, 1)");
 	      set_style(span, "-ms-transform", "scale(-1, 1)");
 	      set_style(span, "transform", "scale(-1, 1)");
-	      add_location(span, file$V, 909, 4, 36074);
+	      add_location(span, file$V, 909, 4, 36071);
 	    },
 	    m: function mount(target, anchor) {
 	      insert_dev(target, span, anchor);
@@ -30201,7 +30201,7 @@ var app = (function () {
 	      attr_dev(span, "slot", "rightWidget");
 	      attr_dev(span, "class", "kai-icon-arrow");
 	      set_style(span, "margin", "0px 5px");
-	      add_location(span, file$V, 910, 4, 36297);
+	      add_location(span, file$V, 910, 4, 36294);
 	    },
 	    m: function mount(target, anchor) {
 	      insert_dev(target, span, anchor);
@@ -30245,7 +30245,7 @@ var app = (function () {
 	      attr_dev(main, "data-pad-top", "28");
 	      attr_dev(main, "data-pad-bottom", "30");
 	      attr_dev(main, "class", "svelte-k2v3lx");
-	      add_location(main, file$V, 881, 0, 33524);
+	      add_location(main, file$V, 881, 0, 33521);
 	    },
 	    l: function claim(nodes) {
 	      throw new Error("options.hydrate only works if the component was compiled with the `hydratable: true` option");
@@ -30417,15 +30417,13 @@ var app = (function () {
 	        focusIndex: 0,
 	        options: archivedChatList,
 	        thumbs,
-	        softKeyLeftText: 'Unarchive',
+	        softKeyLeftText: '',
 	        softKeyCenterText: 'Select',
 	        softKeyRightText: '',
-	        onSoftkeyRight: (evt, scope) => {
-	          archivedChatListMenu.$destroy();
-	        },
-	        onSoftkeyLeft: (evt, scope) => {
-	          archivedChatListMenu.$destroy();
-	        },
+	        onSoftkeyRight: (evt, scope) => {},
+	        // archivedChatListMenu.$destroy();
+	        onSoftkeyLeft: (evt, scope) => {},
+	        // archivedChatListMenu.$destroy();
 	        onEnter: (evt, scope) => {
 	          archivedChatListMenu.$destroy();
 	          setTimeout(() => {

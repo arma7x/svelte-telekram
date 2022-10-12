@@ -88,14 +88,14 @@
         focusIndex: 0,
         options: archivedChatList,
         thumbs: thumbs,
-        softKeyLeftText: 'Unarchive',
+        softKeyLeftText: '',
         softKeyCenterText: 'Select',
         softKeyRightText: '',
         onSoftkeyRight: (evt, scope) => {
-          archivedChatListMenu.$destroy();
+          // archivedChatListMenu.$destroy();
         },
         onSoftkeyLeft: (evt, scope) => {
-          archivedChatListMenu.$destroy();
+          // archivedChatListMenu.$destroy();
         },
         onEnter: (evt, scope) => {
           archivedChatListMenu.$destroy();
