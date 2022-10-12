@@ -5,7 +5,7 @@
 
   import { Api, client, cachedDatabase } from '../utils/bootstrap';
 
-  import { shouldGetDialogs, getDialogs, getDialogList, runTask, getAuthorizedUser } from '../stores/telegram';
+  import { shouldGetDialogs, getDialogList, runTask, getAuthorizedUser } from '../stores/telegram';
 
   import * as Message from '../widgets/message';
   import { TextAreaDialog, OptionMenu, Dialog } from '../components';
@@ -587,6 +587,33 @@
     });
   }
 
+  async function archivingChat() {
+    if (chat && chat.inputEntity) {
+      let folderId;
+      if (chat.archived) {
+        folderId = 0;
+      } else {
+        folderId = 1;
+      }
+      try {
+        const result = await client.invoke(
+          new Api.folders.EditPeerFolders({
+            folderPeers: [
+              new Api.InputFolderPeer({
+                peer: chat.inputEntity,
+                folderId: folderId,
+              }),
+            ],
+          })
+        );
+        // console.log(result);
+        chat.archived = !chat.archived;
+      } catch (err) {
+        console.log(err);
+      }
+    }
+  }
+
   async function openContextMenu(msg, index) {
     let len = 0;
     let entities = [];
@@ -650,6 +677,11 @@
           menu.push({ title: 'Unmute Chat' });
         }
       }
+      if (chat.archived) {
+        menu.push({ title: 'Unarchive' });
+      } else {
+        menu.push({ title: 'Archive' });
+      }
       if (chat.entity.className === 'Channel') {
         menu.push({ title: 'Report' });
       }
@@ -703,6 +735,8 @@
                 showReplies(getReplyHeader(msg), true);
               } else if (scope.selected.title === 'Leave Group') {
                 leaveChannel();
+              } else if (['Archive','Unarchive'].indexOf(scope.selected.title) > -1) {
+                archivingChat();
               }
             }, 200);
           },

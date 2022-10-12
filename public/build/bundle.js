@@ -62310,9 +62310,9 @@ var app = (function () {
 
 	function get_each_context(ctx, list, i) {
 	  var child_ctx = ctx.slice();
-	  child_ctx[52] = list[i];
+	  child_ctx[53] = list[i];
 	  return child_ctx;
-	} // (1363:2) {:else}
+	} // (1399:2) {:else}
 
 
 	function create_else_block(ctx) {
@@ -62322,7 +62322,7 @@ var app = (function () {
 	      div = element("div");
 	      div.textContent = "Loading";
 	      set_style(div, "margin-top", "45%");
-	      add_location(div, file$1, 1363, 4, 61709);
+	      add_location(div, file$1, 1399, 4, 62882);
 	    },
 	    m: function mount(target, anchor) {
 	      insert_dev(target, div, anchor);
@@ -62338,11 +62338,11 @@ var app = (function () {
 	    block,
 	    id: create_else_block.name,
 	    type: "else",
-	    source: "(1363:2) {:else}",
+	    source: "(1399:2) {:else}",
 	    ctx
 	  });
 	  return block;
-	} // (1357:2) {#if ready }
+	} // (1393:2) {#if ready }
 
 
 	function create_if_block(ctx) {
@@ -62443,11 +62443,11 @@ var app = (function () {
 	    block,
 	    id: create_if_block.name,
 	    type: "if",
-	    source: "(1357:2) {#if ready }",
+	    source: "(1393:2) {#if ready }",
 	    ctx
 	  });
 	  return block;
-	} // (1359:4) {#if message && message.id && messageMetadata[message.id.toString()] && messageMetadata[message.id.toString()].deleted === false}
+	} // (1395:4) {#if message && message.id && messageMetadata[message.id.toString()] && messageMetadata[message.id.toString()].deleted === false}
 
 
 	function create_if_block_1(ctx) {
@@ -62458,7 +62458,7 @@ var app = (function () {
 	  /*resolveMessageWidget*/
 	  ctx[5](
 	  /*message*/
-	  ctx[52]);
+	  ctx[53]);
 
 	  function switch_props(ctx) {
 	    return {
@@ -62466,7 +62466,7 @@ var app = (function () {
 	        className: "roomNav",
 	        message:
 	        /*message*/
-	        ctx[52],
+	        ctx[53],
 	        registerCallButtonHandler:
 	        /*registerCallButtonHandler*/
 	        ctx[6],
@@ -62480,7 +62480,7 @@ var app = (function () {
 	        /*getReplyHeader*/
 	        ctx[8](
 	        /*message*/
-	        ctx[52]),
+	        ctx[53]),
 	        chat:
 	        /*chat*/
 	        ctx[1],
@@ -62515,7 +62515,7 @@ var app = (function () {
 	      /*messages*/
 	      4) switch_instance_changes.message =
 	      /*message*/
-	      ctx[52];
+	      ctx[53];
 	      if (dirty[0] &
 	      /*navInstance*/
 	      16) switch_instance_changes.parentNavInstance =
@@ -62527,7 +62527,7 @@ var app = (function () {
 	      /*getReplyHeader*/
 	      ctx[8](
 	      /*message*/
-	      ctx[52]);
+	      ctx[53]);
 	      if (dirty[0] &
 	      /*chat*/
 	      2) switch_instance_changes.chat =
@@ -62538,7 +62538,7 @@ var app = (function () {
 	      /*resolveMessageWidget*/
 	      ctx[5](
 	      /*message*/
-	      ctx[52]))) {
+	      ctx[53]))) {
 	        if (switch_instance) {
 	          group_outros();
 	          var old_component = switch_instance;
@@ -62578,27 +62578,27 @@ var app = (function () {
 	    block,
 	    id: create_if_block_1.name,
 	    type: "if",
-	    source: "(1359:4) {#if message && message.id && messageMetadata[message.id.toString()] && messageMetadata[message.id.toString()].deleted === false}",
+	    source: "(1395:4) {#if message && message.id && messageMetadata[message.id.toString()] && messageMetadata[message.id.toString()].deleted === false}",
 	    ctx
 	  });
 	  return block;
-	} // (1358:2) {#each messages as message}
+	} // (1394:2) {#each messages as message}
 
 
 	function create_each_block(ctx) {
 	  var show_if =
 	  /*message*/
-	  ctx[52] &&
+	  ctx[53] &&
 	  /*message*/
-	  ctx[52].id &&
+	  ctx[53].id &&
 	  /*messageMetadata*/
 	  ctx[3][
 	  /*message*/
-	  ctx[52].id.toString()] &&
+	  ctx[53].id.toString()] &&
 	  /*messageMetadata*/
 	  ctx[3][
 	  /*message*/
-	  ctx[52].id.toString()].deleted === false;
+	  ctx[53].id.toString()].deleted === false;
 	  var if_block_anchor;
 	  var current;
 	  var if_block = show_if && create_if_block_1(ctx);
@@ -62617,17 +62617,17 @@ var app = (function () {
 	      /*messages, messageMetadata*/
 	      12) show_if =
 	      /*message*/
-	      ctx[52] &&
+	      ctx[53] &&
 	      /*message*/
-	      ctx[52].id &&
+	      ctx[53].id &&
 	      /*messageMetadata*/
 	      ctx[3][
 	      /*message*/
-	      ctx[52].id.toString()] &&
+	      ctx[53].id.toString()] &&
 	      /*messageMetadata*/
 	      ctx[3][
 	      /*message*/
-	      ctx[52].id.toString()].deleted === false;
+	      ctx[53].id.toString()].deleted === false;
 
 	      if (show_if) {
 	        if (if_block) {
@@ -62670,7 +62670,7 @@ var app = (function () {
 	    block,
 	    id: create_each_block.name,
 	    type: "each",
-	    source: "(1358:2) {#each messages as message}",
+	    source: "(1394:2) {#each messages as message}",
 	    ctx
 	  });
 	  return block;
@@ -62701,7 +62701,7 @@ var app = (function () {
 	      attr_dev(main, "data-pad-top", "50");
 	      attr_dev(main, "data-pad-bottom", "30");
 	      attr_dev(main, "class", "svelte-yfuvl7");
-	      add_location(main, file$1, 1355, 0, 61164);
+	      add_location(main, file$1, 1391, 0, 62337);
 	    },
 	    l: function claim(nodes) {
 	      throw new Error("options.hydrate only works if the component was compiled with the `hydratable: true` option");
@@ -63500,6 +63500,33 @@ var app = (function () {
 	    });
 	  }
 
+	  function archivingChat() {
+	    return __awaiter(this, void 0, void 0, function* () {
+	      if (chat && chat.inputEntity) {
+	        var folderId;
+
+	        if (chat.archived) {
+	          folderId = 0;
+	        } else {
+	          folderId = 1;
+	        }
+
+	        try {
+	          var result = yield client.invoke(new Api.folders.EditPeerFolders({
+	            folderPeers: [new Api.InputFolderPeer({
+	              peer: chat.inputEntity,
+	              folderId
+	            })]
+	          })); // console.log(result);
+
+	          $$invalidate(1, chat.archived = !chat.archived, chat);
+	        } catch (err) {
+	          console.log(err);
+	        }
+	      }
+	    });
+	  }
+
 	  function openContextMenu(msg, index) {
 	    return __awaiter(this, void 0, void 0, function* () {
 	      var entities = [];
@@ -63615,6 +63642,16 @@ var app = (function () {
 	          }
 	        }
 
+	        if (chat.archived) {
+	          menu.push({
+	            title: 'Unarchive'
+	          });
+	        } else {
+	          menu.push({
+	            title: 'Archive'
+	          });
+	        }
+
 	        if (chat.entity.className === 'Channel') {
 	          menu.push({
 	            title: 'Report'
@@ -63667,6 +63704,8 @@ var app = (function () {
 	                  showReplies(getReplyHeader(msg), true);
 	                } else if (scope.selected.title === 'Leave Group') {
 	                  leaveChannel();
+	                } else if (['Archive', 'Unarchive'].indexOf(scope.selected.title) > -1) {
+	                  archivingChat();
 	                }
 	              }), 200);
 	            },
@@ -64360,7 +64399,6 @@ var app = (function () {
 	    navInstance.attachListener();
 	    client.addEventHandler(clientListener);
 	    $$invalidate(0, ready = true);
-	    console.log(location.state);
 	  });
 	  onDestroy(() => {
 	    navInstance.detachListener();
@@ -64434,6 +64472,7 @@ var app = (function () {
 	    handleTelegramLink,
 	    openRoom,
 	    showEntities,
+	    archivingChat,
 	    openContextMenu,
 	    showReplies,
 	    resolveMessageWidget,
