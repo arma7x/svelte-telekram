@@ -2654,7 +2654,7 @@ var app = (function () {
 	function _objectSpread$1(target) { for (var i = 1; i < arguments.length; i++) { var source = null != arguments[i] ? arguments[i] : {}; i % 2 ? ownKeys$1(Object(source), !0).forEach(function (key) { _defineProperty(target, key, source[key]); }) : Object.getOwnPropertyDescriptors ? Object.defineProperties(target, Object.getOwnPropertyDescriptors(source)) : ownKeys$1(Object(source)).forEach(function (key) { Object.defineProperty(target, key, Object.getOwnPropertyDescriptor(source, key)); }); } return target; }
 	var file$1h = "node_modules/svelte-navigator/src/Router.svelte"; // (195:0) {#if isTopLevelRouter && manageFocus && a11yConfig.announcements}
 
-	function create_if_block$j(ctx) {
+	function create_if_block$k(ctx) {
 	  var div;
 	  var t;
 	  var block = {
@@ -2686,7 +2686,7 @@ var app = (function () {
 	  };
 	  dispatch_dev("SvelteRegisterBlock", {
 	    block,
-	    id: create_if_block$j.name,
+	    id: create_if_block$k.name,
 	    type: "if",
 	    source: "(195:0) {#if isTopLevelRouter && manageFocus && a11yConfig.announcements}",
 	    ctx
@@ -2712,7 +2712,7 @@ var app = (function () {
 	  /*manageFocus*/
 	  ctx[4] &&
 	  /*a11yConfig*/
-	  ctx[1].announcements && create_if_block$j(ctx);
+	  ctx[1].announcements && create_if_block$k(ctx);
 	  var block = {
 	    c: function create() {
 	      div = element("div");
@@ -3377,7 +3377,7 @@ var app = (function () {
 	}); // (97:0) {#if isActive}
 
 
-	function create_if_block$i(ctx) {
+	function create_if_block$j(ctx) {
 	  var router;
 	  var current;
 	  router = new Router$1({
@@ -3436,7 +3436,7 @@ var app = (function () {
 	  };
 	  dispatch_dev("SvelteRegisterBlock", {
 	    block,
-	    id: create_if_block$i.name,
+	    id: create_if_block$j.name,
 	    type: "if",
 	    source: "(97:0) {#if isActive}",
 	    ctx
@@ -3716,7 +3716,7 @@ var app = (function () {
 	  var current;
 	  var if_block =
 	  /*isActive*/
-	  ctx[2] && create_if_block$i(ctx);
+	  ctx[2] && create_if_block$j(ctx);
 	  var block = {
 	    c: function create() {
 	      div0 = element("div");
@@ -3764,7 +3764,7 @@ var app = (function () {
 	            transition_in(if_block, 1);
 	          }
 	        } else {
-	          if_block = create_if_block$i(ctx);
+	          if_block = create_if_block$j(ctx);
 	          if_block.c();
 	          transition_in(if_block, 1);
 	          if_block.m(t1.parentNode, t1);
@@ -4743,7 +4743,7 @@ var app = (function () {
 	} // (89:4) {#if html}
 
 
-	function create_if_block$h(ctx) {
+	function create_if_block$i(ctx) {
 	  var div;
 	  var block = {
 	    c: function create() {
@@ -4776,7 +4776,7 @@ var app = (function () {
 	  };
 	  dispatch_dev("SvelteRegisterBlock", {
 	    block,
-	    id: create_if_block$h.name,
+	    id: create_if_block$i.name,
 	    type: "if",
 	    source: "(89:4) {#if html}",
 	    ctx
@@ -4794,7 +4794,7 @@ var app = (function () {
 	  function select_block_type(ctx, dirty) {
 	    if (
 	    /*html*/
-	    ctx[2]) return create_if_block$h;
+	    ctx[2]) return create_if_block$i;
 	    return create_else_block$6;
 	  }
 
@@ -5289,7 +5289,7 @@ var app = (function () {
 	} // (15:6) {#if subtitle}
 
 
-	function create_if_block$g(ctx) {
+	function create_if_block$h(ctx) {
 	  var small;
 	  var t;
 	  var block = {
@@ -5318,7 +5318,7 @@ var app = (function () {
 	  };
 	  dispatch_dev("SvelteRegisterBlock", {
 	    block,
-	    id: create_if_block$g.name,
+	    id: create_if_block$h.name,
 	    type: "if",
 	    source: "(15:6) {#if subtitle}",
 	    ctx
@@ -5334,7 +5334,7 @@ var app = (function () {
 	  var t1;
 	  var if_block =
 	  /*subtitle*/
-	  ctx[2] && create_if_block$g(ctx);
+	  ctx[2] && create_if_block$h(ctx);
 	  var block = {
 	    c: function create() {
 	      div = element("div");
@@ -5369,7 +5369,7 @@ var app = (function () {
 	        if (if_block) {
 	          if_block.p(ctx, dirty);
 	        } else {
-	          if_block = create_if_block$g(ctx);
+	          if_block = create_if_block$h(ctx);
 	          if_block.c();
 	          if_block.m(div, null);
 	        }
@@ -8361,7 +8361,7 @@ var app = (function () {
 
 	var file$14 = "src/components/TextInputField.svelte"; // (12:2) {#if label}
 
-	function create_if_block$f(ctx) {
+	function create_if_block$g(ctx) {
 	  var label_1;
 	  var t;
 	  var label_1_for_value;
@@ -8402,7 +8402,7 @@ var app = (function () {
 	  };
 	  dispatch_dev("SvelteRegisterBlock", {
 	    block,
-	    id: create_if_block$f.name,
+	    id: create_if_block$g.name,
 	    type: "if",
 	    source: "(12:2) {#if label}",
 	    ctx
@@ -8420,7 +8420,7 @@ var app = (function () {
 	  var dispose;
 	  var if_block =
 	  /*label*/
-	  ctx[1] && create_if_block$f(ctx);
+	  ctx[1] && create_if_block$g(ctx);
 	  var block = {
 	    c: function create() {
 	      div = element("div");
@@ -8495,7 +8495,7 @@ var app = (function () {
 	        if (if_block) {
 	          if_block.p(ctx, dirty);
 	        } else {
-	          if_block = create_if_block$f(ctx);
+	          if_block = create_if_block$g(ctx);
 	          if_block.c();
 	          if_block.m(div, t);
 	        }
@@ -8730,7 +8730,7 @@ var app = (function () {
 
 	var file$13 = "src/components/TextAreaField.svelte"; // (13:2) {#if label}
 
-	function create_if_block$e(ctx) {
+	function create_if_block$f(ctx) {
 	  var label_1;
 	  var t;
 	  var label_1_for_value;
@@ -8771,7 +8771,7 @@ var app = (function () {
 	  };
 	  dispatch_dev("SvelteRegisterBlock", {
 	    block,
-	    id: create_if_block$e.name,
+	    id: create_if_block$f.name,
 	    type: "if",
 	    source: "(13:2) {#if label}",
 	    ctx
@@ -8789,7 +8789,7 @@ var app = (function () {
 	  var dispose;
 	  var if_block =
 	  /*label*/
-	  ctx[1] && create_if_block$e(ctx);
+	  ctx[1] && create_if_block$f(ctx);
 	  var block = {
 	    c: function create() {
 	      div = element("div");
@@ -8867,7 +8867,7 @@ var app = (function () {
 	        if (if_block) {
 	          if_block.p(ctx, dirty);
 	        } else {
-	          if_block = create_if_block$e(ctx);
+	          if_block = create_if_block$f(ctx);
 	          if_block.c();
 	          if_block.m(div, t);
 	        }
@@ -10587,7 +10587,7 @@ var app = (function () {
 	} // (137:2) {#if item.dismissable}
 
 
-	function create_if_block$d(ctx) {
+	function create_if_block$e(ctx) {
 	  var div;
 	  var mounted;
 	  var dispose;
@@ -10619,7 +10619,7 @@ var app = (function () {
 	  };
 	  dispatch_dev("SvelteRegisterBlock", {
 	    block,
-	    id: create_if_block$d.name,
+	    id: create_if_block$e.name,
 	    type: "if",
 	    source: "(137:2) {#if item.dismissable}",
 	    ctx
@@ -10652,7 +10652,7 @@ var app = (function () {
 	  if_block0 = if_blocks[current_block_type_index] = if_block_creators[current_block_type_index](ctx);
 	  var if_block1 =
 	  /*item*/
-	  ctx[0].dismissable && create_if_block$d(ctx);
+	  ctx[0].dismissable && create_if_block$e(ctx);
 	  var block = {
 	    c: function create() {
 	      div1 = element("div");
@@ -10743,7 +10743,7 @@ var app = (function () {
 	        if (if_block1) {
 	          if_block1.p(ctx, dirty);
 	        } else {
-	          if_block1 = create_if_block$d(ctx);
+	          if_block1 = create_if_block$e(ctx);
 	          if_block1.c();
 	          if_block1.m(div1, t1);
 	        }
@@ -15399,7 +15399,7 @@ var app = (function () {
 	  return _manuallySubscribePushNotification.apply(this, arguments);
 	}
 
-	var console_1$d = globals.console;
+	var console_1$e = globals.console;
 	var file$_ = "src/widgets/QRModal.svelte";
 
 	function create_fragment$_(ctx) {
@@ -15573,7 +15573,7 @@ var app = (function () {
 	  });
 	  var writable_props = ['title', 'onBackspace', 'onOpened', 'onClosed'];
 	  Object.keys($$props).forEach(key => {
-	    if (!~writable_props.indexOf(key) && key.slice(0, 2) !== '$$' && key !== 'slot') console_1$d.warn(`<QRModal> was created with unknown prop '${key}'`);
+	    if (!~writable_props.indexOf(key) && key.slice(0, 2) !== '$$' && key !== 'slot') console_1$e.warn(`<QRModal> was created with unknown prop '${key}'`);
 	  });
 
 	  $$self.$$set = $$props => {
@@ -26820,7 +26820,7 @@ var app = (function () {
 	});
 	var jsQR$1 = /*@__PURE__*/getDefaultExportFromCjs(jsQR);
 
-	var console_1$c = globals.console;
+	var console_1$d = globals.console;
 	var file$Z = "src/widgets/QRScanner.svelte";
 
 	function create_fragment$Z(ctx) {
@@ -27000,7 +27000,7 @@ var app = (function () {
 	  });
 	  var writable_props = ['title', 'onBackspace', 'onOpened', 'onClosed', 'callback'];
 	  Object.keys($$props).forEach(key => {
-	    if (!~writable_props.indexOf(key) && key.slice(0, 2) !== '$$' && key !== 'slot') console_1$c.warn(`<QRScanner> was created with unknown prop '${key}'`);
+	    if (!~writable_props.indexOf(key) && key.slice(0, 2) !== '$$' && key !== 'slot') console_1$d.warn(`<QRScanner> was created with unknown prop '${key}'`);
 	  });
 
 	  function video_binding($$value) {
@@ -27358,7 +27358,7 @@ var app = (function () {
 	} // (33:4) {#if chat.unreadCount}
 
 
-	function create_if_block$c(ctx) {
+	function create_if_block$d(ctx) {
 	  var span;
 	  var t_value =
 	  /*chat*/
@@ -27399,7 +27399,7 @@ var app = (function () {
 	  };
 	  dispatch_dev("SvelteRegisterBlock", {
 	    block,
-	    id: create_if_block$c.name,
+	    id: create_if_block$d.name,
 	    type: "if",
 	    source: "(33:4) {#if chat.unreadCount}",
 	    ctx
@@ -27470,7 +27470,7 @@ var app = (function () {
 	  var if_block2 = current_block_type_1(ctx);
 	  var if_block3 =
 	  /*chat*/
-	  ctx[2].unreadCount && create_if_block$c(ctx);
+	  ctx[2].unreadCount && create_if_block$d(ctx);
 	  var block = {
 	    c: function create() {
 	      div3 = element("div");
@@ -27610,7 +27610,7 @@ var app = (function () {
 	        if (if_block3) {
 	          if_block3.p(ctx, dirty);
 	        } else {
-	          if_block3 = create_if_block$c(ctx);
+	          if_block3 = create_if_block$d(ctx);
 	          if_block3.c();
 	          if_block3.m(div2, t5);
 	        }
@@ -29053,7 +29053,7 @@ var app = (function () {
 	}
 
 	/* src/routes/Home.svelte generated by Svelte v3.46.4 */
-	var console_1$b = globals.console;
+	var console_1$c = globals.console;
 	var file$V = "src/routes/Home.svelte";
 
 	function get_each_context$2(ctx, list, i) {
@@ -29207,7 +29207,7 @@ var app = (function () {
 	} // (883:2) {#if authStatus === false }
 
 
-	function create_if_block$b(ctx) {
+	function create_if_block$c(ctx) {
 	  var current_block_type_index;
 	  var if_block;
 	  var t;
@@ -29311,7 +29311,7 @@ var app = (function () {
 	  };
 	  dispatch_dev("SvelteRegisterBlock", {
 	    block,
-	    id: create_if_block$b.name,
+	    id: create_if_block$c.name,
 	    type: "if",
 	    source: "(883:2) {#if authStatus === false }",
 	    ctx
@@ -30225,7 +30225,7 @@ var app = (function () {
 	  var current_block_type_index;
 	  var if_block;
 	  var current;
-	  var if_block_creators = [create_if_block$b, create_else_block_1];
+	  var if_block_creators = [create_if_block$c, create_else_block_1];
 	  var if_blocks = [];
 
 	  function select_block_type(ctx, dirty) {
@@ -31273,7 +31273,7 @@ var app = (function () {
 	  });
 	  var writable_props = ['location', 'navigate', 'getAppProp'];
 	  Object.keys($$props).forEach(key => {
-	    if (!~writable_props.indexOf(key) && key.slice(0, 2) !== '$$' && key !== 'slot') console_1$b.warn(`<Home> was created with unknown prop '${key}'`);
+	    if (!~writable_props.indexOf(key) && key.slice(0, 2) !== '$$' && key !== 'slot') console_1$c.warn(`<Home> was created with unknown prop '${key}'`);
 	  });
 
 	  var func = () => window.close();
@@ -31454,19 +31454,19 @@ var app = (function () {
 	    if (
 	    /*location*/
 	    ctx[20] === undefined && !('location' in props)) {
-	      console_1$b.warn("<Home> was created without expected prop 'location'");
+	      console_1$c.warn("<Home> was created without expected prop 'location'");
 	    }
 
 	    if (
 	    /*navigate*/
 	    ctx[21] === undefined && !('navigate' in props)) {
-	      console_1$b.warn("<Home> was created without expected prop 'navigate'");
+	      console_1$c.warn("<Home> was created without expected prop 'navigate'");
 	    }
 
 	    if (
 	    /*getAppProp*/
 	    ctx[22] === undefined && !('getAppProp' in props)) {
-	      console_1$b.warn("<Home> was created without expected prop 'getAppProp'");
+	      console_1$c.warn("<Home> was created without expected prop 'getAppProp'");
 	    }
 	  }
 
@@ -43197,7 +43197,7 @@ var app = (function () {
 	  return _removeCachedMedia.apply(this, arguments);
 	}
 
-	var console_1$a = globals.console;
+	var console_1$b = globals.console;
 	var file$T = "src/widgets/message/media/MessageMediaDocument/Audio.svelte"; // (168:9) {#if downloading > -1}
 
 	function create_if_block_1$6(ctx) {
@@ -43237,7 +43237,7 @@ var app = (function () {
 	} // (168:56) {#if !downloaded && downloading === -1}
 
 
-	function create_if_block$a(ctx) {
+	function create_if_block$b(ctx) {
 	  var img;
 	  var img_src_value;
 	  var t;
@@ -43262,7 +43262,7 @@ var app = (function () {
 	  };
 	  dispatch_dev("SvelteRegisterBlock", {
 	    block,
-	    id: create_if_block$a.name,
+	    id: create_if_block$b.name,
 	    type: "if",
 	    source: "(168:56) {#if !downloaded && downloading === -1}",
 	    ctx
@@ -43292,7 +43292,7 @@ var app = (function () {
 	  /*downloaded*/
 	  ctx[2] &&
 	  /*downloading*/
-	  ctx[3] === -1 && create_if_block$a(ctx);
+	  ctx[3] === -1 && create_if_block$b(ctx);
 	  var block = {
 	    c: function create() {
 	      div2 = element("div");
@@ -43362,7 +43362,7 @@ var app = (function () {
 	      /*downloading*/
 	      ctx[3] === -1) {
 	        if (if_block1) ; else {
-	          if_block1 = create_if_block$a(ctx);
+	          if_block1 = create_if_block$b(ctx);
 	          if_block1.c();
 	          if_block1.m(div0, t1);
 	        }
@@ -43600,7 +43600,7 @@ var app = (function () {
 	  });
 	  var writable_props = ['chat', 'message', 'parentNavInstance', 'registerCallButtonHandler', 'refetchMessage'];
 	  Object.keys($$props).forEach(key => {
-	    if (!~writable_props.indexOf(key) && key.slice(0, 2) !== '$$' && key !== 'slot') console_1$a.warn(`<Audio> was created with unknown prop '${key}'`);
+	    if (!~writable_props.indexOf(key) && key.slice(0, 2) !== '$$' && key !== 'slot') console_1$b.warn(`<Audio> was created with unknown prop '${key}'`);
 	  });
 
 	  $$self.$$set = $$props => {
@@ -43684,7 +43684,7 @@ var app = (function () {
 	    if (
 	    /*parentNavInstance*/
 	    ctx[5] === undefined && !('parentNavInstance' in props)) {
-	      console_1$a.warn("<Audio> was created without expected prop 'parentNavInstance'");
+	      console_1$b.warn("<Audio> was created without expected prop 'parentNavInstance'");
 	    }
 	  }
 
@@ -43927,7 +43927,7 @@ var app = (function () {
 
 	}
 
-	var console_1$9 = globals.console;
+	var console_1$a = globals.console;
 	var file$R = "src/widgets/message/media/MessageMediaDocument/Video.svelte"; // (175:9) {#if downloading > -1}
 
 	function create_if_block_1$5(ctx) {
@@ -43967,7 +43967,7 @@ var app = (function () {
 	} // (175:56) {#if !downloaded && downloading === -1}
 
 
-	function create_if_block$9(ctx) {
+	function create_if_block$a(ctx) {
 	  var img;
 	  var img_src_value;
 	  var t;
@@ -43992,7 +43992,7 @@ var app = (function () {
 	  };
 	  dispatch_dev("SvelteRegisterBlock", {
 	    block,
-	    id: create_if_block$9.name,
+	    id: create_if_block$a.name,
 	    type: "if",
 	    source: "(175:56) {#if !downloaded && downloading === -1}",
 	    ctx
@@ -44022,7 +44022,7 @@ var app = (function () {
 	  /*downloaded*/
 	  ctx[3] &&
 	  /*downloading*/
-	  ctx[4] === -1 && create_if_block$9(ctx);
+	  ctx[4] === -1 && create_if_block$a(ctx);
 	  var block = {
 	    c: function create() {
 	      div2 = element("div");
@@ -44102,7 +44102,7 @@ var app = (function () {
 	      /*downloading*/
 	      ctx[4] === -1) {
 	        if (if_block1) ; else {
-	          if_block1 = create_if_block$9(ctx);
+	          if_block1 = create_if_block$a(ctx);
 	          if_block1.c();
 	          if_block1.m(div0, t1);
 	        }
@@ -44347,7 +44347,7 @@ var app = (function () {
 	  });
 	  var writable_props = ['chat', 'message', 'parentNavInstance', 'registerCallButtonHandler', 'refetchMessage'];
 	  Object.keys($$props).forEach(key => {
-	    if (!~writable_props.indexOf(key) && key.slice(0, 2) !== '$$' && key !== 'slot') console_1$9.warn(`<Video> was created with unknown prop '${key}'`);
+	    if (!~writable_props.indexOf(key) && key.slice(0, 2) !== '$$' && key !== 'slot') console_1$a.warn(`<Video> was created with unknown prop '${key}'`);
 	  });
 
 	  $$self.$$set = $$props => {
@@ -44434,7 +44434,7 @@ var app = (function () {
 	    if (
 	    /*parentNavInstance*/
 	    ctx[6] === undefined && !('parentNavInstance' in props)) {
-	      console_1$9.warn("<Video> was created without expected prop 'parentNavInstance'");
+	      console_1$a.warn("<Video> was created without expected prop 'parentNavInstance'");
 	    }
 	  }
 
@@ -44495,7 +44495,7 @@ var app = (function () {
 
 	}
 
-	var console_1$8 = globals.console;
+	var console_1$9 = globals.console;
 	var file$Q = "src/widgets/message/media/MessageMediaDocument/Doc.svelte"; // (164:9) {#if downloading > -1}
 
 	function create_if_block_1$4(ctx) {
@@ -44535,7 +44535,7 @@ var app = (function () {
 	} // (164:56) {#if !downloaded && downloading === -1}
 
 
-	function create_if_block$8(ctx) {
+	function create_if_block$9(ctx) {
 	  var img;
 	  var img_src_value;
 	  var t;
@@ -44560,7 +44560,7 @@ var app = (function () {
 	  };
 	  dispatch_dev("SvelteRegisterBlock", {
 	    block,
-	    id: create_if_block$8.name,
+	    id: create_if_block$9.name,
 	    type: "if",
 	    source: "(164:56) {#if !downloaded && downloading === -1}",
 	    ctx
@@ -44590,7 +44590,7 @@ var app = (function () {
 	  /*downloaded*/
 	  ctx[2] &&
 	  /*downloading*/
-	  ctx[3] === -1 && create_if_block$8(ctx);
+	  ctx[3] === -1 && create_if_block$9(ctx);
 	  var block = {
 	    c: function create() {
 	      div2 = element("div");
@@ -44660,7 +44660,7 @@ var app = (function () {
 	      /*downloading*/
 	      ctx[3] === -1) {
 	        if (if_block1) ; else {
-	          if_block1 = create_if_block$8(ctx);
+	          if_block1 = create_if_block$9(ctx);
 	          if_block1.c();
 	          if_block1.m(div0, t1);
 	        }
@@ -44892,7 +44892,7 @@ var app = (function () {
 	  });
 	  var writable_props = ['chat', 'message', 'parentNavInstance', 'registerCallButtonHandler', 'refetchMessage'];
 	  Object.keys($$props).forEach(key => {
-	    if (!~writable_props.indexOf(key) && key.slice(0, 2) !== '$$' && key !== 'slot') console_1$8.warn(`<Doc> was created with unknown prop '${key}'`);
+	    if (!~writable_props.indexOf(key) && key.slice(0, 2) !== '$$' && key !== 'slot') console_1$9.warn(`<Doc> was created with unknown prop '${key}'`);
 	  });
 
 	  $$self.$$set = $$props => {
@@ -44975,7 +44975,7 @@ var app = (function () {
 	    if (
 	    /*parentNavInstance*/
 	    ctx[5] === undefined && !('parentNavInstance' in props)) {
-	      console_1$8.warn("<Doc> was created without expected prop 'parentNavInstance'");
+	      console_1$9.warn("<Doc> was created without expected prop 'parentNavInstance'");
 	    }
 	  }
 
@@ -45419,7 +45419,7 @@ var app = (function () {
 
 	}
 
-	var console_1$7 = globals.console;
+	var console_1$8 = globals.console;
 	var file$N = "src/widgets/message/media/MessageMediaPhoto.svelte"; // (190:9) {#if downloading > -1}
 
 	function create_if_block_1$3(ctx) {
@@ -45459,7 +45459,7 @@ var app = (function () {
 	} // (190:56) {#if !downloaded && downloading === -1}
 
 
-	function create_if_block$7(ctx) {
+	function create_if_block$8(ctx) {
 	  var img;
 	  var img_src_value;
 	  var t;
@@ -45484,7 +45484,7 @@ var app = (function () {
 	  };
 	  dispatch_dev("SvelteRegisterBlock", {
 	    block,
-	    id: create_if_block$7.name,
+	    id: create_if_block$8.name,
 	    type: "if",
 	    source: "(190:56) {#if !downloaded && downloading === -1}",
 	    ctx
@@ -45511,7 +45511,7 @@ var app = (function () {
 	  /*downloaded*/
 	  ctx[2] &&
 	  /*downloading*/
-	  ctx[3] === -1 && create_if_block$7(ctx);
+	  ctx[3] === -1 && create_if_block$8(ctx);
 	  var block = {
 	    c: function create() {
 	      div2 = element("div");
@@ -45591,7 +45591,7 @@ var app = (function () {
 	      /*downloading*/
 	      ctx[3] === -1) {
 	        if (if_block1) ; else {
-	          if_block1 = create_if_block$7(ctx);
+	          if_block1 = create_if_block$8(ctx);
 	          if_block1.c();
 	          if_block1.m(div0, t1);
 	        }
@@ -45847,7 +45847,7 @@ var app = (function () {
 	  });
 	  var writable_props = ['chat', 'message', 'parentNavInstance', 'registerCallButtonHandler', 'refetchMessage'];
 	  Object.keys($$props).forEach(key => {
-	    if (!~writable_props.indexOf(key) && key.slice(0, 2) !== '$$' && key !== 'slot') console_1$7.warn(`<MessageMediaPhoto> was created with unknown prop '${key}'`);
+	    if (!~writable_props.indexOf(key) && key.slice(0, 2) !== '$$' && key !== 'slot') console_1$8.warn(`<MessageMediaPhoto> was created with unknown prop '${key}'`);
 	  });
 
 	  $$self.$$set = $$props => {
@@ -45933,7 +45933,7 @@ var app = (function () {
 	    if (
 	    /*parentNavInstance*/
 	    ctx[6] === undefined && !('parentNavInstance' in props)) {
-	      console_1$7.warn("<MessageMediaPhoto> was created without expected prop 'parentNavInstance'");
+	      console_1$8.warn("<MessageMediaPhoto> was created without expected prop 'parentNavInstance'");
 	    }
 	  }
 
@@ -46276,7 +46276,7 @@ var app = (function () {
 
 	}
 
-	var console_1$6 = globals.console;
+	var console_1$7 = globals.console;
 	var file$L = "src/widgets/message/media/MessageMediaPoll.svelte"; // (284:2) {:else}
 
 	function create_else_block$2(ctx) {
@@ -46310,7 +46310,7 @@ var app = (function () {
 	} // (282:2) {#if !available}
 
 
-	function create_if_block$6(ctx) {
+	function create_if_block$7(ctx) {
 	  var small;
 	  var i;
 	  var t0;
@@ -46350,7 +46350,7 @@ var app = (function () {
 	  };
 	  dispatch_dev("SvelteRegisterBlock", {
 	    block,
-	    id: create_if_block$6.name,
+	    id: create_if_block$7.name,
 	    type: "if",
 	    source: "(282:2) {#if !available}",
 	    ctx
@@ -46377,7 +46377,7 @@ var app = (function () {
 	  function select_block_type(ctx, dirty) {
 	    if (!
 	    /*available*/
-	    ctx[1]) return create_if_block$6;
+	    ctx[1]) return create_if_block$7;
 	    return create_else_block$2;
 	  }
 
@@ -46779,7 +46779,7 @@ var app = (function () {
 	  onDestroy(() => {});
 	  var writable_props = ['chat', 'message', 'parentNavInstance', 'registerCallButtonHandler', 'refetchMessage'];
 	  Object.keys($$props).forEach(key => {
-	    if (!~writable_props.indexOf(key) && key.slice(0, 2) !== '$$' && key !== 'slot') console_1$6.warn(`<MessageMediaPoll> was created with unknown prop '${key}'`);
+	    if (!~writable_props.indexOf(key) && key.slice(0, 2) !== '$$' && key !== 'slot') console_1$7.warn(`<MessageMediaPoll> was created with unknown prop '${key}'`);
 	  });
 
 	  $$self.$$set = $$props => {
@@ -46863,7 +46863,7 @@ var app = (function () {
 	    if (
 	    /*parentNavInstance*/
 	    ctx[4] === undefined && !('parentNavInstance' in props)) {
-	      console_1$6.warn("<MessageMediaPoll> was created without expected prop 'parentNavInstance'");
+	      console_1$7.warn("<MessageMediaPoll> was created without expected prop 'parentNavInstance'");
 	    }
 	  }
 
@@ -52152,7 +52152,7 @@ var app = (function () {
 
 	}
 
-	var console_1$5 = globals.console;
+	var console_1$6 = globals.console;
 	var file$E = "src/widgets/message/media/MessageMediaWebPage.svelte"; // (166:4) {#if message.media.webpage.siteName}
 
 	function create_if_block_2$1(ctx) {
@@ -52241,7 +52241,7 @@ var app = (function () {
 	} // (172:4) {#if message.media.webpage.description}
 
 
-	function create_if_block$5(ctx) {
+	function create_if_block$6(ctx) {
 	  var p;
 	  var t_value = (
 	  /*message*/
@@ -52279,7 +52279,7 @@ var app = (function () {
 	  };
 	  dispatch_dev("SvelteRegisterBlock", {
 	    block,
-	    id: create_if_block$5.name,
+	    id: create_if_block$6.name,
 	    type: "if",
 	    source: "(172:4) {#if message.media.webpage.description}",
 	    ctx
@@ -52300,7 +52300,7 @@ var app = (function () {
 	  ctx[0].media.webpage.title && create_if_block_1$2(ctx);
 	  var if_block2 =
 	  /*message*/
-	  ctx[0].media.webpage.description && create_if_block$5(ctx);
+	  ctx[0].media.webpage.description && create_if_block$6(ctx);
 	  var block = {
 	    c: function create() {
 	      div1 = element("div");
@@ -52367,7 +52367,7 @@ var app = (function () {
 	        if (if_block2) {
 	          if_block2.p(ctx, dirty);
 	        } else {
-	          if_block2 = create_if_block$5(ctx);
+	          if_block2 = create_if_block$6(ctx);
 	          if_block2.c();
 	          if_block2.m(div0, null);
 	        }
@@ -52594,7 +52594,7 @@ var app = (function () {
 	  });
 	  var writable_props = ['chat', 'message', 'parentNavInstance', 'registerCallButtonHandler', 'refetchMessage'];
 	  Object.keys($$props).forEach(key => {
-	    if (!~writable_props.indexOf(key) && key.slice(0, 2) !== '$$' && key !== 'slot') console_1$5.warn(`<MessageMediaWebPage> was created with unknown prop '${key}'`);
+	    if (!~writable_props.indexOf(key) && key.slice(0, 2) !== '$$' && key !== 'slot') console_1$6.warn(`<MessageMediaWebPage> was created with unknown prop '${key}'`);
 	  });
 
 	  $$self.$$set = $$props => {
@@ -52670,7 +52670,7 @@ var app = (function () {
 	    if (
 	    /*parentNavInstance*/
 	    ctx[2] === undefined && !('parentNavInstance' in props)) {
-	      console_1$5.warn("<MessageMediaWebPage> was created without expected prop 'parentNavInstance'");
+	      console_1$6.warn("<MessageMediaWebPage> was created without expected prop 'parentNavInstance'");
 	    }
 	  }
 
@@ -53139,7 +53139,7 @@ var app = (function () {
 	});
 
 	/* src/widgets/message/Message.svelte generated by Svelte v3.46.4 */
-	var console_1$4 = globals.console;
+	var console_1$5 = globals.console;
 	var file$B = "src/widgets/message/Message.svelte"; // (265:2) {#if hasAvatar && !chat.isUser }
 
 	function create_if_block_14(ctx) {
@@ -53878,7 +53878,7 @@ var app = (function () {
 	} // (307:6) {#if message.forwards && message.forwards > 0}
 
 
-	function create_if_block$4(ctx) {
+	function create_if_block$5(ctx) {
 	  var small;
 	  var img;
 	  var img_src_value;
@@ -53923,7 +53923,7 @@ var app = (function () {
 	  };
 	  dispatch_dev("SvelteRegisterBlock", {
 	    block,
-	    id: create_if_block$4.name,
+	    id: create_if_block$5.name,
 	    type: "if",
 	    source: "(307:6) {#if message.forwards && message.forwards > 0}",
 	    ctx
@@ -54033,7 +54033,7 @@ var app = (function () {
 	  /*message*/
 	  ctx[2].forwards &&
 	  /*message*/
-	  ctx[2].forwards > 0 && create_if_block$4(ctx);
+	  ctx[2].forwards > 0 && create_if_block$5(ctx);
 	  var block = {
 	    c: function create() {
 	      div2 = element("div");
@@ -54370,7 +54370,7 @@ var app = (function () {
 	        if (if_block12) {
 	          if_block12.p(ctx, dirty);
 	        } else {
-	          if_block12 = create_if_block$4(ctx);
+	          if_block12 = create_if_block$5(ctx);
 	          if_block12.c();
 	          if_block12.m(div0, t12);
 	        }
@@ -54793,7 +54793,7 @@ var app = (function () {
 	  });
 	  var writable_props = ['key', 'chat', 'message', 'className', 'onClick', 'parentNavInstance', 'registerCallButtonHandler', 'refetchMessage', 'destroyCallback', 'replyTo', 'short', 'scrollable', 'replyThreadId'];
 	  Object.keys($$props).forEach(key => {
-	    if (!~writable_props.indexOf(key) && key.slice(0, 2) !== '$$' && key !== 'slot') console_1$4.warn(`<Message> was created with unknown prop '${key}'`);
+	    if (!~writable_props.indexOf(key) && key.slice(0, 2) !== '$$' && key !== 'slot') console_1$5.warn(`<Message> was created with unknown prop '${key}'`);
 	  });
 
 	  function div2_binding($$value) {
@@ -54930,19 +54930,19 @@ var app = (function () {
 	    if (
 	    /*parentNavInstance*/
 	    ctx[5] === undefined && !('parentNavInstance' in props)) {
-	      console_1$4.warn("<Message> was created without expected prop 'parentNavInstance'");
+	      console_1$5.warn("<Message> was created without expected prop 'parentNavInstance'");
 	    }
 
 	    if (
 	    /*replyTo*/
 	    ctx[8] === undefined && !('replyTo' in props)) {
-	      console_1$4.warn("<Message> was created without expected prop 'replyTo'");
+	      console_1$5.warn("<Message> was created without expected prop 'replyTo'");
 	    }
 
 	    if (
 	    /*replyThreadId*/
 	    ctx[10] === undefined && !('replyThreadId' in props)) {
-	      console_1$4.warn("<Message> was created without expected prop 'replyThreadId'");
+	      console_1$5.warn("<Message> was created without expected prop 'replyThreadId'");
 	    }
 	  }
 
@@ -55999,10 +55999,10 @@ var app = (function () {
 
 	}
 
-	var console_1$3 = globals.console;
+	var console_1$4 = globals.console;
 	var file$v = "src/widgets/message/action/MessageActionChatAddUser.svelte"; // (34:5) {#if username}
 
-	function create_if_block$3(ctx) {
+	function create_if_block$4(ctx) {
 	  var t0;
 	  var t1;
 	  var block = {
@@ -56030,7 +56030,7 @@ var app = (function () {
 	  };
 	  dispatch_dev("SvelteRegisterBlock", {
 	    block,
-	    id: create_if_block$3.name,
+	    id: create_if_block$4.name,
 	    type: "if",
 	    source: "(34:5) {#if username}",
 	    ctx
@@ -56044,7 +56044,7 @@ var app = (function () {
 	  var t;
 	  var if_block =
 	  /*username*/
-	  ctx[0] && create_if_block$3(ctx);
+	  ctx[0] && create_if_block$4(ctx);
 	  var block = {
 	    c: function create() {
 	      div = element("div");
@@ -56075,7 +56075,7 @@ var app = (function () {
 	        if (if_block) {
 	          if_block.p(ctx, dirty);
 	        } else {
-	          if_block = create_if_block$3(ctx);
+	          if_block = create_if_block$4(ctx);
 	          if_block.c();
 	          if_block.m(p, t);
 	        }
@@ -56134,7 +56134,7 @@ var app = (function () {
 	  });
 	  var writable_props = ['chat', 'message', 'parentNavInstance', 'registerCallButtonHandler', 'refetchMessage'];
 	  Object.keys($$props).forEach(key => {
-	    if (!~writable_props.indexOf(key) && key.slice(0, 2) !== '$$' && key !== 'slot') console_1$3.warn(`<MessageActionChatAddUser> was created with unknown prop '${key}'`);
+	    if (!~writable_props.indexOf(key) && key.slice(0, 2) !== '$$' && key !== 'slot') console_1$4.warn(`<MessageActionChatAddUser> was created with unknown prop '${key}'`);
 	  });
 
 	  $$self.$$set = $$props => {
@@ -56195,7 +56195,7 @@ var app = (function () {
 	    if (
 	    /*parentNavInstance*/
 	    ctx[3] === undefined && !('parentNavInstance' in props)) {
-	      console_1$3.warn("<MessageActionChatAddUser> was created without expected prop 'parentNavInstance'");
+	      console_1$4.warn("<MessageActionChatAddUser> was created without expected prop 'parentNavInstance'");
 	    }
 	  }
 
@@ -56256,10 +56256,10 @@ var app = (function () {
 
 	}
 
-	var console_1$2 = globals.console;
+	var console_1$3 = globals.console;
 	var file$u = "src/widgets/message/action/MessageActionChatDeleteUser.svelte"; // (34:5) {#if username}
 
-	function create_if_block$2(ctx) {
+	function create_if_block$3(ctx) {
 	  var t0;
 	  var t1;
 	  var block = {
@@ -56287,7 +56287,7 @@ var app = (function () {
 	  };
 	  dispatch_dev("SvelteRegisterBlock", {
 	    block,
-	    id: create_if_block$2.name,
+	    id: create_if_block$3.name,
 	    type: "if",
 	    source: "(34:5) {#if username}",
 	    ctx
@@ -56301,7 +56301,7 @@ var app = (function () {
 	  var t;
 	  var if_block =
 	  /*username*/
-	  ctx[0] && create_if_block$2(ctx);
+	  ctx[0] && create_if_block$3(ctx);
 	  var block = {
 	    c: function create() {
 	      div = element("div");
@@ -56332,7 +56332,7 @@ var app = (function () {
 	        if (if_block) {
 	          if_block.p(ctx, dirty);
 	        } else {
-	          if_block = create_if_block$2(ctx);
+	          if_block = create_if_block$3(ctx);
 	          if_block.c();
 	          if_block.m(p, t);
 	        }
@@ -56391,7 +56391,7 @@ var app = (function () {
 	  });
 	  var writable_props = ['chat', 'message', 'parentNavInstance', 'registerCallButtonHandler', 'refetchMessage'];
 	  Object.keys($$props).forEach(key => {
-	    if (!~writable_props.indexOf(key) && key.slice(0, 2) !== '$$' && key !== 'slot') console_1$2.warn(`<MessageActionChatDeleteUser> was created with unknown prop '${key}'`);
+	    if (!~writable_props.indexOf(key) && key.slice(0, 2) !== '$$' && key !== 'slot') console_1$3.warn(`<MessageActionChatDeleteUser> was created with unknown prop '${key}'`);
 	  });
 
 	  $$self.$$set = $$props => {
@@ -56452,7 +56452,7 @@ var app = (function () {
 	    if (
 	    /*parentNavInstance*/
 	    ctx[3] === undefined && !('parentNavInstance' in props)) {
-	      console_1$2.warn("<MessageActionChatDeleteUser> was created without expected prop 'parentNavInstance'");
+	      console_1$3.warn("<MessageActionChatDeleteUser> was created without expected prop 'parentNavInstance'");
 	    }
 	  }
 
@@ -60067,10 +60067,10 @@ var app = (function () {
 
 	}
 
-	var console_1$1 = globals.console;
+	var console_1$2 = globals.console;
 	var file$9 = "src/widgets/message/action/MessageActionGroupCallScheduled.svelte"; // (21:31) {#if dt}
 
-	function create_if_block$1(ctx) {
+	function create_if_block$2(ctx) {
 	  var t0;
 	  var t1;
 	  var block = {
@@ -60098,7 +60098,7 @@ var app = (function () {
 	  };
 	  dispatch_dev("SvelteRegisterBlock", {
 	    block,
-	    id: create_if_block$1.name,
+	    id: create_if_block$2.name,
 	    type: "if",
 	    source: "(21:31) {#if dt}",
 	    ctx
@@ -60115,7 +60115,7 @@ var app = (function () {
 	  var t;
 	  var if_block =
 	  /*dt*/
-	  ctx[1] && create_if_block$1(ctx);
+	  ctx[1] && create_if_block$2(ctx);
 	  var block = {
 	    c: function create() {
 	      div = element("div");
@@ -60152,7 +60152,7 @@ var app = (function () {
 	        if (if_block) {
 	          if_block.p(ctx, dirty);
 	        } else {
-	          if_block = create_if_block$1(ctx);
+	          if_block = create_if_block$2(ctx);
 	          if_block.c();
 	          if_block.m(p, null);
 	        }
@@ -60203,7 +60203,7 @@ var app = (function () {
 	  });
 	  var writable_props = ['chat', 'message', 'parentNavInstance', 'registerCallButtonHandler', 'refetchMessage'];
 	  Object.keys($$props).forEach(key => {
-	    if (!~writable_props.indexOf(key) && key.slice(0, 2) !== '$$' && key !== 'slot') console_1$1.warn(`<MessageActionGroupCallScheduled> was created with unknown prop '${key}'`);
+	    if (!~writable_props.indexOf(key) && key.slice(0, 2) !== '$$' && key !== 'slot') console_1$2.warn(`<MessageActionGroupCallScheduled> was created with unknown prop '${key}'`);
 	  });
 
 	  $$self.$$set = $$props => {
@@ -60262,7 +60262,7 @@ var app = (function () {
 	    if (
 	    /*parentNavInstance*/
 	    ctx[3] === undefined && !('parentNavInstance' in props)) {
-	      console_1$1.warn("<MessageActionGroupCallScheduled> was created without expected prop 'parentNavInstance'");
+	      console_1$2.warn("<MessageActionGroupCallScheduled> was created without expected prop 'parentNavInstance'");
 	    }
 	  }
 
@@ -60482,21 +60482,62 @@ var app = (function () {
 
 	}
 
-	/* src/widgets/message/action/MessageActionChatJoinedByRequest.svelte generated by Svelte v3.46.4 */
-	var file$7 = "src/widgets/message/action/MessageActionChatJoinedByRequest.svelte";
+	var console_1$1 = globals.console;
+	var file$7 = "src/widgets/message/action/MessageActionChatJoinedByRequest.svelte"; // (32:5) {#if username}
+
+	function create_if_block$1(ctx) {
+	  var t0;
+	  var t1;
+	  var block = {
+	    c: function create() {
+	      t0 = text(
+	      /*username*/
+	      ctx[0]);
+	      t1 = space();
+	    },
+	    m: function mount(target, anchor) {
+	      insert_dev(target, t0, anchor);
+	      insert_dev(target, t1, anchor);
+	    },
+	    p: function update(ctx, dirty) {
+	      if (dirty &
+	      /*username*/
+	      1) set_data_dev(t0,
+	      /*username*/
+	      ctx[0]);
+	    },
+	    d: function destroy(detaching) {
+	      if (detaching) detach_dev(t0);
+	      if (detaching) detach_dev(t1);
+	    }
+	  };
+	  dispatch_dev("SvelteRegisterBlock", {
+	    block,
+	    id: create_if_block$1.name,
+	    type: "if",
+	    source: "(32:5) {#if username}",
+	    ctx
+	  });
+	  return block;
+	}
 
 	function create_fragment$7(ctx) {
 	  var div;
 	  var p;
+	  var t;
+	  var if_block =
+	  /*username*/
+	  ctx[0] && create_if_block$1(ctx);
 	  var block = {
 	    c: function create() {
 	      div = element("div");
 	      p = element("p");
-	      p.textContent = "Joined by request";
+	      if (if_block) if_block.c();
+	      t = text("was accepted to the group");
 	      attr_dev(p, "class", "svelte-enhkiq");
-	      add_location(p, file$7, 13, 2, 377);
+	      add_location(p, file$7, 31, 2, 999);
 	      attr_dev(div, "class", "MessageActionChatJoinedByRequest svelte-enhkiq");
-	      add_location(div, file$7, 12, 0, 328);
+	      add_location(div, file$7, 30, 0, 950);
 	    },
 	    l: function claim(nodes) {
 	      throw new Error("options.hydrate only works if the component was compiled with the `hydratable: true` option");
@@ -60504,12 +60545,33 @@ var app = (function () {
 	    m: function mount(target, anchor) {
 	      insert_dev(target, div, anchor);
 	      append_dev(div, p);
+	      if (if_block) if_block.m(p, null);
+	      append_dev(p, t);
 	    },
-	    p: noop,
+	    p: function update(ctx, _ref) {
+	      var _ref2 = _slicedToArray(_ref, 1),
+	          dirty = _ref2[0];
+
+	      if (
+	      /*username*/
+	      ctx[0]) {
+	        if (if_block) {
+	          if_block.p(ctx, dirty);
+	        } else {
+	          if_block = create_if_block$1(ctx);
+	          if_block.c();
+	          if_block.m(p, t);
+	        }
+	      } else if (if_block) {
+	        if_block.d(1);
+	        if_block = null;
+	      }
+	    },
 	    i: noop,
 	    o: noop,
 	    d: function destroy(detaching) {
 	      if (detaching) detach_dev(div);
+	      if (if_block) if_block.d();
 	    }
 	  };
 	  dispatch_dev("SvelteRegisterBlock", {
@@ -60536,54 +60598,73 @@ var app = (function () {
 	      registerCallButtonHandler = _$$props$registerCall === void 0 ? (id, callback) => {} : _$$props$registerCall;
 	  var _$$props$refetchMessa = $$props.refetchMessage,
 	      refetchMessage = _$$props$refetchMessa === void 0 ? id => {} : _$$props$refetchMessa;
-	  onMount(() => {}); // console.log(message);
-
+	  var username = false;
+	  onMount(() => {
+	    client.invoke(new Api.users.GetUsers({
+	      id: [message.fromId.userId]
+	    })).then(users => {
+	      if (users.length > 0) {
+	        var u = '';
+	        if (users[0].firstName) u = users[0].firstName;
+	        if (users[0].lastName) u += ' ' + users[0].lastName;
+	        if (u == '' && users[0].username) u = users[0].username;
+	        u = u == '' ? false : u;
+	        $$invalidate(0, username = u);
+	      }
+	    }).catch(err => {
+	      console.log("MessageActionChatJoinedByRequest:", err);
+	    });
+	  });
 	  var writable_props = ['chat', 'message', 'parentNavInstance', 'registerCallButtonHandler', 'refetchMessage'];
 	  Object.keys($$props).forEach(key => {
-	    if (!~writable_props.indexOf(key) && key.slice(0, 2) !== '$$' && key !== 'slot') console.warn(`<MessageActionChatJoinedByRequest> was created with unknown prop '${key}'`);
+	    if (!~writable_props.indexOf(key) && key.slice(0, 2) !== '$$' && key !== 'slot') console_1$1.warn(`<MessageActionChatJoinedByRequest> was created with unknown prop '${key}'`);
 	  });
 
 	  $$self.$$set = $$props => {
-	    if ('chat' in $$props) $$invalidate(0, chat = $$props.chat);
-	    if ('message' in $$props) $$invalidate(1, message = $$props.message);
-	    if ('parentNavInstance' in $$props) $$invalidate(2, parentNavInstance = $$props.parentNavInstance);
-	    if ('registerCallButtonHandler' in $$props) $$invalidate(3, registerCallButtonHandler = $$props.registerCallButtonHandler);
-	    if ('refetchMessage' in $$props) $$invalidate(4, refetchMessage = $$props.refetchMessage);
+	    if ('chat' in $$props) $$invalidate(1, chat = $$props.chat);
+	    if ('message' in $$props) $$invalidate(2, message = $$props.message);
+	    if ('parentNavInstance' in $$props) $$invalidate(3, parentNavInstance = $$props.parentNavInstance);
+	    if ('registerCallButtonHandler' in $$props) $$invalidate(4, registerCallButtonHandler = $$props.registerCallButtonHandler);
+	    if ('refetchMessage' in $$props) $$invalidate(5, refetchMessage = $$props.refetchMessage);
 	  };
 
 	  $$self.$capture_state = () => ({
 	    onMount,
+	    Api,
+	    client,
 	    chat,
 	    message,
 	    parentNavInstance,
 	    registerCallButtonHandler,
-	    refetchMessage
+	    refetchMessage,
+	    username
 	  });
 
 	  $$self.$inject_state = $$props => {
-	    if ('chat' in $$props) $$invalidate(0, chat = $$props.chat);
-	    if ('message' in $$props) $$invalidate(1, message = $$props.message);
-	    if ('parentNavInstance' in $$props) $$invalidate(2, parentNavInstance = $$props.parentNavInstance);
-	    if ('registerCallButtonHandler' in $$props) $$invalidate(3, registerCallButtonHandler = $$props.registerCallButtonHandler);
-	    if ('refetchMessage' in $$props) $$invalidate(4, refetchMessage = $$props.refetchMessage);
+	    if ('chat' in $$props) $$invalidate(1, chat = $$props.chat);
+	    if ('message' in $$props) $$invalidate(2, message = $$props.message);
+	    if ('parentNavInstance' in $$props) $$invalidate(3, parentNavInstance = $$props.parentNavInstance);
+	    if ('registerCallButtonHandler' in $$props) $$invalidate(4, registerCallButtonHandler = $$props.registerCallButtonHandler);
+	    if ('refetchMessage' in $$props) $$invalidate(5, refetchMessage = $$props.refetchMessage);
+	    if ('username' in $$props) $$invalidate(0, username = $$props.username);
 	  };
 
 	  if ($$props && "$$inject" in $$props) {
 	    $$self.$inject_state($$props.$$inject);
 	  }
 
-	  return [chat, message, parentNavInstance, registerCallButtonHandler, refetchMessage];
+	  return [username, chat, message, parentNavInstance, registerCallButtonHandler, refetchMessage];
 	}
 
 	class MessageActionChatJoinedByRequest extends SvelteComponentDev {
 	  constructor(options) {
 	    super(options);
 	    init(this, options, instance$7, create_fragment$7, safe_not_equal, {
-	      chat: 0,
-	      message: 1,
-	      parentNavInstance: 2,
-	      registerCallButtonHandler: 3,
-	      refetchMessage: 4
+	      chat: 1,
+	      message: 2,
+	      parentNavInstance: 3,
+	      registerCallButtonHandler: 4,
+	      refetchMessage: 5
 	    });
 	    dispatch_dev("SvelteRegisterComponent", {
 	      component: this,
@@ -60596,8 +60677,8 @@ var app = (function () {
 
 	    if (
 	    /*parentNavInstance*/
-	    ctx[2] === undefined && !('parentNavInstance' in props)) {
-	      console.warn("<MessageActionChatJoinedByRequest> was created without expected prop 'parentNavInstance'");
+	    ctx[3] === undefined && !('parentNavInstance' in props)) {
+	      console_1$1.warn("<MessageActionChatJoinedByRequest> was created without expected prop 'parentNavInstance'");
 	    }
 	  }
 
