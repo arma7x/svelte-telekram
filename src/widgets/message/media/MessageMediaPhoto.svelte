@@ -11,8 +11,8 @@
   export let chat: any = {};
   export let message: any = {}; //.media.photo or .media.document
   export let parentNavInstance: typeof KaiNavigator;
-  export let registerCallButtonHandler: Function = (id, callback) => {}
-  export let refetchMessage: Function = (id: number) => {}
+  export let callButtonCallback: Function = (id, callback) => {}
+  export let fetchMessageCallback: Function = (id: number) => {}
 
   let action: OptionMenu;
 
@@ -133,7 +133,7 @@
       fileId = message.media.document.id.toString();
     }
     downloaded = await isMediaCached(fileId);
-    registerCallButtonHandler(message.id.toString(), actionMenu);
+    callButtonCallback(message.id.toString(), actionMenu);
     if (!downloaded) {
       downloadedMediaEmitter.addListener('message', handleDownloadedMedia);
     } else {

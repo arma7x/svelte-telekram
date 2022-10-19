@@ -43363,7 +43363,7 @@ var app = (function () {
 	      if (!src_url_equal(img.src, img_src_value = "/icons/download.svg")) attr_dev(img, "src", img_src_value);
 	      attr_dev(img, "width", "10px");
 	      attr_dev(img, "height", "10px");
-	      add_location(img, file$T, 167, 95, 6809);
+	      add_location(img, file$T, 167, 95, 6801);
 	    },
 	    m: function mount(target, anchor) {
 	      insert_dev(target, img, anchor);
@@ -43426,13 +43426,13 @@ var app = (function () {
 	      attr_dev(img, "alt", "thumb");
 	      if (!src_url_equal(img.src, img_src_value = "/icons/audio.svg")) attr_dev(img, "src", img_src_value);
 	      attr_dev(img, "class", "svelte-1lknwbb");
-	      add_location(img, file$T, 165, 2, 6661);
-	      add_location(div0, file$T, 167, 4, 6718);
-	      add_location(div1, file$T, 168, 4, 6932);
+	      add_location(img, file$T, 165, 2, 6653);
+	      add_location(div0, file$T, 167, 4, 6710);
+	      add_location(div1, file$T, 168, 4, 6924);
 	      attr_dev(small, "class", "svelte-1lknwbb");
-	      add_location(small, file$T, 166, 2, 6706);
+	      add_location(small, file$T, 166, 2, 6698);
 	      attr_dev(div2, "class", "media-container svelte-1lknwbb");
-	      add_location(div2, file$T, 164, 0, 6629);
+	      add_location(div2, file$T, 164, 0, 6621);
 	    },
 	    l: function claim(nodes) {
 	      throw new Error("options.hydrate only works if the component was compiled with the `hydratable: true` option");
@@ -43563,10 +43563,10 @@ var app = (function () {
 	  var _$$props$message = $$props.message,
 	      message = _$$props$message === void 0 ? {} : _$$props$message;
 	  var parentNavInstance = $$props.parentNavInstance;
-	  var _$$props$registerCall = $$props.registerCallButtonHandler,
-	      registerCallButtonHandler = _$$props$registerCall === void 0 ? (id, callback) => {} : _$$props$registerCall;
-	  var _$$props$refetchMessa = $$props.refetchMessage,
-	      refetchMessage = _$$props$refetchMessa === void 0 ? id => {} : _$$props$refetchMessa;
+	  var _$$props$callButtonCa = $$props.callButtonCallback,
+	      callButtonCallback = _$$props$callButtonCa === void 0 ? (id, callback) => {} : _$$props$callButtonCa;
+	  var _$$props$fetchMessage = $$props.fetchMessageCallback,
+	      fetchMessageCallback = _$$props$fetchMessage === void 0 ? id => {} : _$$props$fetchMessage;
 	  var action;
 	  var size;
 	  var downloaded = false;
@@ -43698,7 +43698,7 @@ var app = (function () {
 	  beforeUpdate(() => __awaiter(void 0, void 0, void 0, function* () {
 	    fileId = message.media.document.id.toString();
 	    $$invalidate(2, downloaded = yield isMediaCached(fileId));
-	    registerCallButtonHandler(message.id.toString(), actionMenu);
+	    callButtonCallback(message.id.toString(), actionMenu);
 
 	    if (!downloaded) {
 	      downloadedMediaEmitter.addListener('message', handleDownloadedMedia);
@@ -43712,7 +43712,7 @@ var app = (function () {
 	  onDestroy(() => {
 	    downloadedMediaEmitter.removeListener('message', handleDownloadedMedia);
 	  });
-	  var writable_props = ['chat', 'message', 'parentNavInstance', 'registerCallButtonHandler', 'refetchMessage'];
+	  var writable_props = ['chat', 'message', 'parentNavInstance', 'callButtonCallback', 'fetchMessageCallback'];
 	  Object.keys($$props).forEach(key => {
 	    if (!~writable_props.indexOf(key) && key.slice(0, 2) !== '$$' && key !== 'slot') console_1$b.warn(`<Audio> was created with unknown prop '${key}'`);
 	  });
@@ -43721,8 +43721,8 @@ var app = (function () {
 	    if ('chat' in $$props) $$invalidate(4, chat = $$props.chat);
 	    if ('message' in $$props) $$invalidate(0, message = $$props.message);
 	    if ('parentNavInstance' in $$props) $$invalidate(5, parentNavInstance = $$props.parentNavInstance);
-	    if ('registerCallButtonHandler' in $$props) $$invalidate(6, registerCallButtonHandler = $$props.registerCallButtonHandler);
-	    if ('refetchMessage' in $$props) $$invalidate(7, refetchMessage = $$props.refetchMessage);
+	    if ('callButtonCallback' in $$props) $$invalidate(6, callButtonCallback = $$props.callButtonCallback);
+	    if ('fetchMessageCallback' in $$props) $$invalidate(7, fetchMessageCallback = $$props.fetchMessageCallback);
 	  };
 
 	  $$self.$capture_state = () => ({
@@ -43743,8 +43743,8 @@ var app = (function () {
 	    chat,
 	    message,
 	    parentNavInstance,
-	    registerCallButtonHandler,
-	    refetchMessage,
+	    callButtonCallback,
+	    fetchMessageCallback,
 	    action,
 	    size,
 	    downloaded,
@@ -43760,8 +43760,8 @@ var app = (function () {
 	    if ('chat' in $$props) $$invalidate(4, chat = $$props.chat);
 	    if ('message' in $$props) $$invalidate(0, message = $$props.message);
 	    if ('parentNavInstance' in $$props) $$invalidate(5, parentNavInstance = $$props.parentNavInstance);
-	    if ('registerCallButtonHandler' in $$props) $$invalidate(6, registerCallButtonHandler = $$props.registerCallButtonHandler);
-	    if ('refetchMessage' in $$props) $$invalidate(7, refetchMessage = $$props.refetchMessage);
+	    if ('callButtonCallback' in $$props) $$invalidate(6, callButtonCallback = $$props.callButtonCallback);
+	    if ('fetchMessageCallback' in $$props) $$invalidate(7, fetchMessageCallback = $$props.fetchMessageCallback);
 	    if ('action' in $$props) action = $$props.action;
 	    if ('size' in $$props) $$invalidate(1, size = $$props.size);
 	    if ('downloaded' in $$props) $$invalidate(2, downloaded = $$props.downloaded);
@@ -43773,7 +43773,7 @@ var app = (function () {
 	    $$self.$inject_state($$props.$$inject);
 	  }
 
-	  return [message, size, downloaded, downloading, chat, parentNavInstance, registerCallButtonHandler, refetchMessage];
+	  return [message, size, downloaded, downloading, chat, parentNavInstance, callButtonCallback, fetchMessageCallback];
 	}
 
 	class Audio extends SvelteComponentDev {
@@ -43783,8 +43783,8 @@ var app = (function () {
 	      chat: 4,
 	      message: 0,
 	      parentNavInstance: 5,
-	      registerCallButtonHandler: 6,
-	      refetchMessage: 7
+	      callButtonCallback: 6,
+	      fetchMessageCallback: 7
 	    });
 	    dispatch_dev("SvelteRegisterComponent", {
 	      component: this,
@@ -43835,24 +43835,24 @@ var app = (function () {
 	    flush();
 	  }
 
-	  get registerCallButtonHandler() {
+	  get callButtonCallback() {
 	    return this.$$.ctx[6];
 	  }
 
-	  set registerCallButtonHandler(registerCallButtonHandler) {
+	  set callButtonCallback(callButtonCallback) {
 	    this.$$set({
-	      registerCallButtonHandler
+	      callButtonCallback
 	    });
 	    flush();
 	  }
 
-	  get refetchMessage() {
+	  get fetchMessageCallback() {
 	    return this.$$.ctx[7];
 	  }
 
-	  set refetchMessage(refetchMessage) {
+	  set fetchMessageCallback(fetchMessageCallback) {
 	    this.$$set({
-	      refetchMessage
+	      fetchMessageCallback
 	    });
 	    flush();
 	  }
@@ -43871,9 +43871,9 @@ var app = (function () {
 	      span = element("span");
 	      span.textContent = "Unsupported Media: Sticker";
 	      set_style(span, "color", "#A20000");
-	      add_location(span, file$S, 18, 2, 505);
+	      add_location(span, file$S, 18, 2, 497);
 	      attr_dev(div, "class", "media-container svelte-16i9emv");
-	      add_location(div, file$S, 17, 0, 473);
+	      add_location(div, file$S, 17, 0, 465);
 	    },
 	    l: function claim(nodes) {
 	      throw new Error("options.hydrate only works if the component was compiled with the `hydratable: true` option");
@@ -43911,15 +43911,15 @@ var app = (function () {
 	  var _$$props$message = $$props.message,
 	      message = _$$props$message === void 0 ? {} : _$$props$message;
 	  var parentNavInstance = $$props.parentNavInstance;
-	  var _$$props$registerCall = $$props.registerCallButtonHandler,
-	      registerCallButtonHandler = _$$props$registerCall === void 0 ? (id, callback) => {} : _$$props$registerCall;
-	  var _$$props$refetchMessa = $$props.refetchMessage,
-	      refetchMessage = _$$props$refetchMessa === void 0 ? id => {} : _$$props$refetchMessa;
+	  var _$$props$callButtonCa = $$props.callButtonCallback,
+	      callButtonCallback = _$$props$callButtonCa === void 0 ? (id, callback) => {} : _$$props$callButtonCa;
+	  var _$$props$fetchMessage = $$props.fetchMessageCallback,
+	      fetchMessageCallback = _$$props$fetchMessage === void 0 ? id => {} : _$$props$fetchMessage;
 	  onMount(() => {
-	    registerCallButtonHandler(message.id.toString(), actionMenu$9);
+	    callButtonCallback(message.id.toString(), actionMenu$9);
 	  });
 	  onDestroy(() => {});
-	  var writable_props = ['chat', 'message', 'parentNavInstance', 'registerCallButtonHandler', 'refetchMessage'];
+	  var writable_props = ['chat', 'message', 'parentNavInstance', 'callButtonCallback', 'fetchMessageCallback'];
 	  Object.keys($$props).forEach(key => {
 	    if (!~writable_props.indexOf(key) && key.slice(0, 2) !== '$$' && key !== 'slot') console.warn(`<Sticker> was created with unknown prop '${key}'`);
 	  });
@@ -43928,8 +43928,8 @@ var app = (function () {
 	    if ('chat' in $$props) $$invalidate(0, chat = $$props.chat);
 	    if ('message' in $$props) $$invalidate(1, message = $$props.message);
 	    if ('parentNavInstance' in $$props) $$invalidate(2, parentNavInstance = $$props.parentNavInstance);
-	    if ('registerCallButtonHandler' in $$props) $$invalidate(3, registerCallButtonHandler = $$props.registerCallButtonHandler);
-	    if ('refetchMessage' in $$props) $$invalidate(4, refetchMessage = $$props.refetchMessage);
+	    if ('callButtonCallback' in $$props) $$invalidate(3, callButtonCallback = $$props.callButtonCallback);
+	    if ('fetchMessageCallback' in $$props) $$invalidate(4, fetchMessageCallback = $$props.fetchMessageCallback);
 	  };
 
 	  $$self.$capture_state = () => ({
@@ -43938,8 +43938,8 @@ var app = (function () {
 	    chat,
 	    message,
 	    parentNavInstance,
-	    registerCallButtonHandler,
-	    refetchMessage,
+	    callButtonCallback,
+	    fetchMessageCallback,
 	    actionMenu: actionMenu$9
 	  });
 
@@ -43947,15 +43947,15 @@ var app = (function () {
 	    if ('chat' in $$props) $$invalidate(0, chat = $$props.chat);
 	    if ('message' in $$props) $$invalidate(1, message = $$props.message);
 	    if ('parentNavInstance' in $$props) $$invalidate(2, parentNavInstance = $$props.parentNavInstance);
-	    if ('registerCallButtonHandler' in $$props) $$invalidate(3, registerCallButtonHandler = $$props.registerCallButtonHandler);
-	    if ('refetchMessage' in $$props) $$invalidate(4, refetchMessage = $$props.refetchMessage);
+	    if ('callButtonCallback' in $$props) $$invalidate(3, callButtonCallback = $$props.callButtonCallback);
+	    if ('fetchMessageCallback' in $$props) $$invalidate(4, fetchMessageCallback = $$props.fetchMessageCallback);
 	  };
 
 	  if ($$props && "$$inject" in $$props) {
 	    $$self.$inject_state($$props.$$inject);
 	  }
 
-	  return [chat, message, parentNavInstance, registerCallButtonHandler, refetchMessage];
+	  return [chat, message, parentNavInstance, callButtonCallback, fetchMessageCallback];
 	}
 
 	class Sticker extends SvelteComponentDev {
@@ -43965,8 +43965,8 @@ var app = (function () {
 	      chat: 0,
 	      message: 1,
 	      parentNavInstance: 2,
-	      registerCallButtonHandler: 3,
-	      refetchMessage: 4
+	      callButtonCallback: 3,
+	      fetchMessageCallback: 4
 	    });
 	    dispatch_dev("SvelteRegisterComponent", {
 	      component: this,
@@ -44017,24 +44017,24 @@ var app = (function () {
 	    flush();
 	  }
 
-	  get registerCallButtonHandler() {
+	  get callButtonCallback() {
 	    return this.$$.ctx[3];
 	  }
 
-	  set registerCallButtonHandler(registerCallButtonHandler) {
+	  set callButtonCallback(callButtonCallback) {
 	    this.$$set({
-	      registerCallButtonHandler
+	      callButtonCallback
 	    });
 	    flush();
 	  }
 
-	  get refetchMessage() {
+	  get fetchMessageCallback() {
 	    return this.$$.ctx[4];
 	  }
 
-	  set refetchMessage(refetchMessage) {
+	  set fetchMessageCallback(fetchMessageCallback) {
 	    this.$$set({
-	      refetchMessage
+	      fetchMessageCallback
 	    });
 	    flush();
 	  }
@@ -44093,7 +44093,7 @@ var app = (function () {
 	      if (!src_url_equal(img.src, img_src_value = "/icons/download.svg")) attr_dev(img, "src", img_src_value);
 	      attr_dev(img, "width", "10px");
 	      attr_dev(img, "height", "10px");
-	      add_location(img, file$R, 174, 95, 7056);
+	      add_location(img, file$R, 174, 95, 7048);
 	    },
 	    m: function mount(target, anchor) {
 	      insert_dev(target, img, anchor);
@@ -44158,13 +44158,13 @@ var app = (function () {
 	      /*thumb*/
 	      ctx[1])) attr_dev(img, "src", img_src_value);
 	      attr_dev(img, "class", "svelte-1lknwbb");
-	      add_location(img, file$R, 172, 2, 6917);
-	      add_location(div0, file$R, 174, 4, 6965);
-	      add_location(div1, file$R, 175, 4, 7179);
+	      add_location(img, file$R, 172, 2, 6909);
+	      add_location(div0, file$R, 174, 4, 6957);
+	      add_location(div1, file$R, 175, 4, 7171);
 	      attr_dev(small, "class", "svelte-1lknwbb");
-	      add_location(small, file$R, 173, 2, 6953);
+	      add_location(small, file$R, 173, 2, 6945);
 	      attr_dev(div2, "class", "media-container svelte-1lknwbb");
-	      add_location(div2, file$R, 171, 0, 6885);
+	      add_location(div2, file$R, 171, 0, 6877);
 	    },
 	    l: function claim(nodes) {
 	      throw new Error("options.hydrate only works if the component was compiled with the `hydratable: true` option");
@@ -44297,10 +44297,10 @@ var app = (function () {
 	  var _$$props$message = $$props.message,
 	      message = _$$props$message === void 0 ? {} : _$$props$message;
 	  var parentNavInstance = $$props.parentNavInstance;
-	  var _$$props$registerCall = $$props.registerCallButtonHandler,
-	      registerCallButtonHandler = _$$props$registerCall === void 0 ? (id, callback) => {} : _$$props$registerCall;
-	  var _$$props$refetchMessa = $$props.refetchMessage,
-	      refetchMessage = _$$props$refetchMessa === void 0 ? id => {} : _$$props$refetchMessa;
+	  var _$$props$callButtonCa = $$props.callButtonCallback,
+	      callButtonCallback = _$$props$callButtonCa === void 0 ? (id, callback) => {} : _$$props$callButtonCa;
+	  var _$$props$fetchMessage = $$props.fetchMessageCallback,
+	      fetchMessageCallback = _$$props$fetchMessage === void 0 ? id => {} : _$$props$fetchMessage;
 	  var action;
 	  var thumb = '/icons/document.svg';
 	  var size;
@@ -44433,7 +44433,7 @@ var app = (function () {
 	  beforeUpdate(() => __awaiter(void 0, void 0, void 0, function* () {
 	    fileId = message.media.document.id.toString();
 	    $$invalidate(3, downloaded = yield isMediaCached(fileId));
-	    registerCallButtonHandler(message.id.toString(), actionMenu);
+	    callButtonCallback(message.id.toString(), actionMenu);
 
 	    if (!downloaded) {
 	      downloadedMediaEmitter.addListener('message', handleDownloadedMedia);
@@ -44459,7 +44459,7 @@ var app = (function () {
 	  onDestroy(() => {
 	    downloadedMediaEmitter.removeListener('message', handleDownloadedMedia);
 	  });
-	  var writable_props = ['chat', 'message', 'parentNavInstance', 'registerCallButtonHandler', 'refetchMessage'];
+	  var writable_props = ['chat', 'message', 'parentNavInstance', 'callButtonCallback', 'fetchMessageCallback'];
 	  Object.keys($$props).forEach(key => {
 	    if (!~writable_props.indexOf(key) && key.slice(0, 2) !== '$$' && key !== 'slot') console_1$a.warn(`<Video> was created with unknown prop '${key}'`);
 	  });
@@ -44468,8 +44468,8 @@ var app = (function () {
 	    if ('chat' in $$props) $$invalidate(5, chat = $$props.chat);
 	    if ('message' in $$props) $$invalidate(0, message = $$props.message);
 	    if ('parentNavInstance' in $$props) $$invalidate(6, parentNavInstance = $$props.parentNavInstance);
-	    if ('registerCallButtonHandler' in $$props) $$invalidate(7, registerCallButtonHandler = $$props.registerCallButtonHandler);
-	    if ('refetchMessage' in $$props) $$invalidate(8, refetchMessage = $$props.refetchMessage);
+	    if ('callButtonCallback' in $$props) $$invalidate(7, callButtonCallback = $$props.callButtonCallback);
+	    if ('fetchMessageCallback' in $$props) $$invalidate(8, fetchMessageCallback = $$props.fetchMessageCallback);
 	  };
 
 	  $$self.$capture_state = () => ({
@@ -44492,8 +44492,8 @@ var app = (function () {
 	    chat,
 	    message,
 	    parentNavInstance,
-	    registerCallButtonHandler,
-	    refetchMessage,
+	    callButtonCallback,
+	    fetchMessageCallback,
 	    action,
 	    thumb,
 	    size,
@@ -44509,8 +44509,8 @@ var app = (function () {
 	    if ('chat' in $$props) $$invalidate(5, chat = $$props.chat);
 	    if ('message' in $$props) $$invalidate(0, message = $$props.message);
 	    if ('parentNavInstance' in $$props) $$invalidate(6, parentNavInstance = $$props.parentNavInstance);
-	    if ('registerCallButtonHandler' in $$props) $$invalidate(7, registerCallButtonHandler = $$props.registerCallButtonHandler);
-	    if ('refetchMessage' in $$props) $$invalidate(8, refetchMessage = $$props.refetchMessage);
+	    if ('callButtonCallback' in $$props) $$invalidate(7, callButtonCallback = $$props.callButtonCallback);
+	    if ('fetchMessageCallback' in $$props) $$invalidate(8, fetchMessageCallback = $$props.fetchMessageCallback);
 	    if ('action' in $$props) action = $$props.action;
 	    if ('thumb' in $$props) $$invalidate(1, thumb = $$props.thumb);
 	    if ('size' in $$props) $$invalidate(2, size = $$props.size);
@@ -44523,7 +44523,7 @@ var app = (function () {
 	    $$self.$inject_state($$props.$$inject);
 	  }
 
-	  return [message, thumb, size, downloaded, downloading, chat, parentNavInstance, registerCallButtonHandler, refetchMessage];
+	  return [message, thumb, size, downloaded, downloading, chat, parentNavInstance, callButtonCallback, fetchMessageCallback];
 	}
 
 	class Video extends SvelteComponentDev {
@@ -44533,8 +44533,8 @@ var app = (function () {
 	      chat: 5,
 	      message: 0,
 	      parentNavInstance: 6,
-	      registerCallButtonHandler: 7,
-	      refetchMessage: 8
+	      callButtonCallback: 7,
+	      fetchMessageCallback: 8
 	    });
 	    dispatch_dev("SvelteRegisterComponent", {
 	      component: this,
@@ -44585,24 +44585,24 @@ var app = (function () {
 	    flush();
 	  }
 
-	  get registerCallButtonHandler() {
+	  get callButtonCallback() {
 	    return this.$$.ctx[7];
 	  }
 
-	  set registerCallButtonHandler(registerCallButtonHandler) {
+	  set callButtonCallback(callButtonCallback) {
 	    this.$$set({
-	      registerCallButtonHandler
+	      callButtonCallback
 	    });
 	    flush();
 	  }
 
-	  get refetchMessage() {
+	  get fetchMessageCallback() {
 	    return this.$$.ctx[8];
 	  }
 
-	  set refetchMessage(refetchMessage) {
+	  set fetchMessageCallback(fetchMessageCallback) {
 	    this.$$set({
-	      refetchMessage
+	      fetchMessageCallback
 	    });
 	    flush();
 	  }
@@ -44661,7 +44661,7 @@ var app = (function () {
 	      if (!src_url_equal(img.src, img_src_value = "/icons/download.svg")) attr_dev(img, "src", img_src_value);
 	      attr_dev(img, "width", "10px");
 	      attr_dev(img, "height", "10px");
-	      add_location(img, file$Q, 163, 95, 6637);
+	      add_location(img, file$Q, 163, 95, 6629);
 	    },
 	    m: function mount(target, anchor) {
 	      insert_dev(target, img, anchor);
@@ -44724,13 +44724,13 @@ var app = (function () {
 	      attr_dev(img, "alt", "thumb");
 	      if (!src_url_equal(img.src, img_src_value = "/icons/document.svg")) attr_dev(img, "src", img_src_value);
 	      attr_dev(img, "class", "svelte-1lknwbb");
-	      add_location(img, file$Q, 161, 2, 6486);
-	      add_location(div0, file$Q, 163, 4, 6546);
-	      add_location(div1, file$Q, 164, 4, 6760);
+	      add_location(img, file$Q, 161, 2, 6478);
+	      add_location(div0, file$Q, 163, 4, 6538);
+	      add_location(div1, file$Q, 164, 4, 6752);
 	      attr_dev(small, "class", "svelte-1lknwbb");
-	      add_location(small, file$Q, 162, 2, 6534);
+	      add_location(small, file$Q, 162, 2, 6526);
 	      attr_dev(div2, "class", "media-container svelte-1lknwbb");
-	      add_location(div2, file$Q, 160, 0, 6454);
+	      add_location(div2, file$Q, 160, 0, 6446);
 	    },
 	    l: function claim(nodes) {
 	      throw new Error("options.hydrate only works if the component was compiled with the `hydratable: true` option");
@@ -44855,10 +44855,10 @@ var app = (function () {
 	  var _$$props$message = $$props.message,
 	      message = _$$props$message === void 0 ? {} : _$$props$message;
 	  var parentNavInstance = $$props.parentNavInstance;
-	  var _$$props$registerCall = $$props.registerCallButtonHandler,
-	      registerCallButtonHandler = _$$props$registerCall === void 0 ? (id, callback) => {} : _$$props$registerCall;
-	  var _$$props$refetchMessa = $$props.refetchMessage,
-	      refetchMessage = _$$props$refetchMessa === void 0 ? id => {} : _$$props$refetchMessa;
+	  var _$$props$callButtonCa = $$props.callButtonCallback,
+	      callButtonCallback = _$$props$callButtonCa === void 0 ? (id, callback) => {} : _$$props$callButtonCa;
+	  var _$$props$fetchMessage = $$props.fetchMessageCallback,
+	      fetchMessageCallback = _$$props$fetchMessage === void 0 ? id => {} : _$$props$fetchMessage;
 	  var action;
 	  var size;
 	  var downloaded = false;
@@ -44990,7 +44990,7 @@ var app = (function () {
 	  beforeUpdate(() => __awaiter(void 0, void 0, void 0, function* () {
 	    fileId = message.media.document.id.toString();
 	    $$invalidate(2, downloaded = yield isMediaCached(fileId));
-	    registerCallButtonHandler(message.id.toString(), actionMenu);
+	    callButtonCallback(message.id.toString(), actionMenu);
 
 	    if (!downloaded) {
 	      downloadedMediaEmitter.addListener('message', handleDownloadedMedia);
@@ -45004,7 +45004,7 @@ var app = (function () {
 	  onDestroy(() => {
 	    downloadedMediaEmitter.removeListener('message', handleDownloadedMedia);
 	  });
-	  var writable_props = ['chat', 'message', 'parentNavInstance', 'registerCallButtonHandler', 'refetchMessage'];
+	  var writable_props = ['chat', 'message', 'parentNavInstance', 'callButtonCallback', 'fetchMessageCallback'];
 	  Object.keys($$props).forEach(key => {
 	    if (!~writable_props.indexOf(key) && key.slice(0, 2) !== '$$' && key !== 'slot') console_1$9.warn(`<Doc> was created with unknown prop '${key}'`);
 	  });
@@ -45013,8 +45013,8 @@ var app = (function () {
 	    if ('chat' in $$props) $$invalidate(4, chat = $$props.chat);
 	    if ('message' in $$props) $$invalidate(0, message = $$props.message);
 	    if ('parentNavInstance' in $$props) $$invalidate(5, parentNavInstance = $$props.parentNavInstance);
-	    if ('registerCallButtonHandler' in $$props) $$invalidate(6, registerCallButtonHandler = $$props.registerCallButtonHandler);
-	    if ('refetchMessage' in $$props) $$invalidate(7, refetchMessage = $$props.refetchMessage);
+	    if ('callButtonCallback' in $$props) $$invalidate(6, callButtonCallback = $$props.callButtonCallback);
+	    if ('fetchMessageCallback' in $$props) $$invalidate(7, fetchMessageCallback = $$props.fetchMessageCallback);
 	  };
 
 	  $$self.$capture_state = () => ({
@@ -45035,8 +45035,8 @@ var app = (function () {
 	    chat,
 	    message,
 	    parentNavInstance,
-	    registerCallButtonHandler,
-	    refetchMessage,
+	    callButtonCallback,
+	    fetchMessageCallback,
 	    action,
 	    size,
 	    downloaded,
@@ -45051,8 +45051,8 @@ var app = (function () {
 	    if ('chat' in $$props) $$invalidate(4, chat = $$props.chat);
 	    if ('message' in $$props) $$invalidate(0, message = $$props.message);
 	    if ('parentNavInstance' in $$props) $$invalidate(5, parentNavInstance = $$props.parentNavInstance);
-	    if ('registerCallButtonHandler' in $$props) $$invalidate(6, registerCallButtonHandler = $$props.registerCallButtonHandler);
-	    if ('refetchMessage' in $$props) $$invalidate(7, refetchMessage = $$props.refetchMessage);
+	    if ('callButtonCallback' in $$props) $$invalidate(6, callButtonCallback = $$props.callButtonCallback);
+	    if ('fetchMessageCallback' in $$props) $$invalidate(7, fetchMessageCallback = $$props.fetchMessageCallback);
 	    if ('action' in $$props) action = $$props.action;
 	    if ('size' in $$props) $$invalidate(1, size = $$props.size);
 	    if ('downloaded' in $$props) $$invalidate(2, downloaded = $$props.downloaded);
@@ -45064,7 +45064,7 @@ var app = (function () {
 	    $$self.$inject_state($$props.$$inject);
 	  }
 
-	  return [message, size, downloaded, downloading, chat, parentNavInstance, registerCallButtonHandler, refetchMessage];
+	  return [message, size, downloaded, downloading, chat, parentNavInstance, callButtonCallback, fetchMessageCallback];
 	}
 
 	class Doc extends SvelteComponentDev {
@@ -45074,8 +45074,8 @@ var app = (function () {
 	      chat: 4,
 	      message: 0,
 	      parentNavInstance: 5,
-	      registerCallButtonHandler: 6,
-	      refetchMessage: 7
+	      callButtonCallback: 6,
+	      fetchMessageCallback: 7
 	    });
 	    dispatch_dev("SvelteRegisterComponent", {
 	      component: this,
@@ -45126,24 +45126,24 @@ var app = (function () {
 	    flush();
 	  }
 
-	  get registerCallButtonHandler() {
+	  get callButtonCallback() {
 	    return this.$$.ctx[6];
 	  }
 
-	  set registerCallButtonHandler(registerCallButtonHandler) {
+	  set callButtonCallback(callButtonCallback) {
 	    this.$$set({
-	      registerCallButtonHandler
+	      callButtonCallback
 	    });
 	    flush();
 	  }
 
-	  get refetchMessage() {
+	  get fetchMessageCallback() {
 	    return this.$$.ctx[7];
 	  }
 
-	  set refetchMessage(refetchMessage) {
+	  set fetchMessageCallback(fetchMessageCallback) {
 	    this.$$set({
-	      refetchMessage
+	      fetchMessageCallback
 	    });
 	    flush();
 	  }
@@ -45170,9 +45170,9 @@ var app = (function () {
 	      span = element("span");
 	      span.textContent = "Unsupported Media: GeoLive";
 	      set_style(span, "color", "#A20000");
-	      add_location(span, file$P, 16, 2, 501);
+	      add_location(span, file$P, 16, 2, 493);
 	      attr_dev(div, "class", "media-container svelte-16i9emv");
-	      add_location(div, file$P, 15, 0, 469);
+	      add_location(div, file$P, 15, 0, 461);
 	    },
 	    l: function claim(nodes) {
 	      throw new Error("options.hydrate only works if the component was compiled with the `hydratable: true` option");
@@ -45210,15 +45210,15 @@ var app = (function () {
 	  var _$$props$message = $$props.message,
 	      message = _$$props$message === void 0 ? {} : _$$props$message;
 	  var parentNavInstance = $$props.parentNavInstance;
-	  var _$$props$registerCall = $$props.registerCallButtonHandler,
-	      registerCallButtonHandler = _$$props$registerCall === void 0 ? (id, callback) => {} : _$$props$registerCall;
-	  var _$$props$refetchMessa = $$props.refetchMessage,
-	      refetchMessage = _$$props$refetchMessa === void 0 ? id => {} : _$$props$refetchMessa;
+	  var _$$props$callButtonCa = $$props.callButtonCallback,
+	      callButtonCallback = _$$props$callButtonCa === void 0 ? (id, callback) => {} : _$$props$callButtonCa;
+	  var _$$props$fetchMessage = $$props.fetchMessageCallback,
+	      fetchMessageCallback = _$$props$fetchMessage === void 0 ? id => {} : _$$props$fetchMessage;
 	  onMount(() => {
-	    registerCallButtonHandler(message.id.toString(), actionMenu$8);
+	    callButtonCallback(message.id.toString(), actionMenu$8);
 	  });
 	  onDestroy(() => {});
-	  var writable_props = ['chat', 'message', 'parentNavInstance', 'registerCallButtonHandler', 'refetchMessage'];
+	  var writable_props = ['chat', 'message', 'parentNavInstance', 'callButtonCallback', 'fetchMessageCallback'];
 	  Object.keys($$props).forEach(key => {
 	    if (!~writable_props.indexOf(key) && key.slice(0, 2) !== '$$' && key !== 'slot') console.warn(`<MessageMediaGeoLive> was created with unknown prop '${key}'`);
 	  });
@@ -45227,8 +45227,8 @@ var app = (function () {
 	    if ('chat' in $$props) $$invalidate(0, chat = $$props.chat);
 	    if ('message' in $$props) $$invalidate(1, message = $$props.message);
 	    if ('parentNavInstance' in $$props) $$invalidate(2, parentNavInstance = $$props.parentNavInstance);
-	    if ('registerCallButtonHandler' in $$props) $$invalidate(3, registerCallButtonHandler = $$props.registerCallButtonHandler);
-	    if ('refetchMessage' in $$props) $$invalidate(4, refetchMessage = $$props.refetchMessage);
+	    if ('callButtonCallback' in $$props) $$invalidate(3, callButtonCallback = $$props.callButtonCallback);
+	    if ('fetchMessageCallback' in $$props) $$invalidate(4, fetchMessageCallback = $$props.fetchMessageCallback);
 	  };
 
 	  $$self.$capture_state = () => ({
@@ -45237,8 +45237,8 @@ var app = (function () {
 	    chat,
 	    message,
 	    parentNavInstance,
-	    registerCallButtonHandler,
-	    refetchMessage,
+	    callButtonCallback,
+	    fetchMessageCallback,
 	    actionMenu: actionMenu$8
 	  });
 
@@ -45246,15 +45246,15 @@ var app = (function () {
 	    if ('chat' in $$props) $$invalidate(0, chat = $$props.chat);
 	    if ('message' in $$props) $$invalidate(1, message = $$props.message);
 	    if ('parentNavInstance' in $$props) $$invalidate(2, parentNavInstance = $$props.parentNavInstance);
-	    if ('registerCallButtonHandler' in $$props) $$invalidate(3, registerCallButtonHandler = $$props.registerCallButtonHandler);
-	    if ('refetchMessage' in $$props) $$invalidate(4, refetchMessage = $$props.refetchMessage);
+	    if ('callButtonCallback' in $$props) $$invalidate(3, callButtonCallback = $$props.callButtonCallback);
+	    if ('fetchMessageCallback' in $$props) $$invalidate(4, fetchMessageCallback = $$props.fetchMessageCallback);
 	  };
 
 	  if ($$props && "$$inject" in $$props) {
 	    $$self.$inject_state($$props.$$inject);
 	  }
 
-	  return [chat, message, parentNavInstance, registerCallButtonHandler, refetchMessage];
+	  return [chat, message, parentNavInstance, callButtonCallback, fetchMessageCallback];
 	}
 
 	class MessageMediaGeoLive extends SvelteComponentDev {
@@ -45264,8 +45264,8 @@ var app = (function () {
 	      chat: 0,
 	      message: 1,
 	      parentNavInstance: 2,
-	      registerCallButtonHandler: 3,
-	      refetchMessage: 4
+	      callButtonCallback: 3,
+	      fetchMessageCallback: 4
 	    });
 	    dispatch_dev("SvelteRegisterComponent", {
 	      component: this,
@@ -45316,24 +45316,24 @@ var app = (function () {
 	    flush();
 	  }
 
-	  get registerCallButtonHandler() {
+	  get callButtonCallback() {
 	    return this.$$.ctx[3];
 	  }
 
-	  set registerCallButtonHandler(registerCallButtonHandler) {
+	  set callButtonCallback(callButtonCallback) {
 	    this.$$set({
-	      registerCallButtonHandler
+	      callButtonCallback
 	    });
 	    flush();
 	  }
 
-	  get refetchMessage() {
+	  get fetchMessageCallback() {
 	    return this.$$.ctx[4];
 	  }
 
-	  set refetchMessage(refetchMessage) {
+	  set fetchMessageCallback(fetchMessageCallback) {
 	    this.$$set({
-	      refetchMessage
+	      fetchMessageCallback
 	    });
 	    flush();
 	  }
@@ -45355,9 +45355,9 @@ var app = (function () {
 	      span = element("span");
 	      t = text(t_value);
 	      set_style(span, "color", "#A20000");
-	      add_location(span, file$O, 16, 2, 469);
+	      add_location(span, file$O, 16, 2, 461);
 	      attr_dev(div, "class", "media-container svelte-16i9emv");
-	      add_location(div, file$O, 15, 0, 437);
+	      add_location(div, file$O, 15, 0, 429);
 	    },
 	    l: function claim(nodes) {
 	      throw new Error("options.hydrate only works if the component was compiled with the `hydratable: true` option");
@@ -45405,14 +45405,14 @@ var app = (function () {
 	  var _$$props$message = $$props.message,
 	      message = _$$props$message === void 0 ? {} : _$$props$message;
 	  var parentNavInstance = $$props.parentNavInstance;
-	  var _$$props$registerCall = $$props.registerCallButtonHandler,
-	      registerCallButtonHandler = _$$props$registerCall === void 0 ? (id, callback) => {} : _$$props$registerCall;
-	  var _$$props$refetchMessa = $$props.refetchMessage,
-	      refetchMessage = _$$props$refetchMessa === void 0 ? id => {} : _$$props$refetchMessa;
+	  var _$$props$callButtonCa = $$props.callButtonCallback,
+	      callButtonCallback = _$$props$callButtonCa === void 0 ? (id, callback) => {} : _$$props$callButtonCa;
+	  var _$$props$fetchMessage = $$props.fetchMessageCallback,
+	      fetchMessageCallback = _$$props$fetchMessage === void 0 ? id => {} : _$$props$fetchMessage;
 	  onMount(() => {
-	    registerCallButtonHandler(message.id.toString(), actionMenu$7);
+	    callButtonCallback(message.id.toString(), actionMenu$7);
 	  });
-	  var writable_props = ['chat', 'message', 'parentNavInstance', 'registerCallButtonHandler', 'refetchMessage'];
+	  var writable_props = ['chat', 'message', 'parentNavInstance', 'callButtonCallback', 'fetchMessageCallback'];
 	  Object.keys($$props).forEach(key => {
 	    if (!~writable_props.indexOf(key) && key.slice(0, 2) !== '$$' && key !== 'slot') console.warn(`<MessageMediaEmpty> was created with unknown prop '${key}'`);
 	  });
@@ -45421,8 +45421,8 @@ var app = (function () {
 	    if ('chat' in $$props) $$invalidate(1, chat = $$props.chat);
 	    if ('message' in $$props) $$invalidate(0, message = $$props.message);
 	    if ('parentNavInstance' in $$props) $$invalidate(2, parentNavInstance = $$props.parentNavInstance);
-	    if ('registerCallButtonHandler' in $$props) $$invalidate(3, registerCallButtonHandler = $$props.registerCallButtonHandler);
-	    if ('refetchMessage' in $$props) $$invalidate(4, refetchMessage = $$props.refetchMessage);
+	    if ('callButtonCallback' in $$props) $$invalidate(3, callButtonCallback = $$props.callButtonCallback);
+	    if ('fetchMessageCallback' in $$props) $$invalidate(4, fetchMessageCallback = $$props.fetchMessageCallback);
 	  };
 
 	  $$self.$capture_state = () => ({
@@ -45430,8 +45430,8 @@ var app = (function () {
 	    chat,
 	    message,
 	    parentNavInstance,
-	    registerCallButtonHandler,
-	    refetchMessage,
+	    callButtonCallback,
+	    fetchMessageCallback,
 	    actionMenu: actionMenu$7
 	  });
 
@@ -45439,15 +45439,15 @@ var app = (function () {
 	    if ('chat' in $$props) $$invalidate(1, chat = $$props.chat);
 	    if ('message' in $$props) $$invalidate(0, message = $$props.message);
 	    if ('parentNavInstance' in $$props) $$invalidate(2, parentNavInstance = $$props.parentNavInstance);
-	    if ('registerCallButtonHandler' in $$props) $$invalidate(3, registerCallButtonHandler = $$props.registerCallButtonHandler);
-	    if ('refetchMessage' in $$props) $$invalidate(4, refetchMessage = $$props.refetchMessage);
+	    if ('callButtonCallback' in $$props) $$invalidate(3, callButtonCallback = $$props.callButtonCallback);
+	    if ('fetchMessageCallback' in $$props) $$invalidate(4, fetchMessageCallback = $$props.fetchMessageCallback);
 	  };
 
 	  if ($$props && "$$inject" in $$props) {
 	    $$self.$inject_state($$props.$$inject);
 	  }
 
-	  return [message, chat, parentNavInstance, registerCallButtonHandler, refetchMessage];
+	  return [message, chat, parentNavInstance, callButtonCallback, fetchMessageCallback];
 	}
 
 	class MessageMediaEmpty extends SvelteComponentDev {
@@ -45457,8 +45457,8 @@ var app = (function () {
 	      chat: 1,
 	      message: 0,
 	      parentNavInstance: 2,
-	      registerCallButtonHandler: 3,
-	      refetchMessage: 4
+	      callButtonCallback: 3,
+	      fetchMessageCallback: 4
 	    });
 	    dispatch_dev("SvelteRegisterComponent", {
 	      component: this,
@@ -45509,24 +45509,24 @@ var app = (function () {
 	    flush();
 	  }
 
-	  get registerCallButtonHandler() {
+	  get callButtonCallback() {
 	    return this.$$.ctx[3];
 	  }
 
-	  set registerCallButtonHandler(registerCallButtonHandler) {
+	  set callButtonCallback(callButtonCallback) {
 	    this.$$set({
-	      registerCallButtonHandler
+	      callButtonCallback
 	    });
 	    flush();
 	  }
 
-	  get refetchMessage() {
+	  get fetchMessageCallback() {
 	    return this.$$.ctx[4];
 	  }
 
-	  set refetchMessage(refetchMessage) {
+	  set fetchMessageCallback(fetchMessageCallback) {
 	    this.$$set({
-	      refetchMessage
+	      fetchMessageCallback
 	    });
 	    flush();
 	  }
@@ -45585,7 +45585,7 @@ var app = (function () {
 	      if (!src_url_equal(img.src, img_src_value = "/icons/download.svg")) attr_dev(img, "src", img_src_value);
 	      attr_dev(img, "width", "10px");
 	      attr_dev(img, "height", "10px");
-	      add_location(img, file$N, 189, 95, 7668);
+	      add_location(img, file$N, 189, 95, 7660);
 	    },
 	    m: function mount(target, anchor) {
 	      insert_dev(target, img, anchor);
@@ -45647,13 +45647,13 @@ var app = (function () {
 	      /*thumb*/
 	      ctx[0])) attr_dev(img, "src", img_src_value);
 	      attr_dev(img, "class", "svelte-49hv9n");
-	      add_location(img, file$N, 187, 2, 7529);
-	      add_location(div0, file$N, 189, 4, 7577);
-	      add_location(div1, file$N, 190, 4, 7770);
+	      add_location(img, file$N, 187, 2, 7521);
+	      add_location(div0, file$N, 189, 4, 7569);
+	      add_location(div1, file$N, 190, 4, 7762);
 	      attr_dev(small, "class", "svelte-49hv9n");
-	      add_location(small, file$N, 188, 2, 7565);
+	      add_location(small, file$N, 188, 2, 7557);
 	      attr_dev(div2, "class", "media-container svelte-49hv9n");
-	      add_location(div2, file$N, 186, 0, 7497);
+	      add_location(div2, file$N, 186, 0, 7489);
 	    },
 	    l: function claim(nodes) {
 	      throw new Error("options.hydrate only works if the component was compiled with the `hydratable: true` option");
@@ -45781,10 +45781,10 @@ var app = (function () {
 	  var _$$props$message = $$props.message,
 	      message = _$$props$message === void 0 ? {} : _$$props$message;
 	  var parentNavInstance = $$props.parentNavInstance;
-	  var _$$props$registerCall = $$props.registerCallButtonHandler,
-	      registerCallButtonHandler = _$$props$registerCall === void 0 ? (id, callback) => {} : _$$props$registerCall;
-	  var _$$props$refetchMessa = $$props.refetchMessage,
-	      refetchMessage = _$$props$refetchMessa === void 0 ? id => {} : _$$props$refetchMessa;
+	  var _$$props$callButtonCa = $$props.callButtonCallback,
+	      callButtonCallback = _$$props$callButtonCa === void 0 ? (id, callback) => {} : _$$props$callButtonCa;
+	  var _$$props$fetchMessage = $$props.fetchMessageCallback,
+	      fetchMessageCallback = _$$props$fetchMessage === void 0 ? id => {} : _$$props$fetchMessage;
 	  var action;
 	  var thumb = '/icons/document.svg';
 	  var size;
@@ -45924,7 +45924,7 @@ var app = (function () {
 	    }
 
 	    $$invalidate(2, downloaded = yield isMediaCached(fileId));
-	    registerCallButtonHandler(message.id.toString(), actionMenu);
+	    callButtonCallback(message.id.toString(), actionMenu);
 
 	    if (!downloaded) {
 	      downloadedMediaEmitter.addListener('message', handleDownloadedMedia);
@@ -45959,7 +45959,7 @@ var app = (function () {
 	  onDestroy(() => {
 	    downloadedMediaEmitter.removeListener('message', handleDownloadedMedia);
 	  });
-	  var writable_props = ['chat', 'message', 'parentNavInstance', 'registerCallButtonHandler', 'refetchMessage'];
+	  var writable_props = ['chat', 'message', 'parentNavInstance', 'callButtonCallback', 'fetchMessageCallback'];
 	  Object.keys($$props).forEach(key => {
 	    if (!~writable_props.indexOf(key) && key.slice(0, 2) !== '$$' && key !== 'slot') console_1$8.warn(`<MessageMediaPhoto> was created with unknown prop '${key}'`);
 	  });
@@ -45968,8 +45968,8 @@ var app = (function () {
 	    if ('chat' in $$props) $$invalidate(4, chat = $$props.chat);
 	    if ('message' in $$props) $$invalidate(5, message = $$props.message);
 	    if ('parentNavInstance' in $$props) $$invalidate(6, parentNavInstance = $$props.parentNavInstance);
-	    if ('registerCallButtonHandler' in $$props) $$invalidate(7, registerCallButtonHandler = $$props.registerCallButtonHandler);
-	    if ('refetchMessage' in $$props) $$invalidate(8, refetchMessage = $$props.refetchMessage);
+	    if ('callButtonCallback' in $$props) $$invalidate(7, callButtonCallback = $$props.callButtonCallback);
+	    if ('fetchMessageCallback' in $$props) $$invalidate(8, fetchMessageCallback = $$props.fetchMessageCallback);
 	  };
 
 	  $$self.$capture_state = () => ({
@@ -45991,8 +45991,8 @@ var app = (function () {
 	    chat,
 	    message,
 	    parentNavInstance,
-	    registerCallButtonHandler,
-	    refetchMessage,
+	    callButtonCallback,
+	    fetchMessageCallback,
 	    action,
 	    thumb,
 	    size,
@@ -46008,8 +46008,8 @@ var app = (function () {
 	    if ('chat' in $$props) $$invalidate(4, chat = $$props.chat);
 	    if ('message' in $$props) $$invalidate(5, message = $$props.message);
 	    if ('parentNavInstance' in $$props) $$invalidate(6, parentNavInstance = $$props.parentNavInstance);
-	    if ('registerCallButtonHandler' in $$props) $$invalidate(7, registerCallButtonHandler = $$props.registerCallButtonHandler);
-	    if ('refetchMessage' in $$props) $$invalidate(8, refetchMessage = $$props.refetchMessage);
+	    if ('callButtonCallback' in $$props) $$invalidate(7, callButtonCallback = $$props.callButtonCallback);
+	    if ('fetchMessageCallback' in $$props) $$invalidate(8, fetchMessageCallback = $$props.fetchMessageCallback);
 	    if ('action' in $$props) action = $$props.action;
 	    if ('thumb' in $$props) $$invalidate(0, thumb = $$props.thumb);
 	    if ('size' in $$props) $$invalidate(1, size = $$props.size);
@@ -46022,7 +46022,7 @@ var app = (function () {
 	    $$self.$inject_state($$props.$$inject);
 	  }
 
-	  return [thumb, size, downloaded, downloading, chat, message, parentNavInstance, registerCallButtonHandler, refetchMessage];
+	  return [thumb, size, downloaded, downloading, chat, message, parentNavInstance, callButtonCallback, fetchMessageCallback];
 	}
 
 	class MessageMediaPhoto extends SvelteComponentDev {
@@ -46032,8 +46032,8 @@ var app = (function () {
 	      chat: 4,
 	      message: 5,
 	      parentNavInstance: 6,
-	      registerCallButtonHandler: 7,
-	      refetchMessage: 8
+	      callButtonCallback: 7,
+	      fetchMessageCallback: 8
 	    });
 	    dispatch_dev("SvelteRegisterComponent", {
 	      component: this,
@@ -46084,24 +46084,24 @@ var app = (function () {
 	    flush();
 	  }
 
-	  get registerCallButtonHandler() {
+	  get callButtonCallback() {
 	    return this.$$.ctx[7];
 	  }
 
-	  set registerCallButtonHandler(registerCallButtonHandler) {
+	  set callButtonCallback(callButtonCallback) {
 	    this.$$set({
-	      registerCallButtonHandler
+	      callButtonCallback
 	    });
 	    flush();
 	  }
 
-	  get refetchMessage() {
+	  get fetchMessageCallback() {
 	    return this.$$.ctx[8];
 	  }
 
-	  set refetchMessage(refetchMessage) {
+	  set fetchMessageCallback(fetchMessageCallback) {
 	    this.$$set({
-	      refetchMessage
+	      fetchMessageCallback
 	    });
 	    flush();
 	  }
@@ -46129,11 +46129,11 @@ var app = (function () {
 	      if (!src_url_equal(iframe.src, iframe_src_value =
 	      /*url*/
 	      ctx[0])) attr_dev(iframe, "src", iframe_src_value);
-	      add_location(iframe, file$M, 83, 27, 3407);
+	      add_location(iframe, file$M, 83, 27, 3399);
 	      set_style(div0, "width", "100%");
-	      add_location(div0, file$M, 83, 2, 3382);
+	      add_location(div0, file$M, 83, 2, 3374);
 	      attr_dev(div1, "class", "media-container svelte-16i9emv");
-	      add_location(div1, file$M, 82, 0, 3350);
+	      add_location(div1, file$M, 82, 0, 3342);
 	    },
 	    l: function claim(nodes) {
 	      throw new Error("options.hydrate only works if the component was compiled with the `hydratable: true` option");
@@ -46203,10 +46203,10 @@ var app = (function () {
 	  var _$$props$message = $$props.message,
 	      message = _$$props$message === void 0 ? {} : _$$props$message;
 	  var parentNavInstance = $$props.parentNavInstance;
-	  var _$$props$registerCall = $$props.registerCallButtonHandler,
-	      registerCallButtonHandler = _$$props$registerCall === void 0 ? (id, callback) => {} : _$$props$registerCall;
-	  var _$$props$refetchMessa = $$props.refetchMessage,
-	      refetchMessage = _$$props$refetchMessa === void 0 ? id => {} : _$$props$refetchMessa;
+	  var _$$props$callButtonCa = $$props.callButtonCallback,
+	      callButtonCallback = _$$props$callButtonCa === void 0 ? (id, callback) => {} : _$$props$callButtonCa;
+	  var _$$props$fetchMessage = $$props.fetchMessageCallback,
+	      fetchMessageCallback = _$$props$fetchMessage === void 0 ? id => {} : _$$props$fetchMessage;
 	  var menu;
 	  var url = '';
 
@@ -46257,9 +46257,9 @@ var app = (function () {
 	    $$invalidate(0, url = getGoogleMapEmbed(message.media.geo.lat, message.media.geo.long));
 	  });
 	  onMount(() => {
-	    registerCallButtonHandler(message.id.toString(), actionMenu);
+	    callButtonCallback(message.id.toString(), actionMenu);
 	  });
-	  var writable_props = ['chat', 'message', 'parentNavInstance', 'registerCallButtonHandler', 'refetchMessage'];
+	  var writable_props = ['chat', 'message', 'parentNavInstance', 'callButtonCallback', 'fetchMessageCallback'];
 	  Object.keys($$props).forEach(key => {
 	    if (!~writable_props.indexOf(key) && key.slice(0, 2) !== '$$' && key !== 'slot') console.warn(`<MessageMediaGeo> was created with unknown prop '${key}'`);
 	  });
@@ -46268,8 +46268,8 @@ var app = (function () {
 	    if ('chat' in $$props) $$invalidate(1, chat = $$props.chat);
 	    if ('message' in $$props) $$invalidate(2, message = $$props.message);
 	    if ('parentNavInstance' in $$props) $$invalidate(3, parentNavInstance = $$props.parentNavInstance);
-	    if ('registerCallButtonHandler' in $$props) $$invalidate(4, registerCallButtonHandler = $$props.registerCallButtonHandler);
-	    if ('refetchMessage' in $$props) $$invalidate(5, refetchMessage = $$props.refetchMessage);
+	    if ('callButtonCallback' in $$props) $$invalidate(4, callButtonCallback = $$props.callButtonCallback);
+	    if ('fetchMessageCallback' in $$props) $$invalidate(5, fetchMessageCallback = $$props.fetchMessageCallback);
 	  };
 
 	  $$self.$capture_state = () => ({
@@ -46279,8 +46279,8 @@ var app = (function () {
 	    chat,
 	    message,
 	    parentNavInstance,
-	    registerCallButtonHandler,
-	    refetchMessage,
+	    callButtonCallback,
+	    fetchMessageCallback,
 	    menu,
 	    url,
 	    getCoordOffset,
@@ -46294,8 +46294,8 @@ var app = (function () {
 	    if ('chat' in $$props) $$invalidate(1, chat = $$props.chat);
 	    if ('message' in $$props) $$invalidate(2, message = $$props.message);
 	    if ('parentNavInstance' in $$props) $$invalidate(3, parentNavInstance = $$props.parentNavInstance);
-	    if ('registerCallButtonHandler' in $$props) $$invalidate(4, registerCallButtonHandler = $$props.registerCallButtonHandler);
-	    if ('refetchMessage' in $$props) $$invalidate(5, refetchMessage = $$props.refetchMessage);
+	    if ('callButtonCallback' in $$props) $$invalidate(4, callButtonCallback = $$props.callButtonCallback);
+	    if ('fetchMessageCallback' in $$props) $$invalidate(5, fetchMessageCallback = $$props.fetchMessageCallback);
 	    if ('menu' in $$props) menu = $$props.menu;
 	    if ('url' in $$props) $$invalidate(0, url = $$props.url);
 	  };
@@ -46304,7 +46304,7 @@ var app = (function () {
 	    $$self.$inject_state($$props.$$inject);
 	  }
 
-	  return [url, chat, message, parentNavInstance, registerCallButtonHandler, refetchMessage];
+	  return [url, chat, message, parentNavInstance, callButtonCallback, fetchMessageCallback];
 	}
 
 	class MessageMediaGeo extends SvelteComponentDev {
@@ -46314,8 +46314,8 @@ var app = (function () {
 	      chat: 1,
 	      message: 2,
 	      parentNavInstance: 3,
-	      registerCallButtonHandler: 4,
-	      refetchMessage: 5
+	      callButtonCallback: 4,
+	      fetchMessageCallback: 5
 	    });
 	    dispatch_dev("SvelteRegisterComponent", {
 	      component: this,
@@ -46366,24 +46366,24 @@ var app = (function () {
 	    flush();
 	  }
 
-	  get registerCallButtonHandler() {
+	  get callButtonCallback() {
 	    return this.$$.ctx[4];
 	  }
 
-	  set registerCallButtonHandler(registerCallButtonHandler) {
+	  set callButtonCallback(callButtonCallback) {
 	    this.$$set({
-	      registerCallButtonHandler
+	      callButtonCallback
 	    });
 	    flush();
 	  }
 
-	  get refetchMessage() {
+	  get fetchMessageCallback() {
 	    return this.$$.ctx[5];
 	  }
 
-	  set refetchMessage(refetchMessage) {
+	  set fetchMessageCallback(fetchMessageCallback) {
 	    this.$$set({
-	      refetchMessage
+	      fetchMessageCallback
 	    });
 	    flush();
 	  }
@@ -46401,8 +46401,8 @@ var app = (function () {
 	      small = element("small");
 	      i = element("i");
 	      i.textContent = "Status: Available";
-	      add_location(i, file$L, 284, 9, 10353);
-	      add_location(small, file$L, 284, 2, 10346);
+	      add_location(i, file$L, 284, 9, 10363);
+	      add_location(small, file$L, 284, 2, 10356);
 	    },
 	    m: function mount(target, anchor) {
 	      insert_dev(target, small, anchor);
@@ -46440,8 +46440,8 @@ var app = (function () {
 	      i = element("i");
 	      t0 = text("Status: ");
 	      t1 = text(t1_value);
-	      add_location(i, file$L, 282, 9, 10232);
-	      add_location(small, file$L, 282, 2, 10225);
+	      add_location(i, file$L, 282, 9, 10242);
+	      add_location(small, file$L, 282, 2, 10235);
 	    },
 	    m: function mount(target, anchor) {
 	      insert_dev(target, small, anchor);
@@ -46508,11 +46508,11 @@ var app = (function () {
 	      t3 = text(t3_value);
 	      t4 = space();
 	      if_block.c();
-	      add_location(b, file$L, 279, 2, 10113);
+	      add_location(b, file$L, 279, 2, 10123);
 	      attr_dev(p, "class", "svelte-1x2nbdi");
-	      add_location(p, file$L, 280, 2, 10167);
+	      add_location(p, file$L, 280, 2, 10177);
 	      attr_dev(div, "class", "media-container svelte-1x2nbdi");
-	      add_location(div, file$L, 278, 0, 10081);
+	      add_location(div, file$L, 278, 0, 10091);
 	    },
 	    l: function claim(nodes) {
 	      throw new Error("options.hydrate only works if the component was compiled with the `hydratable: true` option");
@@ -46615,10 +46615,10 @@ var app = (function () {
 	  var _$$props$message = $$props.message,
 	      message = _$$props$message === void 0 ? {} : _$$props$message;
 	  var parentNavInstance = $$props.parentNavInstance;
-	  var _$$props$registerCall = $$props.registerCallButtonHandler,
-	      registerCallButtonHandler = _$$props$registerCall === void 0 ? (id, callback) => {} : _$$props$registerCall;
-	  var _$$props$refetchMessa = $$props.refetchMessage,
-	      refetchMessage = _$$props$refetchMessa === void 0 ? id => {} : _$$props$refetchMessa;
+	  var _$$props$callButtonCa = $$props.callButtonCallback,
+	      callButtonCallback = _$$props$callButtonCa === void 0 ? (id, callback) => {} : _$$props$callButtonCa;
+	  var _$$props$fetchMessage = $$props.fetchMessageCallback,
+	      fetchMessageCallback = _$$props$fetchMessage === void 0 ? id => {} : _$$props$fetchMessage;
 	  var available = true;
 	  var answeredOrVoted = false;
 	  var pollResults;
@@ -46660,7 +46660,7 @@ var app = (function () {
 	                msgId: message.id,
 	                options: [vote.option]
 	              }));
-	              refetchMessage(message.id);
+	              fetchMessageCallback(message.id);
 	            }
 	          }),
 	          onBackspace: (evt, scope) => {
@@ -46723,7 +46723,7 @@ var app = (function () {
 	                msgId: message.id,
 	                options
 	              }));
-	              refetchMessage(message.id);
+	              fetchMessageCallback(message.id);
 	            }
 	          }),
 	          onBackspace: (evt, scope) => {
@@ -46753,7 +46753,7 @@ var app = (function () {
 	          msgId: message.id,
 	          options: []
 	        }));
-	        refetchMessage(message.id);
+	        fetchMessageCallback(message.id);
 	      } catch (err) {
 	        console.log('retractVote:', err);
 	      }
@@ -46887,11 +46887,11 @@ var app = (function () {
 	    update();
 	  });
 	  onMount(() => {
-	    registerCallButtonHandler(message.id.toString(), actionMenu);
+	    callButtonCallback(message.id.toString(), actionMenu);
 	    update();
 	  });
 	  onDestroy(() => {});
-	  var writable_props = ['chat', 'message', 'parentNavInstance', 'registerCallButtonHandler', 'refetchMessage'];
+	  var writable_props = ['chat', 'message', 'parentNavInstance', 'callButtonCallback', 'fetchMessageCallback'];
 	  Object.keys($$props).forEach(key => {
 	    if (!~writable_props.indexOf(key) && key.slice(0, 2) !== '$$' && key !== 'slot') console_1$7.warn(`<MessageMediaPoll> was created with unknown prop '${key}'`);
 	  });
@@ -46900,8 +46900,8 @@ var app = (function () {
 	    if ('chat' in $$props) $$invalidate(3, chat = $$props.chat);
 	    if ('message' in $$props) $$invalidate(0, message = $$props.message);
 	    if ('parentNavInstance' in $$props) $$invalidate(4, parentNavInstance = $$props.parentNavInstance);
-	    if ('registerCallButtonHandler' in $$props) $$invalidate(5, registerCallButtonHandler = $$props.registerCallButtonHandler);
-	    if ('refetchMessage' in $$props) $$invalidate(6, refetchMessage = $$props.refetchMessage);
+	    if ('callButtonCallback' in $$props) $$invalidate(5, callButtonCallback = $$props.callButtonCallback);
+	    if ('fetchMessageCallback' in $$props) $$invalidate(6, fetchMessageCallback = $$props.fetchMessageCallback);
 	  };
 
 	  $$self.$capture_state = () => ({
@@ -46917,8 +46917,8 @@ var app = (function () {
 	    chat,
 	    message,
 	    parentNavInstance,
-	    registerCallButtonHandler,
-	    refetchMessage,
+	    callButtonCallback,
+	    fetchMessageCallback,
 	    available,
 	    answeredOrVoted,
 	    pollResults,
@@ -46938,8 +46938,8 @@ var app = (function () {
 	    if ('chat' in $$props) $$invalidate(3, chat = $$props.chat);
 	    if ('message' in $$props) $$invalidate(0, message = $$props.message);
 	    if ('parentNavInstance' in $$props) $$invalidate(4, parentNavInstance = $$props.parentNavInstance);
-	    if ('registerCallButtonHandler' in $$props) $$invalidate(5, registerCallButtonHandler = $$props.registerCallButtonHandler);
-	    if ('refetchMessage' in $$props) $$invalidate(6, refetchMessage = $$props.refetchMessage);
+	    if ('callButtonCallback' in $$props) $$invalidate(5, callButtonCallback = $$props.callButtonCallback);
+	    if ('fetchMessageCallback' in $$props) $$invalidate(6, fetchMessageCallback = $$props.fetchMessageCallback);
 	    if ('available' in $$props) $$invalidate(1, available = $$props.available);
 	    if ('answeredOrVoted' in $$props) $$invalidate(2, answeredOrVoted = $$props.answeredOrVoted);
 	    if ('pollResults' in $$props) pollResults = $$props.pollResults;
@@ -46952,7 +46952,7 @@ var app = (function () {
 	    $$self.$inject_state($$props.$$inject);
 	  }
 
-	  return [message, available, answeredOrVoted, chat, parentNavInstance, registerCallButtonHandler, refetchMessage];
+	  return [message, available, answeredOrVoted, chat, parentNavInstance, callButtonCallback, fetchMessageCallback];
 	}
 
 	class MessageMediaPoll extends SvelteComponentDev {
@@ -46962,8 +46962,8 @@ var app = (function () {
 	      chat: 3,
 	      message: 0,
 	      parentNavInstance: 4,
-	      registerCallButtonHandler: 5,
-	      refetchMessage: 6
+	      callButtonCallback: 5,
+	      fetchMessageCallback: 6
 	    });
 	    dispatch_dev("SvelteRegisterComponent", {
 	      component: this,
@@ -47014,24 +47014,24 @@ var app = (function () {
 	    flush();
 	  }
 
-	  get registerCallButtonHandler() {
+	  get callButtonCallback() {
 	    return this.$$.ctx[5];
 	  }
 
-	  set registerCallButtonHandler(registerCallButtonHandler) {
+	  set callButtonCallback(callButtonCallback) {
 	    this.$$set({
-	      registerCallButtonHandler
+	      callButtonCallback
 	    });
 	    flush();
 	  }
 
-	  get refetchMessage() {
+	  get fetchMessageCallback() {
 	    return this.$$.ctx[6];
 	  }
 
-	  set refetchMessage(refetchMessage) {
+	  set fetchMessageCallback(fetchMessageCallback) {
 	    this.$$set({
-	      refetchMessage
+	      fetchMessageCallback
 	    });
 	    flush();
 	  }
@@ -47050,9 +47050,9 @@ var app = (function () {
 	      span = element("span");
 	      span.textContent = "Unsupported Media: Venue";
 	      set_style(span, "color", "#A20000");
-	      add_location(span, file$K, 16, 2, 501);
+	      add_location(span, file$K, 16, 2, 493);
 	      attr_dev(div, "class", "media-container svelte-16i9emv");
-	      add_location(div, file$K, 15, 0, 469);
+	      add_location(div, file$K, 15, 0, 461);
 	    },
 	    l: function claim(nodes) {
 	      throw new Error("options.hydrate only works if the component was compiled with the `hydratable: true` option");
@@ -47090,15 +47090,15 @@ var app = (function () {
 	  var _$$props$message = $$props.message,
 	      message = _$$props$message === void 0 ? {} : _$$props$message;
 	  var parentNavInstance = $$props.parentNavInstance;
-	  var _$$props$registerCall = $$props.registerCallButtonHandler,
-	      registerCallButtonHandler = _$$props$registerCall === void 0 ? (id, callback) => {} : _$$props$registerCall;
-	  var _$$props$refetchMessa = $$props.refetchMessage,
-	      refetchMessage = _$$props$refetchMessa === void 0 ? id => {} : _$$props$refetchMessa;
+	  var _$$props$callButtonCa = $$props.callButtonCallback,
+	      callButtonCallback = _$$props$callButtonCa === void 0 ? (id, callback) => {} : _$$props$callButtonCa;
+	  var _$$props$fetchMessage = $$props.fetchMessageCallback,
+	      fetchMessageCallback = _$$props$fetchMessage === void 0 ? id => {} : _$$props$fetchMessage;
 	  onMount(() => {
-	    registerCallButtonHandler(message.id.toString(), actionMenu$6);
+	    callButtonCallback(message.id.toString(), actionMenu$6);
 	  });
 	  onDestroy(() => {});
-	  var writable_props = ['chat', 'message', 'parentNavInstance', 'registerCallButtonHandler', 'refetchMessage'];
+	  var writable_props = ['chat', 'message', 'parentNavInstance', 'callButtonCallback', 'fetchMessageCallback'];
 	  Object.keys($$props).forEach(key => {
 	    if (!~writable_props.indexOf(key) && key.slice(0, 2) !== '$$' && key !== 'slot') console.warn(`<MessageMediaVenue> was created with unknown prop '${key}'`);
 	  });
@@ -47107,8 +47107,8 @@ var app = (function () {
 	    if ('chat' in $$props) $$invalidate(0, chat = $$props.chat);
 	    if ('message' in $$props) $$invalidate(1, message = $$props.message);
 	    if ('parentNavInstance' in $$props) $$invalidate(2, parentNavInstance = $$props.parentNavInstance);
-	    if ('registerCallButtonHandler' in $$props) $$invalidate(3, registerCallButtonHandler = $$props.registerCallButtonHandler);
-	    if ('refetchMessage' in $$props) $$invalidate(4, refetchMessage = $$props.refetchMessage);
+	    if ('callButtonCallback' in $$props) $$invalidate(3, callButtonCallback = $$props.callButtonCallback);
+	    if ('fetchMessageCallback' in $$props) $$invalidate(4, fetchMessageCallback = $$props.fetchMessageCallback);
 	  };
 
 	  $$self.$capture_state = () => ({
@@ -47117,8 +47117,8 @@ var app = (function () {
 	    chat,
 	    message,
 	    parentNavInstance,
-	    registerCallButtonHandler,
-	    refetchMessage,
+	    callButtonCallback,
+	    fetchMessageCallback,
 	    actionMenu: actionMenu$6
 	  });
 
@@ -47126,15 +47126,15 @@ var app = (function () {
 	    if ('chat' in $$props) $$invalidate(0, chat = $$props.chat);
 	    if ('message' in $$props) $$invalidate(1, message = $$props.message);
 	    if ('parentNavInstance' in $$props) $$invalidate(2, parentNavInstance = $$props.parentNavInstance);
-	    if ('registerCallButtonHandler' in $$props) $$invalidate(3, registerCallButtonHandler = $$props.registerCallButtonHandler);
-	    if ('refetchMessage' in $$props) $$invalidate(4, refetchMessage = $$props.refetchMessage);
+	    if ('callButtonCallback' in $$props) $$invalidate(3, callButtonCallback = $$props.callButtonCallback);
+	    if ('fetchMessageCallback' in $$props) $$invalidate(4, fetchMessageCallback = $$props.fetchMessageCallback);
 	  };
 
 	  if ($$props && "$$inject" in $$props) {
 	    $$self.$inject_state($$props.$$inject);
 	  }
 
-	  return [chat, message, parentNavInstance, registerCallButtonHandler, refetchMessage];
+	  return [chat, message, parentNavInstance, callButtonCallback, fetchMessageCallback];
 	}
 
 	class MessageMediaVenue extends SvelteComponentDev {
@@ -47144,8 +47144,8 @@ var app = (function () {
 	      chat: 0,
 	      message: 1,
 	      parentNavInstance: 2,
-	      registerCallButtonHandler: 3,
-	      refetchMessage: 4
+	      callButtonCallback: 3,
+	      fetchMessageCallback: 4
 	    });
 	    dispatch_dev("SvelteRegisterComponent", {
 	      component: this,
@@ -47196,24 +47196,24 @@ var app = (function () {
 	    flush();
 	  }
 
-	  get registerCallButtonHandler() {
+	  get callButtonCallback() {
 	    return this.$$.ctx[3];
 	  }
 
-	  set registerCallButtonHandler(registerCallButtonHandler) {
+	  set callButtonCallback(callButtonCallback) {
 	    this.$$set({
-	      registerCallButtonHandler
+	      callButtonCallback
 	    });
 	    flush();
 	  }
 
-	  get refetchMessage() {
+	  get fetchMessageCallback() {
 	    return this.$$.ctx[4];
 	  }
 
-	  set refetchMessage(refetchMessage) {
+	  set fetchMessageCallback(fetchMessageCallback) {
 	    this.$$set({
-	      refetchMessage
+	      fetchMessageCallback
 	    });
 	    flush();
 	  }
@@ -47232,9 +47232,9 @@ var app = (function () {
 	      span = element("span");
 	      span.textContent = "Unsupported: Game";
 	      set_style(span, "color", "#A20000");
-	      add_location(span, file$J, 17, 2, 502);
+	      add_location(span, file$J, 17, 2, 494);
 	      attr_dev(div, "class", "media-container svelte-16i9emv");
-	      add_location(div, file$J, 16, 0, 470);
+	      add_location(div, file$J, 16, 0, 462);
 	    },
 	    l: function claim(nodes) {
 	      throw new Error("options.hydrate only works if the component was compiled with the `hydratable: true` option");
@@ -47272,15 +47272,15 @@ var app = (function () {
 	  var _$$props$message = $$props.message,
 	      message = _$$props$message === void 0 ? {} : _$$props$message;
 	  var parentNavInstance = $$props.parentNavInstance;
-	  var _$$props$registerCall = $$props.registerCallButtonHandler,
-	      registerCallButtonHandler = _$$props$registerCall === void 0 ? (id, callback) => {} : _$$props$registerCall;
-	  var _$$props$refetchMessa = $$props.refetchMessage,
-	      refetchMessage = _$$props$refetchMessa === void 0 ? id => {} : _$$props$refetchMessa;
+	  var _$$props$callButtonCa = $$props.callButtonCallback,
+	      callButtonCallback = _$$props$callButtonCa === void 0 ? (id, callback) => {} : _$$props$callButtonCa;
+	  var _$$props$fetchMessage = $$props.fetchMessageCallback,
+	      fetchMessageCallback = _$$props$fetchMessage === void 0 ? id => {} : _$$props$fetchMessage;
 	  onMount(() => {
-	    registerCallButtonHandler(message.id.toString(), actionMenu$5);
+	    callButtonCallback(message.id.toString(), actionMenu$5);
 	  });
 	  onDestroy(() => {});
-	  var writable_props = ['chat', 'message', 'parentNavInstance', 'registerCallButtonHandler', 'refetchMessage'];
+	  var writable_props = ['chat', 'message', 'parentNavInstance', 'callButtonCallback', 'fetchMessageCallback'];
 	  Object.keys($$props).forEach(key => {
 	    if (!~writable_props.indexOf(key) && key.slice(0, 2) !== '$$' && key !== 'slot') console.warn(`<MessageMediaGame> was created with unknown prop '${key}'`);
 	  });
@@ -47289,8 +47289,8 @@ var app = (function () {
 	    if ('chat' in $$props) $$invalidate(0, chat = $$props.chat);
 	    if ('message' in $$props) $$invalidate(1, message = $$props.message);
 	    if ('parentNavInstance' in $$props) $$invalidate(2, parentNavInstance = $$props.parentNavInstance);
-	    if ('registerCallButtonHandler' in $$props) $$invalidate(3, registerCallButtonHandler = $$props.registerCallButtonHandler);
-	    if ('refetchMessage' in $$props) $$invalidate(4, refetchMessage = $$props.refetchMessage);
+	    if ('callButtonCallback' in $$props) $$invalidate(3, callButtonCallback = $$props.callButtonCallback);
+	    if ('fetchMessageCallback' in $$props) $$invalidate(4, fetchMessageCallback = $$props.fetchMessageCallback);
 	  };
 
 	  $$self.$capture_state = () => ({
@@ -47299,8 +47299,8 @@ var app = (function () {
 	    chat,
 	    message,
 	    parentNavInstance,
-	    registerCallButtonHandler,
-	    refetchMessage,
+	    callButtonCallback,
+	    fetchMessageCallback,
 	    actionMenu: actionMenu$5
 	  });
 
@@ -47308,15 +47308,15 @@ var app = (function () {
 	    if ('chat' in $$props) $$invalidate(0, chat = $$props.chat);
 	    if ('message' in $$props) $$invalidate(1, message = $$props.message);
 	    if ('parentNavInstance' in $$props) $$invalidate(2, parentNavInstance = $$props.parentNavInstance);
-	    if ('registerCallButtonHandler' in $$props) $$invalidate(3, registerCallButtonHandler = $$props.registerCallButtonHandler);
-	    if ('refetchMessage' in $$props) $$invalidate(4, refetchMessage = $$props.refetchMessage);
+	    if ('callButtonCallback' in $$props) $$invalidate(3, callButtonCallback = $$props.callButtonCallback);
+	    if ('fetchMessageCallback' in $$props) $$invalidate(4, fetchMessageCallback = $$props.fetchMessageCallback);
 	  };
 
 	  if ($$props && "$$inject" in $$props) {
 	    $$self.$inject_state($$props.$$inject);
 	  }
 
-	  return [chat, message, parentNavInstance, registerCallButtonHandler, refetchMessage];
+	  return [chat, message, parentNavInstance, callButtonCallback, fetchMessageCallback];
 	}
 
 	class MessageMediaGame extends SvelteComponentDev {
@@ -47326,8 +47326,8 @@ var app = (function () {
 	      chat: 0,
 	      message: 1,
 	      parentNavInstance: 2,
-	      registerCallButtonHandler: 3,
-	      refetchMessage: 4
+	      callButtonCallback: 3,
+	      fetchMessageCallback: 4
 	    });
 	    dispatch_dev("SvelteRegisterComponent", {
 	      component: this,
@@ -47378,24 +47378,24 @@ var app = (function () {
 	    flush();
 	  }
 
-	  get registerCallButtonHandler() {
+	  get callButtonCallback() {
 	    return this.$$.ctx[3];
 	  }
 
-	  set registerCallButtonHandler(registerCallButtonHandler) {
+	  set callButtonCallback(callButtonCallback) {
 	    this.$$set({
-	      registerCallButtonHandler
+	      callButtonCallback
 	    });
 	    flush();
 	  }
 
-	  get refetchMessage() {
+	  get fetchMessageCallback() {
 	    return this.$$.ctx[4];
 	  }
 
-	  set refetchMessage(refetchMessage) {
+	  set fetchMessageCallback(fetchMessageCallback) {
 	    this.$$set({
-	      refetchMessage
+	      fetchMessageCallback
 	    });
 	    flush();
 	  }
@@ -47414,9 +47414,9 @@ var app = (function () {
 	      span = element("span");
 	      span.textContent = "Unsupported Media: Invoice";
 	      set_style(span, "color", "#A20000");
-	      add_location(span, file$I, 16, 2, 501);
+	      add_location(span, file$I, 16, 2, 493);
 	      attr_dev(div, "class", "media-container svelte-16i9emv");
-	      add_location(div, file$I, 15, 0, 469);
+	      add_location(div, file$I, 15, 0, 461);
 	    },
 	    l: function claim(nodes) {
 	      throw new Error("options.hydrate only works if the component was compiled with the `hydratable: true` option");
@@ -47454,15 +47454,15 @@ var app = (function () {
 	  var _$$props$message = $$props.message,
 	      message = _$$props$message === void 0 ? {} : _$$props$message;
 	  var parentNavInstance = $$props.parentNavInstance;
-	  var _$$props$registerCall = $$props.registerCallButtonHandler,
-	      registerCallButtonHandler = _$$props$registerCall === void 0 ? (id, callback) => {} : _$$props$registerCall;
-	  var _$$props$refetchMessa = $$props.refetchMessage,
-	      refetchMessage = _$$props$refetchMessa === void 0 ? id => {} : _$$props$refetchMessa;
+	  var _$$props$callButtonCa = $$props.callButtonCallback,
+	      callButtonCallback = _$$props$callButtonCa === void 0 ? (id, callback) => {} : _$$props$callButtonCa;
+	  var _$$props$fetchMessage = $$props.fetchMessageCallback,
+	      fetchMessageCallback = _$$props$fetchMessage === void 0 ? id => {} : _$$props$fetchMessage;
 	  onMount(() => {
-	    registerCallButtonHandler(message.id.toString(), actionMenu$4);
+	    callButtonCallback(message.id.toString(), actionMenu$4);
 	  });
 	  onDestroy(() => {});
-	  var writable_props = ['chat', 'message', 'parentNavInstance', 'registerCallButtonHandler', 'refetchMessage'];
+	  var writable_props = ['chat', 'message', 'parentNavInstance', 'callButtonCallback', 'fetchMessageCallback'];
 	  Object.keys($$props).forEach(key => {
 	    if (!~writable_props.indexOf(key) && key.slice(0, 2) !== '$$' && key !== 'slot') console.warn(`<MessageMediaInvoice> was created with unknown prop '${key}'`);
 	  });
@@ -47471,8 +47471,8 @@ var app = (function () {
 	    if ('chat' in $$props) $$invalidate(0, chat = $$props.chat);
 	    if ('message' in $$props) $$invalidate(1, message = $$props.message);
 	    if ('parentNavInstance' in $$props) $$invalidate(2, parentNavInstance = $$props.parentNavInstance);
-	    if ('registerCallButtonHandler' in $$props) $$invalidate(3, registerCallButtonHandler = $$props.registerCallButtonHandler);
-	    if ('refetchMessage' in $$props) $$invalidate(4, refetchMessage = $$props.refetchMessage);
+	    if ('callButtonCallback' in $$props) $$invalidate(3, callButtonCallback = $$props.callButtonCallback);
+	    if ('fetchMessageCallback' in $$props) $$invalidate(4, fetchMessageCallback = $$props.fetchMessageCallback);
 	  };
 
 	  $$self.$capture_state = () => ({
@@ -47481,8 +47481,8 @@ var app = (function () {
 	    chat,
 	    message,
 	    parentNavInstance,
-	    registerCallButtonHandler,
-	    refetchMessage,
+	    callButtonCallback,
+	    fetchMessageCallback,
 	    actionMenu: actionMenu$4
 	  });
 
@@ -47490,15 +47490,15 @@ var app = (function () {
 	    if ('chat' in $$props) $$invalidate(0, chat = $$props.chat);
 	    if ('message' in $$props) $$invalidate(1, message = $$props.message);
 	    if ('parentNavInstance' in $$props) $$invalidate(2, parentNavInstance = $$props.parentNavInstance);
-	    if ('registerCallButtonHandler' in $$props) $$invalidate(3, registerCallButtonHandler = $$props.registerCallButtonHandler);
-	    if ('refetchMessage' in $$props) $$invalidate(4, refetchMessage = $$props.refetchMessage);
+	    if ('callButtonCallback' in $$props) $$invalidate(3, callButtonCallback = $$props.callButtonCallback);
+	    if ('fetchMessageCallback' in $$props) $$invalidate(4, fetchMessageCallback = $$props.fetchMessageCallback);
 	  };
 
 	  if ($$props && "$$inject" in $$props) {
 	    $$self.$inject_state($$props.$$inject);
 	  }
 
-	  return [chat, message, parentNavInstance, registerCallButtonHandler, refetchMessage];
+	  return [chat, message, parentNavInstance, callButtonCallback, fetchMessageCallback];
 	}
 
 	class MessageMediaInvoice extends SvelteComponentDev {
@@ -47508,8 +47508,8 @@ var app = (function () {
 	      chat: 0,
 	      message: 1,
 	      parentNavInstance: 2,
-	      registerCallButtonHandler: 3,
-	      refetchMessage: 4
+	      callButtonCallback: 3,
+	      fetchMessageCallback: 4
 	    });
 	    dispatch_dev("SvelteRegisterComponent", {
 	      component: this,
@@ -47560,24 +47560,24 @@ var app = (function () {
 	    flush();
 	  }
 
-	  get registerCallButtonHandler() {
+	  get callButtonCallback() {
 	    return this.$$.ctx[3];
 	  }
 
-	  set registerCallButtonHandler(registerCallButtonHandler) {
+	  set callButtonCallback(callButtonCallback) {
 	    this.$$set({
-	      registerCallButtonHandler
+	      callButtonCallback
 	    });
 	    flush();
 	  }
 
-	  get refetchMessage() {
+	  get fetchMessageCallback() {
 	    return this.$$.ctx[4];
 	  }
 
-	  set refetchMessage(refetchMessage) {
+	  set fetchMessageCallback(fetchMessageCallback) {
 	    this.$$set({
-	      refetchMessage
+	      fetchMessageCallback
 	    });
 	    flush();
 	  }
@@ -47596,9 +47596,9 @@ var app = (function () {
 	      span = element("span");
 	      span.textContent = "Unsupported Media: Dice";
 	      set_style(span, "color", "#A20000");
-	      add_location(span, file$H, 16, 2, 501);
+	      add_location(span, file$H, 16, 2, 493);
 	      attr_dev(div, "class", "media-container svelte-16i9emv");
-	      add_location(div, file$H, 15, 0, 469);
+	      add_location(div, file$H, 15, 0, 461);
 	    },
 	    l: function claim(nodes) {
 	      throw new Error("options.hydrate only works if the component was compiled with the `hydratable: true` option");
@@ -47636,15 +47636,15 @@ var app = (function () {
 	  var _$$props$message = $$props.message,
 	      message = _$$props$message === void 0 ? {} : _$$props$message;
 	  var parentNavInstance = $$props.parentNavInstance;
-	  var _$$props$registerCall = $$props.registerCallButtonHandler,
-	      registerCallButtonHandler = _$$props$registerCall === void 0 ? (id, callback) => {} : _$$props$registerCall;
-	  var _$$props$refetchMessa = $$props.refetchMessage,
-	      refetchMessage = _$$props$refetchMessa === void 0 ? id => {} : _$$props$refetchMessa;
+	  var _$$props$callButtonCa = $$props.callButtonCallback,
+	      callButtonCallback = _$$props$callButtonCa === void 0 ? (id, callback) => {} : _$$props$callButtonCa;
+	  var _$$props$fetchMessage = $$props.fetchMessageCallback,
+	      fetchMessageCallback = _$$props$fetchMessage === void 0 ? id => {} : _$$props$fetchMessage;
 	  onMount(() => {
-	    registerCallButtonHandler(message.id.toString(), actionMenu$3);
+	    callButtonCallback(message.id.toString(), actionMenu$3);
 	  });
 	  onDestroy(() => {});
-	  var writable_props = ['chat', 'message', 'parentNavInstance', 'registerCallButtonHandler', 'refetchMessage'];
+	  var writable_props = ['chat', 'message', 'parentNavInstance', 'callButtonCallback', 'fetchMessageCallback'];
 	  Object.keys($$props).forEach(key => {
 	    if (!~writable_props.indexOf(key) && key.slice(0, 2) !== '$$' && key !== 'slot') console.warn(`<MessageMediaDice> was created with unknown prop '${key}'`);
 	  });
@@ -47653,8 +47653,8 @@ var app = (function () {
 	    if ('chat' in $$props) $$invalidate(0, chat = $$props.chat);
 	    if ('message' in $$props) $$invalidate(1, message = $$props.message);
 	    if ('parentNavInstance' in $$props) $$invalidate(2, parentNavInstance = $$props.parentNavInstance);
-	    if ('registerCallButtonHandler' in $$props) $$invalidate(3, registerCallButtonHandler = $$props.registerCallButtonHandler);
-	    if ('refetchMessage' in $$props) $$invalidate(4, refetchMessage = $$props.refetchMessage);
+	    if ('callButtonCallback' in $$props) $$invalidate(3, callButtonCallback = $$props.callButtonCallback);
+	    if ('fetchMessageCallback' in $$props) $$invalidate(4, fetchMessageCallback = $$props.fetchMessageCallback);
 	  };
 
 	  $$self.$capture_state = () => ({
@@ -47663,8 +47663,8 @@ var app = (function () {
 	    chat,
 	    message,
 	    parentNavInstance,
-	    registerCallButtonHandler,
-	    refetchMessage,
+	    callButtonCallback,
+	    fetchMessageCallback,
 	    actionMenu: actionMenu$3
 	  });
 
@@ -47672,15 +47672,15 @@ var app = (function () {
 	    if ('chat' in $$props) $$invalidate(0, chat = $$props.chat);
 	    if ('message' in $$props) $$invalidate(1, message = $$props.message);
 	    if ('parentNavInstance' in $$props) $$invalidate(2, parentNavInstance = $$props.parentNavInstance);
-	    if ('registerCallButtonHandler' in $$props) $$invalidate(3, registerCallButtonHandler = $$props.registerCallButtonHandler);
-	    if ('refetchMessage' in $$props) $$invalidate(4, refetchMessage = $$props.refetchMessage);
+	    if ('callButtonCallback' in $$props) $$invalidate(3, callButtonCallback = $$props.callButtonCallback);
+	    if ('fetchMessageCallback' in $$props) $$invalidate(4, fetchMessageCallback = $$props.fetchMessageCallback);
 	  };
 
 	  if ($$props && "$$inject" in $$props) {
 	    $$self.$inject_state($$props.$$inject);
 	  }
 
-	  return [chat, message, parentNavInstance, registerCallButtonHandler, refetchMessage];
+	  return [chat, message, parentNavInstance, callButtonCallback, fetchMessageCallback];
 	}
 
 	class MessageMediaDice extends SvelteComponentDev {
@@ -47690,8 +47690,8 @@ var app = (function () {
 	      chat: 0,
 	      message: 1,
 	      parentNavInstance: 2,
-	      registerCallButtonHandler: 3,
-	      refetchMessage: 4
+	      callButtonCallback: 3,
+	      fetchMessageCallback: 4
 	    });
 	    dispatch_dev("SvelteRegisterComponent", {
 	      component: this,
@@ -47742,24 +47742,24 @@ var app = (function () {
 	    flush();
 	  }
 
-	  get registerCallButtonHandler() {
+	  get callButtonCallback() {
 	    return this.$$.ctx[3];
 	  }
 
-	  set registerCallButtonHandler(registerCallButtonHandler) {
+	  set callButtonCallback(callButtonCallback) {
 	    this.$$set({
-	      registerCallButtonHandler
+	      callButtonCallback
 	    });
 	    flush();
 	  }
 
-	  get refetchMessage() {
+	  get fetchMessageCallback() {
 	    return this.$$.ctx[4];
 	  }
 
-	  set refetchMessage(refetchMessage) {
+	  set fetchMessageCallback(fetchMessageCallback) {
 	    this.$$set({
-	      refetchMessage
+	      fetchMessageCallback
 	    });
 	    flush();
 	  }
@@ -47778,9 +47778,9 @@ var app = (function () {
 	      span = element("span");
 	      span.textContent = "Unsupported Media: Dice";
 	      set_style(span, "color", "#A20000");
-	      add_location(span, file$G, 16, 2, 501);
+	      add_location(span, file$G, 16, 2, 493);
 	      attr_dev(div, "class", "media-container svelte-16i9emv");
-	      add_location(div, file$G, 15, 0, 469);
+	      add_location(div, file$G, 15, 0, 461);
 	    },
 	    l: function claim(nodes) {
 	      throw new Error("options.hydrate only works if the component was compiled with the `hydratable: true` option");
@@ -47818,15 +47818,15 @@ var app = (function () {
 	  var _$$props$message = $$props.message,
 	      message = _$$props$message === void 0 ? {} : _$$props$message;
 	  var parentNavInstance = $$props.parentNavInstance;
-	  var _$$props$registerCall = $$props.registerCallButtonHandler,
-	      registerCallButtonHandler = _$$props$registerCall === void 0 ? (id, callback) => {} : _$$props$registerCall;
-	  var _$$props$refetchMessa = $$props.refetchMessage,
-	      refetchMessage = _$$props$refetchMessa === void 0 ? id => {} : _$$props$refetchMessa;
+	  var _$$props$callButtonCa = $$props.callButtonCallback,
+	      callButtonCallback = _$$props$callButtonCa === void 0 ? (id, callback) => {} : _$$props$callButtonCa;
+	  var _$$props$fetchMessage = $$props.fetchMessageCallback,
+	      fetchMessageCallback = _$$props$fetchMessage === void 0 ? id => {} : _$$props$fetchMessage;
 	  onMount(() => {
-	    registerCallButtonHandler(message.id.toString(), actionMenu$2);
+	    callButtonCallback(message.id.toString(), actionMenu$2);
 	  });
 	  onDestroy(() => {});
-	  var writable_props = ['chat', 'message', 'parentNavInstance', 'registerCallButtonHandler', 'refetchMessage'];
+	  var writable_props = ['chat', 'message', 'parentNavInstance', 'callButtonCallback', 'fetchMessageCallback'];
 	  Object.keys($$props).forEach(key => {
 	    if (!~writable_props.indexOf(key) && key.slice(0, 2) !== '$$' && key !== 'slot') console.warn(`<MessageMediaContact> was created with unknown prop '${key}'`);
 	  });
@@ -47835,8 +47835,8 @@ var app = (function () {
 	    if ('chat' in $$props) $$invalidate(0, chat = $$props.chat);
 	    if ('message' in $$props) $$invalidate(1, message = $$props.message);
 	    if ('parentNavInstance' in $$props) $$invalidate(2, parentNavInstance = $$props.parentNavInstance);
-	    if ('registerCallButtonHandler' in $$props) $$invalidate(3, registerCallButtonHandler = $$props.registerCallButtonHandler);
-	    if ('refetchMessage' in $$props) $$invalidate(4, refetchMessage = $$props.refetchMessage);
+	    if ('callButtonCallback' in $$props) $$invalidate(3, callButtonCallback = $$props.callButtonCallback);
+	    if ('fetchMessageCallback' in $$props) $$invalidate(4, fetchMessageCallback = $$props.fetchMessageCallback);
 	  };
 
 	  $$self.$capture_state = () => ({
@@ -47845,8 +47845,8 @@ var app = (function () {
 	    chat,
 	    message,
 	    parentNavInstance,
-	    registerCallButtonHandler,
-	    refetchMessage,
+	    callButtonCallback,
+	    fetchMessageCallback,
 	    actionMenu: actionMenu$2
 	  });
 
@@ -47854,15 +47854,15 @@ var app = (function () {
 	    if ('chat' in $$props) $$invalidate(0, chat = $$props.chat);
 	    if ('message' in $$props) $$invalidate(1, message = $$props.message);
 	    if ('parentNavInstance' in $$props) $$invalidate(2, parentNavInstance = $$props.parentNavInstance);
-	    if ('registerCallButtonHandler' in $$props) $$invalidate(3, registerCallButtonHandler = $$props.registerCallButtonHandler);
-	    if ('refetchMessage' in $$props) $$invalidate(4, refetchMessage = $$props.refetchMessage);
+	    if ('callButtonCallback' in $$props) $$invalidate(3, callButtonCallback = $$props.callButtonCallback);
+	    if ('fetchMessageCallback' in $$props) $$invalidate(4, fetchMessageCallback = $$props.fetchMessageCallback);
 	  };
 
 	  if ($$props && "$$inject" in $$props) {
 	    $$self.$inject_state($$props.$$inject);
 	  }
 
-	  return [chat, message, parentNavInstance, registerCallButtonHandler, refetchMessage];
+	  return [chat, message, parentNavInstance, callButtonCallback, fetchMessageCallback];
 	}
 
 	class MessageMediaContact extends SvelteComponentDev {
@@ -47872,8 +47872,8 @@ var app = (function () {
 	      chat: 0,
 	      message: 1,
 	      parentNavInstance: 2,
-	      registerCallButtonHandler: 3,
-	      refetchMessage: 4
+	      callButtonCallback: 3,
+	      fetchMessageCallback: 4
 	    });
 	    dispatch_dev("SvelteRegisterComponent", {
 	      component: this,
@@ -47924,24 +47924,24 @@ var app = (function () {
 	    flush();
 	  }
 
-	  get registerCallButtonHandler() {
+	  get callButtonCallback() {
 	    return this.$$.ctx[3];
 	  }
 
-	  set registerCallButtonHandler(registerCallButtonHandler) {
+	  set callButtonCallback(callButtonCallback) {
 	    this.$$set({
-	      registerCallButtonHandler
+	      callButtonCallback
 	    });
 	    flush();
 	  }
 
-	  get refetchMessage() {
+	  get fetchMessageCallback() {
 	    return this.$$.ctx[4];
 	  }
 
-	  set refetchMessage(refetchMessage) {
+	  set fetchMessageCallback(fetchMessageCallback) {
 	    this.$$set({
-	      refetchMessage
+	      fetchMessageCallback
 	    });
 	    flush();
 	  }
@@ -52280,7 +52280,7 @@ var app = (function () {
 	      h5 = element("h5");
 	      t = text(t_value);
 	      attr_dev(h5, "class", "site-name svelte-1tifo30");
-	      add_location(h5, file$E, 166, 4, 7001);
+	      add_location(h5, file$E, 166, 4, 6993);
 	    },
 	    m: function mount(target, anchor) {
 	      insert_dev(target, h5, anchor);
@@ -52323,7 +52323,7 @@ var app = (function () {
 	      p = element("p");
 	      t = text(t_value);
 	      attr_dev(p, "class", "title svelte-1tifo30");
-	      add_location(p, file$E, 169, 4, 7113);
+	      add_location(p, file$E, 169, 4, 7105);
 	    },
 	    m: function mount(target, anchor) {
 	      insert_dev(target, p, anchor);
@@ -52370,7 +52370,7 @@ var app = (function () {
 	      p = element("p");
 	      t = text(t_value);
 	      attr_dev(p, "class", "description svelte-1tifo30");
-	      add_location(p, file$E, 172, 4, 7319);
+	      add_location(p, file$E, 172, 4, 7311);
 	    },
 	    m: function mount(target, anchor) {
 	      insert_dev(target, p, anchor);
@@ -52425,9 +52425,9 @@ var app = (function () {
 	      t1 = space();
 	      if (if_block2) if_block2.c();
 	      attr_dev(div0, "class", "quote svelte-1tifo30");
-	      add_location(div0, file$E, 164, 2, 6936);
+	      add_location(div0, file$E, 164, 2, 6928);
 	      attr_dev(div1, "class", "media-container svelte-1tifo30");
-	      add_location(div1, file$E, 163, 0, 6904);
+	      add_location(div1, file$E, 163, 0, 6896);
 	    },
 	    l: function claim(nodes) {
 	      throw new Error("options.hydrate only works if the component was compiled with the `hydratable: true` option");
@@ -52552,10 +52552,10 @@ var app = (function () {
 	  var _$$props$message = $$props.message,
 	      message = _$$props$message === void 0 ? {} : _$$props$message;
 	  var parentNavInstance = $$props.parentNavInstance;
-	  var _$$props$registerCall = $$props.registerCallButtonHandler,
-	      registerCallButtonHandler = _$$props$registerCall === void 0 ? (id, callback) => {} : _$$props$registerCall;
-	  var _$$props$refetchMessa = $$props.refetchMessage,
-	      refetchMessage = _$$props$refetchMessa === void 0 ? id => {} : _$$props$refetchMessa;
+	  var _$$props$callButtonCa = $$props.callButtonCallback,
+	      callButtonCallback = _$$props$callButtonCa === void 0 ? (id, callback) => {} : _$$props$callButtonCa;
+	  var _$$props$fetchMessage = $$props.fetchMessageCallback,
+	      fetchMessageCallback = _$$props$fetchMessage === void 0 ? id => {} : _$$props$fetchMessage;
 	  var loadingBar;
 	  var menu;
 	  var reader;
@@ -52704,9 +52704,9 @@ var app = (function () {
 	  onMount(() => {
 	    // console.log(message.media);
 	    // .webpage: description, displayUrl, siteName, title, url, cachedPage(instantview)
-	    registerCallButtonHandler(message.id.toString(), actionMenu);
+	    callButtonCallback(message.id.toString(), actionMenu);
 	  });
-	  var writable_props = ['chat', 'message', 'parentNavInstance', 'registerCallButtonHandler', 'refetchMessage'];
+	  var writable_props = ['chat', 'message', 'parentNavInstance', 'callButtonCallback', 'fetchMessageCallback'];
 	  Object.keys($$props).forEach(key => {
 	    if (!~writable_props.indexOf(key) && key.slice(0, 2) !== '$$' && key !== 'slot') console_1$6.warn(`<MessageMediaWebPage> was created with unknown prop '${key}'`);
 	  });
@@ -52715,8 +52715,8 @@ var app = (function () {
 	    if ('chat' in $$props) $$invalidate(1, chat = $$props.chat);
 	    if ('message' in $$props) $$invalidate(0, message = $$props.message);
 	    if ('parentNavInstance' in $$props) $$invalidate(2, parentNavInstance = $$props.parentNavInstance);
-	    if ('registerCallButtonHandler' in $$props) $$invalidate(3, registerCallButtonHandler = $$props.registerCallButtonHandler);
-	    if ('refetchMessage' in $$props) $$invalidate(4, refetchMessage = $$props.refetchMessage);
+	    if ('callButtonCallback' in $$props) $$invalidate(3, callButtonCallback = $$props.callButtonCallback);
+	    if ('fetchMessageCallback' in $$props) $$invalidate(4, fetchMessageCallback = $$props.fetchMessageCallback);
 	  };
 
 	  $$self.$capture_state = () => ({
@@ -52732,8 +52732,8 @@ var app = (function () {
 	    chat,
 	    message,
 	    parentNavInstance,
-	    registerCallButtonHandler,
-	    refetchMessage,
+	    callButtonCallback,
+	    fetchMessageCallback,
 	    loadingBar,
 	    menu,
 	    reader,
@@ -52748,8 +52748,8 @@ var app = (function () {
 	    if ('chat' in $$props) $$invalidate(1, chat = $$props.chat);
 	    if ('message' in $$props) $$invalidate(0, message = $$props.message);
 	    if ('parentNavInstance' in $$props) $$invalidate(2, parentNavInstance = $$props.parentNavInstance);
-	    if ('registerCallButtonHandler' in $$props) $$invalidate(3, registerCallButtonHandler = $$props.registerCallButtonHandler);
-	    if ('refetchMessage' in $$props) $$invalidate(4, refetchMessage = $$props.refetchMessage);
+	    if ('callButtonCallback' in $$props) $$invalidate(3, callButtonCallback = $$props.callButtonCallback);
+	    if ('fetchMessageCallback' in $$props) $$invalidate(4, fetchMessageCallback = $$props.fetchMessageCallback);
 	    if ('loadingBar' in $$props) loadingBar = $$props.loadingBar;
 	    if ('menu' in $$props) menu = $$props.menu;
 	    if ('reader' in $$props) reader = $$props.reader;
@@ -52759,7 +52759,7 @@ var app = (function () {
 	    $$self.$inject_state($$props.$$inject);
 	  }
 
-	  return [message, chat, parentNavInstance, registerCallButtonHandler, refetchMessage];
+	  return [message, chat, parentNavInstance, callButtonCallback, fetchMessageCallback];
 	}
 
 	class MessageMediaWebPage extends SvelteComponentDev {
@@ -52769,8 +52769,8 @@ var app = (function () {
 	      chat: 1,
 	      message: 0,
 	      parentNavInstance: 2,
-	      registerCallButtonHandler: 3,
-	      refetchMessage: 4
+	      callButtonCallback: 3,
+	      fetchMessageCallback: 4
 	    });
 	    dispatch_dev("SvelteRegisterComponent", {
 	      component: this,
@@ -52821,24 +52821,24 @@ var app = (function () {
 	    flush();
 	  }
 
-	  get registerCallButtonHandler() {
+	  get callButtonCallback() {
 	    return this.$$.ctx[3];
 	  }
 
-	  set registerCallButtonHandler(registerCallButtonHandler) {
+	  set callButtonCallback(callButtonCallback) {
 	    this.$$set({
-	      registerCallButtonHandler
+	      callButtonCallback
 	    });
 	    flush();
 	  }
 
-	  get refetchMessage() {
+	  get fetchMessageCallback() {
 	    return this.$$.ctx[4];
 	  }
 
-	  set refetchMessage(refetchMessage) {
+	  set fetchMessageCallback(fetchMessageCallback) {
 	    this.$$set({
-	      refetchMessage
+	      fetchMessageCallback
 	    });
 	    flush();
 	  }
@@ -52860,9 +52860,9 @@ var app = (function () {
 	      span = element("span");
 	      t = text(t_value);
 	      set_style(span, "color", "#A20000");
-	      add_location(span, file$D, 16, 2, 469);
+	      add_location(span, file$D, 16, 2, 461);
 	      attr_dev(div, "class", "media-container svelte-16i9emv");
-	      add_location(div, file$D, 15, 0, 437);
+	      add_location(div, file$D, 15, 0, 429);
 	    },
 	    l: function claim(nodes) {
 	      throw new Error("options.hydrate only works if the component was compiled with the `hydratable: true` option");
@@ -52910,14 +52910,14 @@ var app = (function () {
 	  var _$$props$message = $$props.message,
 	      message = _$$props$message === void 0 ? {} : _$$props$message;
 	  var parentNavInstance = $$props.parentNavInstance;
-	  var _$$props$registerCall = $$props.registerCallButtonHandler,
-	      registerCallButtonHandler = _$$props$registerCall === void 0 ? (id, callback) => {} : _$$props$registerCall;
-	  var _$$props$refetchMessa = $$props.refetchMessage,
-	      refetchMessage = _$$props$refetchMessa === void 0 ? id => {} : _$$props$refetchMessa;
+	  var _$$props$callButtonCa = $$props.callButtonCallback,
+	      callButtonCallback = _$$props$callButtonCa === void 0 ? (id, callback) => {} : _$$props$callButtonCa;
+	  var _$$props$fetchMessage = $$props.fetchMessageCallback,
+	      fetchMessageCallback = _$$props$fetchMessage === void 0 ? id => {} : _$$props$fetchMessage;
 	  onMount(() => {
-	    registerCallButtonHandler(message.id.toString(), actionMenu$1);
+	    callButtonCallback(message.id.toString(), actionMenu$1);
 	  });
-	  var writable_props = ['chat', 'message', 'parentNavInstance', 'registerCallButtonHandler', 'refetchMessage'];
+	  var writable_props = ['chat', 'message', 'parentNavInstance', 'callButtonCallback', 'fetchMessageCallback'];
 	  Object.keys($$props).forEach(key => {
 	    if (!~writable_props.indexOf(key) && key.slice(0, 2) !== '$$' && key !== 'slot') console.warn(`<MessageMediaUnsupported> was created with unknown prop '${key}'`);
 	  });
@@ -52926,8 +52926,8 @@ var app = (function () {
 	    if ('chat' in $$props) $$invalidate(1, chat = $$props.chat);
 	    if ('message' in $$props) $$invalidate(0, message = $$props.message);
 	    if ('parentNavInstance' in $$props) $$invalidate(2, parentNavInstance = $$props.parentNavInstance);
-	    if ('registerCallButtonHandler' in $$props) $$invalidate(3, registerCallButtonHandler = $$props.registerCallButtonHandler);
-	    if ('refetchMessage' in $$props) $$invalidate(4, refetchMessage = $$props.refetchMessage);
+	    if ('callButtonCallback' in $$props) $$invalidate(3, callButtonCallback = $$props.callButtonCallback);
+	    if ('fetchMessageCallback' in $$props) $$invalidate(4, fetchMessageCallback = $$props.fetchMessageCallback);
 	  };
 
 	  $$self.$capture_state = () => ({
@@ -52935,8 +52935,8 @@ var app = (function () {
 	    chat,
 	    message,
 	    parentNavInstance,
-	    registerCallButtonHandler,
-	    refetchMessage,
+	    callButtonCallback,
+	    fetchMessageCallback,
 	    actionMenu: actionMenu$1
 	  });
 
@@ -52944,15 +52944,15 @@ var app = (function () {
 	    if ('chat' in $$props) $$invalidate(1, chat = $$props.chat);
 	    if ('message' in $$props) $$invalidate(0, message = $$props.message);
 	    if ('parentNavInstance' in $$props) $$invalidate(2, parentNavInstance = $$props.parentNavInstance);
-	    if ('registerCallButtonHandler' in $$props) $$invalidate(3, registerCallButtonHandler = $$props.registerCallButtonHandler);
-	    if ('refetchMessage' in $$props) $$invalidate(4, refetchMessage = $$props.refetchMessage);
+	    if ('callButtonCallback' in $$props) $$invalidate(3, callButtonCallback = $$props.callButtonCallback);
+	    if ('fetchMessageCallback' in $$props) $$invalidate(4, fetchMessageCallback = $$props.fetchMessageCallback);
 	  };
 
 	  if ($$props && "$$inject" in $$props) {
 	    $$self.$inject_state($$props.$$inject);
 	  }
 
-	  return [message, chat, parentNavInstance, registerCallButtonHandler, refetchMessage];
+	  return [message, chat, parentNavInstance, callButtonCallback, fetchMessageCallback];
 	}
 
 	class MessageMediaUnsupported extends SvelteComponentDev {
@@ -52962,8 +52962,8 @@ var app = (function () {
 	      chat: 1,
 	      message: 0,
 	      parentNavInstance: 2,
-	      registerCallButtonHandler: 3,
-	      refetchMessage: 4
+	      callButtonCallback: 3,
+	      fetchMessageCallback: 4
 	    });
 	    dispatch_dev("SvelteRegisterComponent", {
 	      component: this,
@@ -53014,24 +53014,24 @@ var app = (function () {
 	    flush();
 	  }
 
-	  get registerCallButtonHandler() {
+	  get callButtonCallback() {
 	    return this.$$.ctx[3];
 	  }
 
-	  set registerCallButtonHandler(registerCallButtonHandler) {
+	  set callButtonCallback(callButtonCallback) {
 	    this.$$set({
-	      registerCallButtonHandler
+	      callButtonCallback
 	    });
 	    flush();
 	  }
 
-	  get refetchMessage() {
+	  get fetchMessageCallback() {
 	    return this.$$.ctx[4];
 	  }
 
-	  set refetchMessage(refetchMessage) {
+	  set fetchMessageCallback(fetchMessageCallback) {
 	    this.$$set({
-	      refetchMessage
+	      fetchMessageCallback
 	    });
 	    flush();
 	  }
@@ -53055,9 +53055,9 @@ var app = (function () {
 	      t0 = text("Unsupported: ");
 	      t1 = text(t1_value);
 	      set_style(span, "color", "#A20000");
-	      add_location(span, file$C, 16, 2, 469);
+	      add_location(span, file$C, 16, 2, 461);
 	      attr_dev(div, "class", "media-container svelte-16i9emv");
-	      add_location(div, file$C, 15, 0, 437);
+	      add_location(div, file$C, 15, 0, 429);
 	    },
 	    l: function claim(nodes) {
 	      throw new Error("options.hydrate only works if the component was compiled with the `hydratable: true` option");
@@ -53106,14 +53106,14 @@ var app = (function () {
 	  var _$$props$message = $$props.message,
 	      message = _$$props$message === void 0 ? {} : _$$props$message;
 	  var parentNavInstance = $$props.parentNavInstance;
-	  var _$$props$registerCall = $$props.registerCallButtonHandler,
-	      registerCallButtonHandler = _$$props$registerCall === void 0 ? (id, callback) => {} : _$$props$registerCall;
-	  var _$$props$refetchMessa = $$props.refetchMessage,
-	      refetchMessage = _$$props$refetchMessa === void 0 ? id => {} : _$$props$refetchMessa;
+	  var _$$props$callButtonCa = $$props.callButtonCallback,
+	      callButtonCallback = _$$props$callButtonCa === void 0 ? (id, callback) => {} : _$$props$callButtonCa;
+	  var _$$props$fetchMessage = $$props.fetchMessageCallback,
+	      fetchMessageCallback = _$$props$fetchMessage === void 0 ? id => {} : _$$props$fetchMessage;
 	  onMount(() => {
-	    registerCallButtonHandler(message.id.toString(), actionMenu);
+	    callButtonCallback(message.id.toString(), actionMenu);
 	  });
-	  var writable_props = ['chat', 'message', 'parentNavInstance', 'registerCallButtonHandler', 'refetchMessage'];
+	  var writable_props = ['chat', 'message', 'parentNavInstance', 'callButtonCallback', 'fetchMessageCallback'];
 	  Object.keys($$props).forEach(key => {
 	    if (!~writable_props.indexOf(key) && key.slice(0, 2) !== '$$' && key !== 'slot') console.warn(`<Dummy> was created with unknown prop '${key}'`);
 	  });
@@ -53122,8 +53122,8 @@ var app = (function () {
 	    if ('chat' in $$props) $$invalidate(1, chat = $$props.chat);
 	    if ('message' in $$props) $$invalidate(0, message = $$props.message);
 	    if ('parentNavInstance' in $$props) $$invalidate(2, parentNavInstance = $$props.parentNavInstance);
-	    if ('registerCallButtonHandler' in $$props) $$invalidate(3, registerCallButtonHandler = $$props.registerCallButtonHandler);
-	    if ('refetchMessage' in $$props) $$invalidate(4, refetchMessage = $$props.refetchMessage);
+	    if ('callButtonCallback' in $$props) $$invalidate(3, callButtonCallback = $$props.callButtonCallback);
+	    if ('fetchMessageCallback' in $$props) $$invalidate(4, fetchMessageCallback = $$props.fetchMessageCallback);
 	  };
 
 	  $$self.$capture_state = () => ({
@@ -53131,8 +53131,8 @@ var app = (function () {
 	    chat,
 	    message,
 	    parentNavInstance,
-	    registerCallButtonHandler,
-	    refetchMessage,
+	    callButtonCallback,
+	    fetchMessageCallback,
 	    actionMenu
 	  });
 
@@ -53140,15 +53140,15 @@ var app = (function () {
 	    if ('chat' in $$props) $$invalidate(1, chat = $$props.chat);
 	    if ('message' in $$props) $$invalidate(0, message = $$props.message);
 	    if ('parentNavInstance' in $$props) $$invalidate(2, parentNavInstance = $$props.parentNavInstance);
-	    if ('registerCallButtonHandler' in $$props) $$invalidate(3, registerCallButtonHandler = $$props.registerCallButtonHandler);
-	    if ('refetchMessage' in $$props) $$invalidate(4, refetchMessage = $$props.refetchMessage);
+	    if ('callButtonCallback' in $$props) $$invalidate(3, callButtonCallback = $$props.callButtonCallback);
+	    if ('fetchMessageCallback' in $$props) $$invalidate(4, fetchMessageCallback = $$props.fetchMessageCallback);
 	  };
 
 	  if ($$props && "$$inject" in $$props) {
 	    $$self.$inject_state($$props.$$inject);
 	  }
 
-	  return [message, chat, parentNavInstance, registerCallButtonHandler, refetchMessage];
+	  return [message, chat, parentNavInstance, callButtonCallback, fetchMessageCallback];
 	}
 
 	class Dummy$1 extends SvelteComponentDev {
@@ -53158,8 +53158,8 @@ var app = (function () {
 	      chat: 1,
 	      message: 0,
 	      parentNavInstance: 2,
-	      registerCallButtonHandler: 3,
-	      refetchMessage: 4
+	      callButtonCallback: 3,
+	      fetchMessageCallback: 4
 	    });
 	    dispatch_dev("SvelteRegisterComponent", {
 	      component: this,
@@ -53210,24 +53210,24 @@ var app = (function () {
 	    flush();
 	  }
 
-	  get registerCallButtonHandler() {
+	  get callButtonCallback() {
 	    return this.$$.ctx[3];
 	  }
 
-	  set registerCallButtonHandler(registerCallButtonHandler) {
+	  set callButtonCallback(callButtonCallback) {
 	    this.$$set({
-	      registerCallButtonHandler
+	      callButtonCallback
 	    });
 	    flush();
 	  }
 
-	  get refetchMessage() {
+	  get fetchMessageCallback() {
 	    return this.$$.ctx[4];
 	  }
 
-	  set refetchMessage(refetchMessage) {
+	  set fetchMessageCallback(fetchMessageCallback) {
 	    this.$$set({
-	      refetchMessage
+	      fetchMessageCallback
 	    });
 	    flush();
 	  }
@@ -53352,7 +53352,7 @@ var app = (function () {
 	      /*forwardedPrefix*/
 	      ctx[17]);
 	      t1 = text(t1_value);
-	      add_location(b, file$B, 270, 6, 10639);
+	      add_location(b, file$B, 270, 6, 10638);
 	    },
 	    m: function mount(target, anchor) {
 	      insert_dev(target, b, anchor);
@@ -53404,7 +53404,7 @@ var app = (function () {
 	    c: function create() {
 	      b = element("b");
 	      t = text(t_value);
-	      add_location(b, file$B, 268, 6, 10560);
+	      add_location(b, file$B, 268, 6, 10559);
 	    },
 	    m: function mount(target, anchor) {
 	      insert_dev(target, b, anchor);
@@ -53453,7 +53453,7 @@ var app = (function () {
 	      div = element("div");
 	      if_block.c();
 	      attr_dev(div, "class", "reply-box svelte-1o4zint");
-	      add_location(div, file$B, 273, 6, 10800);
+	      add_location(div, file$B, 273, 6, 10799);
 	    },
 	    m: function mount(target, anchor) {
 	      insert_dev(target, div, anchor);
@@ -53537,7 +53537,7 @@ var app = (function () {
 	    c: function create() {
 	      small = element("small");
 	      small.textContent = "Deleted";
-	      add_location(small, file$B, 275, 8, 10859);
+	      add_location(small, file$B, 275, 8, 10858);
 	    },
 	    m: function mount(target, anchor) {
 	      insert_dev(target, small, anchor);
@@ -53578,11 +53578,11 @@ var app = (function () {
 	        parentNavInstance:
 	        /*parentNavInstance*/
 	        ctx[5],
-	        registerCallButtonHandler:
-	        /*registerCallButtonHandler*/
+	        callButtonCallback:
+	        /*callButtonCallback*/
 	        ctx[6],
-	        refetchMessage:
-	        /*refetchMessage*/
+	        fetchMessageCallback:
+	        /*fetchMessageCallback*/
 	        ctx[7]
 	      },
 	      $$inline: true
@@ -53624,14 +53624,14 @@ var app = (function () {
 	      /*parentNavInstance*/
 	      ctx[5];
 	      if (dirty[0] &
-	      /*registerCallButtonHandler*/
-	      64) switch_instance_changes.registerCallButtonHandler =
-	      /*registerCallButtonHandler*/
+	      /*callButtonCallback*/
+	      64) switch_instance_changes.callButtonCallback =
+	      /*callButtonCallback*/
 	      ctx[6];
 	      if (dirty[0] &
-	      /*refetchMessage*/
-	      128) switch_instance_changes.refetchMessage =
-	      /*refetchMessage*/
+	      /*fetchMessageCallback*/
+	      128) switch_instance_changes.fetchMessageCallback =
+	      /*fetchMessageCallback*/
 	      ctx[7];
 
 	      if (switch_value !== (switch_value =
@@ -53698,7 +53698,7 @@ var app = (function () {
 	    c: function create() {
 	      p = element("p");
 	      attr_dev(p, "class", "svelte-1o4zint");
-	      add_location(p, file$B, 285, 6, 11184);
+	      add_location(p, file$B, 285, 6, 11182);
 	    },
 	    m: function mount(target, anchor) {
 	      insert_dev(target, p, anchor);
@@ -53746,9 +53746,9 @@ var app = (function () {
 	      if (!src_url_equal(img.src, img_src_value = "/icons/globe.svg")) attr_dev(img, "src", img_src_value);
 	      attr_dev(img, "width", "10px");
 	      attr_dev(img, "height", "10px");
-	      add_location(img, file$B, 289, 29, 11481);
+	      add_location(img, file$B, 289, 29, 11479);
 	      attr_dev(small, "class", "buttons");
-	      add_location(small, file$B, 289, 6, 11458);
+	      add_location(small, file$B, 289, 6, 11456);
 	    },
 	    m: function mount(target, anchor) {
 	      insert_dev(target, small, anchor);
@@ -53784,9 +53784,9 @@ var app = (function () {
 	      if (!src_url_equal(img.src, img_src_value = "/icons/keyboard.svg")) attr_dev(img, "src", img_src_value);
 	      attr_dev(img, "width", "10px");
 	      attr_dev(img, "height", "10px");
-	      add_location(img, file$B, 292, 29, 11668);
+	      add_location(img, file$B, 292, 29, 11666);
 	      attr_dev(small, "class", "buttons");
-	      add_location(small, file$B, 292, 6, 11645);
+	      add_location(small, file$B, 292, 6, 11643);
 	    },
 	    m: function mount(target, anchor) {
 	      insert_dev(target, small, anchor);
@@ -53822,9 +53822,9 @@ var app = (function () {
 	      if (!src_url_equal(img.src, img_src_value = "/icons/pinned.svg")) attr_dev(img, "src", img_src_value);
 	      attr_dev(img, "width", "10px");
 	      attr_dev(img, "height", "10px");
-	      add_location(img, file$B, 295, 28, 11824);
+	      add_location(img, file$B, 295, 28, 11822);
 	      attr_dev(small, "class", "pinned");
-	      add_location(small, file$B, 295, 6, 11802);
+	      add_location(small, file$B, 295, 6, 11800);
 	    },
 	    m: function mount(target, anchor) {
 	      insert_dev(target, small, anchor);
@@ -53867,9 +53867,9 @@ var app = (function () {
 	      if (!src_url_equal(img.src, img_src_value = "/icons/eye.svg")) attr_dev(img, "src", img_src_value);
 	      attr_dev(img, "width", "10px");
 	      attr_dev(img, "height", "10px");
-	      add_location(img, file$B, 298, 27, 11976);
+	      add_location(img, file$B, 298, 27, 11974);
 	      attr_dev(small, "class", "views");
-	      add_location(small, file$B, 298, 6, 11955);
+	      add_location(small, file$B, 298, 6, 11953);
 	    },
 	    m: function mount(target, anchor) {
 	      insert_dev(target, small, anchor);
@@ -53914,9 +53914,9 @@ var app = (function () {
 	      if (!src_url_equal(img.src, img_src_value = "/icons/edited.svg")) attr_dev(img, "src", img_src_value);
 	      attr_dev(img, "width", "10px");
 	      attr_dev(img, "height", "10px");
-	      add_location(img, file$B, 301, 28, 12177);
+	      add_location(img, file$B, 301, 28, 12175);
 	      attr_dev(small, "class", "edited");
-	      add_location(small, file$B, 301, 6, 12155);
+	      add_location(small, file$B, 301, 6, 12153);
 	    },
 	    m: function mount(target, anchor) {
 	      insert_dev(target, small, anchor);
@@ -53959,9 +53959,9 @@ var app = (function () {
 	      if (!src_url_equal(img.src, img_src_value = "/icons/reply.svg")) attr_dev(img, "src", img_src_value);
 	      attr_dev(img, "width", "10px");
 	      attr_dev(img, "height", "10px");
-	      add_location(img, file$B, 304, 27, 12361);
+	      add_location(img, file$B, 304, 27, 12359);
 	      attr_dev(small, "class", "reply");
-	      add_location(small, file$B, 304, 6, 12340);
+	      add_location(small, file$B, 304, 6, 12338);
 	    },
 	    m: function mount(target, anchor) {
 	      insert_dev(target, small, anchor);
@@ -54013,9 +54013,9 @@ var app = (function () {
 	      if (!src_url_equal(img.src, img_src_value = "/icons/forward.svg")) attr_dev(img, "src", img_src_value);
 	      attr_dev(img, "width", "10px");
 	      attr_dev(img, "height", "10px");
-	      add_location(img, file$B, 307, 30, 12571);
+	      add_location(img, file$B, 307, 30, 12569);
 	      attr_dev(small, "class", "forwards");
-	      add_location(small, file$B, 307, 6, 12547);
+	      add_location(small, file$B, 307, 6, 12545);
 	    },
 	    m: function mount(target, anchor) {
 	      insert_dev(target, small, anchor);
@@ -54182,9 +54182,9 @@ var app = (function () {
 	      small = element("small");
 	      t13 = text(t13_value);
 	      attr_dev(small, "class", "time");
-	      add_location(small, file$B, 309, 6, 12702);
+	      add_location(small, file$B, 309, 6, 12700);
 	      attr_dev(div0, "class", "indicator svelte-1o4zint");
-	      add_location(div0, file$B, 287, 4, 11377);
+	      add_location(div0, file$B, 287, 4, 11375);
 	      attr_dev(div1, "class", "kai-list-view-content svelte-1o4zint");
 	      set_style(div1, "margin-left",
 	      /*hasAvatar*/
@@ -54195,7 +54195,7 @@ var app = (function () {
 	      ctx[12] &&
 	      /*chat*/
 	      ctx[1].entity.__isSavedMessages ? '45px' : '0px');
-	      add_location(div1, file$B, 266, 2, 10363);
+	      add_location(div1, file$B, 266, 2, 10362);
 	      attr_dev(div2, "data-key",
 	      /*key*/
 	      ctx[0]);
@@ -54221,7 +54221,7 @@ var app = (function () {
 	      ctx[15]) + ";min-height:" + (
 	      /*hasAvatar*/
 	      ctx[13] ? '50px' : '0px') + ";");
-	      add_location(div2, file$B, 263, 0, 9756);
+	      add_location(div2, file$B, 263, 0, 9755);
 	    },
 	    l: function claim(nodes) {
 	      throw new Error("options.hydrate only works if the component was compiled with the `hydratable: true` option");
@@ -54649,10 +54649,10 @@ var app = (function () {
 	  var _$$props$onClick = $$props.onClick,
 	      onClick = _$$props$onClick === void 0 ? evt => {} : _$$props$onClick;
 	  var parentNavInstance = $$props.parentNavInstance;
-	  var _$$props$registerCall = $$props.registerCallButtonHandler,
-	      registerCallButtonHandler = _$$props$registerCall === void 0 ? (id, callback) => {} : _$$props$registerCall;
-	  var _$$props$refetchMessa = $$props.refetchMessage,
-	      refetchMessage = _$$props$refetchMessa === void 0 ? id => {} : _$$props$refetchMessa;
+	  var _$$props$callButtonCa = $$props.callButtonCallback,
+	      callButtonCallback = _$$props$callButtonCa === void 0 ? (id, callback) => {} : _$$props$callButtonCa;
+	  var _$$props$fetchMessage = $$props.fetchMessageCallback,
+	      fetchMessageCallback = _$$props$fetchMessage === void 0 ? id => {} : _$$props$fetchMessage;
 	  var _$$props$destroyCallb = $$props.destroyCallback,
 	      destroyCallback = _$$props$destroyCallb === void 0 ? () => {} : _$$props$destroyCallb;
 	  var replyTo = $$props.replyTo;
@@ -54905,7 +54905,7 @@ var app = (function () {
 
 	    if (uncachedThumbnails) uncachedThumbnails();
 	  });
-	  var writable_props = ['key', 'chat', 'message', 'className', 'onClick', 'parentNavInstance', 'registerCallButtonHandler', 'refetchMessage', 'destroyCallback', 'replyTo', 'short', 'scrollable', 'replyThreadId'];
+	  var writable_props = ['key', 'chat', 'message', 'className', 'onClick', 'parentNavInstance', 'callButtonCallback', 'fetchMessageCallback', 'destroyCallback', 'replyTo', 'short', 'scrollable', 'replyThreadId'];
 	  Object.keys($$props).forEach(key => {
 	    if (!~writable_props.indexOf(key) && key.slice(0, 2) !== '$$' && key !== 'slot') console_1$5.warn(`<Message> was created with unknown prop '${key}'`);
 	  });
@@ -54924,8 +54924,8 @@ var app = (function () {
 	    if ('className' in $$props) $$invalidate(3, className = $$props.className);
 	    if ('onClick' in $$props) $$invalidate(4, onClick = $$props.onClick);
 	    if ('parentNavInstance' in $$props) $$invalidate(5, parentNavInstance = $$props.parentNavInstance);
-	    if ('registerCallButtonHandler' in $$props) $$invalidate(6, registerCallButtonHandler = $$props.registerCallButtonHandler);
-	    if ('refetchMessage' in $$props) $$invalidate(7, refetchMessage = $$props.refetchMessage);
+	    if ('callButtonCallback' in $$props) $$invalidate(6, callButtonCallback = $$props.callButtonCallback);
+	    if ('fetchMessageCallback' in $$props) $$invalidate(7, fetchMessageCallback = $$props.fetchMessageCallback);
 	    if ('destroyCallback' in $$props) $$invalidate(24, destroyCallback = $$props.destroyCallback);
 	    if ('replyTo' in $$props) $$invalidate(8, replyTo = $$props.replyTo);
 	    if ('short' in $$props) $$invalidate(9, short = $$props.short);
@@ -54949,8 +54949,8 @@ var app = (function () {
 	    className,
 	    onClick,
 	    parentNavInstance,
-	    registerCallButtonHandler,
-	    refetchMessage,
+	    callButtonCallback,
+	    fetchMessageCallback,
 	    destroyCallback,
 	    replyTo,
 	    short,
@@ -54984,8 +54984,8 @@ var app = (function () {
 	    if ('className' in $$props) $$invalidate(3, className = $$props.className);
 	    if ('onClick' in $$props) $$invalidate(4, onClick = $$props.onClick);
 	    if ('parentNavInstance' in $$props) $$invalidate(5, parentNavInstance = $$props.parentNavInstance);
-	    if ('registerCallButtonHandler' in $$props) $$invalidate(6, registerCallButtonHandler = $$props.registerCallButtonHandler);
-	    if ('refetchMessage' in $$props) $$invalidate(7, refetchMessage = $$props.refetchMessage);
+	    if ('callButtonCallback' in $$props) $$invalidate(6, callButtonCallback = $$props.callButtonCallback);
+	    if ('fetchMessageCallback' in $$props) $$invalidate(7, fetchMessageCallback = $$props.fetchMessageCallback);
 	    if ('destroyCallback' in $$props) $$invalidate(24, destroyCallback = $$props.destroyCallback);
 	    if ('replyTo' in $$props) $$invalidate(8, replyTo = $$props.replyTo);
 	    if ('short' in $$props) $$invalidate(9, short = $$props.short);
@@ -55011,7 +55011,7 @@ var app = (function () {
 	    $$self.$inject_state($$props.$$inject);
 	  }
 
-	  return [key, chat, message, className, onClick, parentNavInstance, registerCallButtonHandler, refetchMessage, replyTo, short, replyThreadId, nodeRef, self, hasAvatar, avatarSrc, justifyContent, fullName, forwardedPrefix, showFull, hasMedia, mediaWidget, renderReplyHeader, getFullname, getTime, destroyCallback, scrollable, div2_binding];
+	  return [key, chat, message, className, onClick, parentNavInstance, callButtonCallback, fetchMessageCallback, replyTo, short, replyThreadId, nodeRef, self, hasAvatar, avatarSrc, justifyContent, fullName, forwardedPrefix, showFull, hasMedia, mediaWidget, renderReplyHeader, getFullname, getTime, destroyCallback, scrollable, div2_binding];
 	}
 
 	class Message$1 extends SvelteComponentDev {
@@ -55024,8 +55024,8 @@ var app = (function () {
 	      className: 3,
 	      onClick: 4,
 	      parentNavInstance: 5,
-	      registerCallButtonHandler: 6,
-	      refetchMessage: 7,
+	      callButtonCallback: 6,
+	      fetchMessageCallback: 7,
 	      destroyCallback: 24,
 	      replyTo: 8,
 	      short: 9,
@@ -55126,24 +55126,24 @@ var app = (function () {
 	    flush();
 	  }
 
-	  get registerCallButtonHandler() {
+	  get callButtonCallback() {
 	    return this.$$.ctx[6];
 	  }
 
-	  set registerCallButtonHandler(registerCallButtonHandler) {
+	  set callButtonCallback(callButtonCallback) {
 	    this.$$set({
-	      registerCallButtonHandler
+	      callButtonCallback
 	    });
 	    flush();
 	  }
 
-	  get refetchMessage() {
+	  get fetchMessageCallback() {
 	    return this.$$.ctx[7];
 	  }
 
-	  set refetchMessage(refetchMessage) {
+	  set fetchMessageCallback(fetchMessageCallback) {
 	    this.$$set({
-	      refetchMessage
+	      fetchMessageCallback
 	    });
 	    flush();
 	  }
@@ -55220,9 +55220,9 @@ var app = (function () {
 	      p = element("p");
 	      t = text(t_value);
 	      attr_dev(p, "class", "svelte-x2q8ou");
-	      add_location(p, file$A, 13, 2, 363);
+	      add_location(p, file$A, 13, 2, 362);
 	      attr_dev(div, "class", "MessageActionEmpty svelte-x2q8ou");
-	      add_location(div, file$A, 12, 0, 328);
+	      add_location(div, file$A, 12, 0, 327);
 	    },
 	    l: function claim(nodes) {
 	      throw new Error("options.hydrate only works if the component was compiled with the `hydratable: true` option");
@@ -55268,13 +55268,13 @@ var app = (function () {
 	  var _$$props$message = $$props.message,
 	      message = _$$props$message === void 0 ? {} : _$$props$message;
 	  var parentNavInstance = $$props.parentNavInstance;
-	  var _$$props$registerCall = $$props.registerCallButtonHandler,
-	      registerCallButtonHandler = _$$props$registerCall === void 0 ? (id, callback) => {} : _$$props$registerCall;
-	  var _$$props$refetchMessa = $$props.refetchMessage,
-	      refetchMessage = _$$props$refetchMessa === void 0 ? id => {} : _$$props$refetchMessa;
+	  var _$$props$callButtonCa = $$props.callButtonCallback,
+	      callButtonCallback = _$$props$callButtonCa === void 0 ? (id, callback) => {} : _$$props$callButtonCa;
+	  var _$$props$fetchMessage = $$props.fetchMessageCallback,
+	      fetchMessageCallback = _$$props$fetchMessage === void 0 ? id => {} : _$$props$fetchMessage;
 	  onMount(() => {}); // console.log(message);
 
-	  var writable_props = ['chat', 'message', 'parentNavInstance', 'registerCallButtonHandler', 'refetchMessage'];
+	  var writable_props = ['chat', 'message', 'parentNavInstance', 'callButtonCallback', 'fetchMessageCallback'];
 	  Object.keys($$props).forEach(key => {
 	    if (!~writable_props.indexOf(key) && key.slice(0, 2) !== '$$' && key !== 'slot') console.warn(`<MessageActionEmpty> was created with unknown prop '${key}'`);
 	  });
@@ -55283,8 +55283,8 @@ var app = (function () {
 	    if ('chat' in $$props) $$invalidate(1, chat = $$props.chat);
 	    if ('message' in $$props) $$invalidate(0, message = $$props.message);
 	    if ('parentNavInstance' in $$props) $$invalidate(2, parentNavInstance = $$props.parentNavInstance);
-	    if ('registerCallButtonHandler' in $$props) $$invalidate(3, registerCallButtonHandler = $$props.registerCallButtonHandler);
-	    if ('refetchMessage' in $$props) $$invalidate(4, refetchMessage = $$props.refetchMessage);
+	    if ('callButtonCallback' in $$props) $$invalidate(3, callButtonCallback = $$props.callButtonCallback);
+	    if ('fetchMessageCallback' in $$props) $$invalidate(4, fetchMessageCallback = $$props.fetchMessageCallback);
 	  };
 
 	  $$self.$capture_state = () => ({
@@ -55292,23 +55292,23 @@ var app = (function () {
 	    chat,
 	    message,
 	    parentNavInstance,
-	    registerCallButtonHandler,
-	    refetchMessage
+	    callButtonCallback,
+	    fetchMessageCallback
 	  });
 
 	  $$self.$inject_state = $$props => {
 	    if ('chat' in $$props) $$invalidate(1, chat = $$props.chat);
 	    if ('message' in $$props) $$invalidate(0, message = $$props.message);
 	    if ('parentNavInstance' in $$props) $$invalidate(2, parentNavInstance = $$props.parentNavInstance);
-	    if ('registerCallButtonHandler' in $$props) $$invalidate(3, registerCallButtonHandler = $$props.registerCallButtonHandler);
-	    if ('refetchMessage' in $$props) $$invalidate(4, refetchMessage = $$props.refetchMessage);
+	    if ('callButtonCallback' in $$props) $$invalidate(3, callButtonCallback = $$props.callButtonCallback);
+	    if ('fetchMessageCallback' in $$props) $$invalidate(4, fetchMessageCallback = $$props.fetchMessageCallback);
 	  };
 
 	  if ($$props && "$$inject" in $$props) {
 	    $$self.$inject_state($$props.$$inject);
 	  }
 
-	  return [message, chat, parentNavInstance, registerCallButtonHandler, refetchMessage];
+	  return [message, chat, parentNavInstance, callButtonCallback, fetchMessageCallback];
 	}
 
 	class MessageActionEmpty extends SvelteComponentDev {
@@ -55318,8 +55318,8 @@ var app = (function () {
 	      chat: 1,
 	      message: 0,
 	      parentNavInstance: 2,
-	      registerCallButtonHandler: 3,
-	      refetchMessage: 4
+	      callButtonCallback: 3,
+	      fetchMessageCallback: 4
 	    });
 	    dispatch_dev("SvelteRegisterComponent", {
 	      component: this,
@@ -55361,19 +55361,19 @@ var app = (function () {
 	    throw new Error("<MessageActionEmpty>: Props cannot be set directly on the component instance unless compiling with 'accessors: true' or '<svelte:options accessors/>'");
 	  }
 
-	  get registerCallButtonHandler() {
+	  get callButtonCallback() {
 	    throw new Error("<MessageActionEmpty>: Props cannot be read directly from the component instance unless compiling with 'accessors: true' or '<svelte:options accessors/>'");
 	  }
 
-	  set registerCallButtonHandler(value) {
+	  set callButtonCallback(value) {
 	    throw new Error("<MessageActionEmpty>: Props cannot be set directly on the component instance unless compiling with 'accessors: true' or '<svelte:options accessors/>'");
 	  }
 
-	  get refetchMessage() {
+	  get fetchMessageCallback() {
 	    throw new Error("<MessageActionEmpty>: Props cannot be read directly from the component instance unless compiling with 'accessors: true' or '<svelte:options accessors/>'");
 	  }
 
-	  set refetchMessage(value) {
+	  set fetchMessageCallback(value) {
 	    throw new Error("<MessageActionEmpty>: Props cannot be set directly on the component instance unless compiling with 'accessors: true' or '<svelte:options accessors/>'");
 	  }
 
@@ -55391,9 +55391,9 @@ var app = (function () {
 	      p = element("p");
 	      p.textContent = "Chat created";
 	      attr_dev(p, "class", "svelte-108wyqm");
-	      add_location(p, file$z, 15, 2, 414);
+	      add_location(p, file$z, 15, 2, 413);
 	      attr_dev(div, "class", "MessageActionChatCreate svelte-108wyqm");
-	      add_location(div, file$z, 14, 0, 374);
+	      add_location(div, file$z, 14, 0, 373);
 	    },
 	    l: function claim(nodes) {
 	      throw new Error("options.hydrate only works if the component was compiled with the `hydratable: true` option");
@@ -55429,13 +55429,13 @@ var app = (function () {
 	  var _$$props$message = $$props.message,
 	      message = _$$props$message === void 0 ? {} : _$$props$message;
 	  var parentNavInstance = $$props.parentNavInstance;
-	  var _$$props$registerCall = $$props.registerCallButtonHandler,
-	      registerCallButtonHandler = _$$props$registerCall === void 0 ? (id, callback) => {} : _$$props$registerCall;
-	  var _$$props$refetchMessa = $$props.refetchMessage,
-	      refetchMessage = _$$props$refetchMessa === void 0 ? id => {} : _$$props$refetchMessa;
+	  var _$$props$callButtonCa = $$props.callButtonCallback,
+	      callButtonCallback = _$$props$callButtonCa === void 0 ? (id, callback) => {} : _$$props$callButtonCa;
+	  var _$$props$fetchMessage = $$props.fetchMessageCallback,
+	      fetchMessageCallback = _$$props$fetchMessage === void 0 ? id => {} : _$$props$fetchMessage;
 	  onMount(() => {}); // console.log(message);
 
-	  var writable_props = ['chat', 'message', 'parentNavInstance', 'registerCallButtonHandler', 'refetchMessage'];
+	  var writable_props = ['chat', 'message', 'parentNavInstance', 'callButtonCallback', 'fetchMessageCallback'];
 	  Object.keys($$props).forEach(key => {
 	    if (!~writable_props.indexOf(key) && key.slice(0, 2) !== '$$' && key !== 'slot') console.warn(`<MessageActionChatCreate> was created with unknown prop '${key}'`);
 	  });
@@ -55444,8 +55444,8 @@ var app = (function () {
 	    if ('chat' in $$props) $$invalidate(0, chat = $$props.chat);
 	    if ('message' in $$props) $$invalidate(1, message = $$props.message);
 	    if ('parentNavInstance' in $$props) $$invalidate(2, parentNavInstance = $$props.parentNavInstance);
-	    if ('registerCallButtonHandler' in $$props) $$invalidate(3, registerCallButtonHandler = $$props.registerCallButtonHandler);
-	    if ('refetchMessage' in $$props) $$invalidate(4, refetchMessage = $$props.refetchMessage);
+	    if ('callButtonCallback' in $$props) $$invalidate(3, callButtonCallback = $$props.callButtonCallback);
+	    if ('fetchMessageCallback' in $$props) $$invalidate(4, fetchMessageCallback = $$props.fetchMessageCallback);
 	  };
 
 	  $$self.$capture_state = () => ({
@@ -55453,23 +55453,23 @@ var app = (function () {
 	    chat,
 	    message,
 	    parentNavInstance,
-	    registerCallButtonHandler,
-	    refetchMessage
+	    callButtonCallback,
+	    fetchMessageCallback
 	  });
 
 	  $$self.$inject_state = $$props => {
 	    if ('chat' in $$props) $$invalidate(0, chat = $$props.chat);
 	    if ('message' in $$props) $$invalidate(1, message = $$props.message);
 	    if ('parentNavInstance' in $$props) $$invalidate(2, parentNavInstance = $$props.parentNavInstance);
-	    if ('registerCallButtonHandler' in $$props) $$invalidate(3, registerCallButtonHandler = $$props.registerCallButtonHandler);
-	    if ('refetchMessage' in $$props) $$invalidate(4, refetchMessage = $$props.refetchMessage);
+	    if ('callButtonCallback' in $$props) $$invalidate(3, callButtonCallback = $$props.callButtonCallback);
+	    if ('fetchMessageCallback' in $$props) $$invalidate(4, fetchMessageCallback = $$props.fetchMessageCallback);
 	  };
 
 	  if ($$props && "$$inject" in $$props) {
 	    $$self.$inject_state($$props.$$inject);
 	  }
 
-	  return [chat, message, parentNavInstance, registerCallButtonHandler, refetchMessage];
+	  return [chat, message, parentNavInstance, callButtonCallback, fetchMessageCallback];
 	}
 
 	class MessageActionChatCreate extends SvelteComponentDev {
@@ -55479,8 +55479,8 @@ var app = (function () {
 	      chat: 0,
 	      message: 1,
 	      parentNavInstance: 2,
-	      registerCallButtonHandler: 3,
-	      refetchMessage: 4
+	      callButtonCallback: 3,
+	      fetchMessageCallback: 4
 	    });
 	    dispatch_dev("SvelteRegisterComponent", {
 	      component: this,
@@ -55531,24 +55531,24 @@ var app = (function () {
 	    flush();
 	  }
 
-	  get registerCallButtonHandler() {
+	  get callButtonCallback() {
 	    return this.$$.ctx[3];
 	  }
 
-	  set registerCallButtonHandler(registerCallButtonHandler) {
+	  set callButtonCallback(callButtonCallback) {
 	    this.$$set({
-	      registerCallButtonHandler
+	      callButtonCallback
 	    });
 	    flush();
 	  }
 
-	  get refetchMessage() {
+	  get fetchMessageCallback() {
 	    return this.$$.ctx[4];
 	  }
 
-	  set refetchMessage(refetchMessage) {
+	  set fetchMessageCallback(fetchMessageCallback) {
 	    this.$$set({
-	      refetchMessage
+	      fetchMessageCallback
 	    });
 	    flush();
 	  }
@@ -55572,9 +55572,9 @@ var app = (function () {
 	      t0 = text("Title updated, ");
 	      t1 = text(t1_value);
 	      attr_dev(p, "class", "svelte-atedv4");
-	      add_location(p, file$y, 13, 2, 371);
+	      add_location(p, file$y, 13, 2, 370);
 	      attr_dev(div, "class", "MessageActionChatEditTitle svelte-atedv4");
-	      add_location(div, file$y, 12, 0, 328);
+	      add_location(div, file$y, 12, 0, 327);
 	    },
 	    l: function claim(nodes) {
 	      throw new Error("options.hydrate only works if the component was compiled with the `hydratable: true` option");
@@ -55621,13 +55621,13 @@ var app = (function () {
 	  var _$$props$message = $$props.message,
 	      message = _$$props$message === void 0 ? {} : _$$props$message;
 	  var parentNavInstance = $$props.parentNavInstance;
-	  var _$$props$registerCall = $$props.registerCallButtonHandler,
-	      registerCallButtonHandler = _$$props$registerCall === void 0 ? (id, callback) => {} : _$$props$registerCall;
-	  var _$$props$refetchMessa = $$props.refetchMessage,
-	      refetchMessage = _$$props$refetchMessa === void 0 ? id => {} : _$$props$refetchMessa;
+	  var _$$props$callButtonCa = $$props.callButtonCallback,
+	      callButtonCallback = _$$props$callButtonCa === void 0 ? (id, callback) => {} : _$$props$callButtonCa;
+	  var _$$props$fetchMessage = $$props.fetchMessageCallback,
+	      fetchMessageCallback = _$$props$fetchMessage === void 0 ? id => {} : _$$props$fetchMessage;
 	  onMount(() => {}); // console.log(message);
 
-	  var writable_props = ['chat', 'message', 'parentNavInstance', 'registerCallButtonHandler', 'refetchMessage'];
+	  var writable_props = ['chat', 'message', 'parentNavInstance', 'callButtonCallback', 'fetchMessageCallback'];
 	  Object.keys($$props).forEach(key => {
 	    if (!~writable_props.indexOf(key) && key.slice(0, 2) !== '$$' && key !== 'slot') console.warn(`<MessageActionChatEditTitle> was created with unknown prop '${key}'`);
 	  });
@@ -55636,8 +55636,8 @@ var app = (function () {
 	    if ('chat' in $$props) $$invalidate(1, chat = $$props.chat);
 	    if ('message' in $$props) $$invalidate(0, message = $$props.message);
 	    if ('parentNavInstance' in $$props) $$invalidate(2, parentNavInstance = $$props.parentNavInstance);
-	    if ('registerCallButtonHandler' in $$props) $$invalidate(3, registerCallButtonHandler = $$props.registerCallButtonHandler);
-	    if ('refetchMessage' in $$props) $$invalidate(4, refetchMessage = $$props.refetchMessage);
+	    if ('callButtonCallback' in $$props) $$invalidate(3, callButtonCallback = $$props.callButtonCallback);
+	    if ('fetchMessageCallback' in $$props) $$invalidate(4, fetchMessageCallback = $$props.fetchMessageCallback);
 	  };
 
 	  $$self.$capture_state = () => ({
@@ -55645,23 +55645,23 @@ var app = (function () {
 	    chat,
 	    message,
 	    parentNavInstance,
-	    registerCallButtonHandler,
-	    refetchMessage
+	    callButtonCallback,
+	    fetchMessageCallback
 	  });
 
 	  $$self.$inject_state = $$props => {
 	    if ('chat' in $$props) $$invalidate(1, chat = $$props.chat);
 	    if ('message' in $$props) $$invalidate(0, message = $$props.message);
 	    if ('parentNavInstance' in $$props) $$invalidate(2, parentNavInstance = $$props.parentNavInstance);
-	    if ('registerCallButtonHandler' in $$props) $$invalidate(3, registerCallButtonHandler = $$props.registerCallButtonHandler);
-	    if ('refetchMessage' in $$props) $$invalidate(4, refetchMessage = $$props.refetchMessage);
+	    if ('callButtonCallback' in $$props) $$invalidate(3, callButtonCallback = $$props.callButtonCallback);
+	    if ('fetchMessageCallback' in $$props) $$invalidate(4, fetchMessageCallback = $$props.fetchMessageCallback);
 	  };
 
 	  if ($$props && "$$inject" in $$props) {
 	    $$self.$inject_state($$props.$$inject);
 	  }
 
-	  return [message, chat, parentNavInstance, registerCallButtonHandler, refetchMessage];
+	  return [message, chat, parentNavInstance, callButtonCallback, fetchMessageCallback];
 	}
 
 	class MessageActionChatEditTitle extends SvelteComponentDev {
@@ -55671,8 +55671,8 @@ var app = (function () {
 	      chat: 1,
 	      message: 0,
 	      parentNavInstance: 2,
-	      registerCallButtonHandler: 3,
-	      refetchMessage: 4
+	      callButtonCallback: 3,
+	      fetchMessageCallback: 4
 	    });
 	    dispatch_dev("SvelteRegisterComponent", {
 	      component: this,
@@ -55714,19 +55714,19 @@ var app = (function () {
 	    throw new Error("<MessageActionChatEditTitle>: Props cannot be set directly on the component instance unless compiling with 'accessors: true' or '<svelte:options accessors/>'");
 	  }
 
-	  get registerCallButtonHandler() {
+	  get callButtonCallback() {
 	    throw new Error("<MessageActionChatEditTitle>: Props cannot be read directly from the component instance unless compiling with 'accessors: true' or '<svelte:options accessors/>'");
 	  }
 
-	  set registerCallButtonHandler(value) {
+	  set callButtonCallback(value) {
 	    throw new Error("<MessageActionChatEditTitle>: Props cannot be set directly on the component instance unless compiling with 'accessors: true' or '<svelte:options accessors/>'");
 	  }
 
-	  get refetchMessage() {
+	  get fetchMessageCallback() {
 	    throw new Error("<MessageActionChatEditTitle>: Props cannot be read directly from the component instance unless compiling with 'accessors: true' or '<svelte:options accessors/>'");
 	  }
 
-	  set refetchMessage(value) {
+	  set fetchMessageCallback(value) {
 	    throw new Error("<MessageActionChatEditTitle>: Props cannot be set directly on the component instance unless compiling with 'accessors: true' or '<svelte:options accessors/>'");
 	  }
 
@@ -55748,15 +55748,15 @@ var app = (function () {
 	      t1 = space();
 	      img = element("img");
 	      attr_dev(p, "class", "svelte-1khqr45");
-	      add_location(p, file$x, 19, 2, 618);
+	      add_location(p, file$x, 19, 2, 617);
 	      attr_dev(img, "alt", "icon");
 	      if (!src_url_equal(img.src, img_src_value =
 	      /*src*/
 	      ctx[0])) attr_dev(img, "src", img_src_value);
 	      attr_dev(img, "class", "svelte-1khqr45");
-	      add_location(img, file$x, 20, 2, 641);
+	      add_location(img, file$x, 20, 2, 640);
 	      attr_dev(div, "class", "MessageActionChatEditPhoto svelte-1khqr45");
-	      add_location(div, file$x, 18, 0, 575);
+	      add_location(div, file$x, 18, 0, 574);
 	    },
 	    l: function claim(nodes) {
 	      throw new Error("options.hydrate only works if the component was compiled with the `hydratable: true` option");
@@ -55805,16 +55805,16 @@ var app = (function () {
 	  var _$$props$message = $$props.message,
 	      message = _$$props$message === void 0 ? {} : _$$props$message;
 	  var parentNavInstance = $$props.parentNavInstance;
-	  var _$$props$registerCall = $$props.registerCallButtonHandler,
-	      registerCallButtonHandler = _$$props$registerCall === void 0 ? (id, callback) => {} : _$$props$registerCall;
-	  var _$$props$refetchMessa = $$props.refetchMessage,
-	      refetchMessage = _$$props$refetchMessa === void 0 ? id => {} : _$$props$refetchMessa;
+	  var _$$props$callButtonCa = $$props.callButtonCallback,
+	      callButtonCallback = _$$props$callButtonCa === void 0 ? (id, callback) => {} : _$$props$callButtonCa;
+	  var _$$props$fetchMessage = $$props.fetchMessageCallback,
+	      fetchMessageCallback = _$$props$fetchMessage === void 0 ? id => {} : _$$props$fetchMessage;
 	  var src = '';
 	  onMount(() => {
 	    var cached = getCachedThumbnails();
 	    if (cached[message.action.photo.id.toString()]) $$invalidate(0, src = cached[message.action.photo.id.toString()]);
 	  });
-	  var writable_props = ['chat', 'message', 'parentNavInstance', 'registerCallButtonHandler', 'refetchMessage'];
+	  var writable_props = ['chat', 'message', 'parentNavInstance', 'callButtonCallback', 'fetchMessageCallback'];
 	  Object.keys($$props).forEach(key => {
 	    if (!~writable_props.indexOf(key) && key.slice(0, 2) !== '$$' && key !== 'slot') console.warn(`<MessageActionChatEditPhoto> was created with unknown prop '${key}'`);
 	  });
@@ -55823,8 +55823,8 @@ var app = (function () {
 	    if ('chat' in $$props) $$invalidate(1, chat = $$props.chat);
 	    if ('message' in $$props) $$invalidate(2, message = $$props.message);
 	    if ('parentNavInstance' in $$props) $$invalidate(3, parentNavInstance = $$props.parentNavInstance);
-	    if ('registerCallButtonHandler' in $$props) $$invalidate(4, registerCallButtonHandler = $$props.registerCallButtonHandler);
-	    if ('refetchMessage' in $$props) $$invalidate(5, refetchMessage = $$props.refetchMessage);
+	    if ('callButtonCallback' in $$props) $$invalidate(4, callButtonCallback = $$props.callButtonCallback);
+	    if ('fetchMessageCallback' in $$props) $$invalidate(5, fetchMessageCallback = $$props.fetchMessageCallback);
 	  };
 
 	  $$self.$capture_state = () => ({
@@ -55833,8 +55833,8 @@ var app = (function () {
 	    chat,
 	    message,
 	    parentNavInstance,
-	    registerCallButtonHandler,
-	    refetchMessage,
+	    callButtonCallback,
+	    fetchMessageCallback,
 	    src
 	  });
 
@@ -55842,8 +55842,8 @@ var app = (function () {
 	    if ('chat' in $$props) $$invalidate(1, chat = $$props.chat);
 	    if ('message' in $$props) $$invalidate(2, message = $$props.message);
 	    if ('parentNavInstance' in $$props) $$invalidate(3, parentNavInstance = $$props.parentNavInstance);
-	    if ('registerCallButtonHandler' in $$props) $$invalidate(4, registerCallButtonHandler = $$props.registerCallButtonHandler);
-	    if ('refetchMessage' in $$props) $$invalidate(5, refetchMessage = $$props.refetchMessage);
+	    if ('callButtonCallback' in $$props) $$invalidate(4, callButtonCallback = $$props.callButtonCallback);
+	    if ('fetchMessageCallback' in $$props) $$invalidate(5, fetchMessageCallback = $$props.fetchMessageCallback);
 	    if ('src' in $$props) $$invalidate(0, src = $$props.src);
 	  };
 
@@ -55851,7 +55851,7 @@ var app = (function () {
 	    $$self.$inject_state($$props.$$inject);
 	  }
 
-	  return [src, chat, message, parentNavInstance, registerCallButtonHandler, refetchMessage];
+	  return [src, chat, message, parentNavInstance, callButtonCallback, fetchMessageCallback];
 	}
 
 	class MessageActionChatEditPhoto extends SvelteComponentDev {
@@ -55861,8 +55861,8 @@ var app = (function () {
 	      chat: 1,
 	      message: 2,
 	      parentNavInstance: 3,
-	      registerCallButtonHandler: 4,
-	      refetchMessage: 5
+	      callButtonCallback: 4,
+	      fetchMessageCallback: 5
 	    });
 	    dispatch_dev("SvelteRegisterComponent", {
 	      component: this,
@@ -55913,24 +55913,24 @@ var app = (function () {
 	    flush();
 	  }
 
-	  get registerCallButtonHandler() {
+	  get callButtonCallback() {
 	    return this.$$.ctx[4];
 	  }
 
-	  set registerCallButtonHandler(registerCallButtonHandler) {
+	  set callButtonCallback(callButtonCallback) {
 	    this.$$set({
-	      registerCallButtonHandler
+	      callButtonCallback
 	    });
 	    flush();
 	  }
 
-	  get refetchMessage() {
+	  get fetchMessageCallback() {
 	    return this.$$.ctx[5];
 	  }
 
-	  set refetchMessage(refetchMessage) {
+	  set fetchMessageCallback(fetchMessageCallback) {
 	    this.$$set({
-	      refetchMessage
+	      fetchMessageCallback
 	    });
 	    flush();
 	  }
@@ -55949,9 +55949,9 @@ var app = (function () {
 	      p = element("p");
 	      p.textContent = "Photo deleted";
 	      attr_dev(p, "class", "svelte-elenwi");
-	      add_location(p, file$w, 15, 2, 419);
+	      add_location(p, file$w, 15, 2, 418);
 	      attr_dev(div, "class", "MessageActionChatDeletePhoto svelte-elenwi");
-	      add_location(div, file$w, 14, 0, 374);
+	      add_location(div, file$w, 14, 0, 373);
 	    },
 	    l: function claim(nodes) {
 	      throw new Error("options.hydrate only works if the component was compiled with the `hydratable: true` option");
@@ -55987,13 +55987,13 @@ var app = (function () {
 	  var _$$props$message = $$props.message,
 	      message = _$$props$message === void 0 ? {} : _$$props$message;
 	  var parentNavInstance = $$props.parentNavInstance;
-	  var _$$props$registerCall = $$props.registerCallButtonHandler,
-	      registerCallButtonHandler = _$$props$registerCall === void 0 ? (id, callback) => {} : _$$props$registerCall;
-	  var _$$props$refetchMessa = $$props.refetchMessage,
-	      refetchMessage = _$$props$refetchMessa === void 0 ? id => {} : _$$props$refetchMessa;
+	  var _$$props$callButtonCa = $$props.callButtonCallback,
+	      callButtonCallback = _$$props$callButtonCa === void 0 ? (id, callback) => {} : _$$props$callButtonCa;
+	  var _$$props$fetchMessage = $$props.fetchMessageCallback,
+	      fetchMessageCallback = _$$props$fetchMessage === void 0 ? id => {} : _$$props$fetchMessage;
 	  onMount(() => {}); // console.log(message);
 
-	  var writable_props = ['chat', 'message', 'parentNavInstance', 'registerCallButtonHandler', 'refetchMessage'];
+	  var writable_props = ['chat', 'message', 'parentNavInstance', 'callButtonCallback', 'fetchMessageCallback'];
 	  Object.keys($$props).forEach(key => {
 	    if (!~writable_props.indexOf(key) && key.slice(0, 2) !== '$$' && key !== 'slot') console.warn(`<MessageActionChatDeletePhoto> was created with unknown prop '${key}'`);
 	  });
@@ -56002,8 +56002,8 @@ var app = (function () {
 	    if ('chat' in $$props) $$invalidate(0, chat = $$props.chat);
 	    if ('message' in $$props) $$invalidate(1, message = $$props.message);
 	    if ('parentNavInstance' in $$props) $$invalidate(2, parentNavInstance = $$props.parentNavInstance);
-	    if ('registerCallButtonHandler' in $$props) $$invalidate(3, registerCallButtonHandler = $$props.registerCallButtonHandler);
-	    if ('refetchMessage' in $$props) $$invalidate(4, refetchMessage = $$props.refetchMessage);
+	    if ('callButtonCallback' in $$props) $$invalidate(3, callButtonCallback = $$props.callButtonCallback);
+	    if ('fetchMessageCallback' in $$props) $$invalidate(4, fetchMessageCallback = $$props.fetchMessageCallback);
 	  };
 
 	  $$self.$capture_state = () => ({
@@ -56011,23 +56011,23 @@ var app = (function () {
 	    chat,
 	    message,
 	    parentNavInstance,
-	    registerCallButtonHandler,
-	    refetchMessage
+	    callButtonCallback,
+	    fetchMessageCallback
 	  });
 
 	  $$self.$inject_state = $$props => {
 	    if ('chat' in $$props) $$invalidate(0, chat = $$props.chat);
 	    if ('message' in $$props) $$invalidate(1, message = $$props.message);
 	    if ('parentNavInstance' in $$props) $$invalidate(2, parentNavInstance = $$props.parentNavInstance);
-	    if ('registerCallButtonHandler' in $$props) $$invalidate(3, registerCallButtonHandler = $$props.registerCallButtonHandler);
-	    if ('refetchMessage' in $$props) $$invalidate(4, refetchMessage = $$props.refetchMessage);
+	    if ('callButtonCallback' in $$props) $$invalidate(3, callButtonCallback = $$props.callButtonCallback);
+	    if ('fetchMessageCallback' in $$props) $$invalidate(4, fetchMessageCallback = $$props.fetchMessageCallback);
 	  };
 
 	  if ($$props && "$$inject" in $$props) {
 	    $$self.$inject_state($$props.$$inject);
 	  }
 
-	  return [chat, message, parentNavInstance, registerCallButtonHandler, refetchMessage];
+	  return [chat, message, parentNavInstance, callButtonCallback, fetchMessageCallback];
 	}
 
 	class MessageActionChatDeletePhoto extends SvelteComponentDev {
@@ -56037,8 +56037,8 @@ var app = (function () {
 	      chat: 0,
 	      message: 1,
 	      parentNavInstance: 2,
-	      registerCallButtonHandler: 3,
-	      refetchMessage: 4
+	      callButtonCallback: 3,
+	      fetchMessageCallback: 4
 	    });
 	    dispatch_dev("SvelteRegisterComponent", {
 	      component: this,
@@ -56089,24 +56089,24 @@ var app = (function () {
 	    flush();
 	  }
 
-	  get registerCallButtonHandler() {
+	  get callButtonCallback() {
 	    return this.$$.ctx[3];
 	  }
 
-	  set registerCallButtonHandler(registerCallButtonHandler) {
+	  set callButtonCallback(callButtonCallback) {
 	    this.$$set({
-	      registerCallButtonHandler
+	      callButtonCallback
 	    });
 	    flush();
 	  }
 
-	  get refetchMessage() {
+	  get fetchMessageCallback() {
 	    return this.$$.ctx[4];
 	  }
 
-	  set refetchMessage(refetchMessage) {
+	  set fetchMessageCallback(fetchMessageCallback) {
 	    this.$$set({
-	      refetchMessage
+	      fetchMessageCallback
 	    });
 	    flush();
 	  }
@@ -56166,9 +56166,9 @@ var app = (function () {
 	      if (if_block) if_block.c();
 	      t = text("joined the group");
 	      attr_dev(p, "class", "svelte-1m9vdrs");
-	      add_location(p, file$v, 33, 2, 1026);
+	      add_location(p, file$v, 33, 2, 1025);
 	      attr_dev(div, "class", "MessageActionChatAddUser svelte-1m9vdrs");
-	      add_location(div, file$v, 32, 0, 985);
+	      add_location(div, file$v, 32, 0, 984);
 	    },
 	    l: function claim(nodes) {
 	      throw new Error("options.hydrate only works if the component was compiled with the `hydratable: true` option");
@@ -56225,10 +56225,10 @@ var app = (function () {
 	  var _$$props$message = $$props.message,
 	      message = _$$props$message === void 0 ? {} : _$$props$message;
 	  var parentNavInstance = $$props.parentNavInstance;
-	  var _$$props$registerCall = $$props.registerCallButtonHandler,
-	      registerCallButtonHandler = _$$props$registerCall === void 0 ? (id, callback) => {} : _$$props$registerCall;
-	  var _$$props$refetchMessa = $$props.refetchMessage,
-	      refetchMessage = _$$props$refetchMessa === void 0 ? id => {} : _$$props$refetchMessa;
+	  var _$$props$callButtonCa = $$props.callButtonCallback,
+	      callButtonCallback = _$$props$callButtonCa === void 0 ? (id, callback) => {} : _$$props$callButtonCa;
+	  var _$$props$fetchMessage = $$props.fetchMessageCallback,
+	      fetchMessageCallback = _$$props$fetchMessage === void 0 ? id => {} : _$$props$fetchMessage;
 	  var username = false;
 	  onMount(() => {
 	    client.invoke(new Api.users.GetUsers({
@@ -56246,7 +56246,7 @@ var app = (function () {
 	      console.log("MessageActionChatAddUser:", err);
 	    });
 	  });
-	  var writable_props = ['chat', 'message', 'parentNavInstance', 'registerCallButtonHandler', 'refetchMessage'];
+	  var writable_props = ['chat', 'message', 'parentNavInstance', 'callButtonCallback', 'fetchMessageCallback'];
 	  Object.keys($$props).forEach(key => {
 	    if (!~writable_props.indexOf(key) && key.slice(0, 2) !== '$$' && key !== 'slot') console_1$4.warn(`<MessageActionChatAddUser> was created with unknown prop '${key}'`);
 	  });
@@ -56255,8 +56255,8 @@ var app = (function () {
 	    if ('chat' in $$props) $$invalidate(1, chat = $$props.chat);
 	    if ('message' in $$props) $$invalidate(2, message = $$props.message);
 	    if ('parentNavInstance' in $$props) $$invalidate(3, parentNavInstance = $$props.parentNavInstance);
-	    if ('registerCallButtonHandler' in $$props) $$invalidate(4, registerCallButtonHandler = $$props.registerCallButtonHandler);
-	    if ('refetchMessage' in $$props) $$invalidate(5, refetchMessage = $$props.refetchMessage);
+	    if ('callButtonCallback' in $$props) $$invalidate(4, callButtonCallback = $$props.callButtonCallback);
+	    if ('fetchMessageCallback' in $$props) $$invalidate(5, fetchMessageCallback = $$props.fetchMessageCallback);
 	  };
 
 	  $$self.$capture_state = () => ({
@@ -56266,8 +56266,8 @@ var app = (function () {
 	    chat,
 	    message,
 	    parentNavInstance,
-	    registerCallButtonHandler,
-	    refetchMessage,
+	    callButtonCallback,
+	    fetchMessageCallback,
 	    username
 	  });
 
@@ -56275,8 +56275,8 @@ var app = (function () {
 	    if ('chat' in $$props) $$invalidate(1, chat = $$props.chat);
 	    if ('message' in $$props) $$invalidate(2, message = $$props.message);
 	    if ('parentNavInstance' in $$props) $$invalidate(3, parentNavInstance = $$props.parentNavInstance);
-	    if ('registerCallButtonHandler' in $$props) $$invalidate(4, registerCallButtonHandler = $$props.registerCallButtonHandler);
-	    if ('refetchMessage' in $$props) $$invalidate(5, refetchMessage = $$props.refetchMessage);
+	    if ('callButtonCallback' in $$props) $$invalidate(4, callButtonCallback = $$props.callButtonCallback);
+	    if ('fetchMessageCallback' in $$props) $$invalidate(5, fetchMessageCallback = $$props.fetchMessageCallback);
 	    if ('username' in $$props) $$invalidate(0, username = $$props.username);
 	  };
 
@@ -56284,7 +56284,7 @@ var app = (function () {
 	    $$self.$inject_state($$props.$$inject);
 	  }
 
-	  return [username, chat, message, parentNavInstance, registerCallButtonHandler, refetchMessage];
+	  return [username, chat, message, parentNavInstance, callButtonCallback, fetchMessageCallback];
 	}
 
 	class MessageActionChatAddUser extends SvelteComponentDev {
@@ -56294,8 +56294,8 @@ var app = (function () {
 	      chat: 1,
 	      message: 2,
 	      parentNavInstance: 3,
-	      registerCallButtonHandler: 4,
-	      refetchMessage: 5
+	      callButtonCallback: 4,
+	      fetchMessageCallback: 5
 	    });
 	    dispatch_dev("SvelteRegisterComponent", {
 	      component: this,
@@ -56346,24 +56346,24 @@ var app = (function () {
 	    flush();
 	  }
 
-	  get registerCallButtonHandler() {
+	  get callButtonCallback() {
 	    return this.$$.ctx[4];
 	  }
 
-	  set registerCallButtonHandler(registerCallButtonHandler) {
+	  set callButtonCallback(callButtonCallback) {
 	    this.$$set({
-	      registerCallButtonHandler
+	      callButtonCallback
 	    });
 	    flush();
 	  }
 
-	  get refetchMessage() {
+	  get fetchMessageCallback() {
 	    return this.$$.ctx[5];
 	  }
 
-	  set refetchMessage(refetchMessage) {
+	  set fetchMessageCallback(fetchMessageCallback) {
 	    this.$$set({
-	      refetchMessage
+	      fetchMessageCallback
 	    });
 	    flush();
 	  }
@@ -56423,9 +56423,9 @@ var app = (function () {
 	      if (if_block) if_block.c();
 	      t = text("left the group");
 	      attr_dev(p, "class", "svelte-vtb1xu");
-	      add_location(p, file$u, 33, 2, 1035);
+	      add_location(p, file$u, 33, 2, 1034);
 	      attr_dev(div, "class", "MessageActionChatDeleteUser svelte-vtb1xu");
-	      add_location(div, file$u, 32, 0, 991);
+	      add_location(div, file$u, 32, 0, 990);
 	    },
 	    l: function claim(nodes) {
 	      throw new Error("options.hydrate only works if the component was compiled with the `hydratable: true` option");
@@ -56482,10 +56482,10 @@ var app = (function () {
 	  var _$$props$message = $$props.message,
 	      message = _$$props$message === void 0 ? {} : _$$props$message;
 	  var parentNavInstance = $$props.parentNavInstance;
-	  var _$$props$registerCall = $$props.registerCallButtonHandler,
-	      registerCallButtonHandler = _$$props$registerCall === void 0 ? (id, callback) => {} : _$$props$registerCall;
-	  var _$$props$refetchMessa = $$props.refetchMessage,
-	      refetchMessage = _$$props$refetchMessa === void 0 ? id => {} : _$$props$refetchMessa;
+	  var _$$props$callButtonCa = $$props.callButtonCallback,
+	      callButtonCallback = _$$props$callButtonCa === void 0 ? (id, callback) => {} : _$$props$callButtonCa;
+	  var _$$props$fetchMessage = $$props.fetchMessageCallback,
+	      fetchMessageCallback = _$$props$fetchMessage === void 0 ? id => {} : _$$props$fetchMessage;
 	  var username = false;
 	  onMount(() => {
 	    client.invoke(new Api.users.GetUsers({
@@ -56503,7 +56503,7 @@ var app = (function () {
 	      console.log("MessageActionChatDeleteUser:", err);
 	    });
 	  });
-	  var writable_props = ['chat', 'message', 'parentNavInstance', 'registerCallButtonHandler', 'refetchMessage'];
+	  var writable_props = ['chat', 'message', 'parentNavInstance', 'callButtonCallback', 'fetchMessageCallback'];
 	  Object.keys($$props).forEach(key => {
 	    if (!~writable_props.indexOf(key) && key.slice(0, 2) !== '$$' && key !== 'slot') console_1$3.warn(`<MessageActionChatDeleteUser> was created with unknown prop '${key}'`);
 	  });
@@ -56512,8 +56512,8 @@ var app = (function () {
 	    if ('chat' in $$props) $$invalidate(1, chat = $$props.chat);
 	    if ('message' in $$props) $$invalidate(2, message = $$props.message);
 	    if ('parentNavInstance' in $$props) $$invalidate(3, parentNavInstance = $$props.parentNavInstance);
-	    if ('registerCallButtonHandler' in $$props) $$invalidate(4, registerCallButtonHandler = $$props.registerCallButtonHandler);
-	    if ('refetchMessage' in $$props) $$invalidate(5, refetchMessage = $$props.refetchMessage);
+	    if ('callButtonCallback' in $$props) $$invalidate(4, callButtonCallback = $$props.callButtonCallback);
+	    if ('fetchMessageCallback' in $$props) $$invalidate(5, fetchMessageCallback = $$props.fetchMessageCallback);
 	  };
 
 	  $$self.$capture_state = () => ({
@@ -56523,8 +56523,8 @@ var app = (function () {
 	    chat,
 	    message,
 	    parentNavInstance,
-	    registerCallButtonHandler,
-	    refetchMessage,
+	    callButtonCallback,
+	    fetchMessageCallback,
 	    username
 	  });
 
@@ -56532,8 +56532,8 @@ var app = (function () {
 	    if ('chat' in $$props) $$invalidate(1, chat = $$props.chat);
 	    if ('message' in $$props) $$invalidate(2, message = $$props.message);
 	    if ('parentNavInstance' in $$props) $$invalidate(3, parentNavInstance = $$props.parentNavInstance);
-	    if ('registerCallButtonHandler' in $$props) $$invalidate(4, registerCallButtonHandler = $$props.registerCallButtonHandler);
-	    if ('refetchMessage' in $$props) $$invalidate(5, refetchMessage = $$props.refetchMessage);
+	    if ('callButtonCallback' in $$props) $$invalidate(4, callButtonCallback = $$props.callButtonCallback);
+	    if ('fetchMessageCallback' in $$props) $$invalidate(5, fetchMessageCallback = $$props.fetchMessageCallback);
 	    if ('username' in $$props) $$invalidate(0, username = $$props.username);
 	  };
 
@@ -56541,7 +56541,7 @@ var app = (function () {
 	    $$self.$inject_state($$props.$$inject);
 	  }
 
-	  return [username, chat, message, parentNavInstance, registerCallButtonHandler, refetchMessage];
+	  return [username, chat, message, parentNavInstance, callButtonCallback, fetchMessageCallback];
 	}
 
 	class MessageActionChatDeleteUser extends SvelteComponentDev {
@@ -56551,8 +56551,8 @@ var app = (function () {
 	      chat: 1,
 	      message: 2,
 	      parentNavInstance: 3,
-	      registerCallButtonHandler: 4,
-	      refetchMessage: 5
+	      callButtonCallback: 4,
+	      fetchMessageCallback: 5
 	    });
 	    dispatch_dev("SvelteRegisterComponent", {
 	      component: this,
@@ -56603,24 +56603,24 @@ var app = (function () {
 	    flush();
 	  }
 
-	  get registerCallButtonHandler() {
+	  get callButtonCallback() {
 	    return this.$$.ctx[4];
 	  }
 
-	  set registerCallButtonHandler(registerCallButtonHandler) {
+	  set callButtonCallback(callButtonCallback) {
 	    this.$$set({
-	      registerCallButtonHandler
+	      callButtonCallback
 	    });
 	    flush();
 	  }
 
-	  get refetchMessage() {
+	  get fetchMessageCallback() {
 	    return this.$$.ctx[5];
 	  }
 
-	  set refetchMessage(refetchMessage) {
+	  set fetchMessageCallback(fetchMessageCallback) {
 	    this.$$set({
-	      refetchMessage
+	      fetchMessageCallback
 	    });
 	    flush();
 	  }
@@ -56638,9 +56638,9 @@ var app = (function () {
 	      div = element("div");
 	      p = element("p");
 	      p.textContent = "Joined by link";
-	      add_location(p, file$t, 13, 2, 374);
+	      add_location(p, file$t, 13, 2, 373);
 	      attr_dev(div, "class", "MessageActionChatJoinedByLink svelte-69i83z");
-	      add_location(div, file$t, 12, 0, 328);
+	      add_location(div, file$t, 12, 0, 327);
 	    },
 	    l: function claim(nodes) {
 	      throw new Error("options.hydrate only works if the component was compiled with the `hydratable: true` option");
@@ -56676,13 +56676,13 @@ var app = (function () {
 	  var _$$props$message = $$props.message,
 	      message = _$$props$message === void 0 ? {} : _$$props$message;
 	  var parentNavInstance = $$props.parentNavInstance;
-	  var _$$props$registerCall = $$props.registerCallButtonHandler,
-	      registerCallButtonHandler = _$$props$registerCall === void 0 ? (id, callback) => {} : _$$props$registerCall;
-	  var _$$props$refetchMessa = $$props.refetchMessage,
-	      refetchMessage = _$$props$refetchMessa === void 0 ? id => {} : _$$props$refetchMessa;
+	  var _$$props$callButtonCa = $$props.callButtonCallback,
+	      callButtonCallback = _$$props$callButtonCa === void 0 ? (id, callback) => {} : _$$props$callButtonCa;
+	  var _$$props$fetchMessage = $$props.fetchMessageCallback,
+	      fetchMessageCallback = _$$props$fetchMessage === void 0 ? id => {} : _$$props$fetchMessage;
 	  onMount(() => {}); // console.log(message);
 
-	  var writable_props = ['chat', 'message', 'parentNavInstance', 'registerCallButtonHandler', 'refetchMessage'];
+	  var writable_props = ['chat', 'message', 'parentNavInstance', 'callButtonCallback', 'fetchMessageCallback'];
 	  Object.keys($$props).forEach(key => {
 	    if (!~writable_props.indexOf(key) && key.slice(0, 2) !== '$$' && key !== 'slot') console.warn(`<MessageActionChatJoinedByLink> was created with unknown prop '${key}'`);
 	  });
@@ -56691,8 +56691,8 @@ var app = (function () {
 	    if ('chat' in $$props) $$invalidate(0, chat = $$props.chat);
 	    if ('message' in $$props) $$invalidate(1, message = $$props.message);
 	    if ('parentNavInstance' in $$props) $$invalidate(2, parentNavInstance = $$props.parentNavInstance);
-	    if ('registerCallButtonHandler' in $$props) $$invalidate(3, registerCallButtonHandler = $$props.registerCallButtonHandler);
-	    if ('refetchMessage' in $$props) $$invalidate(4, refetchMessage = $$props.refetchMessage);
+	    if ('callButtonCallback' in $$props) $$invalidate(3, callButtonCallback = $$props.callButtonCallback);
+	    if ('fetchMessageCallback' in $$props) $$invalidate(4, fetchMessageCallback = $$props.fetchMessageCallback);
 	  };
 
 	  $$self.$capture_state = () => ({
@@ -56700,23 +56700,23 @@ var app = (function () {
 	    chat,
 	    message,
 	    parentNavInstance,
-	    registerCallButtonHandler,
-	    refetchMessage
+	    callButtonCallback,
+	    fetchMessageCallback
 	  });
 
 	  $$self.$inject_state = $$props => {
 	    if ('chat' in $$props) $$invalidate(0, chat = $$props.chat);
 	    if ('message' in $$props) $$invalidate(1, message = $$props.message);
 	    if ('parentNavInstance' in $$props) $$invalidate(2, parentNavInstance = $$props.parentNavInstance);
-	    if ('registerCallButtonHandler' in $$props) $$invalidate(3, registerCallButtonHandler = $$props.registerCallButtonHandler);
-	    if ('refetchMessage' in $$props) $$invalidate(4, refetchMessage = $$props.refetchMessage);
+	    if ('callButtonCallback' in $$props) $$invalidate(3, callButtonCallback = $$props.callButtonCallback);
+	    if ('fetchMessageCallback' in $$props) $$invalidate(4, fetchMessageCallback = $$props.fetchMessageCallback);
 	  };
 
 	  if ($$props && "$$inject" in $$props) {
 	    $$self.$inject_state($$props.$$inject);
 	  }
 
-	  return [chat, message, parentNavInstance, registerCallButtonHandler, refetchMessage];
+	  return [chat, message, parentNavInstance, callButtonCallback, fetchMessageCallback];
 	}
 
 	class MessageActionChatJoinedByLink extends SvelteComponentDev {
@@ -56726,8 +56726,8 @@ var app = (function () {
 	      chat: 0,
 	      message: 1,
 	      parentNavInstance: 2,
-	      registerCallButtonHandler: 3,
-	      refetchMessage: 4
+	      callButtonCallback: 3,
+	      fetchMessageCallback: 4
 	    });
 	    dispatch_dev("SvelteRegisterComponent", {
 	      component: this,
@@ -56769,19 +56769,19 @@ var app = (function () {
 	    throw new Error("<MessageActionChatJoinedByLink>: Props cannot be set directly on the component instance unless compiling with 'accessors: true' or '<svelte:options accessors/>'");
 	  }
 
-	  get registerCallButtonHandler() {
+	  get callButtonCallback() {
 	    throw new Error("<MessageActionChatJoinedByLink>: Props cannot be read directly from the component instance unless compiling with 'accessors: true' or '<svelte:options accessors/>'");
 	  }
 
-	  set registerCallButtonHandler(value) {
+	  set callButtonCallback(value) {
 	    throw new Error("<MessageActionChatJoinedByLink>: Props cannot be set directly on the component instance unless compiling with 'accessors: true' or '<svelte:options accessors/>'");
 	  }
 
-	  get refetchMessage() {
+	  get fetchMessageCallback() {
 	    throw new Error("<MessageActionChatJoinedByLink>: Props cannot be read directly from the component instance unless compiling with 'accessors: true' or '<svelte:options accessors/>'");
 	  }
 
-	  set refetchMessage(value) {
+	  set fetchMessageCallback(value) {
 	    throw new Error("<MessageActionChatJoinedByLink>: Props cannot be set directly on the component instance unless compiling with 'accessors: true' or '<svelte:options accessors/>'");
 	  }
 
@@ -56799,9 +56799,9 @@ var app = (function () {
 	      p = element("p");
 	      p.textContent = "Channel created";
 	      attr_dev(p, "class", "svelte-o3rlsq");
-	      add_location(p, file$s, 15, 2, 417);
+	      add_location(p, file$s, 15, 2, 416);
 	      attr_dev(div, "class", "MessageActionChannelCreate svelte-o3rlsq");
-	      add_location(div, file$s, 14, 0, 374);
+	      add_location(div, file$s, 14, 0, 373);
 	    },
 	    l: function claim(nodes) {
 	      throw new Error("options.hydrate only works if the component was compiled with the `hydratable: true` option");
@@ -56837,13 +56837,13 @@ var app = (function () {
 	  var _$$props$message = $$props.message,
 	      message = _$$props$message === void 0 ? {} : _$$props$message;
 	  var parentNavInstance = $$props.parentNavInstance;
-	  var _$$props$registerCall = $$props.registerCallButtonHandler,
-	      registerCallButtonHandler = _$$props$registerCall === void 0 ? (id, callback) => {} : _$$props$registerCall;
-	  var _$$props$refetchMessa = $$props.refetchMessage,
-	      refetchMessage = _$$props$refetchMessa === void 0 ? id => {} : _$$props$refetchMessa;
+	  var _$$props$callButtonCa = $$props.callButtonCallback,
+	      callButtonCallback = _$$props$callButtonCa === void 0 ? (id, callback) => {} : _$$props$callButtonCa;
+	  var _$$props$fetchMessage = $$props.fetchMessageCallback,
+	      fetchMessageCallback = _$$props$fetchMessage === void 0 ? id => {} : _$$props$fetchMessage;
 	  onMount(() => {}); // console.log(message);
 
-	  var writable_props = ['chat', 'message', 'parentNavInstance', 'registerCallButtonHandler', 'refetchMessage'];
+	  var writable_props = ['chat', 'message', 'parentNavInstance', 'callButtonCallback', 'fetchMessageCallback'];
 	  Object.keys($$props).forEach(key => {
 	    if (!~writable_props.indexOf(key) && key.slice(0, 2) !== '$$' && key !== 'slot') console.warn(`<MessageActionChannelCreate> was created with unknown prop '${key}'`);
 	  });
@@ -56852,8 +56852,8 @@ var app = (function () {
 	    if ('chat' in $$props) $$invalidate(0, chat = $$props.chat);
 	    if ('message' in $$props) $$invalidate(1, message = $$props.message);
 	    if ('parentNavInstance' in $$props) $$invalidate(2, parentNavInstance = $$props.parentNavInstance);
-	    if ('registerCallButtonHandler' in $$props) $$invalidate(3, registerCallButtonHandler = $$props.registerCallButtonHandler);
-	    if ('refetchMessage' in $$props) $$invalidate(4, refetchMessage = $$props.refetchMessage);
+	    if ('callButtonCallback' in $$props) $$invalidate(3, callButtonCallback = $$props.callButtonCallback);
+	    if ('fetchMessageCallback' in $$props) $$invalidate(4, fetchMessageCallback = $$props.fetchMessageCallback);
 	  };
 
 	  $$self.$capture_state = () => ({
@@ -56861,23 +56861,23 @@ var app = (function () {
 	    chat,
 	    message,
 	    parentNavInstance,
-	    registerCallButtonHandler,
-	    refetchMessage
+	    callButtonCallback,
+	    fetchMessageCallback
 	  });
 
 	  $$self.$inject_state = $$props => {
 	    if ('chat' in $$props) $$invalidate(0, chat = $$props.chat);
 	    if ('message' in $$props) $$invalidate(1, message = $$props.message);
 	    if ('parentNavInstance' in $$props) $$invalidate(2, parentNavInstance = $$props.parentNavInstance);
-	    if ('registerCallButtonHandler' in $$props) $$invalidate(3, registerCallButtonHandler = $$props.registerCallButtonHandler);
-	    if ('refetchMessage' in $$props) $$invalidate(4, refetchMessage = $$props.refetchMessage);
+	    if ('callButtonCallback' in $$props) $$invalidate(3, callButtonCallback = $$props.callButtonCallback);
+	    if ('fetchMessageCallback' in $$props) $$invalidate(4, fetchMessageCallback = $$props.fetchMessageCallback);
 	  };
 
 	  if ($$props && "$$inject" in $$props) {
 	    $$self.$inject_state($$props.$$inject);
 	  }
 
-	  return [chat, message, parentNavInstance, registerCallButtonHandler, refetchMessage];
+	  return [chat, message, parentNavInstance, callButtonCallback, fetchMessageCallback];
 	}
 
 	class MessageActionChannelCreate extends SvelteComponentDev {
@@ -56887,8 +56887,8 @@ var app = (function () {
 	      chat: 0,
 	      message: 1,
 	      parentNavInstance: 2,
-	      registerCallButtonHandler: 3,
-	      refetchMessage: 4
+	      callButtonCallback: 3,
+	      fetchMessageCallback: 4
 	    });
 	    dispatch_dev("SvelteRegisterComponent", {
 	      component: this,
@@ -56939,24 +56939,24 @@ var app = (function () {
 	    flush();
 	  }
 
-	  get registerCallButtonHandler() {
+	  get callButtonCallback() {
 	    return this.$$.ctx[3];
 	  }
 
-	  set registerCallButtonHandler(registerCallButtonHandler) {
+	  set callButtonCallback(callButtonCallback) {
 	    this.$$set({
-	      registerCallButtonHandler
+	      callButtonCallback
 	    });
 	    flush();
 	  }
 
-	  get refetchMessage() {
+	  get fetchMessageCallback() {
 	    return this.$$.ctx[4];
 	  }
 
-	  set refetchMessage(refetchMessage) {
+	  set fetchMessageCallback(fetchMessageCallback) {
 	    this.$$set({
-	      refetchMessage
+	      fetchMessageCallback
 	    });
 	    flush();
 	  }
@@ -56975,9 +56975,9 @@ var app = (function () {
 	      p = element("p");
 	      p.textContent = "Chat migrate to channel";
 	      attr_dev(p, "class", "svelte-vceezg");
-	      add_location(p, file$r, 13, 2, 371);
+	      add_location(p, file$r, 13, 2, 370);
 	      attr_dev(div, "class", "MessageActionChatMigrateTo svelte-vceezg");
-	      add_location(div, file$r, 12, 0, 328);
+	      add_location(div, file$r, 12, 0, 327);
 	    },
 	    l: function claim(nodes) {
 	      throw new Error("options.hydrate only works if the component was compiled with the `hydratable: true` option");
@@ -57013,13 +57013,13 @@ var app = (function () {
 	  var _$$props$message = $$props.message,
 	      message = _$$props$message === void 0 ? {} : _$$props$message;
 	  var parentNavInstance = $$props.parentNavInstance;
-	  var _$$props$registerCall = $$props.registerCallButtonHandler,
-	      registerCallButtonHandler = _$$props$registerCall === void 0 ? (id, callback) => {} : _$$props$registerCall;
-	  var _$$props$refetchMessa = $$props.refetchMessage,
-	      refetchMessage = _$$props$refetchMessa === void 0 ? id => {} : _$$props$refetchMessa;
+	  var _$$props$callButtonCa = $$props.callButtonCallback,
+	      callButtonCallback = _$$props$callButtonCa === void 0 ? (id, callback) => {} : _$$props$callButtonCa;
+	  var _$$props$fetchMessage = $$props.fetchMessageCallback,
+	      fetchMessageCallback = _$$props$fetchMessage === void 0 ? id => {} : _$$props$fetchMessage;
 	  onMount(() => {}); // console.log(message);
 
-	  var writable_props = ['chat', 'message', 'parentNavInstance', 'registerCallButtonHandler', 'refetchMessage'];
+	  var writable_props = ['chat', 'message', 'parentNavInstance', 'callButtonCallback', 'fetchMessageCallback'];
 	  Object.keys($$props).forEach(key => {
 	    if (!~writable_props.indexOf(key) && key.slice(0, 2) !== '$$' && key !== 'slot') console.warn(`<MessageActionChatMigrateTo> was created with unknown prop '${key}'`);
 	  });
@@ -57028,8 +57028,8 @@ var app = (function () {
 	    if ('chat' in $$props) $$invalidate(0, chat = $$props.chat);
 	    if ('message' in $$props) $$invalidate(1, message = $$props.message);
 	    if ('parentNavInstance' in $$props) $$invalidate(2, parentNavInstance = $$props.parentNavInstance);
-	    if ('registerCallButtonHandler' in $$props) $$invalidate(3, registerCallButtonHandler = $$props.registerCallButtonHandler);
-	    if ('refetchMessage' in $$props) $$invalidate(4, refetchMessage = $$props.refetchMessage);
+	    if ('callButtonCallback' in $$props) $$invalidate(3, callButtonCallback = $$props.callButtonCallback);
+	    if ('fetchMessageCallback' in $$props) $$invalidate(4, fetchMessageCallback = $$props.fetchMessageCallback);
 	  };
 
 	  $$self.$capture_state = () => ({
@@ -57037,23 +57037,23 @@ var app = (function () {
 	    chat,
 	    message,
 	    parentNavInstance,
-	    registerCallButtonHandler,
-	    refetchMessage
+	    callButtonCallback,
+	    fetchMessageCallback
 	  });
 
 	  $$self.$inject_state = $$props => {
 	    if ('chat' in $$props) $$invalidate(0, chat = $$props.chat);
 	    if ('message' in $$props) $$invalidate(1, message = $$props.message);
 	    if ('parentNavInstance' in $$props) $$invalidate(2, parentNavInstance = $$props.parentNavInstance);
-	    if ('registerCallButtonHandler' in $$props) $$invalidate(3, registerCallButtonHandler = $$props.registerCallButtonHandler);
-	    if ('refetchMessage' in $$props) $$invalidate(4, refetchMessage = $$props.refetchMessage);
+	    if ('callButtonCallback' in $$props) $$invalidate(3, callButtonCallback = $$props.callButtonCallback);
+	    if ('fetchMessageCallback' in $$props) $$invalidate(4, fetchMessageCallback = $$props.fetchMessageCallback);
 	  };
 
 	  if ($$props && "$$inject" in $$props) {
 	    $$self.$inject_state($$props.$$inject);
 	  }
 
-	  return [chat, message, parentNavInstance, registerCallButtonHandler, refetchMessage];
+	  return [chat, message, parentNavInstance, callButtonCallback, fetchMessageCallback];
 	}
 
 	class MessageActionChatMigrateTo extends SvelteComponentDev {
@@ -57063,8 +57063,8 @@ var app = (function () {
 	      chat: 0,
 	      message: 1,
 	      parentNavInstance: 2,
-	      registerCallButtonHandler: 3,
-	      refetchMessage: 4
+	      callButtonCallback: 3,
+	      fetchMessageCallback: 4
 	    });
 	    dispatch_dev("SvelteRegisterComponent", {
 	      component: this,
@@ -57106,19 +57106,19 @@ var app = (function () {
 	    throw new Error("<MessageActionChatMigrateTo>: Props cannot be set directly on the component instance unless compiling with 'accessors: true' or '<svelte:options accessors/>'");
 	  }
 
-	  get registerCallButtonHandler() {
+	  get callButtonCallback() {
 	    throw new Error("<MessageActionChatMigrateTo>: Props cannot be read directly from the component instance unless compiling with 'accessors: true' or '<svelte:options accessors/>'");
 	  }
 
-	  set registerCallButtonHandler(value) {
+	  set callButtonCallback(value) {
 	    throw new Error("<MessageActionChatMigrateTo>: Props cannot be set directly on the component instance unless compiling with 'accessors: true' or '<svelte:options accessors/>'");
 	  }
 
-	  get refetchMessage() {
+	  get fetchMessageCallback() {
 	    throw new Error("<MessageActionChatMigrateTo>: Props cannot be read directly from the component instance unless compiling with 'accessors: true' or '<svelte:options accessors/>'");
 	  }
 
-	  set refetchMessage(value) {
+	  set fetchMessageCallback(value) {
 	    throw new Error("<MessageActionChatMigrateTo>: Props cannot be set directly on the component instance unless compiling with 'accessors: true' or '<svelte:options accessors/>'");
 	  }
 
@@ -57141,9 +57141,9 @@ var app = (function () {
 	      t0 = text("Channel migrate from ");
 	      t1 = text(t1_value);
 	      attr_dev(p, "class", "svelte-1wjmegi");
-	      add_location(p, file$q, 15, 2, 422);
+	      add_location(p, file$q, 15, 2, 421);
 	      attr_dev(div, "class", "MessageActionChannelMigrateFrom svelte-1wjmegi");
-	      add_location(div, file$q, 14, 0, 374);
+	      add_location(div, file$q, 14, 0, 373);
 	    },
 	    l: function claim(nodes) {
 	      throw new Error("options.hydrate only works if the component was compiled with the `hydratable: true` option");
@@ -57190,13 +57190,13 @@ var app = (function () {
 	  var _$$props$message = $$props.message,
 	      message = _$$props$message === void 0 ? {} : _$$props$message;
 	  var parentNavInstance = $$props.parentNavInstance;
-	  var _$$props$registerCall = $$props.registerCallButtonHandler,
-	      registerCallButtonHandler = _$$props$registerCall === void 0 ? (id, callback) => {} : _$$props$registerCall;
-	  var _$$props$refetchMessa = $$props.refetchMessage,
-	      refetchMessage = _$$props$refetchMessa === void 0 ? id => {} : _$$props$refetchMessa;
+	  var _$$props$callButtonCa = $$props.callButtonCallback,
+	      callButtonCallback = _$$props$callButtonCa === void 0 ? (id, callback) => {} : _$$props$callButtonCa;
+	  var _$$props$fetchMessage = $$props.fetchMessageCallback,
+	      fetchMessageCallback = _$$props$fetchMessage === void 0 ? id => {} : _$$props$fetchMessage;
 	  onMount(() => {}); // console.log(message);
 
-	  var writable_props = ['chat', 'message', 'parentNavInstance', 'registerCallButtonHandler', 'refetchMessage'];
+	  var writable_props = ['chat', 'message', 'parentNavInstance', 'callButtonCallback', 'fetchMessageCallback'];
 	  Object.keys($$props).forEach(key => {
 	    if (!~writable_props.indexOf(key) && key.slice(0, 2) !== '$$' && key !== 'slot') console.warn(`<MessageActionChannelMigrateFrom> was created with unknown prop '${key}'`);
 	  });
@@ -57205,8 +57205,8 @@ var app = (function () {
 	    if ('chat' in $$props) $$invalidate(1, chat = $$props.chat);
 	    if ('message' in $$props) $$invalidate(0, message = $$props.message);
 	    if ('parentNavInstance' in $$props) $$invalidate(2, parentNavInstance = $$props.parentNavInstance);
-	    if ('registerCallButtonHandler' in $$props) $$invalidate(3, registerCallButtonHandler = $$props.registerCallButtonHandler);
-	    if ('refetchMessage' in $$props) $$invalidate(4, refetchMessage = $$props.refetchMessage);
+	    if ('callButtonCallback' in $$props) $$invalidate(3, callButtonCallback = $$props.callButtonCallback);
+	    if ('fetchMessageCallback' in $$props) $$invalidate(4, fetchMessageCallback = $$props.fetchMessageCallback);
 	  };
 
 	  $$self.$capture_state = () => ({
@@ -57214,23 +57214,23 @@ var app = (function () {
 	    chat,
 	    message,
 	    parentNavInstance,
-	    registerCallButtonHandler,
-	    refetchMessage
+	    callButtonCallback,
+	    fetchMessageCallback
 	  });
 
 	  $$self.$inject_state = $$props => {
 	    if ('chat' in $$props) $$invalidate(1, chat = $$props.chat);
 	    if ('message' in $$props) $$invalidate(0, message = $$props.message);
 	    if ('parentNavInstance' in $$props) $$invalidate(2, parentNavInstance = $$props.parentNavInstance);
-	    if ('registerCallButtonHandler' in $$props) $$invalidate(3, registerCallButtonHandler = $$props.registerCallButtonHandler);
-	    if ('refetchMessage' in $$props) $$invalidate(4, refetchMessage = $$props.refetchMessage);
+	    if ('callButtonCallback' in $$props) $$invalidate(3, callButtonCallback = $$props.callButtonCallback);
+	    if ('fetchMessageCallback' in $$props) $$invalidate(4, fetchMessageCallback = $$props.fetchMessageCallback);
 	  };
 
 	  if ($$props && "$$inject" in $$props) {
 	    $$self.$inject_state($$props.$$inject);
 	  }
 
-	  return [message, chat, parentNavInstance, registerCallButtonHandler, refetchMessage];
+	  return [message, chat, parentNavInstance, callButtonCallback, fetchMessageCallback];
 	}
 
 	class MessageActionChannelMigrateFrom extends SvelteComponentDev {
@@ -57240,8 +57240,8 @@ var app = (function () {
 	      chat: 1,
 	      message: 0,
 	      parentNavInstance: 2,
-	      registerCallButtonHandler: 3,
-	      refetchMessage: 4
+	      callButtonCallback: 3,
+	      fetchMessageCallback: 4
 	    });
 	    dispatch_dev("SvelteRegisterComponent", {
 	      component: this,
@@ -57292,24 +57292,24 @@ var app = (function () {
 	    flush();
 	  }
 
-	  get registerCallButtonHandler() {
+	  get callButtonCallback() {
 	    return this.$$.ctx[3];
 	  }
 
-	  set registerCallButtonHandler(registerCallButtonHandler) {
+	  set callButtonCallback(callButtonCallback) {
 	    this.$$set({
-	      registerCallButtonHandler
+	      callButtonCallback
 	    });
 	    flush();
 	  }
 
-	  get refetchMessage() {
+	  get fetchMessageCallback() {
 	    return this.$$.ctx[4];
 	  }
 
-	  set refetchMessage(refetchMessage) {
+	  set fetchMessageCallback(fetchMessageCallback) {
 	    this.$$set({
-	      refetchMessage
+	      fetchMessageCallback
 	    });
 	    flush();
 	  }
@@ -57331,9 +57331,9 @@ var app = (function () {
 	      p = element("p");
 	      t = text(t_value);
 	      attr_dev(p, "class", "svelte-1iwd9h6");
-	      add_location(p, file$p, 13, 2, 368);
+	      add_location(p, file$p, 13, 2, 367);
 	      attr_dev(div, "class", "MessageActionPinMessage svelte-1iwd9h6");
-	      add_location(div, file$p, 12, 0, 328);
+	      add_location(div, file$p, 12, 0, 327);
 	    },
 	    l: function claim(nodes) {
 	      throw new Error("options.hydrate only works if the component was compiled with the `hydratable: true` option");
@@ -57379,13 +57379,13 @@ var app = (function () {
 	  var _$$props$message = $$props.message,
 	      message = _$$props$message === void 0 ? {} : _$$props$message;
 	  var parentNavInstance = $$props.parentNavInstance;
-	  var _$$props$registerCall = $$props.registerCallButtonHandler,
-	      registerCallButtonHandler = _$$props$registerCall === void 0 ? (id, callback) => {} : _$$props$registerCall;
-	  var _$$props$refetchMessa = $$props.refetchMessage,
-	      refetchMessage = _$$props$refetchMessa === void 0 ? id => {} : _$$props$refetchMessa;
+	  var _$$props$callButtonCa = $$props.callButtonCallback,
+	      callButtonCallback = _$$props$callButtonCa === void 0 ? (id, callback) => {} : _$$props$callButtonCa;
+	  var _$$props$fetchMessage = $$props.fetchMessageCallback,
+	      fetchMessageCallback = _$$props$fetchMessage === void 0 ? id => {} : _$$props$fetchMessage;
 	  onMount(() => {}); // console.log(message);
 
-	  var writable_props = ['chat', 'message', 'parentNavInstance', 'registerCallButtonHandler', 'refetchMessage'];
+	  var writable_props = ['chat', 'message', 'parentNavInstance', 'callButtonCallback', 'fetchMessageCallback'];
 	  Object.keys($$props).forEach(key => {
 	    if (!~writable_props.indexOf(key) && key.slice(0, 2) !== '$$' && key !== 'slot') console.warn(`<MessageActionPinMessage> was created with unknown prop '${key}'`);
 	  });
@@ -57394,8 +57394,8 @@ var app = (function () {
 	    if ('chat' in $$props) $$invalidate(1, chat = $$props.chat);
 	    if ('message' in $$props) $$invalidate(0, message = $$props.message);
 	    if ('parentNavInstance' in $$props) $$invalidate(2, parentNavInstance = $$props.parentNavInstance);
-	    if ('registerCallButtonHandler' in $$props) $$invalidate(3, registerCallButtonHandler = $$props.registerCallButtonHandler);
-	    if ('refetchMessage' in $$props) $$invalidate(4, refetchMessage = $$props.refetchMessage);
+	    if ('callButtonCallback' in $$props) $$invalidate(3, callButtonCallback = $$props.callButtonCallback);
+	    if ('fetchMessageCallback' in $$props) $$invalidate(4, fetchMessageCallback = $$props.fetchMessageCallback);
 	  };
 
 	  $$self.$capture_state = () => ({
@@ -57403,23 +57403,23 @@ var app = (function () {
 	    chat,
 	    message,
 	    parentNavInstance,
-	    registerCallButtonHandler,
-	    refetchMessage
+	    callButtonCallback,
+	    fetchMessageCallback
 	  });
 
 	  $$self.$inject_state = $$props => {
 	    if ('chat' in $$props) $$invalidate(1, chat = $$props.chat);
 	    if ('message' in $$props) $$invalidate(0, message = $$props.message);
 	    if ('parentNavInstance' in $$props) $$invalidate(2, parentNavInstance = $$props.parentNavInstance);
-	    if ('registerCallButtonHandler' in $$props) $$invalidate(3, registerCallButtonHandler = $$props.registerCallButtonHandler);
-	    if ('refetchMessage' in $$props) $$invalidate(4, refetchMessage = $$props.refetchMessage);
+	    if ('callButtonCallback' in $$props) $$invalidate(3, callButtonCallback = $$props.callButtonCallback);
+	    if ('fetchMessageCallback' in $$props) $$invalidate(4, fetchMessageCallback = $$props.fetchMessageCallback);
 	  };
 
 	  if ($$props && "$$inject" in $$props) {
 	    $$self.$inject_state($$props.$$inject);
 	  }
 
-	  return [message, chat, parentNavInstance, registerCallButtonHandler, refetchMessage];
+	  return [message, chat, parentNavInstance, callButtonCallback, fetchMessageCallback];
 	}
 
 	class MessageActionPinMessage extends SvelteComponentDev {
@@ -57429,8 +57429,8 @@ var app = (function () {
 	      chat: 1,
 	      message: 0,
 	      parentNavInstance: 2,
-	      registerCallButtonHandler: 3,
-	      refetchMessage: 4
+	      callButtonCallback: 3,
+	      fetchMessageCallback: 4
 	    });
 	    dispatch_dev("SvelteRegisterComponent", {
 	      component: this,
@@ -57472,19 +57472,19 @@ var app = (function () {
 	    throw new Error("<MessageActionPinMessage>: Props cannot be set directly on the component instance unless compiling with 'accessors: true' or '<svelte:options accessors/>'");
 	  }
 
-	  get registerCallButtonHandler() {
+	  get callButtonCallback() {
 	    throw new Error("<MessageActionPinMessage>: Props cannot be read directly from the component instance unless compiling with 'accessors: true' or '<svelte:options accessors/>'");
 	  }
 
-	  set registerCallButtonHandler(value) {
+	  set callButtonCallback(value) {
 	    throw new Error("<MessageActionPinMessage>: Props cannot be set directly on the component instance unless compiling with 'accessors: true' or '<svelte:options accessors/>'");
 	  }
 
-	  get refetchMessage() {
+	  get fetchMessageCallback() {
 	    throw new Error("<MessageActionPinMessage>: Props cannot be read directly from the component instance unless compiling with 'accessors: true' or '<svelte:options accessors/>'");
 	  }
 
-	  set refetchMessage(value) {
+	  set fetchMessageCallback(value) {
 	    throw new Error("<MessageActionPinMessage>: Props cannot be set directly on the component instance unless compiling with 'accessors: true' or '<svelte:options accessors/>'");
 	  }
 
@@ -57505,9 +57505,9 @@ var app = (function () {
 	      p = element("p");
 	      t = text(t_value);
 	      attr_dev(p, "class", "svelte-vc9uzi");
-	      add_location(p, file$o, 13, 2, 370);
+	      add_location(p, file$o, 13, 2, 369);
 	      attr_dev(div, "class", "MessageActionHistoryClear svelte-vc9uzi");
-	      add_location(div, file$o, 12, 0, 328);
+	      add_location(div, file$o, 12, 0, 327);
 	    },
 	    l: function claim(nodes) {
 	      throw new Error("options.hydrate only works if the component was compiled with the `hydratable: true` option");
@@ -57553,13 +57553,13 @@ var app = (function () {
 	  var _$$props$message = $$props.message,
 	      message = _$$props$message === void 0 ? {} : _$$props$message;
 	  var parentNavInstance = $$props.parentNavInstance;
-	  var _$$props$registerCall = $$props.registerCallButtonHandler,
-	      registerCallButtonHandler = _$$props$registerCall === void 0 ? (id, callback) => {} : _$$props$registerCall;
-	  var _$$props$refetchMessa = $$props.refetchMessage,
-	      refetchMessage = _$$props$refetchMessa === void 0 ? id => {} : _$$props$refetchMessa;
+	  var _$$props$callButtonCa = $$props.callButtonCallback,
+	      callButtonCallback = _$$props$callButtonCa === void 0 ? (id, callback) => {} : _$$props$callButtonCa;
+	  var _$$props$fetchMessage = $$props.fetchMessageCallback,
+	      fetchMessageCallback = _$$props$fetchMessage === void 0 ? id => {} : _$$props$fetchMessage;
 	  onMount(() => {}); // console.log(message);
 
-	  var writable_props = ['chat', 'message', 'parentNavInstance', 'registerCallButtonHandler', 'refetchMessage'];
+	  var writable_props = ['chat', 'message', 'parentNavInstance', 'callButtonCallback', 'fetchMessageCallback'];
 	  Object.keys($$props).forEach(key => {
 	    if (!~writable_props.indexOf(key) && key.slice(0, 2) !== '$$' && key !== 'slot') console.warn(`<MessageActionHistoryClear> was created with unknown prop '${key}'`);
 	  });
@@ -57568,8 +57568,8 @@ var app = (function () {
 	    if ('chat' in $$props) $$invalidate(1, chat = $$props.chat);
 	    if ('message' in $$props) $$invalidate(0, message = $$props.message);
 	    if ('parentNavInstance' in $$props) $$invalidate(2, parentNavInstance = $$props.parentNavInstance);
-	    if ('registerCallButtonHandler' in $$props) $$invalidate(3, registerCallButtonHandler = $$props.registerCallButtonHandler);
-	    if ('refetchMessage' in $$props) $$invalidate(4, refetchMessage = $$props.refetchMessage);
+	    if ('callButtonCallback' in $$props) $$invalidate(3, callButtonCallback = $$props.callButtonCallback);
+	    if ('fetchMessageCallback' in $$props) $$invalidate(4, fetchMessageCallback = $$props.fetchMessageCallback);
 	  };
 
 	  $$self.$capture_state = () => ({
@@ -57577,23 +57577,23 @@ var app = (function () {
 	    chat,
 	    message,
 	    parentNavInstance,
-	    registerCallButtonHandler,
-	    refetchMessage
+	    callButtonCallback,
+	    fetchMessageCallback
 	  });
 
 	  $$self.$inject_state = $$props => {
 	    if ('chat' in $$props) $$invalidate(1, chat = $$props.chat);
 	    if ('message' in $$props) $$invalidate(0, message = $$props.message);
 	    if ('parentNavInstance' in $$props) $$invalidate(2, parentNavInstance = $$props.parentNavInstance);
-	    if ('registerCallButtonHandler' in $$props) $$invalidate(3, registerCallButtonHandler = $$props.registerCallButtonHandler);
-	    if ('refetchMessage' in $$props) $$invalidate(4, refetchMessage = $$props.refetchMessage);
+	    if ('callButtonCallback' in $$props) $$invalidate(3, callButtonCallback = $$props.callButtonCallback);
+	    if ('fetchMessageCallback' in $$props) $$invalidate(4, fetchMessageCallback = $$props.fetchMessageCallback);
 	  };
 
 	  if ($$props && "$$inject" in $$props) {
 	    $$self.$inject_state($$props.$$inject);
 	  }
 
-	  return [message, chat, parentNavInstance, registerCallButtonHandler, refetchMessage];
+	  return [message, chat, parentNavInstance, callButtonCallback, fetchMessageCallback];
 	}
 
 	class MessageActionHistoryClear extends SvelteComponentDev {
@@ -57603,8 +57603,8 @@ var app = (function () {
 	      chat: 1,
 	      message: 0,
 	      parentNavInstance: 2,
-	      registerCallButtonHandler: 3,
-	      refetchMessage: 4
+	      callButtonCallback: 3,
+	      fetchMessageCallback: 4
 	    });
 	    dispatch_dev("SvelteRegisterComponent", {
 	      component: this,
@@ -57646,19 +57646,19 @@ var app = (function () {
 	    throw new Error("<MessageActionHistoryClear>: Props cannot be set directly on the component instance unless compiling with 'accessors: true' or '<svelte:options accessors/>'");
 	  }
 
-	  get registerCallButtonHandler() {
+	  get callButtonCallback() {
 	    throw new Error("<MessageActionHistoryClear>: Props cannot be read directly from the component instance unless compiling with 'accessors: true' or '<svelte:options accessors/>'");
 	  }
 
-	  set registerCallButtonHandler(value) {
+	  set callButtonCallback(value) {
 	    throw new Error("<MessageActionHistoryClear>: Props cannot be set directly on the component instance unless compiling with 'accessors: true' or '<svelte:options accessors/>'");
 	  }
 
-	  get refetchMessage() {
+	  get fetchMessageCallback() {
 	    throw new Error("<MessageActionHistoryClear>: Props cannot be read directly from the component instance unless compiling with 'accessors: true' or '<svelte:options accessors/>'");
 	  }
 
-	  set refetchMessage(value) {
+	  set fetchMessageCallback(value) {
 	    throw new Error("<MessageActionHistoryClear>: Props cannot be set directly on the component instance unless compiling with 'accessors: true' or '<svelte:options accessors/>'");
 	  }
 
@@ -57686,9 +57686,9 @@ var app = (function () {
 	      t1 = text(": ");
 	      t2 = text(t2_value);
 	      attr_dev(p, "class", "svelte-y81l7k");
-	      add_location(p, file$n, 13, 2, 367);
+	      add_location(p, file$n, 13, 2, 366);
 	      attr_dev(div, "class", "MessageActionGameScore svelte-y81l7k");
-	      add_location(div, file$n, 12, 0, 328);
+	      add_location(div, file$n, 12, 0, 327);
 	    },
 	    l: function claim(nodes) {
 	      throw new Error("options.hydrate only works if the component was compiled with the `hydratable: true` option");
@@ -57741,13 +57741,13 @@ var app = (function () {
 	  var _$$props$message = $$props.message,
 	      message = _$$props$message === void 0 ? {} : _$$props$message;
 	  var parentNavInstance = $$props.parentNavInstance;
-	  var _$$props$registerCall = $$props.registerCallButtonHandler,
-	      registerCallButtonHandler = _$$props$registerCall === void 0 ? (id, callback) => {} : _$$props$registerCall;
-	  var _$$props$refetchMessa = $$props.refetchMessage,
-	      refetchMessage = _$$props$refetchMessa === void 0 ? id => {} : _$$props$refetchMessa;
+	  var _$$props$callButtonCa = $$props.callButtonCallback,
+	      callButtonCallback = _$$props$callButtonCa === void 0 ? (id, callback) => {} : _$$props$callButtonCa;
+	  var _$$props$fetchMessage = $$props.fetchMessageCallback,
+	      fetchMessageCallback = _$$props$fetchMessage === void 0 ? id => {} : _$$props$fetchMessage;
 	  onMount(() => {}); // console.log(message);
 
-	  var writable_props = ['chat', 'message', 'parentNavInstance', 'registerCallButtonHandler', 'refetchMessage'];
+	  var writable_props = ['chat', 'message', 'parentNavInstance', 'callButtonCallback', 'fetchMessageCallback'];
 	  Object.keys($$props).forEach(key => {
 	    if (!~writable_props.indexOf(key) && key.slice(0, 2) !== '$$' && key !== 'slot') console.warn(`<MessageActionGameScore> was created with unknown prop '${key}'`);
 	  });
@@ -57756,8 +57756,8 @@ var app = (function () {
 	    if ('chat' in $$props) $$invalidate(1, chat = $$props.chat);
 	    if ('message' in $$props) $$invalidate(0, message = $$props.message);
 	    if ('parentNavInstance' in $$props) $$invalidate(2, parentNavInstance = $$props.parentNavInstance);
-	    if ('registerCallButtonHandler' in $$props) $$invalidate(3, registerCallButtonHandler = $$props.registerCallButtonHandler);
-	    if ('refetchMessage' in $$props) $$invalidate(4, refetchMessage = $$props.refetchMessage);
+	    if ('callButtonCallback' in $$props) $$invalidate(3, callButtonCallback = $$props.callButtonCallback);
+	    if ('fetchMessageCallback' in $$props) $$invalidate(4, fetchMessageCallback = $$props.fetchMessageCallback);
 	  };
 
 	  $$self.$capture_state = () => ({
@@ -57765,23 +57765,23 @@ var app = (function () {
 	    chat,
 	    message,
 	    parentNavInstance,
-	    registerCallButtonHandler,
-	    refetchMessage
+	    callButtonCallback,
+	    fetchMessageCallback
 	  });
 
 	  $$self.$inject_state = $$props => {
 	    if ('chat' in $$props) $$invalidate(1, chat = $$props.chat);
 	    if ('message' in $$props) $$invalidate(0, message = $$props.message);
 	    if ('parentNavInstance' in $$props) $$invalidate(2, parentNavInstance = $$props.parentNavInstance);
-	    if ('registerCallButtonHandler' in $$props) $$invalidate(3, registerCallButtonHandler = $$props.registerCallButtonHandler);
-	    if ('refetchMessage' in $$props) $$invalidate(4, refetchMessage = $$props.refetchMessage);
+	    if ('callButtonCallback' in $$props) $$invalidate(3, callButtonCallback = $$props.callButtonCallback);
+	    if ('fetchMessageCallback' in $$props) $$invalidate(4, fetchMessageCallback = $$props.fetchMessageCallback);
 	  };
 
 	  if ($$props && "$$inject" in $$props) {
 	    $$self.$inject_state($$props.$$inject);
 	  }
 
-	  return [message, chat, parentNavInstance, registerCallButtonHandler, refetchMessage];
+	  return [message, chat, parentNavInstance, callButtonCallback, fetchMessageCallback];
 	}
 
 	class MessageActionGameScore extends SvelteComponentDev {
@@ -57791,8 +57791,8 @@ var app = (function () {
 	      chat: 1,
 	      message: 0,
 	      parentNavInstance: 2,
-	      registerCallButtonHandler: 3,
-	      refetchMessage: 4
+	      callButtonCallback: 3,
+	      fetchMessageCallback: 4
 	    });
 	    dispatch_dev("SvelteRegisterComponent", {
 	      component: this,
@@ -57834,19 +57834,19 @@ var app = (function () {
 	    throw new Error("<MessageActionGameScore>: Props cannot be set directly on the component instance unless compiling with 'accessors: true' or '<svelte:options accessors/>'");
 	  }
 
-	  get registerCallButtonHandler() {
+	  get callButtonCallback() {
 	    throw new Error("<MessageActionGameScore>: Props cannot be read directly from the component instance unless compiling with 'accessors: true' or '<svelte:options accessors/>'");
 	  }
 
-	  set registerCallButtonHandler(value) {
+	  set callButtonCallback(value) {
 	    throw new Error("<MessageActionGameScore>: Props cannot be set directly on the component instance unless compiling with 'accessors: true' or '<svelte:options accessors/>'");
 	  }
 
-	  get refetchMessage() {
+	  get fetchMessageCallback() {
 	    throw new Error("<MessageActionGameScore>: Props cannot be read directly from the component instance unless compiling with 'accessors: true' or '<svelte:options accessors/>'");
 	  }
 
-	  set refetchMessage(value) {
+	  set fetchMessageCallback(value) {
 	    throw new Error("<MessageActionGameScore>: Props cannot be set directly on the component instance unless compiling with 'accessors: true' or '<svelte:options accessors/>'");
 	  }
 
@@ -57879,9 +57879,9 @@ var app = (function () {
 	      t2 = text(t2_value);
 	      t3 = text(t3_value);
 	      attr_dev(p, "class", "svelte-grkh5g");
-	      add_location(p, file$m, 13, 2, 371);
+	      add_location(p, file$m, 13, 2, 370);
 	      attr_dev(div, "class", "MessageActionPaymentSentMe svelte-grkh5g");
-	      add_location(div, file$m, 12, 0, 328);
+	      add_location(div, file$m, 12, 0, 327);
 	    },
 	    l: function claim(nodes) {
 	      throw new Error("options.hydrate only works if the component was compiled with the `hydratable: true` option");
@@ -57940,13 +57940,13 @@ var app = (function () {
 	  var _$$props$message = $$props.message,
 	      message = _$$props$message === void 0 ? {} : _$$props$message;
 	  var parentNavInstance = $$props.parentNavInstance;
-	  var _$$props$registerCall = $$props.registerCallButtonHandler,
-	      registerCallButtonHandler = _$$props$registerCall === void 0 ? (id, callback) => {} : _$$props$registerCall;
-	  var _$$props$refetchMessa = $$props.refetchMessage,
-	      refetchMessage = _$$props$refetchMessa === void 0 ? id => {} : _$$props$refetchMessa;
+	  var _$$props$callButtonCa = $$props.callButtonCallback,
+	      callButtonCallback = _$$props$callButtonCa === void 0 ? (id, callback) => {} : _$$props$callButtonCa;
+	  var _$$props$fetchMessage = $$props.fetchMessageCallback,
+	      fetchMessageCallback = _$$props$fetchMessage === void 0 ? id => {} : _$$props$fetchMessage;
 	  onMount(() => {}); // console.log(message);
 
-	  var writable_props = ['chat', 'message', 'parentNavInstance', 'registerCallButtonHandler', 'refetchMessage'];
+	  var writable_props = ['chat', 'message', 'parentNavInstance', 'callButtonCallback', 'fetchMessageCallback'];
 	  Object.keys($$props).forEach(key => {
 	    if (!~writable_props.indexOf(key) && key.slice(0, 2) !== '$$' && key !== 'slot') console.warn(`<MessageActionPaymentSentMe> was created with unknown prop '${key}'`);
 	  });
@@ -57955,8 +57955,8 @@ var app = (function () {
 	    if ('chat' in $$props) $$invalidate(1, chat = $$props.chat);
 	    if ('message' in $$props) $$invalidate(0, message = $$props.message);
 	    if ('parentNavInstance' in $$props) $$invalidate(2, parentNavInstance = $$props.parentNavInstance);
-	    if ('registerCallButtonHandler' in $$props) $$invalidate(3, registerCallButtonHandler = $$props.registerCallButtonHandler);
-	    if ('refetchMessage' in $$props) $$invalidate(4, refetchMessage = $$props.refetchMessage);
+	    if ('callButtonCallback' in $$props) $$invalidate(3, callButtonCallback = $$props.callButtonCallback);
+	    if ('fetchMessageCallback' in $$props) $$invalidate(4, fetchMessageCallback = $$props.fetchMessageCallback);
 	  };
 
 	  $$self.$capture_state = () => ({
@@ -57964,23 +57964,23 @@ var app = (function () {
 	    chat,
 	    message,
 	    parentNavInstance,
-	    registerCallButtonHandler,
-	    refetchMessage
+	    callButtonCallback,
+	    fetchMessageCallback
 	  });
 
 	  $$self.$inject_state = $$props => {
 	    if ('chat' in $$props) $$invalidate(1, chat = $$props.chat);
 	    if ('message' in $$props) $$invalidate(0, message = $$props.message);
 	    if ('parentNavInstance' in $$props) $$invalidate(2, parentNavInstance = $$props.parentNavInstance);
-	    if ('registerCallButtonHandler' in $$props) $$invalidate(3, registerCallButtonHandler = $$props.registerCallButtonHandler);
-	    if ('refetchMessage' in $$props) $$invalidate(4, refetchMessage = $$props.refetchMessage);
+	    if ('callButtonCallback' in $$props) $$invalidate(3, callButtonCallback = $$props.callButtonCallback);
+	    if ('fetchMessageCallback' in $$props) $$invalidate(4, fetchMessageCallback = $$props.fetchMessageCallback);
 	  };
 
 	  if ($$props && "$$inject" in $$props) {
 	    $$self.$inject_state($$props.$$inject);
 	  }
 
-	  return [message, chat, parentNavInstance, registerCallButtonHandler, refetchMessage];
+	  return [message, chat, parentNavInstance, callButtonCallback, fetchMessageCallback];
 	}
 
 	class MessageActionPaymentSentMe extends SvelteComponentDev {
@@ -57990,8 +57990,8 @@ var app = (function () {
 	      chat: 1,
 	      message: 0,
 	      parentNavInstance: 2,
-	      registerCallButtonHandler: 3,
-	      refetchMessage: 4
+	      callButtonCallback: 3,
+	      fetchMessageCallback: 4
 	    });
 	    dispatch_dev("SvelteRegisterComponent", {
 	      component: this,
@@ -58033,19 +58033,19 @@ var app = (function () {
 	    throw new Error("<MessageActionPaymentSentMe>: Props cannot be set directly on the component instance unless compiling with 'accessors: true' or '<svelte:options accessors/>'");
 	  }
 
-	  get registerCallButtonHandler() {
+	  get callButtonCallback() {
 	    throw new Error("<MessageActionPaymentSentMe>: Props cannot be read directly from the component instance unless compiling with 'accessors: true' or '<svelte:options accessors/>'");
 	  }
 
-	  set registerCallButtonHandler(value) {
+	  set callButtonCallback(value) {
 	    throw new Error("<MessageActionPaymentSentMe>: Props cannot be set directly on the component instance unless compiling with 'accessors: true' or '<svelte:options accessors/>'");
 	  }
 
-	  get refetchMessage() {
+	  get fetchMessageCallback() {
 	    throw new Error("<MessageActionPaymentSentMe>: Props cannot be read directly from the component instance unless compiling with 'accessors: true' or '<svelte:options accessors/>'");
 	  }
 
-	  set refetchMessage(value) {
+	  set fetchMessageCallback(value) {
 	    throw new Error("<MessageActionPaymentSentMe>: Props cannot be set directly on the component instance unless compiling with 'accessors: true' or '<svelte:options accessors/>'");
 	  }
 
@@ -58078,9 +58078,9 @@ var app = (function () {
 	      t2 = text(t2_value);
 	      t3 = text(t3_value);
 	      attr_dev(p, "class", "svelte-1kkdhas");
-	      add_location(p, file$l, 13, 2, 369);
+	      add_location(p, file$l, 13, 2, 368);
 	      attr_dev(div, "class", "MessageActionPaymentSent svelte-1kkdhas");
-	      add_location(div, file$l, 12, 0, 328);
+	      add_location(div, file$l, 12, 0, 327);
 	    },
 	    l: function claim(nodes) {
 	      throw new Error("options.hydrate only works if the component was compiled with the `hydratable: true` option");
@@ -58139,13 +58139,13 @@ var app = (function () {
 	  var _$$props$message = $$props.message,
 	      message = _$$props$message === void 0 ? {} : _$$props$message;
 	  var parentNavInstance = $$props.parentNavInstance;
-	  var _$$props$registerCall = $$props.registerCallButtonHandler,
-	      registerCallButtonHandler = _$$props$registerCall === void 0 ? (id, callback) => {} : _$$props$registerCall;
-	  var _$$props$refetchMessa = $$props.refetchMessage,
-	      refetchMessage = _$$props$refetchMessa === void 0 ? id => {} : _$$props$refetchMessa;
+	  var _$$props$callButtonCa = $$props.callButtonCallback,
+	      callButtonCallback = _$$props$callButtonCa === void 0 ? (id, callback) => {} : _$$props$callButtonCa;
+	  var _$$props$fetchMessage = $$props.fetchMessageCallback,
+	      fetchMessageCallback = _$$props$fetchMessage === void 0 ? id => {} : _$$props$fetchMessage;
 	  onMount(() => {}); // console.log(message);
 
-	  var writable_props = ['chat', 'message', 'parentNavInstance', 'registerCallButtonHandler', 'refetchMessage'];
+	  var writable_props = ['chat', 'message', 'parentNavInstance', 'callButtonCallback', 'fetchMessageCallback'];
 	  Object.keys($$props).forEach(key => {
 	    if (!~writable_props.indexOf(key) && key.slice(0, 2) !== '$$' && key !== 'slot') console.warn(`<MessageActionPaymentSent> was created with unknown prop '${key}'`);
 	  });
@@ -58154,8 +58154,8 @@ var app = (function () {
 	    if ('chat' in $$props) $$invalidate(1, chat = $$props.chat);
 	    if ('message' in $$props) $$invalidate(0, message = $$props.message);
 	    if ('parentNavInstance' in $$props) $$invalidate(2, parentNavInstance = $$props.parentNavInstance);
-	    if ('registerCallButtonHandler' in $$props) $$invalidate(3, registerCallButtonHandler = $$props.registerCallButtonHandler);
-	    if ('refetchMessage' in $$props) $$invalidate(4, refetchMessage = $$props.refetchMessage);
+	    if ('callButtonCallback' in $$props) $$invalidate(3, callButtonCallback = $$props.callButtonCallback);
+	    if ('fetchMessageCallback' in $$props) $$invalidate(4, fetchMessageCallback = $$props.fetchMessageCallback);
 	  };
 
 	  $$self.$capture_state = () => ({
@@ -58163,23 +58163,23 @@ var app = (function () {
 	    chat,
 	    message,
 	    parentNavInstance,
-	    registerCallButtonHandler,
-	    refetchMessage
+	    callButtonCallback,
+	    fetchMessageCallback
 	  });
 
 	  $$self.$inject_state = $$props => {
 	    if ('chat' in $$props) $$invalidate(1, chat = $$props.chat);
 	    if ('message' in $$props) $$invalidate(0, message = $$props.message);
 	    if ('parentNavInstance' in $$props) $$invalidate(2, parentNavInstance = $$props.parentNavInstance);
-	    if ('registerCallButtonHandler' in $$props) $$invalidate(3, registerCallButtonHandler = $$props.registerCallButtonHandler);
-	    if ('refetchMessage' in $$props) $$invalidate(4, refetchMessage = $$props.refetchMessage);
+	    if ('callButtonCallback' in $$props) $$invalidate(3, callButtonCallback = $$props.callButtonCallback);
+	    if ('fetchMessageCallback' in $$props) $$invalidate(4, fetchMessageCallback = $$props.fetchMessageCallback);
 	  };
 
 	  if ($$props && "$$inject" in $$props) {
 	    $$self.$inject_state($$props.$$inject);
 	  }
 
-	  return [message, chat, parentNavInstance, registerCallButtonHandler, refetchMessage];
+	  return [message, chat, parentNavInstance, callButtonCallback, fetchMessageCallback];
 	}
 
 	class MessageActionPaymentSent extends SvelteComponentDev {
@@ -58189,8 +58189,8 @@ var app = (function () {
 	      chat: 1,
 	      message: 0,
 	      parentNavInstance: 2,
-	      registerCallButtonHandler: 3,
-	      refetchMessage: 4
+	      callButtonCallback: 3,
+	      fetchMessageCallback: 4
 	    });
 	    dispatch_dev("SvelteRegisterComponent", {
 	      component: this,
@@ -58232,19 +58232,19 @@ var app = (function () {
 	    throw new Error("<MessageActionPaymentSent>: Props cannot be set directly on the component instance unless compiling with 'accessors: true' or '<svelte:options accessors/>'");
 	  }
 
-	  get registerCallButtonHandler() {
+	  get callButtonCallback() {
 	    throw new Error("<MessageActionPaymentSent>: Props cannot be read directly from the component instance unless compiling with 'accessors: true' or '<svelte:options accessors/>'");
 	  }
 
-	  set registerCallButtonHandler(value) {
+	  set callButtonCallback(value) {
 	    throw new Error("<MessageActionPaymentSent>: Props cannot be set directly on the component instance unless compiling with 'accessors: true' or '<svelte:options accessors/>'");
 	  }
 
-	  get refetchMessage() {
+	  get fetchMessageCallback() {
 	    throw new Error("<MessageActionPaymentSent>: Props cannot be read directly from the component instance unless compiling with 'accessors: true' or '<svelte:options accessors/>'");
 	  }
 
-	  set refetchMessage(value) {
+	  set fetchMessageCallback(value) {
 	    throw new Error("<MessageActionPaymentSent>: Props cannot be set directly on the component instance unless compiling with 'accessors: true' or '<svelte:options accessors/>'");
 	  }
 
@@ -58265,9 +58265,9 @@ var app = (function () {
 	      p = element("p");
 	      t = text(t_value);
 	      attr_dev(p, "class", "svelte-1dlvg4o");
-	      add_location(p, file$k, 13, 2, 367);
+	      add_location(p, file$k, 13, 2, 366);
 	      attr_dev(div, "class", "MessageActionPhoneCall svelte-1dlvg4o");
-	      add_location(div, file$k, 12, 0, 328);
+	      add_location(div, file$k, 12, 0, 327);
 	    },
 	    l: function claim(nodes) {
 	      throw new Error("options.hydrate only works if the component was compiled with the `hydratable: true` option");
@@ -58313,13 +58313,13 @@ var app = (function () {
 	  var _$$props$message = $$props.message,
 	      message = _$$props$message === void 0 ? {} : _$$props$message;
 	  var parentNavInstance = $$props.parentNavInstance;
-	  var _$$props$registerCall = $$props.registerCallButtonHandler,
-	      registerCallButtonHandler = _$$props$registerCall === void 0 ? (id, callback) => {} : _$$props$registerCall;
-	  var _$$props$refetchMessa = $$props.refetchMessage,
-	      refetchMessage = _$$props$refetchMessa === void 0 ? id => {} : _$$props$refetchMessa;
+	  var _$$props$callButtonCa = $$props.callButtonCallback,
+	      callButtonCallback = _$$props$callButtonCa === void 0 ? (id, callback) => {} : _$$props$callButtonCa;
+	  var _$$props$fetchMessage = $$props.fetchMessageCallback,
+	      fetchMessageCallback = _$$props$fetchMessage === void 0 ? id => {} : _$$props$fetchMessage;
 	  onMount(() => {}); // console.log(message);
 
-	  var writable_props = ['chat', 'message', 'parentNavInstance', 'registerCallButtonHandler', 'refetchMessage'];
+	  var writable_props = ['chat', 'message', 'parentNavInstance', 'callButtonCallback', 'fetchMessageCallback'];
 	  Object.keys($$props).forEach(key => {
 	    if (!~writable_props.indexOf(key) && key.slice(0, 2) !== '$$' && key !== 'slot') console.warn(`<MessageActionPhoneCall> was created with unknown prop '${key}'`);
 	  });
@@ -58328,8 +58328,8 @@ var app = (function () {
 	    if ('chat' in $$props) $$invalidate(1, chat = $$props.chat);
 	    if ('message' in $$props) $$invalidate(0, message = $$props.message);
 	    if ('parentNavInstance' in $$props) $$invalidate(2, parentNavInstance = $$props.parentNavInstance);
-	    if ('registerCallButtonHandler' in $$props) $$invalidate(3, registerCallButtonHandler = $$props.registerCallButtonHandler);
-	    if ('refetchMessage' in $$props) $$invalidate(4, refetchMessage = $$props.refetchMessage);
+	    if ('callButtonCallback' in $$props) $$invalidate(3, callButtonCallback = $$props.callButtonCallback);
+	    if ('fetchMessageCallback' in $$props) $$invalidate(4, fetchMessageCallback = $$props.fetchMessageCallback);
 	  };
 
 	  $$self.$capture_state = () => ({
@@ -58337,23 +58337,23 @@ var app = (function () {
 	    chat,
 	    message,
 	    parentNavInstance,
-	    registerCallButtonHandler,
-	    refetchMessage
+	    callButtonCallback,
+	    fetchMessageCallback
 	  });
 
 	  $$self.$inject_state = $$props => {
 	    if ('chat' in $$props) $$invalidate(1, chat = $$props.chat);
 	    if ('message' in $$props) $$invalidate(0, message = $$props.message);
 	    if ('parentNavInstance' in $$props) $$invalidate(2, parentNavInstance = $$props.parentNavInstance);
-	    if ('registerCallButtonHandler' in $$props) $$invalidate(3, registerCallButtonHandler = $$props.registerCallButtonHandler);
-	    if ('refetchMessage' in $$props) $$invalidate(4, refetchMessage = $$props.refetchMessage);
+	    if ('callButtonCallback' in $$props) $$invalidate(3, callButtonCallback = $$props.callButtonCallback);
+	    if ('fetchMessageCallback' in $$props) $$invalidate(4, fetchMessageCallback = $$props.fetchMessageCallback);
 	  };
 
 	  if ($$props && "$$inject" in $$props) {
 	    $$self.$inject_state($$props.$$inject);
 	  }
 
-	  return [message, chat, parentNavInstance, registerCallButtonHandler, refetchMessage];
+	  return [message, chat, parentNavInstance, callButtonCallback, fetchMessageCallback];
 	}
 
 	class MessageActionPhoneCall extends SvelteComponentDev {
@@ -58363,8 +58363,8 @@ var app = (function () {
 	      chat: 1,
 	      message: 0,
 	      parentNavInstance: 2,
-	      registerCallButtonHandler: 3,
-	      refetchMessage: 4
+	      callButtonCallback: 3,
+	      fetchMessageCallback: 4
 	    });
 	    dispatch_dev("SvelteRegisterComponent", {
 	      component: this,
@@ -58406,19 +58406,19 @@ var app = (function () {
 	    throw new Error("<MessageActionPhoneCall>: Props cannot be set directly on the component instance unless compiling with 'accessors: true' or '<svelte:options accessors/>'");
 	  }
 
-	  get registerCallButtonHandler() {
+	  get callButtonCallback() {
 	    throw new Error("<MessageActionPhoneCall>: Props cannot be read directly from the component instance unless compiling with 'accessors: true' or '<svelte:options accessors/>'");
 	  }
 
-	  set registerCallButtonHandler(value) {
+	  set callButtonCallback(value) {
 	    throw new Error("<MessageActionPhoneCall>: Props cannot be set directly on the component instance unless compiling with 'accessors: true' or '<svelte:options accessors/>'");
 	  }
 
-	  get refetchMessage() {
+	  get fetchMessageCallback() {
 	    throw new Error("<MessageActionPhoneCall>: Props cannot be read directly from the component instance unless compiling with 'accessors: true' or '<svelte:options accessors/>'");
 	  }
 
-	  set refetchMessage(value) {
+	  set fetchMessageCallback(value) {
 	    throw new Error("<MessageActionPhoneCall>: Props cannot be set directly on the component instance unless compiling with 'accessors: true' or '<svelte:options accessors/>'");
 	  }
 
@@ -58439,9 +58439,9 @@ var app = (function () {
 	      p = element("p");
 	      t = text(t_value);
 	      attr_dev(p, "class", "svelte-flynnq");
-	      add_location(p, file$j, 13, 2, 373);
+	      add_location(p, file$j, 13, 2, 372);
 	      attr_dev(div, "class", "MessageActionScreenshotTaken svelte-flynnq");
-	      add_location(div, file$j, 12, 0, 328);
+	      add_location(div, file$j, 12, 0, 327);
 	    },
 	    l: function claim(nodes) {
 	      throw new Error("options.hydrate only works if the component was compiled with the `hydratable: true` option");
@@ -58487,13 +58487,13 @@ var app = (function () {
 	  var _$$props$message = $$props.message,
 	      message = _$$props$message === void 0 ? {} : _$$props$message;
 	  var parentNavInstance = $$props.parentNavInstance;
-	  var _$$props$registerCall = $$props.registerCallButtonHandler,
-	      registerCallButtonHandler = _$$props$registerCall === void 0 ? (id, callback) => {} : _$$props$registerCall;
-	  var _$$props$refetchMessa = $$props.refetchMessage,
-	      refetchMessage = _$$props$refetchMessa === void 0 ? id => {} : _$$props$refetchMessa;
+	  var _$$props$callButtonCa = $$props.callButtonCallback,
+	      callButtonCallback = _$$props$callButtonCa === void 0 ? (id, callback) => {} : _$$props$callButtonCa;
+	  var _$$props$fetchMessage = $$props.fetchMessageCallback,
+	      fetchMessageCallback = _$$props$fetchMessage === void 0 ? id => {} : _$$props$fetchMessage;
 	  onMount(() => {}); // console.log(message);
 
-	  var writable_props = ['chat', 'message', 'parentNavInstance', 'registerCallButtonHandler', 'refetchMessage'];
+	  var writable_props = ['chat', 'message', 'parentNavInstance', 'callButtonCallback', 'fetchMessageCallback'];
 	  Object.keys($$props).forEach(key => {
 	    if (!~writable_props.indexOf(key) && key.slice(0, 2) !== '$$' && key !== 'slot') console.warn(`<MessageActionScreenshotTaken> was created with unknown prop '${key}'`);
 	  });
@@ -58502,8 +58502,8 @@ var app = (function () {
 	    if ('chat' in $$props) $$invalidate(1, chat = $$props.chat);
 	    if ('message' in $$props) $$invalidate(0, message = $$props.message);
 	    if ('parentNavInstance' in $$props) $$invalidate(2, parentNavInstance = $$props.parentNavInstance);
-	    if ('registerCallButtonHandler' in $$props) $$invalidate(3, registerCallButtonHandler = $$props.registerCallButtonHandler);
-	    if ('refetchMessage' in $$props) $$invalidate(4, refetchMessage = $$props.refetchMessage);
+	    if ('callButtonCallback' in $$props) $$invalidate(3, callButtonCallback = $$props.callButtonCallback);
+	    if ('fetchMessageCallback' in $$props) $$invalidate(4, fetchMessageCallback = $$props.fetchMessageCallback);
 	  };
 
 	  $$self.$capture_state = () => ({
@@ -58511,23 +58511,23 @@ var app = (function () {
 	    chat,
 	    message,
 	    parentNavInstance,
-	    registerCallButtonHandler,
-	    refetchMessage
+	    callButtonCallback,
+	    fetchMessageCallback
 	  });
 
 	  $$self.$inject_state = $$props => {
 	    if ('chat' in $$props) $$invalidate(1, chat = $$props.chat);
 	    if ('message' in $$props) $$invalidate(0, message = $$props.message);
 	    if ('parentNavInstance' in $$props) $$invalidate(2, parentNavInstance = $$props.parentNavInstance);
-	    if ('registerCallButtonHandler' in $$props) $$invalidate(3, registerCallButtonHandler = $$props.registerCallButtonHandler);
-	    if ('refetchMessage' in $$props) $$invalidate(4, refetchMessage = $$props.refetchMessage);
+	    if ('callButtonCallback' in $$props) $$invalidate(3, callButtonCallback = $$props.callButtonCallback);
+	    if ('fetchMessageCallback' in $$props) $$invalidate(4, fetchMessageCallback = $$props.fetchMessageCallback);
 	  };
 
 	  if ($$props && "$$inject" in $$props) {
 	    $$self.$inject_state($$props.$$inject);
 	  }
 
-	  return [message, chat, parentNavInstance, registerCallButtonHandler, refetchMessage];
+	  return [message, chat, parentNavInstance, callButtonCallback, fetchMessageCallback];
 	}
 
 	class MessageActionScreenshotTaken extends SvelteComponentDev {
@@ -58537,8 +58537,8 @@ var app = (function () {
 	      chat: 1,
 	      message: 0,
 	      parentNavInstance: 2,
-	      registerCallButtonHandler: 3,
-	      refetchMessage: 4
+	      callButtonCallback: 3,
+	      fetchMessageCallback: 4
 	    });
 	    dispatch_dev("SvelteRegisterComponent", {
 	      component: this,
@@ -58580,19 +58580,19 @@ var app = (function () {
 	    throw new Error("<MessageActionScreenshotTaken>: Props cannot be set directly on the component instance unless compiling with 'accessors: true' or '<svelte:options accessors/>'");
 	  }
 
-	  get registerCallButtonHandler() {
+	  get callButtonCallback() {
 	    throw new Error("<MessageActionScreenshotTaken>: Props cannot be read directly from the component instance unless compiling with 'accessors: true' or '<svelte:options accessors/>'");
 	  }
 
-	  set registerCallButtonHandler(value) {
+	  set callButtonCallback(value) {
 	    throw new Error("<MessageActionScreenshotTaken>: Props cannot be set directly on the component instance unless compiling with 'accessors: true' or '<svelte:options accessors/>'");
 	  }
 
-	  get refetchMessage() {
+	  get fetchMessageCallback() {
 	    throw new Error("<MessageActionScreenshotTaken>: Props cannot be read directly from the component instance unless compiling with 'accessors: true' or '<svelte:options accessors/>'");
 	  }
 
-	  set refetchMessage(value) {
+	  set fetchMessageCallback(value) {
 	    throw new Error("<MessageActionScreenshotTaken>: Props cannot be set directly on the component instance unless compiling with 'accessors: true' or '<svelte:options accessors/>'");
 	  }
 
@@ -58613,9 +58613,9 @@ var app = (function () {
 	      p = element("p");
 	      t = text(t_value);
 	      attr_dev(p, "class", "svelte-9br0ga");
-	      add_location(p, file$i, 13, 2, 370);
+	      add_location(p, file$i, 13, 2, 369);
 	      attr_dev(div, "class", "MessageActionCustomAction svelte-9br0ga");
-	      add_location(div, file$i, 12, 0, 328);
+	      add_location(div, file$i, 12, 0, 327);
 	    },
 	    l: function claim(nodes) {
 	      throw new Error("options.hydrate only works if the component was compiled with the `hydratable: true` option");
@@ -58661,13 +58661,13 @@ var app = (function () {
 	  var _$$props$message = $$props.message,
 	      message = _$$props$message === void 0 ? {} : _$$props$message;
 	  var parentNavInstance = $$props.parentNavInstance;
-	  var _$$props$registerCall = $$props.registerCallButtonHandler,
-	      registerCallButtonHandler = _$$props$registerCall === void 0 ? (id, callback) => {} : _$$props$registerCall;
-	  var _$$props$refetchMessa = $$props.refetchMessage,
-	      refetchMessage = _$$props$refetchMessa === void 0 ? id => {} : _$$props$refetchMessa;
+	  var _$$props$callButtonCa = $$props.callButtonCallback,
+	      callButtonCallback = _$$props$callButtonCa === void 0 ? (id, callback) => {} : _$$props$callButtonCa;
+	  var _$$props$fetchMessage = $$props.fetchMessageCallback,
+	      fetchMessageCallback = _$$props$fetchMessage === void 0 ? id => {} : _$$props$fetchMessage;
 	  onMount(() => {}); // console.log(message);
 
-	  var writable_props = ['chat', 'message', 'parentNavInstance', 'registerCallButtonHandler', 'refetchMessage'];
+	  var writable_props = ['chat', 'message', 'parentNavInstance', 'callButtonCallback', 'fetchMessageCallback'];
 	  Object.keys($$props).forEach(key => {
 	    if (!~writable_props.indexOf(key) && key.slice(0, 2) !== '$$' && key !== 'slot') console.warn(`<MessageActionCustomAction> was created with unknown prop '${key}'`);
 	  });
@@ -58676,8 +58676,8 @@ var app = (function () {
 	    if ('chat' in $$props) $$invalidate(1, chat = $$props.chat);
 	    if ('message' in $$props) $$invalidate(0, message = $$props.message);
 	    if ('parentNavInstance' in $$props) $$invalidate(2, parentNavInstance = $$props.parentNavInstance);
-	    if ('registerCallButtonHandler' in $$props) $$invalidate(3, registerCallButtonHandler = $$props.registerCallButtonHandler);
-	    if ('refetchMessage' in $$props) $$invalidate(4, refetchMessage = $$props.refetchMessage);
+	    if ('callButtonCallback' in $$props) $$invalidate(3, callButtonCallback = $$props.callButtonCallback);
+	    if ('fetchMessageCallback' in $$props) $$invalidate(4, fetchMessageCallback = $$props.fetchMessageCallback);
 	  };
 
 	  $$self.$capture_state = () => ({
@@ -58685,23 +58685,23 @@ var app = (function () {
 	    chat,
 	    message,
 	    parentNavInstance,
-	    registerCallButtonHandler,
-	    refetchMessage
+	    callButtonCallback,
+	    fetchMessageCallback
 	  });
 
 	  $$self.$inject_state = $$props => {
 	    if ('chat' in $$props) $$invalidate(1, chat = $$props.chat);
 	    if ('message' in $$props) $$invalidate(0, message = $$props.message);
 	    if ('parentNavInstance' in $$props) $$invalidate(2, parentNavInstance = $$props.parentNavInstance);
-	    if ('registerCallButtonHandler' in $$props) $$invalidate(3, registerCallButtonHandler = $$props.registerCallButtonHandler);
-	    if ('refetchMessage' in $$props) $$invalidate(4, refetchMessage = $$props.refetchMessage);
+	    if ('callButtonCallback' in $$props) $$invalidate(3, callButtonCallback = $$props.callButtonCallback);
+	    if ('fetchMessageCallback' in $$props) $$invalidate(4, fetchMessageCallback = $$props.fetchMessageCallback);
 	  };
 
 	  if ($$props && "$$inject" in $$props) {
 	    $$self.$inject_state($$props.$$inject);
 	  }
 
-	  return [message, chat, parentNavInstance, registerCallButtonHandler, refetchMessage];
+	  return [message, chat, parentNavInstance, callButtonCallback, fetchMessageCallback];
 	}
 
 	class MessageActionCustomAction extends SvelteComponentDev {
@@ -58711,8 +58711,8 @@ var app = (function () {
 	      chat: 1,
 	      message: 0,
 	      parentNavInstance: 2,
-	      registerCallButtonHandler: 3,
-	      refetchMessage: 4
+	      callButtonCallback: 3,
+	      fetchMessageCallback: 4
 	    });
 	    dispatch_dev("SvelteRegisterComponent", {
 	      component: this,
@@ -58754,19 +58754,19 @@ var app = (function () {
 	    throw new Error("<MessageActionCustomAction>: Props cannot be set directly on the component instance unless compiling with 'accessors: true' or '<svelte:options accessors/>'");
 	  }
 
-	  get registerCallButtonHandler() {
+	  get callButtonCallback() {
 	    throw new Error("<MessageActionCustomAction>: Props cannot be read directly from the component instance unless compiling with 'accessors: true' or '<svelte:options accessors/>'");
 	  }
 
-	  set registerCallButtonHandler(value) {
+	  set callButtonCallback(value) {
 	    throw new Error("<MessageActionCustomAction>: Props cannot be set directly on the component instance unless compiling with 'accessors: true' or '<svelte:options accessors/>'");
 	  }
 
-	  get refetchMessage() {
+	  get fetchMessageCallback() {
 	    throw new Error("<MessageActionCustomAction>: Props cannot be read directly from the component instance unless compiling with 'accessors: true' or '<svelte:options accessors/>'");
 	  }
 
-	  set refetchMessage(value) {
+	  set fetchMessageCallback(value) {
 	    throw new Error("<MessageActionCustomAction>: Props cannot be set directly on the component instance unless compiling with 'accessors: true' or '<svelte:options accessors/>'");
 	  }
 
@@ -58784,9 +58784,9 @@ var app = (function () {
 	      p = element("p");
 	      p.textContent = "Bot allowed";
 	      attr_dev(p, "class", "svelte-n94dpq");
-	      add_location(p, file$h, 15, 2, 414);
+	      add_location(p, file$h, 15, 2, 413);
 	      attr_dev(div, "class", "MessageActionBotAllowed svelte-n94dpq");
-	      add_location(div, file$h, 14, 0, 374);
+	      add_location(div, file$h, 14, 0, 373);
 	    },
 	    l: function claim(nodes) {
 	      throw new Error("options.hydrate only works if the component was compiled with the `hydratable: true` option");
@@ -58822,13 +58822,13 @@ var app = (function () {
 	  var _$$props$message = $$props.message,
 	      message = _$$props$message === void 0 ? {} : _$$props$message;
 	  var parentNavInstance = $$props.parentNavInstance;
-	  var _$$props$registerCall = $$props.registerCallButtonHandler,
-	      registerCallButtonHandler = _$$props$registerCall === void 0 ? (id, callback) => {} : _$$props$registerCall;
-	  var _$$props$refetchMessa = $$props.refetchMessage,
-	      refetchMessage = _$$props$refetchMessa === void 0 ? id => {} : _$$props$refetchMessa;
+	  var _$$props$callButtonCa = $$props.callButtonCallback,
+	      callButtonCallback = _$$props$callButtonCa === void 0 ? (id, callback) => {} : _$$props$callButtonCa;
+	  var _$$props$fetchMessage = $$props.fetchMessageCallback,
+	      fetchMessageCallback = _$$props$fetchMessage === void 0 ? id => {} : _$$props$fetchMessage;
 	  onMount(() => {}); // console.log(message);
 
-	  var writable_props = ['chat', 'message', 'parentNavInstance', 'registerCallButtonHandler', 'refetchMessage'];
+	  var writable_props = ['chat', 'message', 'parentNavInstance', 'callButtonCallback', 'fetchMessageCallback'];
 	  Object.keys($$props).forEach(key => {
 	    if (!~writable_props.indexOf(key) && key.slice(0, 2) !== '$$' && key !== 'slot') console.warn(`<MessageActionBotAllowed> was created with unknown prop '${key}'`);
 	  });
@@ -58837,8 +58837,8 @@ var app = (function () {
 	    if ('chat' in $$props) $$invalidate(0, chat = $$props.chat);
 	    if ('message' in $$props) $$invalidate(1, message = $$props.message);
 	    if ('parentNavInstance' in $$props) $$invalidate(2, parentNavInstance = $$props.parentNavInstance);
-	    if ('registerCallButtonHandler' in $$props) $$invalidate(3, registerCallButtonHandler = $$props.registerCallButtonHandler);
-	    if ('refetchMessage' in $$props) $$invalidate(4, refetchMessage = $$props.refetchMessage);
+	    if ('callButtonCallback' in $$props) $$invalidate(3, callButtonCallback = $$props.callButtonCallback);
+	    if ('fetchMessageCallback' in $$props) $$invalidate(4, fetchMessageCallback = $$props.fetchMessageCallback);
 	  };
 
 	  $$self.$capture_state = () => ({
@@ -58846,23 +58846,23 @@ var app = (function () {
 	    chat,
 	    message,
 	    parentNavInstance,
-	    registerCallButtonHandler,
-	    refetchMessage
+	    callButtonCallback,
+	    fetchMessageCallback
 	  });
 
 	  $$self.$inject_state = $$props => {
 	    if ('chat' in $$props) $$invalidate(0, chat = $$props.chat);
 	    if ('message' in $$props) $$invalidate(1, message = $$props.message);
 	    if ('parentNavInstance' in $$props) $$invalidate(2, parentNavInstance = $$props.parentNavInstance);
-	    if ('registerCallButtonHandler' in $$props) $$invalidate(3, registerCallButtonHandler = $$props.registerCallButtonHandler);
-	    if ('refetchMessage' in $$props) $$invalidate(4, refetchMessage = $$props.refetchMessage);
+	    if ('callButtonCallback' in $$props) $$invalidate(3, callButtonCallback = $$props.callButtonCallback);
+	    if ('fetchMessageCallback' in $$props) $$invalidate(4, fetchMessageCallback = $$props.fetchMessageCallback);
 	  };
 
 	  if ($$props && "$$inject" in $$props) {
 	    $$self.$inject_state($$props.$$inject);
 	  }
 
-	  return [chat, message, parentNavInstance, registerCallButtonHandler, refetchMessage];
+	  return [chat, message, parentNavInstance, callButtonCallback, fetchMessageCallback];
 	}
 
 	class MessageActionBotAllowed extends SvelteComponentDev {
@@ -58872,8 +58872,8 @@ var app = (function () {
 	      chat: 0,
 	      message: 1,
 	      parentNavInstance: 2,
-	      registerCallButtonHandler: 3,
-	      refetchMessage: 4
+	      callButtonCallback: 3,
+	      fetchMessageCallback: 4
 	    });
 	    dispatch_dev("SvelteRegisterComponent", {
 	      component: this,
@@ -58924,24 +58924,24 @@ var app = (function () {
 	    flush();
 	  }
 
-	  get registerCallButtonHandler() {
+	  get callButtonCallback() {
 	    return this.$$.ctx[3];
 	  }
 
-	  set registerCallButtonHandler(registerCallButtonHandler) {
+	  set callButtonCallback(callButtonCallback) {
 	    this.$$set({
-	      registerCallButtonHandler
+	      callButtonCallback
 	    });
 	    flush();
 	  }
 
-	  get refetchMessage() {
+	  get fetchMessageCallback() {
 	    return this.$$.ctx[4];
 	  }
 
-	  set refetchMessage(refetchMessage) {
+	  set fetchMessageCallback(fetchMessageCallback) {
 	    this.$$set({
-	      refetchMessage
+	      fetchMessageCallback
 	    });
 	    flush();
 	  }
@@ -58963,9 +58963,9 @@ var app = (function () {
 	      p = element("p");
 	      t = text(t_value);
 	      attr_dev(p, "class", "svelte-10vt2xa");
-	      add_location(p, file$g, 13, 2, 376);
+	      add_location(p, file$g, 13, 2, 375);
 	      attr_dev(div, "class", "MessageActionSecureValuesSentMe svelte-10vt2xa");
-	      add_location(div, file$g, 12, 0, 328);
+	      add_location(div, file$g, 12, 0, 327);
 	    },
 	    l: function claim(nodes) {
 	      throw new Error("options.hydrate only works if the component was compiled with the `hydratable: true` option");
@@ -59011,13 +59011,13 @@ var app = (function () {
 	  var _$$props$message = $$props.message,
 	      message = _$$props$message === void 0 ? {} : _$$props$message;
 	  var parentNavInstance = $$props.parentNavInstance;
-	  var _$$props$registerCall = $$props.registerCallButtonHandler,
-	      registerCallButtonHandler = _$$props$registerCall === void 0 ? (id, callback) => {} : _$$props$registerCall;
-	  var _$$props$refetchMessa = $$props.refetchMessage,
-	      refetchMessage = _$$props$refetchMessa === void 0 ? id => {} : _$$props$refetchMessa;
+	  var _$$props$callButtonCa = $$props.callButtonCallback,
+	      callButtonCallback = _$$props$callButtonCa === void 0 ? (id, callback) => {} : _$$props$callButtonCa;
+	  var _$$props$fetchMessage = $$props.fetchMessageCallback,
+	      fetchMessageCallback = _$$props$fetchMessage === void 0 ? id => {} : _$$props$fetchMessage;
 	  onMount(() => {}); // console.log(message);
 
-	  var writable_props = ['chat', 'message', 'parentNavInstance', 'registerCallButtonHandler', 'refetchMessage'];
+	  var writable_props = ['chat', 'message', 'parentNavInstance', 'callButtonCallback', 'fetchMessageCallback'];
 	  Object.keys($$props).forEach(key => {
 	    if (!~writable_props.indexOf(key) && key.slice(0, 2) !== '$$' && key !== 'slot') console.warn(`<MessageActionSecureValuesSentMe> was created with unknown prop '${key}'`);
 	  });
@@ -59026,8 +59026,8 @@ var app = (function () {
 	    if ('chat' in $$props) $$invalidate(1, chat = $$props.chat);
 	    if ('message' in $$props) $$invalidate(0, message = $$props.message);
 	    if ('parentNavInstance' in $$props) $$invalidate(2, parentNavInstance = $$props.parentNavInstance);
-	    if ('registerCallButtonHandler' in $$props) $$invalidate(3, registerCallButtonHandler = $$props.registerCallButtonHandler);
-	    if ('refetchMessage' in $$props) $$invalidate(4, refetchMessage = $$props.refetchMessage);
+	    if ('callButtonCallback' in $$props) $$invalidate(3, callButtonCallback = $$props.callButtonCallback);
+	    if ('fetchMessageCallback' in $$props) $$invalidate(4, fetchMessageCallback = $$props.fetchMessageCallback);
 	  };
 
 	  $$self.$capture_state = () => ({
@@ -59035,23 +59035,23 @@ var app = (function () {
 	    chat,
 	    message,
 	    parentNavInstance,
-	    registerCallButtonHandler,
-	    refetchMessage
+	    callButtonCallback,
+	    fetchMessageCallback
 	  });
 
 	  $$self.$inject_state = $$props => {
 	    if ('chat' in $$props) $$invalidate(1, chat = $$props.chat);
 	    if ('message' in $$props) $$invalidate(0, message = $$props.message);
 	    if ('parentNavInstance' in $$props) $$invalidate(2, parentNavInstance = $$props.parentNavInstance);
-	    if ('registerCallButtonHandler' in $$props) $$invalidate(3, registerCallButtonHandler = $$props.registerCallButtonHandler);
-	    if ('refetchMessage' in $$props) $$invalidate(4, refetchMessage = $$props.refetchMessage);
+	    if ('callButtonCallback' in $$props) $$invalidate(3, callButtonCallback = $$props.callButtonCallback);
+	    if ('fetchMessageCallback' in $$props) $$invalidate(4, fetchMessageCallback = $$props.fetchMessageCallback);
 	  };
 
 	  if ($$props && "$$inject" in $$props) {
 	    $$self.$inject_state($$props.$$inject);
 	  }
 
-	  return [message, chat, parentNavInstance, registerCallButtonHandler, refetchMessage];
+	  return [message, chat, parentNavInstance, callButtonCallback, fetchMessageCallback];
 	}
 
 	class MessageActionSecureValuesSentMe extends SvelteComponentDev {
@@ -59061,8 +59061,8 @@ var app = (function () {
 	      chat: 1,
 	      message: 0,
 	      parentNavInstance: 2,
-	      registerCallButtonHandler: 3,
-	      refetchMessage: 4
+	      callButtonCallback: 3,
+	      fetchMessageCallback: 4
 	    });
 	    dispatch_dev("SvelteRegisterComponent", {
 	      component: this,
@@ -59104,19 +59104,19 @@ var app = (function () {
 	    throw new Error("<MessageActionSecureValuesSentMe>: Props cannot be set directly on the component instance unless compiling with 'accessors: true' or '<svelte:options accessors/>'");
 	  }
 
-	  get registerCallButtonHandler() {
+	  get callButtonCallback() {
 	    throw new Error("<MessageActionSecureValuesSentMe>: Props cannot be read directly from the component instance unless compiling with 'accessors: true' or '<svelte:options accessors/>'");
 	  }
 
-	  set registerCallButtonHandler(value) {
+	  set callButtonCallback(value) {
 	    throw new Error("<MessageActionSecureValuesSentMe>: Props cannot be set directly on the component instance unless compiling with 'accessors: true' or '<svelte:options accessors/>'");
 	  }
 
-	  get refetchMessage() {
+	  get fetchMessageCallback() {
 	    throw new Error("<MessageActionSecureValuesSentMe>: Props cannot be read directly from the component instance unless compiling with 'accessors: true' or '<svelte:options accessors/>'");
 	  }
 
-	  set refetchMessage(value) {
+	  set fetchMessageCallback(value) {
 	    throw new Error("<MessageActionSecureValuesSentMe>: Props cannot be set directly on the component instance unless compiling with 'accessors: true' or '<svelte:options accessors/>'");
 	  }
 
@@ -59137,9 +59137,9 @@ var app = (function () {
 	      p = element("p");
 	      t = text(t_value);
 	      attr_dev(p, "class", "svelte-1qfe2b2");
-	      add_location(p, file$f, 13, 2, 374);
+	      add_location(p, file$f, 13, 2, 373);
 	      attr_dev(div, "class", "MessageActionSecureValuesSent svelte-1qfe2b2");
-	      add_location(div, file$f, 12, 0, 328);
+	      add_location(div, file$f, 12, 0, 327);
 	    },
 	    l: function claim(nodes) {
 	      throw new Error("options.hydrate only works if the component was compiled with the `hydratable: true` option");
@@ -59185,13 +59185,13 @@ var app = (function () {
 	  var _$$props$message = $$props.message,
 	      message = _$$props$message === void 0 ? {} : _$$props$message;
 	  var parentNavInstance = $$props.parentNavInstance;
-	  var _$$props$registerCall = $$props.registerCallButtonHandler,
-	      registerCallButtonHandler = _$$props$registerCall === void 0 ? (id, callback) => {} : _$$props$registerCall;
-	  var _$$props$refetchMessa = $$props.refetchMessage,
-	      refetchMessage = _$$props$refetchMessa === void 0 ? id => {} : _$$props$refetchMessa;
+	  var _$$props$callButtonCa = $$props.callButtonCallback,
+	      callButtonCallback = _$$props$callButtonCa === void 0 ? (id, callback) => {} : _$$props$callButtonCa;
+	  var _$$props$fetchMessage = $$props.fetchMessageCallback,
+	      fetchMessageCallback = _$$props$fetchMessage === void 0 ? id => {} : _$$props$fetchMessage;
 	  onMount(() => {}); // console.log(message);
 
-	  var writable_props = ['chat', 'message', 'parentNavInstance', 'registerCallButtonHandler', 'refetchMessage'];
+	  var writable_props = ['chat', 'message', 'parentNavInstance', 'callButtonCallback', 'fetchMessageCallback'];
 	  Object.keys($$props).forEach(key => {
 	    if (!~writable_props.indexOf(key) && key.slice(0, 2) !== '$$' && key !== 'slot') console.warn(`<MessageActionSecureValuesSent> was created with unknown prop '${key}'`);
 	  });
@@ -59200,8 +59200,8 @@ var app = (function () {
 	    if ('chat' in $$props) $$invalidate(1, chat = $$props.chat);
 	    if ('message' in $$props) $$invalidate(0, message = $$props.message);
 	    if ('parentNavInstance' in $$props) $$invalidate(2, parentNavInstance = $$props.parentNavInstance);
-	    if ('registerCallButtonHandler' in $$props) $$invalidate(3, registerCallButtonHandler = $$props.registerCallButtonHandler);
-	    if ('refetchMessage' in $$props) $$invalidate(4, refetchMessage = $$props.refetchMessage);
+	    if ('callButtonCallback' in $$props) $$invalidate(3, callButtonCallback = $$props.callButtonCallback);
+	    if ('fetchMessageCallback' in $$props) $$invalidate(4, fetchMessageCallback = $$props.fetchMessageCallback);
 	  };
 
 	  $$self.$capture_state = () => ({
@@ -59209,23 +59209,23 @@ var app = (function () {
 	    chat,
 	    message,
 	    parentNavInstance,
-	    registerCallButtonHandler,
-	    refetchMessage
+	    callButtonCallback,
+	    fetchMessageCallback
 	  });
 
 	  $$self.$inject_state = $$props => {
 	    if ('chat' in $$props) $$invalidate(1, chat = $$props.chat);
 	    if ('message' in $$props) $$invalidate(0, message = $$props.message);
 	    if ('parentNavInstance' in $$props) $$invalidate(2, parentNavInstance = $$props.parentNavInstance);
-	    if ('registerCallButtonHandler' in $$props) $$invalidate(3, registerCallButtonHandler = $$props.registerCallButtonHandler);
-	    if ('refetchMessage' in $$props) $$invalidate(4, refetchMessage = $$props.refetchMessage);
+	    if ('callButtonCallback' in $$props) $$invalidate(3, callButtonCallback = $$props.callButtonCallback);
+	    if ('fetchMessageCallback' in $$props) $$invalidate(4, fetchMessageCallback = $$props.fetchMessageCallback);
 	  };
 
 	  if ($$props && "$$inject" in $$props) {
 	    $$self.$inject_state($$props.$$inject);
 	  }
 
-	  return [message, chat, parentNavInstance, registerCallButtonHandler, refetchMessage];
+	  return [message, chat, parentNavInstance, callButtonCallback, fetchMessageCallback];
 	}
 
 	class MessageActionSecureValuesSent extends SvelteComponentDev {
@@ -59235,8 +59235,8 @@ var app = (function () {
 	      chat: 1,
 	      message: 0,
 	      parentNavInstance: 2,
-	      registerCallButtonHandler: 3,
-	      refetchMessage: 4
+	      callButtonCallback: 3,
+	      fetchMessageCallback: 4
 	    });
 	    dispatch_dev("SvelteRegisterComponent", {
 	      component: this,
@@ -59278,19 +59278,19 @@ var app = (function () {
 	    throw new Error("<MessageActionSecureValuesSent>: Props cannot be set directly on the component instance unless compiling with 'accessors: true' or '<svelte:options accessors/>'");
 	  }
 
-	  get registerCallButtonHandler() {
+	  get callButtonCallback() {
 	    throw new Error("<MessageActionSecureValuesSent>: Props cannot be read directly from the component instance unless compiling with 'accessors: true' or '<svelte:options accessors/>'");
 	  }
 
-	  set registerCallButtonHandler(value) {
+	  set callButtonCallback(value) {
 	    throw new Error("<MessageActionSecureValuesSent>: Props cannot be set directly on the component instance unless compiling with 'accessors: true' or '<svelte:options accessors/>'");
 	  }
 
-	  get refetchMessage() {
+	  get fetchMessageCallback() {
 	    throw new Error("<MessageActionSecureValuesSent>: Props cannot be read directly from the component instance unless compiling with 'accessors: true' or '<svelte:options accessors/>'");
 	  }
 
-	  set refetchMessage(value) {
+	  set fetchMessageCallback(value) {
 	    throw new Error("<MessageActionSecureValuesSent>: Props cannot be set directly on the component instance unless compiling with 'accessors: true' or '<svelte:options accessors/>'");
 	  }
 
@@ -59308,9 +59308,9 @@ var app = (function () {
 	      p = element("p");
 	      p.textContent = "Contact sign up";
 	      attr_dev(p, "class", "svelte-42b9dc");
-	      add_location(p, file$e, 13, 2, 371);
+	      add_location(p, file$e, 13, 2, 370);
 	      attr_dev(div, "class", "MessageActionContactSignUp svelte-42b9dc");
-	      add_location(div, file$e, 12, 0, 328);
+	      add_location(div, file$e, 12, 0, 327);
 	    },
 	    l: function claim(nodes) {
 	      throw new Error("options.hydrate only works if the component was compiled with the `hydratable: true` option");
@@ -59346,13 +59346,13 @@ var app = (function () {
 	  var _$$props$message = $$props.message,
 	      message = _$$props$message === void 0 ? {} : _$$props$message;
 	  var parentNavInstance = $$props.parentNavInstance;
-	  var _$$props$registerCall = $$props.registerCallButtonHandler,
-	      registerCallButtonHandler = _$$props$registerCall === void 0 ? (id, callback) => {} : _$$props$registerCall;
-	  var _$$props$refetchMessa = $$props.refetchMessage,
-	      refetchMessage = _$$props$refetchMessa === void 0 ? id => {} : _$$props$refetchMessa;
+	  var _$$props$callButtonCa = $$props.callButtonCallback,
+	      callButtonCallback = _$$props$callButtonCa === void 0 ? (id, callback) => {} : _$$props$callButtonCa;
+	  var _$$props$fetchMessage = $$props.fetchMessageCallback,
+	      fetchMessageCallback = _$$props$fetchMessage === void 0 ? id => {} : _$$props$fetchMessage;
 	  onMount(() => {}); // console.log(message);
 
-	  var writable_props = ['chat', 'message', 'parentNavInstance', 'registerCallButtonHandler', 'refetchMessage'];
+	  var writable_props = ['chat', 'message', 'parentNavInstance', 'callButtonCallback', 'fetchMessageCallback'];
 	  Object.keys($$props).forEach(key => {
 	    if (!~writable_props.indexOf(key) && key.slice(0, 2) !== '$$' && key !== 'slot') console.warn(`<MessageActionContactSignUp> was created with unknown prop '${key}'`);
 	  });
@@ -59361,8 +59361,8 @@ var app = (function () {
 	    if ('chat' in $$props) $$invalidate(0, chat = $$props.chat);
 	    if ('message' in $$props) $$invalidate(1, message = $$props.message);
 	    if ('parentNavInstance' in $$props) $$invalidate(2, parentNavInstance = $$props.parentNavInstance);
-	    if ('registerCallButtonHandler' in $$props) $$invalidate(3, registerCallButtonHandler = $$props.registerCallButtonHandler);
-	    if ('refetchMessage' in $$props) $$invalidate(4, refetchMessage = $$props.refetchMessage);
+	    if ('callButtonCallback' in $$props) $$invalidate(3, callButtonCallback = $$props.callButtonCallback);
+	    if ('fetchMessageCallback' in $$props) $$invalidate(4, fetchMessageCallback = $$props.fetchMessageCallback);
 	  };
 
 	  $$self.$capture_state = () => ({
@@ -59370,23 +59370,23 @@ var app = (function () {
 	    chat,
 	    message,
 	    parentNavInstance,
-	    registerCallButtonHandler,
-	    refetchMessage
+	    callButtonCallback,
+	    fetchMessageCallback
 	  });
 
 	  $$self.$inject_state = $$props => {
 	    if ('chat' in $$props) $$invalidate(0, chat = $$props.chat);
 	    if ('message' in $$props) $$invalidate(1, message = $$props.message);
 	    if ('parentNavInstance' in $$props) $$invalidate(2, parentNavInstance = $$props.parentNavInstance);
-	    if ('registerCallButtonHandler' in $$props) $$invalidate(3, registerCallButtonHandler = $$props.registerCallButtonHandler);
-	    if ('refetchMessage' in $$props) $$invalidate(4, refetchMessage = $$props.refetchMessage);
+	    if ('callButtonCallback' in $$props) $$invalidate(3, callButtonCallback = $$props.callButtonCallback);
+	    if ('fetchMessageCallback' in $$props) $$invalidate(4, fetchMessageCallback = $$props.fetchMessageCallback);
 	  };
 
 	  if ($$props && "$$inject" in $$props) {
 	    $$self.$inject_state($$props.$$inject);
 	  }
 
-	  return [chat, message, parentNavInstance, registerCallButtonHandler, refetchMessage];
+	  return [chat, message, parentNavInstance, callButtonCallback, fetchMessageCallback];
 	}
 
 	class MessageActionContactSignUp extends SvelteComponentDev {
@@ -59396,8 +59396,8 @@ var app = (function () {
 	      chat: 0,
 	      message: 1,
 	      parentNavInstance: 2,
-	      registerCallButtonHandler: 3,
-	      refetchMessage: 4
+	      callButtonCallback: 3,
+	      fetchMessageCallback: 4
 	    });
 	    dispatch_dev("SvelteRegisterComponent", {
 	      component: this,
@@ -59439,19 +59439,19 @@ var app = (function () {
 	    throw new Error("<MessageActionContactSignUp>: Props cannot be set directly on the component instance unless compiling with 'accessors: true' or '<svelte:options accessors/>'");
 	  }
 
-	  get registerCallButtonHandler() {
+	  get callButtonCallback() {
 	    throw new Error("<MessageActionContactSignUp>: Props cannot be read directly from the component instance unless compiling with 'accessors: true' or '<svelte:options accessors/>'");
 	  }
 
-	  set registerCallButtonHandler(value) {
+	  set callButtonCallback(value) {
 	    throw new Error("<MessageActionContactSignUp>: Props cannot be set directly on the component instance unless compiling with 'accessors: true' or '<svelte:options accessors/>'");
 	  }
 
-	  get refetchMessage() {
+	  get fetchMessageCallback() {
 	    throw new Error("<MessageActionContactSignUp>: Props cannot be read directly from the component instance unless compiling with 'accessors: true' or '<svelte:options accessors/>'");
 	  }
 
-	  set refetchMessage(value) {
+	  set fetchMessageCallback(value) {
 	    throw new Error("<MessageActionContactSignUp>: Props cannot be set directly on the component instance unless compiling with 'accessors: true' or '<svelte:options accessors/>'");
 	  }
 
@@ -59479,9 +59479,9 @@ var app = (function () {
 	      t1 = text(": ");
 	      t2 = text(t2_value);
 	      attr_dev(p, "class", "svelte-1i46c4s");
-	      add_location(p, file$d, 13, 2, 377);
+	      add_location(p, file$d, 13, 2, 376);
 	      attr_dev(div, "class", "MessageActionGeoProximityReached svelte-1i46c4s");
-	      add_location(div, file$d, 12, 0, 328);
+	      add_location(div, file$d, 12, 0, 327);
 	    },
 	    l: function claim(nodes) {
 	      throw new Error("options.hydrate only works if the component was compiled with the `hydratable: true` option");
@@ -59534,13 +59534,13 @@ var app = (function () {
 	  var _$$props$message = $$props.message,
 	      message = _$$props$message === void 0 ? {} : _$$props$message;
 	  var parentNavInstance = $$props.parentNavInstance;
-	  var _$$props$registerCall = $$props.registerCallButtonHandler,
-	      registerCallButtonHandler = _$$props$registerCall === void 0 ? (id, callback) => {} : _$$props$registerCall;
-	  var _$$props$refetchMessa = $$props.refetchMessage,
-	      refetchMessage = _$$props$refetchMessa === void 0 ? id => {} : _$$props$refetchMessa;
+	  var _$$props$callButtonCa = $$props.callButtonCallback,
+	      callButtonCallback = _$$props$callButtonCa === void 0 ? (id, callback) => {} : _$$props$callButtonCa;
+	  var _$$props$fetchMessage = $$props.fetchMessageCallback,
+	      fetchMessageCallback = _$$props$fetchMessage === void 0 ? id => {} : _$$props$fetchMessage;
 	  onMount(() => {}); // console.log(message);
 
-	  var writable_props = ['chat', 'message', 'parentNavInstance', 'registerCallButtonHandler', 'refetchMessage'];
+	  var writable_props = ['chat', 'message', 'parentNavInstance', 'callButtonCallback', 'fetchMessageCallback'];
 	  Object.keys($$props).forEach(key => {
 	    if (!~writable_props.indexOf(key) && key.slice(0, 2) !== '$$' && key !== 'slot') console.warn(`<MessageActionGeoProximityReached> was created with unknown prop '${key}'`);
 	  });
@@ -59549,8 +59549,8 @@ var app = (function () {
 	    if ('chat' in $$props) $$invalidate(1, chat = $$props.chat);
 	    if ('message' in $$props) $$invalidate(0, message = $$props.message);
 	    if ('parentNavInstance' in $$props) $$invalidate(2, parentNavInstance = $$props.parentNavInstance);
-	    if ('registerCallButtonHandler' in $$props) $$invalidate(3, registerCallButtonHandler = $$props.registerCallButtonHandler);
-	    if ('refetchMessage' in $$props) $$invalidate(4, refetchMessage = $$props.refetchMessage);
+	    if ('callButtonCallback' in $$props) $$invalidate(3, callButtonCallback = $$props.callButtonCallback);
+	    if ('fetchMessageCallback' in $$props) $$invalidate(4, fetchMessageCallback = $$props.fetchMessageCallback);
 	  };
 
 	  $$self.$capture_state = () => ({
@@ -59558,23 +59558,23 @@ var app = (function () {
 	    chat,
 	    message,
 	    parentNavInstance,
-	    registerCallButtonHandler,
-	    refetchMessage
+	    callButtonCallback,
+	    fetchMessageCallback
 	  });
 
 	  $$self.$inject_state = $$props => {
 	    if ('chat' in $$props) $$invalidate(1, chat = $$props.chat);
 	    if ('message' in $$props) $$invalidate(0, message = $$props.message);
 	    if ('parentNavInstance' in $$props) $$invalidate(2, parentNavInstance = $$props.parentNavInstance);
-	    if ('registerCallButtonHandler' in $$props) $$invalidate(3, registerCallButtonHandler = $$props.registerCallButtonHandler);
-	    if ('refetchMessage' in $$props) $$invalidate(4, refetchMessage = $$props.refetchMessage);
+	    if ('callButtonCallback' in $$props) $$invalidate(3, callButtonCallback = $$props.callButtonCallback);
+	    if ('fetchMessageCallback' in $$props) $$invalidate(4, fetchMessageCallback = $$props.fetchMessageCallback);
 	  };
 
 	  if ($$props && "$$inject" in $$props) {
 	    $$self.$inject_state($$props.$$inject);
 	  }
 
-	  return [message, chat, parentNavInstance, registerCallButtonHandler, refetchMessage];
+	  return [message, chat, parentNavInstance, callButtonCallback, fetchMessageCallback];
 	}
 
 	class MessageActionGeoProximityReached extends SvelteComponentDev {
@@ -59584,8 +59584,8 @@ var app = (function () {
 	      chat: 1,
 	      message: 0,
 	      parentNavInstance: 2,
-	      registerCallButtonHandler: 3,
-	      refetchMessage: 4
+	      callButtonCallback: 3,
+	      fetchMessageCallback: 4
 	    });
 	    dispatch_dev("SvelteRegisterComponent", {
 	      component: this,
@@ -59627,19 +59627,19 @@ var app = (function () {
 	    throw new Error("<MessageActionGeoProximityReached>: Props cannot be set directly on the component instance unless compiling with 'accessors: true' or '<svelte:options accessors/>'");
 	  }
 
-	  get registerCallButtonHandler() {
+	  get callButtonCallback() {
 	    throw new Error("<MessageActionGeoProximityReached>: Props cannot be read directly from the component instance unless compiling with 'accessors: true' or '<svelte:options accessors/>'");
 	  }
 
-	  set registerCallButtonHandler(value) {
+	  set callButtonCallback(value) {
 	    throw new Error("<MessageActionGeoProximityReached>: Props cannot be set directly on the component instance unless compiling with 'accessors: true' or '<svelte:options accessors/>'");
 	  }
 
-	  get refetchMessage() {
+	  get fetchMessageCallback() {
 	    throw new Error("<MessageActionGeoProximityReached>: Props cannot be read directly from the component instance unless compiling with 'accessors: true' or '<svelte:options accessors/>'");
 	  }
 
-	  set refetchMessage(value) {
+	  set fetchMessageCallback(value) {
 	    throw new Error("<MessageActionGeoProximityReached>: Props cannot be set directly on the component instance unless compiling with 'accessors: true' or '<svelte:options accessors/>'");
 	  }
 
@@ -59660,9 +59660,9 @@ var app = (function () {
 	      p = element("p");
 	      t = text(t_value);
 	      attr_dev(p, "class", "svelte-amvfri");
-	      add_location(p, file$c, 13, 2, 367);
+	      add_location(p, file$c, 13, 2, 366);
 	      attr_dev(div, "class", "MessageActionGroupCall svelte-amvfri");
-	      add_location(div, file$c, 12, 0, 328);
+	      add_location(div, file$c, 12, 0, 327);
 	    },
 	    l: function claim(nodes) {
 	      throw new Error("options.hydrate only works if the component was compiled with the `hydratable: true` option");
@@ -59708,13 +59708,13 @@ var app = (function () {
 	  var _$$props$message = $$props.message,
 	      message = _$$props$message === void 0 ? {} : _$$props$message;
 	  var parentNavInstance = $$props.parentNavInstance;
-	  var _$$props$registerCall = $$props.registerCallButtonHandler,
-	      registerCallButtonHandler = _$$props$registerCall === void 0 ? (id, callback) => {} : _$$props$registerCall;
-	  var _$$props$refetchMessa = $$props.refetchMessage,
-	      refetchMessage = _$$props$refetchMessa === void 0 ? id => {} : _$$props$refetchMessa;
+	  var _$$props$callButtonCa = $$props.callButtonCallback,
+	      callButtonCallback = _$$props$callButtonCa === void 0 ? (id, callback) => {} : _$$props$callButtonCa;
+	  var _$$props$fetchMessage = $$props.fetchMessageCallback,
+	      fetchMessageCallback = _$$props$fetchMessage === void 0 ? id => {} : _$$props$fetchMessage;
 	  onMount(() => {}); // console.log(message);
 
-	  var writable_props = ['chat', 'message', 'parentNavInstance', 'registerCallButtonHandler', 'refetchMessage'];
+	  var writable_props = ['chat', 'message', 'parentNavInstance', 'callButtonCallback', 'fetchMessageCallback'];
 	  Object.keys($$props).forEach(key => {
 	    if (!~writable_props.indexOf(key) && key.slice(0, 2) !== '$$' && key !== 'slot') console.warn(`<MessageActionGroupCall> was created with unknown prop '${key}'`);
 	  });
@@ -59723,8 +59723,8 @@ var app = (function () {
 	    if ('chat' in $$props) $$invalidate(1, chat = $$props.chat);
 	    if ('message' in $$props) $$invalidate(0, message = $$props.message);
 	    if ('parentNavInstance' in $$props) $$invalidate(2, parentNavInstance = $$props.parentNavInstance);
-	    if ('registerCallButtonHandler' in $$props) $$invalidate(3, registerCallButtonHandler = $$props.registerCallButtonHandler);
-	    if ('refetchMessage' in $$props) $$invalidate(4, refetchMessage = $$props.refetchMessage);
+	    if ('callButtonCallback' in $$props) $$invalidate(3, callButtonCallback = $$props.callButtonCallback);
+	    if ('fetchMessageCallback' in $$props) $$invalidate(4, fetchMessageCallback = $$props.fetchMessageCallback);
 	  };
 
 	  $$self.$capture_state = () => ({
@@ -59732,23 +59732,23 @@ var app = (function () {
 	    chat,
 	    message,
 	    parentNavInstance,
-	    registerCallButtonHandler,
-	    refetchMessage
+	    callButtonCallback,
+	    fetchMessageCallback
 	  });
 
 	  $$self.$inject_state = $$props => {
 	    if ('chat' in $$props) $$invalidate(1, chat = $$props.chat);
 	    if ('message' in $$props) $$invalidate(0, message = $$props.message);
 	    if ('parentNavInstance' in $$props) $$invalidate(2, parentNavInstance = $$props.parentNavInstance);
-	    if ('registerCallButtonHandler' in $$props) $$invalidate(3, registerCallButtonHandler = $$props.registerCallButtonHandler);
-	    if ('refetchMessage' in $$props) $$invalidate(4, refetchMessage = $$props.refetchMessage);
+	    if ('callButtonCallback' in $$props) $$invalidate(3, callButtonCallback = $$props.callButtonCallback);
+	    if ('fetchMessageCallback' in $$props) $$invalidate(4, fetchMessageCallback = $$props.fetchMessageCallback);
 	  };
 
 	  if ($$props && "$$inject" in $$props) {
 	    $$self.$inject_state($$props.$$inject);
 	  }
 
-	  return [message, chat, parentNavInstance, registerCallButtonHandler, refetchMessage];
+	  return [message, chat, parentNavInstance, callButtonCallback, fetchMessageCallback];
 	}
 
 	class MessageActionGroupCall extends SvelteComponentDev {
@@ -59758,8 +59758,8 @@ var app = (function () {
 	      chat: 1,
 	      message: 0,
 	      parentNavInstance: 2,
-	      registerCallButtonHandler: 3,
-	      refetchMessage: 4
+	      callButtonCallback: 3,
+	      fetchMessageCallback: 4
 	    });
 	    dispatch_dev("SvelteRegisterComponent", {
 	      component: this,
@@ -59801,19 +59801,19 @@ var app = (function () {
 	    throw new Error("<MessageActionGroupCall>: Props cannot be set directly on the component instance unless compiling with 'accessors: true' or '<svelte:options accessors/>'");
 	  }
 
-	  get registerCallButtonHandler() {
+	  get callButtonCallback() {
 	    throw new Error("<MessageActionGroupCall>: Props cannot be read directly from the component instance unless compiling with 'accessors: true' or '<svelte:options accessors/>'");
 	  }
 
-	  set registerCallButtonHandler(value) {
+	  set callButtonCallback(value) {
 	    throw new Error("<MessageActionGroupCall>: Props cannot be set directly on the component instance unless compiling with 'accessors: true' or '<svelte:options accessors/>'");
 	  }
 
-	  get refetchMessage() {
+	  get fetchMessageCallback() {
 	    throw new Error("<MessageActionGroupCall>: Props cannot be read directly from the component instance unless compiling with 'accessors: true' or '<svelte:options accessors/>'");
 	  }
 
-	  set refetchMessage(value) {
+	  set fetchMessageCallback(value) {
 	    throw new Error("<MessageActionGroupCall>: Props cannot be set directly on the component instance unless compiling with 'accessors: true' or '<svelte:options accessors/>'");
 	  }
 
@@ -59834,9 +59834,9 @@ var app = (function () {
 	      p = element("p");
 	      t = text(t_value);
 	      attr_dev(p, "class", "svelte-1melmze");
-	      add_location(p, file$b, 13, 2, 375);
+	      add_location(p, file$b, 13, 2, 374);
 	      attr_dev(div, "class", "MessageActionInviteToGroupCall svelte-1melmze");
-	      add_location(div, file$b, 12, 0, 328);
+	      add_location(div, file$b, 12, 0, 327);
 	    },
 	    l: function claim(nodes) {
 	      throw new Error("options.hydrate only works if the component was compiled with the `hydratable: true` option");
@@ -59882,13 +59882,13 @@ var app = (function () {
 	  var _$$props$message = $$props.message,
 	      message = _$$props$message === void 0 ? {} : _$$props$message;
 	  var parentNavInstance = $$props.parentNavInstance;
-	  var _$$props$registerCall = $$props.registerCallButtonHandler,
-	      registerCallButtonHandler = _$$props$registerCall === void 0 ? (id, callback) => {} : _$$props$registerCall;
-	  var _$$props$refetchMessa = $$props.refetchMessage,
-	      refetchMessage = _$$props$refetchMessa === void 0 ? id => {} : _$$props$refetchMessa;
+	  var _$$props$callButtonCa = $$props.callButtonCallback,
+	      callButtonCallback = _$$props$callButtonCa === void 0 ? (id, callback) => {} : _$$props$callButtonCa;
+	  var _$$props$fetchMessage = $$props.fetchMessageCallback,
+	      fetchMessageCallback = _$$props$fetchMessage === void 0 ? id => {} : _$$props$fetchMessage;
 	  onMount(() => {}); // console.log(message);
 
-	  var writable_props = ['chat', 'message', 'parentNavInstance', 'registerCallButtonHandler', 'refetchMessage'];
+	  var writable_props = ['chat', 'message', 'parentNavInstance', 'callButtonCallback', 'fetchMessageCallback'];
 	  Object.keys($$props).forEach(key => {
 	    if (!~writable_props.indexOf(key) && key.slice(0, 2) !== '$$' && key !== 'slot') console.warn(`<MessageActionInviteToGroupCall> was created with unknown prop '${key}'`);
 	  });
@@ -59897,8 +59897,8 @@ var app = (function () {
 	    if ('chat' in $$props) $$invalidate(1, chat = $$props.chat);
 	    if ('message' in $$props) $$invalidate(0, message = $$props.message);
 	    if ('parentNavInstance' in $$props) $$invalidate(2, parentNavInstance = $$props.parentNavInstance);
-	    if ('registerCallButtonHandler' in $$props) $$invalidate(3, registerCallButtonHandler = $$props.registerCallButtonHandler);
-	    if ('refetchMessage' in $$props) $$invalidate(4, refetchMessage = $$props.refetchMessage);
+	    if ('callButtonCallback' in $$props) $$invalidate(3, callButtonCallback = $$props.callButtonCallback);
+	    if ('fetchMessageCallback' in $$props) $$invalidate(4, fetchMessageCallback = $$props.fetchMessageCallback);
 	  };
 
 	  $$self.$capture_state = () => ({
@@ -59906,23 +59906,23 @@ var app = (function () {
 	    chat,
 	    message,
 	    parentNavInstance,
-	    registerCallButtonHandler,
-	    refetchMessage
+	    callButtonCallback,
+	    fetchMessageCallback
 	  });
 
 	  $$self.$inject_state = $$props => {
 	    if ('chat' in $$props) $$invalidate(1, chat = $$props.chat);
 	    if ('message' in $$props) $$invalidate(0, message = $$props.message);
 	    if ('parentNavInstance' in $$props) $$invalidate(2, parentNavInstance = $$props.parentNavInstance);
-	    if ('registerCallButtonHandler' in $$props) $$invalidate(3, registerCallButtonHandler = $$props.registerCallButtonHandler);
-	    if ('refetchMessage' in $$props) $$invalidate(4, refetchMessage = $$props.refetchMessage);
+	    if ('callButtonCallback' in $$props) $$invalidate(3, callButtonCallback = $$props.callButtonCallback);
+	    if ('fetchMessageCallback' in $$props) $$invalidate(4, fetchMessageCallback = $$props.fetchMessageCallback);
 	  };
 
 	  if ($$props && "$$inject" in $$props) {
 	    $$self.$inject_state($$props.$$inject);
 	  }
 
-	  return [message, chat, parentNavInstance, registerCallButtonHandler, refetchMessage];
+	  return [message, chat, parentNavInstance, callButtonCallback, fetchMessageCallback];
 	}
 
 	class MessageActionInviteToGroupCall extends SvelteComponentDev {
@@ -59932,8 +59932,8 @@ var app = (function () {
 	      chat: 1,
 	      message: 0,
 	      parentNavInstance: 2,
-	      registerCallButtonHandler: 3,
-	      refetchMessage: 4
+	      callButtonCallback: 3,
+	      fetchMessageCallback: 4
 	    });
 	    dispatch_dev("SvelteRegisterComponent", {
 	      component: this,
@@ -59975,19 +59975,19 @@ var app = (function () {
 	    throw new Error("<MessageActionInviteToGroupCall>: Props cannot be set directly on the component instance unless compiling with 'accessors: true' or '<svelte:options accessors/>'");
 	  }
 
-	  get registerCallButtonHandler() {
+	  get callButtonCallback() {
 	    throw new Error("<MessageActionInviteToGroupCall>: Props cannot be read directly from the component instance unless compiling with 'accessors: true' or '<svelte:options accessors/>'");
 	  }
 
-	  set registerCallButtonHandler(value) {
+	  set callButtonCallback(value) {
 	    throw new Error("<MessageActionInviteToGroupCall>: Props cannot be set directly on the component instance unless compiling with 'accessors: true' or '<svelte:options accessors/>'");
 	  }
 
-	  get refetchMessage() {
+	  get fetchMessageCallback() {
 	    throw new Error("<MessageActionInviteToGroupCall>: Props cannot be read directly from the component instance unless compiling with 'accessors: true' or '<svelte:options accessors/>'");
 	  }
 
-	  set refetchMessage(value) {
+	  set fetchMessageCallback(value) {
 	    throw new Error("<MessageActionInviteToGroupCall>: Props cannot be set directly on the component instance unless compiling with 'accessors: true' or '<svelte:options accessors/>'");
 	  }
 
@@ -60015,9 +60015,9 @@ var app = (function () {
 	      t1 = text(": ");
 	      t2 = text(t2_value);
 	      attr_dev(p, "class", "svelte-8t5zf6");
-	      add_location(p, file$a, 13, 2, 372);
+	      add_location(p, file$a, 13, 2, 371);
 	      attr_dev(div, "class", "MessageActionSetMessagesTTL svelte-8t5zf6");
-	      add_location(div, file$a, 12, 0, 328);
+	      add_location(div, file$a, 12, 0, 327);
 	    },
 	    l: function claim(nodes) {
 	      throw new Error("options.hydrate only works if the component was compiled with the `hydratable: true` option");
@@ -60070,13 +60070,13 @@ var app = (function () {
 	  var _$$props$message = $$props.message,
 	      message = _$$props$message === void 0 ? {} : _$$props$message;
 	  var parentNavInstance = $$props.parentNavInstance;
-	  var _$$props$registerCall = $$props.registerCallButtonHandler,
-	      registerCallButtonHandler = _$$props$registerCall === void 0 ? (id, callback) => {} : _$$props$registerCall;
-	  var _$$props$refetchMessa = $$props.refetchMessage,
-	      refetchMessage = _$$props$refetchMessa === void 0 ? id => {} : _$$props$refetchMessa;
+	  var _$$props$callButtonCa = $$props.callButtonCallback,
+	      callButtonCallback = _$$props$callButtonCa === void 0 ? (id, callback) => {} : _$$props$callButtonCa;
+	  var _$$props$fetchMessage = $$props.fetchMessageCallback,
+	      fetchMessageCallback = _$$props$fetchMessage === void 0 ? id => {} : _$$props$fetchMessage;
 	  onMount(() => {}); // console.log(message);
 
-	  var writable_props = ['chat', 'message', 'parentNavInstance', 'registerCallButtonHandler', 'refetchMessage'];
+	  var writable_props = ['chat', 'message', 'parentNavInstance', 'callButtonCallback', 'fetchMessageCallback'];
 	  Object.keys($$props).forEach(key => {
 	    if (!~writable_props.indexOf(key) && key.slice(0, 2) !== '$$' && key !== 'slot') console.warn(`<MessageActionSetMessagesTTL> was created with unknown prop '${key}'`);
 	  });
@@ -60085,8 +60085,8 @@ var app = (function () {
 	    if ('chat' in $$props) $$invalidate(1, chat = $$props.chat);
 	    if ('message' in $$props) $$invalidate(0, message = $$props.message);
 	    if ('parentNavInstance' in $$props) $$invalidate(2, parentNavInstance = $$props.parentNavInstance);
-	    if ('registerCallButtonHandler' in $$props) $$invalidate(3, registerCallButtonHandler = $$props.registerCallButtonHandler);
-	    if ('refetchMessage' in $$props) $$invalidate(4, refetchMessage = $$props.refetchMessage);
+	    if ('callButtonCallback' in $$props) $$invalidate(3, callButtonCallback = $$props.callButtonCallback);
+	    if ('fetchMessageCallback' in $$props) $$invalidate(4, fetchMessageCallback = $$props.fetchMessageCallback);
 	  };
 
 	  $$self.$capture_state = () => ({
@@ -60094,23 +60094,23 @@ var app = (function () {
 	    chat,
 	    message,
 	    parentNavInstance,
-	    registerCallButtonHandler,
-	    refetchMessage
+	    callButtonCallback,
+	    fetchMessageCallback
 	  });
 
 	  $$self.$inject_state = $$props => {
 	    if ('chat' in $$props) $$invalidate(1, chat = $$props.chat);
 	    if ('message' in $$props) $$invalidate(0, message = $$props.message);
 	    if ('parentNavInstance' in $$props) $$invalidate(2, parentNavInstance = $$props.parentNavInstance);
-	    if ('registerCallButtonHandler' in $$props) $$invalidate(3, registerCallButtonHandler = $$props.registerCallButtonHandler);
-	    if ('refetchMessage' in $$props) $$invalidate(4, refetchMessage = $$props.refetchMessage);
+	    if ('callButtonCallback' in $$props) $$invalidate(3, callButtonCallback = $$props.callButtonCallback);
+	    if ('fetchMessageCallback' in $$props) $$invalidate(4, fetchMessageCallback = $$props.fetchMessageCallback);
 	  };
 
 	  if ($$props && "$$inject" in $$props) {
 	    $$self.$inject_state($$props.$$inject);
 	  }
 
-	  return [message, chat, parentNavInstance, registerCallButtonHandler, refetchMessage];
+	  return [message, chat, parentNavInstance, callButtonCallback, fetchMessageCallback];
 	}
 
 	class MessageActionSetMessagesTTL extends SvelteComponentDev {
@@ -60120,8 +60120,8 @@ var app = (function () {
 	      chat: 1,
 	      message: 0,
 	      parentNavInstance: 2,
-	      registerCallButtonHandler: 3,
-	      refetchMessage: 4
+	      callButtonCallback: 3,
+	      fetchMessageCallback: 4
 	    });
 	    dispatch_dev("SvelteRegisterComponent", {
 	      component: this,
@@ -60163,19 +60163,19 @@ var app = (function () {
 	    throw new Error("<MessageActionSetMessagesTTL>: Props cannot be set directly on the component instance unless compiling with 'accessors: true' or '<svelte:options accessors/>'");
 	  }
 
-	  get registerCallButtonHandler() {
+	  get callButtonCallback() {
 	    throw new Error("<MessageActionSetMessagesTTL>: Props cannot be read directly from the component instance unless compiling with 'accessors: true' or '<svelte:options accessors/>'");
 	  }
 
-	  set registerCallButtonHandler(value) {
+	  set callButtonCallback(value) {
 	    throw new Error("<MessageActionSetMessagesTTL>: Props cannot be set directly on the component instance unless compiling with 'accessors: true' or '<svelte:options accessors/>'");
 	  }
 
-	  get refetchMessage() {
+	  get fetchMessageCallback() {
 	    throw new Error("<MessageActionSetMessagesTTL>: Props cannot be read directly from the component instance unless compiling with 'accessors: true' or '<svelte:options accessors/>'");
 	  }
 
-	  set refetchMessage(value) {
+	  set fetchMessageCallback(value) {
 	    throw new Error("<MessageActionSetMessagesTTL>: Props cannot be set directly on the component instance unless compiling with 'accessors: true' or '<svelte:options accessors/>'");
 	  }
 
@@ -60237,9 +60237,9 @@ var app = (function () {
 	      t = text(t_value);
 	      if (if_block) if_block.c();
 	      attr_dev(p, "class", "svelte-htwnci");
-	      add_location(p, file$9, 20, 2, 569);
+	      add_location(p, file$9, 20, 2, 568);
 	      attr_dev(div, "class", "MessageActionGroupCallScheduled svelte-htwnci");
-	      add_location(div, file$9, 19, 0, 521);
+	      add_location(div, file$9, 19, 0, 520);
 	    },
 	    l: function claim(nodes) {
 	      throw new Error("options.hydrate only works if the component was compiled with the `hydratable: true` option");
@@ -60302,10 +60302,10 @@ var app = (function () {
 	  var _$$props$message = $$props.message,
 	      message = _$$props$message === void 0 ? {} : _$$props$message;
 	  var parentNavInstance = $$props.parentNavInstance;
-	  var _$$props$registerCall = $$props.registerCallButtonHandler,
-	      registerCallButtonHandler = _$$props$registerCall === void 0 ? (id, callback) => {} : _$$props$registerCall;
-	  var _$$props$refetchMessa = $$props.refetchMessage,
-	      refetchMessage = _$$props$refetchMessa === void 0 ? id => {} : _$$props$refetchMessa;
+	  var _$$props$callButtonCa = $$props.callButtonCallback,
+	      callButtonCallback = _$$props$callButtonCa === void 0 ? (id, callback) => {} : _$$props$callButtonCa;
+	  var _$$props$fetchMessage = $$props.fetchMessageCallback,
+	      fetchMessageCallback = _$$props$fetchMessage === void 0 ? id => {} : _$$props$fetchMessage;
 	  var dt = false;
 	  onMount(() => {
 	    // console.log(message);
@@ -60315,7 +60315,7 @@ var app = (function () {
 	      console.log("MessageActionGroupCallScheduled", err);
 	    }
 	  });
-	  var writable_props = ['chat', 'message', 'parentNavInstance', 'registerCallButtonHandler', 'refetchMessage'];
+	  var writable_props = ['chat', 'message', 'parentNavInstance', 'callButtonCallback', 'fetchMessageCallback'];
 	  Object.keys($$props).forEach(key => {
 	    if (!~writable_props.indexOf(key) && key.slice(0, 2) !== '$$' && key !== 'slot') console_1$2.warn(`<MessageActionGroupCallScheduled> was created with unknown prop '${key}'`);
 	  });
@@ -60324,8 +60324,8 @@ var app = (function () {
 	    if ('chat' in $$props) $$invalidate(2, chat = $$props.chat);
 	    if ('message' in $$props) $$invalidate(0, message = $$props.message);
 	    if ('parentNavInstance' in $$props) $$invalidate(3, parentNavInstance = $$props.parentNavInstance);
-	    if ('registerCallButtonHandler' in $$props) $$invalidate(4, registerCallButtonHandler = $$props.registerCallButtonHandler);
-	    if ('refetchMessage' in $$props) $$invalidate(5, refetchMessage = $$props.refetchMessage);
+	    if ('callButtonCallback' in $$props) $$invalidate(4, callButtonCallback = $$props.callButtonCallback);
+	    if ('fetchMessageCallback' in $$props) $$invalidate(5, fetchMessageCallback = $$props.fetchMessageCallback);
 	  };
 
 	  $$self.$capture_state = () => ({
@@ -60333,8 +60333,8 @@ var app = (function () {
 	    chat,
 	    message,
 	    parentNavInstance,
-	    registerCallButtonHandler,
-	    refetchMessage,
+	    callButtonCallback,
+	    fetchMessageCallback,
 	    dt
 	  });
 
@@ -60342,8 +60342,8 @@ var app = (function () {
 	    if ('chat' in $$props) $$invalidate(2, chat = $$props.chat);
 	    if ('message' in $$props) $$invalidate(0, message = $$props.message);
 	    if ('parentNavInstance' in $$props) $$invalidate(3, parentNavInstance = $$props.parentNavInstance);
-	    if ('registerCallButtonHandler' in $$props) $$invalidate(4, registerCallButtonHandler = $$props.registerCallButtonHandler);
-	    if ('refetchMessage' in $$props) $$invalidate(5, refetchMessage = $$props.refetchMessage);
+	    if ('callButtonCallback' in $$props) $$invalidate(4, callButtonCallback = $$props.callButtonCallback);
+	    if ('fetchMessageCallback' in $$props) $$invalidate(5, fetchMessageCallback = $$props.fetchMessageCallback);
 	    if ('dt' in $$props) $$invalidate(1, dt = $$props.dt);
 	  };
 
@@ -60351,7 +60351,7 @@ var app = (function () {
 	    $$self.$inject_state($$props.$$inject);
 	  }
 
-	  return [message, dt, chat, parentNavInstance, registerCallButtonHandler, refetchMessage];
+	  return [message, dt, chat, parentNavInstance, callButtonCallback, fetchMessageCallback];
 	}
 
 	class MessageActionGroupCallScheduled extends SvelteComponentDev {
@@ -60361,8 +60361,8 @@ var app = (function () {
 	      chat: 2,
 	      message: 0,
 	      parentNavInstance: 3,
-	      registerCallButtonHandler: 4,
-	      refetchMessage: 5
+	      callButtonCallback: 4,
+	      fetchMessageCallback: 5
 	    });
 	    dispatch_dev("SvelteRegisterComponent", {
 	      component: this,
@@ -60404,19 +60404,19 @@ var app = (function () {
 	    throw new Error("<MessageActionGroupCallScheduled>: Props cannot be set directly on the component instance unless compiling with 'accessors: true' or '<svelte:options accessors/>'");
 	  }
 
-	  get registerCallButtonHandler() {
+	  get callButtonCallback() {
 	    throw new Error("<MessageActionGroupCallScheduled>: Props cannot be read directly from the component instance unless compiling with 'accessors: true' or '<svelte:options accessors/>'");
 	  }
 
-	  set registerCallButtonHandler(value) {
+	  set callButtonCallback(value) {
 	    throw new Error("<MessageActionGroupCallScheduled>: Props cannot be set directly on the component instance unless compiling with 'accessors: true' or '<svelte:options accessors/>'");
 	  }
 
-	  get refetchMessage() {
+	  get fetchMessageCallback() {
 	    throw new Error("<MessageActionGroupCallScheduled>: Props cannot be read directly from the component instance unless compiling with 'accessors: true' or '<svelte:options accessors/>'");
 	  }
 
-	  set refetchMessage(value) {
+	  set fetchMessageCallback(value) {
 	    throw new Error("<MessageActionGroupCallScheduled>: Props cannot be set directly on the component instance unless compiling with 'accessors: true' or '<svelte:options accessors/>'");
 	  }
 
@@ -60437,9 +60437,9 @@ var app = (function () {
 	      p = element("p");
 	      t = text(t_value);
 	      attr_dev(p, "class", "svelte-1fful8m");
-	      add_location(p, file$8, 13, 2, 370);
+	      add_location(p, file$8, 13, 2, 369);
 	      attr_dev(div, "class", "MessageActionSetChatTheme svelte-1fful8m");
-	      add_location(div, file$8, 12, 0, 328);
+	      add_location(div, file$8, 12, 0, 327);
 	    },
 	    l: function claim(nodes) {
 	      throw new Error("options.hydrate only works if the component was compiled with the `hydratable: true` option");
@@ -60485,13 +60485,13 @@ var app = (function () {
 	  var _$$props$message = $$props.message,
 	      message = _$$props$message === void 0 ? {} : _$$props$message;
 	  var parentNavInstance = $$props.parentNavInstance;
-	  var _$$props$registerCall = $$props.registerCallButtonHandler,
-	      registerCallButtonHandler = _$$props$registerCall === void 0 ? (id, callback) => {} : _$$props$registerCall;
-	  var _$$props$refetchMessa = $$props.refetchMessage,
-	      refetchMessage = _$$props$refetchMessa === void 0 ? id => {} : _$$props$refetchMessa;
+	  var _$$props$callButtonCa = $$props.callButtonCallback,
+	      callButtonCallback = _$$props$callButtonCa === void 0 ? (id, callback) => {} : _$$props$callButtonCa;
+	  var _$$props$fetchMessage = $$props.fetchMessageCallback,
+	      fetchMessageCallback = _$$props$fetchMessage === void 0 ? id => {} : _$$props$fetchMessage;
 	  onMount(() => {}); // console.log(message);
 
-	  var writable_props = ['chat', 'message', 'parentNavInstance', 'registerCallButtonHandler', 'refetchMessage'];
+	  var writable_props = ['chat', 'message', 'parentNavInstance', 'callButtonCallback', 'fetchMessageCallback'];
 	  Object.keys($$props).forEach(key => {
 	    if (!~writable_props.indexOf(key) && key.slice(0, 2) !== '$$' && key !== 'slot') console.warn(`<MessageActionSetChatTheme> was created with unknown prop '${key}'`);
 	  });
@@ -60500,8 +60500,8 @@ var app = (function () {
 	    if ('chat' in $$props) $$invalidate(1, chat = $$props.chat);
 	    if ('message' in $$props) $$invalidate(0, message = $$props.message);
 	    if ('parentNavInstance' in $$props) $$invalidate(2, parentNavInstance = $$props.parentNavInstance);
-	    if ('registerCallButtonHandler' in $$props) $$invalidate(3, registerCallButtonHandler = $$props.registerCallButtonHandler);
-	    if ('refetchMessage' in $$props) $$invalidate(4, refetchMessage = $$props.refetchMessage);
+	    if ('callButtonCallback' in $$props) $$invalidate(3, callButtonCallback = $$props.callButtonCallback);
+	    if ('fetchMessageCallback' in $$props) $$invalidate(4, fetchMessageCallback = $$props.fetchMessageCallback);
 	  };
 
 	  $$self.$capture_state = () => ({
@@ -60509,23 +60509,23 @@ var app = (function () {
 	    chat,
 	    message,
 	    parentNavInstance,
-	    registerCallButtonHandler,
-	    refetchMessage
+	    callButtonCallback,
+	    fetchMessageCallback
 	  });
 
 	  $$self.$inject_state = $$props => {
 	    if ('chat' in $$props) $$invalidate(1, chat = $$props.chat);
 	    if ('message' in $$props) $$invalidate(0, message = $$props.message);
 	    if ('parentNavInstance' in $$props) $$invalidate(2, parentNavInstance = $$props.parentNavInstance);
-	    if ('registerCallButtonHandler' in $$props) $$invalidate(3, registerCallButtonHandler = $$props.registerCallButtonHandler);
-	    if ('refetchMessage' in $$props) $$invalidate(4, refetchMessage = $$props.refetchMessage);
+	    if ('callButtonCallback' in $$props) $$invalidate(3, callButtonCallback = $$props.callButtonCallback);
+	    if ('fetchMessageCallback' in $$props) $$invalidate(4, fetchMessageCallback = $$props.fetchMessageCallback);
 	  };
 
 	  if ($$props && "$$inject" in $$props) {
 	    $$self.$inject_state($$props.$$inject);
 	  }
 
-	  return [message, chat, parentNavInstance, registerCallButtonHandler, refetchMessage];
+	  return [message, chat, parentNavInstance, callButtonCallback, fetchMessageCallback];
 	}
 
 	class MessageActionSetChatTheme extends SvelteComponentDev {
@@ -60535,8 +60535,8 @@ var app = (function () {
 	      chat: 1,
 	      message: 0,
 	      parentNavInstance: 2,
-	      registerCallButtonHandler: 3,
-	      refetchMessage: 4
+	      callButtonCallback: 3,
+	      fetchMessageCallback: 4
 	    });
 	    dispatch_dev("SvelteRegisterComponent", {
 	      component: this,
@@ -60578,19 +60578,19 @@ var app = (function () {
 	    throw new Error("<MessageActionSetChatTheme>: Props cannot be set directly on the component instance unless compiling with 'accessors: true' or '<svelte:options accessors/>'");
 	  }
 
-	  get registerCallButtonHandler() {
+	  get callButtonCallback() {
 	    throw new Error("<MessageActionSetChatTheme>: Props cannot be read directly from the component instance unless compiling with 'accessors: true' or '<svelte:options accessors/>'");
 	  }
 
-	  set registerCallButtonHandler(value) {
+	  set callButtonCallback(value) {
 	    throw new Error("<MessageActionSetChatTheme>: Props cannot be set directly on the component instance unless compiling with 'accessors: true' or '<svelte:options accessors/>'");
 	  }
 
-	  get refetchMessage() {
+	  get fetchMessageCallback() {
 	    throw new Error("<MessageActionSetChatTheme>: Props cannot be read directly from the component instance unless compiling with 'accessors: true' or '<svelte:options accessors/>'");
 	  }
 
-	  set refetchMessage(value) {
+	  set fetchMessageCallback(value) {
 	    throw new Error("<MessageActionSetChatTheme>: Props cannot be set directly on the component instance unless compiling with 'accessors: true' or '<svelte:options accessors/>'");
 	  }
 
@@ -60649,9 +60649,9 @@ var app = (function () {
 	      if (if_block) if_block.c();
 	      t = text("was accepted to the group");
 	      attr_dev(p, "class", "svelte-enhkiq");
-	      add_location(p, file$7, 31, 2, 999);
+	      add_location(p, file$7, 31, 2, 998);
 	      attr_dev(div, "class", "MessageActionChatJoinedByRequest svelte-enhkiq");
-	      add_location(div, file$7, 30, 0, 950);
+	      add_location(div, file$7, 30, 0, 949);
 	    },
 	    l: function claim(nodes) {
 	      throw new Error("options.hydrate only works if the component was compiled with the `hydratable: true` option");
@@ -60708,10 +60708,10 @@ var app = (function () {
 	  var _$$props$message = $$props.message,
 	      message = _$$props$message === void 0 ? {} : _$$props$message;
 	  var parentNavInstance = $$props.parentNavInstance;
-	  var _$$props$registerCall = $$props.registerCallButtonHandler,
-	      registerCallButtonHandler = _$$props$registerCall === void 0 ? (id, callback) => {} : _$$props$registerCall;
-	  var _$$props$refetchMessa = $$props.refetchMessage,
-	      refetchMessage = _$$props$refetchMessa === void 0 ? id => {} : _$$props$refetchMessa;
+	  var _$$props$callButtonCa = $$props.callButtonCallback,
+	      callButtonCallback = _$$props$callButtonCa === void 0 ? (id, callback) => {} : _$$props$callButtonCa;
+	  var _$$props$fetchMessage = $$props.fetchMessageCallback,
+	      fetchMessageCallback = _$$props$fetchMessage === void 0 ? id => {} : _$$props$fetchMessage;
 	  var username = false;
 	  onMount(() => {
 	    client.invoke(new Api.users.GetUsers({
@@ -60729,7 +60729,7 @@ var app = (function () {
 	      console.log("MessageActionChatJoinedByRequest:", err);
 	    });
 	  });
-	  var writable_props = ['chat', 'message', 'parentNavInstance', 'registerCallButtonHandler', 'refetchMessage'];
+	  var writable_props = ['chat', 'message', 'parentNavInstance', 'callButtonCallback', 'fetchMessageCallback'];
 	  Object.keys($$props).forEach(key => {
 	    if (!~writable_props.indexOf(key) && key.slice(0, 2) !== '$$' && key !== 'slot') console_1$1.warn(`<MessageActionChatJoinedByRequest> was created with unknown prop '${key}'`);
 	  });
@@ -60738,8 +60738,8 @@ var app = (function () {
 	    if ('chat' in $$props) $$invalidate(1, chat = $$props.chat);
 	    if ('message' in $$props) $$invalidate(2, message = $$props.message);
 	    if ('parentNavInstance' in $$props) $$invalidate(3, parentNavInstance = $$props.parentNavInstance);
-	    if ('registerCallButtonHandler' in $$props) $$invalidate(4, registerCallButtonHandler = $$props.registerCallButtonHandler);
-	    if ('refetchMessage' in $$props) $$invalidate(5, refetchMessage = $$props.refetchMessage);
+	    if ('callButtonCallback' in $$props) $$invalidate(4, callButtonCallback = $$props.callButtonCallback);
+	    if ('fetchMessageCallback' in $$props) $$invalidate(5, fetchMessageCallback = $$props.fetchMessageCallback);
 	  };
 
 	  $$self.$capture_state = () => ({
@@ -60749,8 +60749,8 @@ var app = (function () {
 	    chat,
 	    message,
 	    parentNavInstance,
-	    registerCallButtonHandler,
-	    refetchMessage,
+	    callButtonCallback,
+	    fetchMessageCallback,
 	    username
 	  });
 
@@ -60758,8 +60758,8 @@ var app = (function () {
 	    if ('chat' in $$props) $$invalidate(1, chat = $$props.chat);
 	    if ('message' in $$props) $$invalidate(2, message = $$props.message);
 	    if ('parentNavInstance' in $$props) $$invalidate(3, parentNavInstance = $$props.parentNavInstance);
-	    if ('registerCallButtonHandler' in $$props) $$invalidate(4, registerCallButtonHandler = $$props.registerCallButtonHandler);
-	    if ('refetchMessage' in $$props) $$invalidate(5, refetchMessage = $$props.refetchMessage);
+	    if ('callButtonCallback' in $$props) $$invalidate(4, callButtonCallback = $$props.callButtonCallback);
+	    if ('fetchMessageCallback' in $$props) $$invalidate(5, fetchMessageCallback = $$props.fetchMessageCallback);
 	    if ('username' in $$props) $$invalidate(0, username = $$props.username);
 	  };
 
@@ -60767,7 +60767,7 @@ var app = (function () {
 	    $$self.$inject_state($$props.$$inject);
 	  }
 
-	  return [username, chat, message, parentNavInstance, registerCallButtonHandler, refetchMessage];
+	  return [username, chat, message, parentNavInstance, callButtonCallback, fetchMessageCallback];
 	}
 
 	class MessageActionChatJoinedByRequest extends SvelteComponentDev {
@@ -60777,8 +60777,8 @@ var app = (function () {
 	      chat: 1,
 	      message: 2,
 	      parentNavInstance: 3,
-	      registerCallButtonHandler: 4,
-	      refetchMessage: 5
+	      callButtonCallback: 4,
+	      fetchMessageCallback: 5
 	    });
 	    dispatch_dev("SvelteRegisterComponent", {
 	      component: this,
@@ -60820,19 +60820,19 @@ var app = (function () {
 	    throw new Error("<MessageActionChatJoinedByRequest>: Props cannot be set directly on the component instance unless compiling with 'accessors: true' or '<svelte:options accessors/>'");
 	  }
 
-	  get registerCallButtonHandler() {
+	  get callButtonCallback() {
 	    throw new Error("<MessageActionChatJoinedByRequest>: Props cannot be read directly from the component instance unless compiling with 'accessors: true' or '<svelte:options accessors/>'");
 	  }
 
-	  set registerCallButtonHandler(value) {
+	  set callButtonCallback(value) {
 	    throw new Error("<MessageActionChatJoinedByRequest>: Props cannot be set directly on the component instance unless compiling with 'accessors: true' or '<svelte:options accessors/>'");
 	  }
 
-	  get refetchMessage() {
+	  get fetchMessageCallback() {
 	    throw new Error("<MessageActionChatJoinedByRequest>: Props cannot be read directly from the component instance unless compiling with 'accessors: true' or '<svelte:options accessors/>'");
 	  }
 
-	  set refetchMessage(value) {
+	  set fetchMessageCallback(value) {
 	    throw new Error("<MessageActionChatJoinedByRequest>: Props cannot be set directly on the component instance unless compiling with 'accessors: true' or '<svelte:options accessors/>'");
 	  }
 
@@ -60853,9 +60853,9 @@ var app = (function () {
 	      p = element("p");
 	      t = text(t_value);
 	      attr_dev(p, "class", "svelte-1mdpnae");
-	      add_location(p, file$6, 13, 2, 375);
+	      add_location(p, file$6, 13, 2, 374);
 	      attr_dev(div, "class", "MessageActionWebViewDataSentMe svelte-1mdpnae");
-	      add_location(div, file$6, 12, 0, 328);
+	      add_location(div, file$6, 12, 0, 327);
 	    },
 	    l: function claim(nodes) {
 	      throw new Error("options.hydrate only works if the component was compiled with the `hydratable: true` option");
@@ -60901,13 +60901,13 @@ var app = (function () {
 	  var _$$props$message = $$props.message,
 	      message = _$$props$message === void 0 ? {} : _$$props$message;
 	  var parentNavInstance = $$props.parentNavInstance;
-	  var _$$props$registerCall = $$props.registerCallButtonHandler,
-	      registerCallButtonHandler = _$$props$registerCall === void 0 ? (id, callback) => {} : _$$props$registerCall;
-	  var _$$props$refetchMessa = $$props.refetchMessage,
-	      refetchMessage = _$$props$refetchMessa === void 0 ? id => {} : _$$props$refetchMessa;
+	  var _$$props$callButtonCa = $$props.callButtonCallback,
+	      callButtonCallback = _$$props$callButtonCa === void 0 ? (id, callback) => {} : _$$props$callButtonCa;
+	  var _$$props$fetchMessage = $$props.fetchMessageCallback,
+	      fetchMessageCallback = _$$props$fetchMessage === void 0 ? id => {} : _$$props$fetchMessage;
 	  onMount(() => {}); // console.log(message);
 
-	  var writable_props = ['chat', 'message', 'parentNavInstance', 'registerCallButtonHandler', 'refetchMessage'];
+	  var writable_props = ['chat', 'message', 'parentNavInstance', 'callButtonCallback', 'fetchMessageCallback'];
 	  Object.keys($$props).forEach(key => {
 	    if (!~writable_props.indexOf(key) && key.slice(0, 2) !== '$$' && key !== 'slot') console.warn(`<MessageActionWebViewDataSentMe> was created with unknown prop '${key}'`);
 	  });
@@ -60916,8 +60916,8 @@ var app = (function () {
 	    if ('chat' in $$props) $$invalidate(1, chat = $$props.chat);
 	    if ('message' in $$props) $$invalidate(0, message = $$props.message);
 	    if ('parentNavInstance' in $$props) $$invalidate(2, parentNavInstance = $$props.parentNavInstance);
-	    if ('registerCallButtonHandler' in $$props) $$invalidate(3, registerCallButtonHandler = $$props.registerCallButtonHandler);
-	    if ('refetchMessage' in $$props) $$invalidate(4, refetchMessage = $$props.refetchMessage);
+	    if ('callButtonCallback' in $$props) $$invalidate(3, callButtonCallback = $$props.callButtonCallback);
+	    if ('fetchMessageCallback' in $$props) $$invalidate(4, fetchMessageCallback = $$props.fetchMessageCallback);
 	  };
 
 	  $$self.$capture_state = () => ({
@@ -60925,23 +60925,23 @@ var app = (function () {
 	    chat,
 	    message,
 	    parentNavInstance,
-	    registerCallButtonHandler,
-	    refetchMessage
+	    callButtonCallback,
+	    fetchMessageCallback
 	  });
 
 	  $$self.$inject_state = $$props => {
 	    if ('chat' in $$props) $$invalidate(1, chat = $$props.chat);
 	    if ('message' in $$props) $$invalidate(0, message = $$props.message);
 	    if ('parentNavInstance' in $$props) $$invalidate(2, parentNavInstance = $$props.parentNavInstance);
-	    if ('registerCallButtonHandler' in $$props) $$invalidate(3, registerCallButtonHandler = $$props.registerCallButtonHandler);
-	    if ('refetchMessage' in $$props) $$invalidate(4, refetchMessage = $$props.refetchMessage);
+	    if ('callButtonCallback' in $$props) $$invalidate(3, callButtonCallback = $$props.callButtonCallback);
+	    if ('fetchMessageCallback' in $$props) $$invalidate(4, fetchMessageCallback = $$props.fetchMessageCallback);
 	  };
 
 	  if ($$props && "$$inject" in $$props) {
 	    $$self.$inject_state($$props.$$inject);
 	  }
 
-	  return [message, chat, parentNavInstance, registerCallButtonHandler, refetchMessage];
+	  return [message, chat, parentNavInstance, callButtonCallback, fetchMessageCallback];
 	}
 
 	class MessageActionWebViewDataSentMe extends SvelteComponentDev {
@@ -60951,8 +60951,8 @@ var app = (function () {
 	      chat: 1,
 	      message: 0,
 	      parentNavInstance: 2,
-	      registerCallButtonHandler: 3,
-	      refetchMessage: 4
+	      callButtonCallback: 3,
+	      fetchMessageCallback: 4
 	    });
 	    dispatch_dev("SvelteRegisterComponent", {
 	      component: this,
@@ -60994,19 +60994,19 @@ var app = (function () {
 	    throw new Error("<MessageActionWebViewDataSentMe>: Props cannot be set directly on the component instance unless compiling with 'accessors: true' or '<svelte:options accessors/>'");
 	  }
 
-	  get registerCallButtonHandler() {
+	  get callButtonCallback() {
 	    throw new Error("<MessageActionWebViewDataSentMe>: Props cannot be read directly from the component instance unless compiling with 'accessors: true' or '<svelte:options accessors/>'");
 	  }
 
-	  set registerCallButtonHandler(value) {
+	  set callButtonCallback(value) {
 	    throw new Error("<MessageActionWebViewDataSentMe>: Props cannot be set directly on the component instance unless compiling with 'accessors: true' or '<svelte:options accessors/>'");
 	  }
 
-	  get refetchMessage() {
+	  get fetchMessageCallback() {
 	    throw new Error("<MessageActionWebViewDataSentMe>: Props cannot be read directly from the component instance unless compiling with 'accessors: true' or '<svelte:options accessors/>'");
 	  }
 
-	  set refetchMessage(value) {
+	  set fetchMessageCallback(value) {
 	    throw new Error("<MessageActionWebViewDataSentMe>: Props cannot be set directly on the component instance unless compiling with 'accessors: true' or '<svelte:options accessors/>'");
 	  }
 
@@ -61027,9 +61027,9 @@ var app = (function () {
 	      p = element("p");
 	      t = text(t_value);
 	      attr_dev(p, "class", "svelte-6n8dj2");
-	      add_location(p, file$5, 13, 2, 373);
+	      add_location(p, file$5, 13, 2, 372);
 	      attr_dev(div, "class", "MessageActionWebViewDataSent svelte-6n8dj2");
-	      add_location(div, file$5, 12, 0, 328);
+	      add_location(div, file$5, 12, 0, 327);
 	    },
 	    l: function claim(nodes) {
 	      throw new Error("options.hydrate only works if the component was compiled with the `hydratable: true` option");
@@ -61075,13 +61075,13 @@ var app = (function () {
 	  var _$$props$message = $$props.message,
 	      message = _$$props$message === void 0 ? {} : _$$props$message;
 	  var parentNavInstance = $$props.parentNavInstance;
-	  var _$$props$registerCall = $$props.registerCallButtonHandler,
-	      registerCallButtonHandler = _$$props$registerCall === void 0 ? (id, callback) => {} : _$$props$registerCall;
-	  var _$$props$refetchMessa = $$props.refetchMessage,
-	      refetchMessage = _$$props$refetchMessa === void 0 ? id => {} : _$$props$refetchMessa;
+	  var _$$props$callButtonCa = $$props.callButtonCallback,
+	      callButtonCallback = _$$props$callButtonCa === void 0 ? (id, callback) => {} : _$$props$callButtonCa;
+	  var _$$props$fetchMessage = $$props.fetchMessageCallback,
+	      fetchMessageCallback = _$$props$fetchMessage === void 0 ? id => {} : _$$props$fetchMessage;
 	  onMount(() => {}); // console.log(message);
 
-	  var writable_props = ['chat', 'message', 'parentNavInstance', 'registerCallButtonHandler', 'refetchMessage'];
+	  var writable_props = ['chat', 'message', 'parentNavInstance', 'callButtonCallback', 'fetchMessageCallback'];
 	  Object.keys($$props).forEach(key => {
 	    if (!~writable_props.indexOf(key) && key.slice(0, 2) !== '$$' && key !== 'slot') console.warn(`<MessageActionWebViewDataSent> was created with unknown prop '${key}'`);
 	  });
@@ -61090,8 +61090,8 @@ var app = (function () {
 	    if ('chat' in $$props) $$invalidate(1, chat = $$props.chat);
 	    if ('message' in $$props) $$invalidate(0, message = $$props.message);
 	    if ('parentNavInstance' in $$props) $$invalidate(2, parentNavInstance = $$props.parentNavInstance);
-	    if ('registerCallButtonHandler' in $$props) $$invalidate(3, registerCallButtonHandler = $$props.registerCallButtonHandler);
-	    if ('refetchMessage' in $$props) $$invalidate(4, refetchMessage = $$props.refetchMessage);
+	    if ('callButtonCallback' in $$props) $$invalidate(3, callButtonCallback = $$props.callButtonCallback);
+	    if ('fetchMessageCallback' in $$props) $$invalidate(4, fetchMessageCallback = $$props.fetchMessageCallback);
 	  };
 
 	  $$self.$capture_state = () => ({
@@ -61099,23 +61099,23 @@ var app = (function () {
 	    chat,
 	    message,
 	    parentNavInstance,
-	    registerCallButtonHandler,
-	    refetchMessage
+	    callButtonCallback,
+	    fetchMessageCallback
 	  });
 
 	  $$self.$inject_state = $$props => {
 	    if ('chat' in $$props) $$invalidate(1, chat = $$props.chat);
 	    if ('message' in $$props) $$invalidate(0, message = $$props.message);
 	    if ('parentNavInstance' in $$props) $$invalidate(2, parentNavInstance = $$props.parentNavInstance);
-	    if ('registerCallButtonHandler' in $$props) $$invalidate(3, registerCallButtonHandler = $$props.registerCallButtonHandler);
-	    if ('refetchMessage' in $$props) $$invalidate(4, refetchMessage = $$props.refetchMessage);
+	    if ('callButtonCallback' in $$props) $$invalidate(3, callButtonCallback = $$props.callButtonCallback);
+	    if ('fetchMessageCallback' in $$props) $$invalidate(4, fetchMessageCallback = $$props.fetchMessageCallback);
 	  };
 
 	  if ($$props && "$$inject" in $$props) {
 	    $$self.$inject_state($$props.$$inject);
 	  }
 
-	  return [message, chat, parentNavInstance, registerCallButtonHandler, refetchMessage];
+	  return [message, chat, parentNavInstance, callButtonCallback, fetchMessageCallback];
 	}
 
 	class MessageActionWebViewDataSent extends SvelteComponentDev {
@@ -61125,8 +61125,8 @@ var app = (function () {
 	      chat: 1,
 	      message: 0,
 	      parentNavInstance: 2,
-	      registerCallButtonHandler: 3,
-	      refetchMessage: 4
+	      callButtonCallback: 3,
+	      fetchMessageCallback: 4
 	    });
 	    dispatch_dev("SvelteRegisterComponent", {
 	      component: this,
@@ -61168,19 +61168,19 @@ var app = (function () {
 	    throw new Error("<MessageActionWebViewDataSent>: Props cannot be set directly on the component instance unless compiling with 'accessors: true' or '<svelte:options accessors/>'");
 	  }
 
-	  get registerCallButtonHandler() {
+	  get callButtonCallback() {
 	    throw new Error("<MessageActionWebViewDataSent>: Props cannot be read directly from the component instance unless compiling with 'accessors: true' or '<svelte:options accessors/>'");
 	  }
 
-	  set registerCallButtonHandler(value) {
+	  set callButtonCallback(value) {
 	    throw new Error("<MessageActionWebViewDataSent>: Props cannot be set directly on the component instance unless compiling with 'accessors: true' or '<svelte:options accessors/>'");
 	  }
 
-	  get refetchMessage() {
+	  get fetchMessageCallback() {
 	    throw new Error("<MessageActionWebViewDataSent>: Props cannot be read directly from the component instance unless compiling with 'accessors: true' or '<svelte:options accessors/>'");
 	  }
 
-	  set refetchMessage(value) {
+	  set fetchMessageCallback(value) {
 	    throw new Error("<MessageActionWebViewDataSent>: Props cannot be set directly on the component instance unless compiling with 'accessors: true' or '<svelte:options accessors/>'");
 	  }
 
@@ -61203,9 +61203,9 @@ var app = (function () {
 	      t0 = text("WIP: ");
 	      t1 = text(t1_value);
 	      attr_dev(p, "class", "svelte-5qc57e");
-	      add_location(p, file$4, 13, 2, 350);
+	      add_location(p, file$4, 13, 2, 349);
 	      attr_dev(div, "class", "Dummy svelte-5qc57e");
-	      add_location(div, file$4, 12, 0, 328);
+	      add_location(div, file$4, 12, 0, 327);
 	    },
 	    l: function claim(nodes) {
 	      throw new Error("options.hydrate only works if the component was compiled with the `hydratable: true` option");
@@ -61252,13 +61252,13 @@ var app = (function () {
 	  var _$$props$message = $$props.message,
 	      message = _$$props$message === void 0 ? {} : _$$props$message;
 	  var parentNavInstance = $$props.parentNavInstance;
-	  var _$$props$registerCall = $$props.registerCallButtonHandler,
-	      registerCallButtonHandler = _$$props$registerCall === void 0 ? (id, callback) => {} : _$$props$registerCall;
-	  var _$$props$refetchMessa = $$props.refetchMessage,
-	      refetchMessage = _$$props$refetchMessa === void 0 ? id => {} : _$$props$refetchMessa;
+	  var _$$props$callButtonCa = $$props.callButtonCallback,
+	      callButtonCallback = _$$props$callButtonCa === void 0 ? (id, callback) => {} : _$$props$callButtonCa;
+	  var _$$props$fetchMessage = $$props.fetchMessageCallback,
+	      fetchMessageCallback = _$$props$fetchMessage === void 0 ? id => {} : _$$props$fetchMessage;
 	  onMount(() => {}); // console.log(message);
 
-	  var writable_props = ['chat', 'message', 'parentNavInstance', 'registerCallButtonHandler', 'refetchMessage'];
+	  var writable_props = ['chat', 'message', 'parentNavInstance', 'callButtonCallback', 'fetchMessageCallback'];
 	  Object.keys($$props).forEach(key => {
 	    if (!~writable_props.indexOf(key) && key.slice(0, 2) !== '$$' && key !== 'slot') console.warn(`<Dummy> was created with unknown prop '${key}'`);
 	  });
@@ -61267,8 +61267,8 @@ var app = (function () {
 	    if ('chat' in $$props) $$invalidate(1, chat = $$props.chat);
 	    if ('message' in $$props) $$invalidate(0, message = $$props.message);
 	    if ('parentNavInstance' in $$props) $$invalidate(2, parentNavInstance = $$props.parentNavInstance);
-	    if ('registerCallButtonHandler' in $$props) $$invalidate(3, registerCallButtonHandler = $$props.registerCallButtonHandler);
-	    if ('refetchMessage' in $$props) $$invalidate(4, refetchMessage = $$props.refetchMessage);
+	    if ('callButtonCallback' in $$props) $$invalidate(3, callButtonCallback = $$props.callButtonCallback);
+	    if ('fetchMessageCallback' in $$props) $$invalidate(4, fetchMessageCallback = $$props.fetchMessageCallback);
 	  };
 
 	  $$self.$capture_state = () => ({
@@ -61276,23 +61276,23 @@ var app = (function () {
 	    chat,
 	    message,
 	    parentNavInstance,
-	    registerCallButtonHandler,
-	    refetchMessage
+	    callButtonCallback,
+	    fetchMessageCallback
 	  });
 
 	  $$self.$inject_state = $$props => {
 	    if ('chat' in $$props) $$invalidate(1, chat = $$props.chat);
 	    if ('message' in $$props) $$invalidate(0, message = $$props.message);
 	    if ('parentNavInstance' in $$props) $$invalidate(2, parentNavInstance = $$props.parentNavInstance);
-	    if ('registerCallButtonHandler' in $$props) $$invalidate(3, registerCallButtonHandler = $$props.registerCallButtonHandler);
-	    if ('refetchMessage' in $$props) $$invalidate(4, refetchMessage = $$props.refetchMessage);
+	    if ('callButtonCallback' in $$props) $$invalidate(3, callButtonCallback = $$props.callButtonCallback);
+	    if ('fetchMessageCallback' in $$props) $$invalidate(4, fetchMessageCallback = $$props.fetchMessageCallback);
 	  };
 
 	  if ($$props && "$$inject" in $$props) {
 	    $$self.$inject_state($$props.$$inject);
 	  }
 
-	  return [message, chat, parentNavInstance, registerCallButtonHandler, refetchMessage];
+	  return [message, chat, parentNavInstance, callButtonCallback, fetchMessageCallback];
 	}
 
 	class Dummy extends SvelteComponentDev {
@@ -61302,8 +61302,8 @@ var app = (function () {
 	      chat: 1,
 	      message: 0,
 	      parentNavInstance: 2,
-	      registerCallButtonHandler: 3,
-	      refetchMessage: 4
+	      callButtonCallback: 3,
+	      fetchMessageCallback: 4
 	    });
 	    dispatch_dev("SvelteRegisterComponent", {
 	      component: this,
@@ -61345,19 +61345,19 @@ var app = (function () {
 	    throw new Error("<Dummy>: Props cannot be set directly on the component instance unless compiling with 'accessors: true' or '<svelte:options accessors/>'");
 	  }
 
-	  get registerCallButtonHandler() {
+	  get callButtonCallback() {
 	    throw new Error("<Dummy>: Props cannot be read directly from the component instance unless compiling with 'accessors: true' or '<svelte:options accessors/>'");
 	  }
 
-	  set registerCallButtonHandler(value) {
+	  set callButtonCallback(value) {
 	    throw new Error("<Dummy>: Props cannot be set directly on the component instance unless compiling with 'accessors: true' or '<svelte:options accessors/>'");
 	  }
 
-	  get refetchMessage() {
+	  get fetchMessageCallback() {
 	    throw new Error("<Dummy>: Props cannot be read directly from the component instance unless compiling with 'accessors: true' or '<svelte:options accessors/>'");
 	  }
 
-	  set refetchMessage(value) {
+	  set fetchMessageCallback(value) {
 	    throw new Error("<Dummy>: Props cannot be set directly on the component instance unless compiling with 'accessors: true' or '<svelte:options accessors/>'");
 	  }
 
@@ -61428,11 +61428,11 @@ var app = (function () {
 	        parentNavInstance:
 	        /*parentNavInstance*/
 	        ctx[5],
-	        registerCallButtonHandler:
-	        /*registerCallButtonHandler*/
+	        callButtonCallback:
+	        /*callButtonCallback*/
 	        ctx[6],
-	        refetchMessage:
-	        /*refetchMessage*/
+	        fetchMessageCallback:
+	        /*fetchMessageCallback*/
 	        ctx[7]
 	      },
 	      $$inline: true
@@ -61449,7 +61449,7 @@ var app = (function () {
 	      div0 = element("div");
 	      if (switch_instance) create_component(switch_instance.$$.fragment);
 	      attr_dev(div0, "class", "kai-list-view-content svelte-gay9lv");
-	      add_location(div0, file$3, 33, 2, 1140);
+	      add_location(div0, file$3, 33, 2, 1139);
 	      attr_dev(div1, "data-key",
 	      /*key*/
 	      ctx[0]);
@@ -61458,7 +61458,7 @@ var app = (function () {
 	      ctx[3] ?
 	      /*className*/
 	      ctx[3] : '') + " svelte-gay9lv");
-	      add_location(div1, file$3, 32, 0, 1045);
+	      add_location(div1, file$3, 32, 0, 1044);
 	    },
 	    l: function claim(nodes) {
 	      throw new Error("options.hydrate only works if the component was compiled with the `hydratable: true` option");
@@ -61506,14 +61506,14 @@ var app = (function () {
 	      /*parentNavInstance*/
 	      ctx[5];
 	      if (dirty &
-	      /*registerCallButtonHandler*/
-	      64) switch_instance_changes.registerCallButtonHandler =
-	      /*registerCallButtonHandler*/
+	      /*callButtonCallback*/
+	      64) switch_instance_changes.callButtonCallback =
+	      /*callButtonCallback*/
 	      ctx[6];
 	      if (dirty &
-	      /*refetchMessage*/
-	      128) switch_instance_changes.refetchMessage =
-	      /*refetchMessage*/
+	      /*fetchMessageCallback*/
+	      128) switch_instance_changes.fetchMessageCallback =
+	      /*fetchMessageCallback*/
 	      ctx[7];
 
 	      if (switch_value !== (switch_value =
@@ -61602,10 +61602,10 @@ var app = (function () {
 	  var _$$props$onClick = $$props.onClick,
 	      onClick = _$$props$onClick === void 0 ? evt => {} : _$$props$onClick;
 	  var parentNavInstance = $$props.parentNavInstance;
-	  var _$$props$registerCall = $$props.registerCallButtonHandler,
-	      registerCallButtonHandler = _$$props$registerCall === void 0 ? (id, callback) => {} : _$$props$registerCall;
-	  var _$$props$refetchMessa = $$props.refetchMessage,
-	      refetchMessage = _$$props$refetchMessa === void 0 ? id => {} : _$$props$refetchMessa;
+	  var _$$props$callButtonCa = $$props.callButtonCallback,
+	      callButtonCallback = _$$props$callButtonCa === void 0 ? (id, callback) => {} : _$$props$callButtonCa;
+	  var _$$props$fetchMessage = $$props.fetchMessageCallback,
+	      fetchMessageCallback = _$$props$fetchMessage === void 0 ? id => {} : _$$props$fetchMessage;
 	  var _$$props$destroyCallb = $$props.destroyCallback,
 	      destroyCallback = _$$props$destroyCallb === void 0 ? () => {} : _$$props$destroyCallb;
 	  var replyTo = $$props.replyTo;
@@ -61633,7 +61633,7 @@ var app = (function () {
 
 	  onMount(() => {}); // console.log(message);
 
-	  var writable_props = ['key', 'chat', 'message', 'className', 'onClick', 'parentNavInstance', 'registerCallButtonHandler', 'refetchMessage', 'destroyCallback', 'replyTo', 'short', 'scrollable', 'replyThreadId'];
+	  var writable_props = ['key', 'chat', 'message', 'className', 'onClick', 'parentNavInstance', 'callButtonCallback', 'fetchMessageCallback', 'destroyCallback', 'replyTo', 'short', 'scrollable', 'replyThreadId'];
 	  Object.keys($$props).forEach(key => {
 	    if (!~writable_props.indexOf(key) && key.slice(0, 2) !== '$$' && key !== 'slot') console.warn(`<MessageService> was created with unknown prop '${key}'`);
 	  });
@@ -61645,8 +61645,8 @@ var app = (function () {
 	    if ('className' in $$props) $$invalidate(3, className = $$props.className);
 	    if ('onClick' in $$props) $$invalidate(4, onClick = $$props.onClick);
 	    if ('parentNavInstance' in $$props) $$invalidate(5, parentNavInstance = $$props.parentNavInstance);
-	    if ('registerCallButtonHandler' in $$props) $$invalidate(6, registerCallButtonHandler = $$props.registerCallButtonHandler);
-	    if ('refetchMessage' in $$props) $$invalidate(7, refetchMessage = $$props.refetchMessage);
+	    if ('callButtonCallback' in $$props) $$invalidate(6, callButtonCallback = $$props.callButtonCallback);
+	    if ('fetchMessageCallback' in $$props) $$invalidate(7, fetchMessageCallback = $$props.fetchMessageCallback);
 	    if ('destroyCallback' in $$props) $$invalidate(9, destroyCallback = $$props.destroyCallback);
 	    if ('replyTo' in $$props) $$invalidate(10, replyTo = $$props.replyTo);
 	    if ('short' in $$props) $$invalidate(11, short = $$props.short);
@@ -61664,8 +61664,8 @@ var app = (function () {
 	    className,
 	    onClick,
 	    parentNavInstance,
-	    registerCallButtonHandler,
-	    refetchMessage,
+	    callButtonCallback,
+	    fetchMessageCallback,
 	    destroyCallback,
 	    replyTo,
 	    short,
@@ -61683,8 +61683,8 @@ var app = (function () {
 	    if ('className' in $$props) $$invalidate(3, className = $$props.className);
 	    if ('onClick' in $$props) $$invalidate(4, onClick = $$props.onClick);
 	    if ('parentNavInstance' in $$props) $$invalidate(5, parentNavInstance = $$props.parentNavInstance);
-	    if ('registerCallButtonHandler' in $$props) $$invalidate(6, registerCallButtonHandler = $$props.registerCallButtonHandler);
-	    if ('refetchMessage' in $$props) $$invalidate(7, refetchMessage = $$props.refetchMessage);
+	    if ('callButtonCallback' in $$props) $$invalidate(6, callButtonCallback = $$props.callButtonCallback);
+	    if ('fetchMessageCallback' in $$props) $$invalidate(7, fetchMessageCallback = $$props.fetchMessageCallback);
 	    if ('destroyCallback' in $$props) $$invalidate(9, destroyCallback = $$props.destroyCallback);
 	    if ('replyTo' in $$props) $$invalidate(10, replyTo = $$props.replyTo);
 	    if ('short' in $$props) $$invalidate(11, short = $$props.short);
@@ -61698,7 +61698,7 @@ var app = (function () {
 	    $$self.$inject_state($$props.$$inject);
 	  }
 
-	  return [key, chat, message, className, onClick, parentNavInstance, registerCallButtonHandler, refetchMessage, resolveActionWidget, destroyCallback, replyTo, short, scrollable, replyThreadId];
+	  return [key, chat, message, className, onClick, parentNavInstance, callButtonCallback, fetchMessageCallback, resolveActionWidget, destroyCallback, replyTo, short, scrollable, replyThreadId];
 	}
 
 	class MessageService extends SvelteComponentDev {
@@ -61711,8 +61711,8 @@ var app = (function () {
 	      className: 3,
 	      onClick: 4,
 	      parentNavInstance: 5,
-	      registerCallButtonHandler: 6,
-	      refetchMessage: 7,
+	      callButtonCallback: 6,
+	      fetchMessageCallback: 7,
 	      destroyCallback: 9,
 	      replyTo: 10,
 	      short: 11,
@@ -61813,24 +61813,24 @@ var app = (function () {
 	    flush();
 	  }
 
-	  get registerCallButtonHandler() {
+	  get callButtonCallback() {
 	    return this.$$.ctx[6];
 	  }
 
-	  set registerCallButtonHandler(registerCallButtonHandler) {
+	  set callButtonCallback(callButtonCallback) {
 	    this.$$set({
-	      registerCallButtonHandler
+	      callButtonCallback
 	    });
 	    flush();
 	  }
 
-	  get refetchMessage() {
+	  get fetchMessageCallback() {
 	    return this.$$.ctx[7];
 	  }
 
-	  set refetchMessage(refetchMessage) {
+	  set fetchMessageCallback(fetchMessageCallback) {
 	    this.$$set({
-	      refetchMessage
+	      fetchMessageCallback
 	    });
 	    flush();
 	  }
@@ -62515,7 +62515,7 @@ var app = (function () {
 	      div = element("div");
 	      div.textContent = "Loading";
 	      set_style(div, "margin-top", "45%");
-	      add_location(div, file$1, 1399, 4, 62882);
+	      add_location(div, file$1, 1399, 4, 62879);
 	    },
 	    m: function mount(target, anchor) {
 	      insert_dev(target, div, anchor);
@@ -62573,7 +62573,7 @@ var app = (function () {
 	    },
 	    p: function update(ctx, dirty) {
 	      if (dirty[0] &
-	      /*resolveMessageWidget, messages, registerCallButtonHandler, refetchMessage, navInstance, getReplyHeader, chat, messageMetadata*/
+	      /*resolveMessageWidget, messages, callButtonCallback, fetchMessageCallback, navInstance, getReplyHeader, chat, messageMetadata*/
 	      510) {
 	        each_value =
 	        /*messages*/
@@ -62660,11 +62660,11 @@ var app = (function () {
 	        message:
 	        /*message*/
 	        ctx[53],
-	        registerCallButtonHandler:
-	        /*registerCallButtonHandler*/
+	        callButtonCallback:
+	        /*callButtonCallback*/
 	        ctx[6],
-	        refetchMessage:
-	        /*refetchMessage*/
+	        fetchMessageCallback:
+	        /*fetchMessageCallback*/
 	        ctx[7],
 	        parentNavInstance:
 	        /*navInstance*/
@@ -62894,7 +62894,7 @@ var app = (function () {
 	      attr_dev(main, "data-pad-top", "50");
 	      attr_dev(main, "data-pad-bottom", "30");
 	      attr_dev(main, "class", "svelte-yfuvl7");
-	      add_location(main, file$1, 1391, 0, 62337);
+	      add_location(main, file$1, 1391, 0, 62335);
 	    },
 	    l: function claim(nodes) {
 	      throw new Error("options.hydrate only works if the component was compiled with the `hydratable: true` option");
@@ -63404,7 +63404,7 @@ var app = (function () {
 	      props: {
 	        className: "",
 	        message: msg,
-	        registerCallButtonHandler: evt => {},
+	        callButtonCallback: evt => {},
 	        parentNavInstance: navInstance,
 	        replyTo: getReplyHeader(msg),
 	        chat,
@@ -64217,7 +64217,7 @@ var app = (function () {
 	    });
 	  }
 
-	  function registerCallButtonHandler(id, callback) {
+	  function callButtonCallback(id, callback) {
 	    if (messageMetadata[id]) {
 	      $$invalidate(3, messageMetadata[id].callback = callback, messageMetadata);
 	    }
@@ -64253,7 +64253,7 @@ var app = (function () {
 	    if (len === 0) merging();
 	  }
 
-	  function refetchMessage(id) {
+	  function fetchMessageCallback(id) {
 	    return __awaiter(this, void 0, void 0, function* () {
 	      try {
 	        id = id.toString();
@@ -64269,7 +64269,7 @@ var app = (function () {
 	          }
 	        }
 	      } catch (err) {
-	        console.log('refetchMessage:', err);
+	        console.log('fetchMessageCallback:', err);
 	      }
 	    });
 	  }
@@ -64670,10 +64670,10 @@ var app = (function () {
 	    showReplies,
 	    resolveMessageWidget,
 	    buildIndex,
-	    registerCallButtonHandler,
+	    callButtonCallback,
 	    merging,
 	    pushMessageToMerge,
-	    refetchMessage,
+	    fetchMessageCallback,
 	    clientListener,
 	    autoScroll,
 	    getReplyHeader,
@@ -64716,7 +64716,7 @@ var app = (function () {
 	    $$self.$inject_state($$props.$$inject);
 	  }
 
-	  return [ready, chat, messages, messageMetadata, navInstance, resolveMessageWidget, registerCallButtonHandler, refetchMessage, getReplyHeader, location, navigate, getAppProp];
+	  return [ready, chat, messages, messageMetadata, navInstance, resolveMessageWidget, callButtonCallback, fetchMessageCallback, getReplyHeader, location, navigate, getAppProp];
 	}
 
 	class Room extends SvelteComponentDev {

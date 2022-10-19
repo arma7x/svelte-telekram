@@ -8,8 +8,8 @@
   export let chat: any = {};
   export let message: any = {};
   export let parentNavInstance: typeof KaiNavigator;
-  export let registerCallButtonHandler: Function = (id, callback) => {}
-  export let refetchMessage: Function = (id: number) => {}
+  export let callButtonCallback: Function = (id, callback) => {}
+  export let fetchMessageCallback: Function = (id: number) => {}
 
   let available: bool = true;
   let answeredOrVoted: bool = false;
@@ -49,7 +49,7 @@
                 msgId: message.id,
                 options: [vote.option]
               }));
-              refetchMessage(message.id);
+              fetchMessageCallback(message.id);
             }
           },
           onBackspace: (evt, scope) => {
@@ -109,7 +109,7 @@
                 msgId: message.id,
                 options: options
               }));
-              refetchMessage(message.id);
+              fetchMessageCallback(message.id);
             }
           },
           onBackspace: (evt, scope) => {
@@ -138,7 +138,7 @@
         msgId: message.id,
         options: []
       }));
-      refetchMessage(message.id);
+      fetchMessageCallback(message.id);
     } catch (err) {
       console.log('retractVote:', err);
     }
@@ -262,7 +262,7 @@
   })
 
   onMount(() => {
-    registerCallButtonHandler(message.id.toString(), actionMenu);
+    callButtonCallback(message.id.toString(), actionMenu);
     update();
   })
 

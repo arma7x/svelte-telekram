@@ -10,8 +10,8 @@
   export let chat: any = {};
   export let message: any = {};
   export let parentNavInstance: typeof KaiNavigator;
-  export let registerCallButtonHandler: Function = (id, callback) => {}
-  export let refetchMessage: Function = (id: number) => {}
+  export let callButtonCallback: Function = (id, callback) => {}
+  export let fetchMessageCallback: Function = (id: number) => {}
 
   let loadingBar: LoadingBar;
   let menu: OptionMenu;
@@ -145,7 +145,7 @@
   onMount(() => {
     // console.log(message.media);
     // .webpage: description, displayUrl, siteName, title, url, cachedPage(instantview)
-    registerCallButtonHandler(message.id.toString(), actionMenu);
+    callButtonCallback(message.id.toString(), actionMenu);
   })
 
 </script>

@@ -322,7 +322,7 @@
       props: {
         className: "",
         message: msg,
-        registerCallButtonHandler: (evt) => {},
+        callButtonCallback: (evt) => {},
         parentNavInstance: navInstance,
         replyTo: getReplyHeader(msg),
         chat: chat,
@@ -1012,7 +1012,7 @@
     return _messages;
   }
 
-  function registerCallButtonHandler(id, callback) {
+  function callButtonCallback(id, callback) {
     if (messageMetadata[id]) {
       messageMetadata[id].callback = callback;
     }
@@ -1045,7 +1045,7 @@
       merging();
   }
 
-  async function refetchMessage(id: number) {
+  async function fetchMessageCallback(id: number) {
     try {
       id = id.toString();
       if (messageMetadata[id] && messages[messageMetadata[id].index]) {
@@ -1056,7 +1056,7 @@
         }
       }
     } catch (err) {
-      console.log('refetchMessage:', err);
+      console.log('fetchMessageCallback:', err);
     }
   }
 
@@ -1307,7 +1307,7 @@
   {#if ready }
   {#each messages as message}
     {#if message && message.id && messageMetadata[message.id.toString()] && messageMetadata[message.id.toString()].deleted === false}
-      <svelte:component className="roomNav" this={resolveMessageWidget(message)} {message} {registerCallButtonHandler} {refetchMessage} parentNavInstance={navInstance} replyTo={getReplyHeader(message)} chat={chat} short={true} scrollable={false} replyThreadId={null}/>
+      <svelte:component className="roomNav" this={resolveMessageWidget(message)} {message} {callButtonCallback} {fetchMessageCallback} parentNavInstance={navInstance} replyTo={getReplyHeader(message)} chat={chat} short={true} scrollable={false} replyThreadId={null}/>
     {/if}
   {/each}
   {:else}

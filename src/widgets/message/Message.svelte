@@ -13,8 +13,8 @@
   export let className: string = null;
   export let onClick: Function = (evt) => {}
   export let parentNavInstance: typeof KaiNavigator;
-  export let registerCallButtonHandler: Function = (id, callback) => {}
-  export let refetchMessage: Function = (id: number) => {}
+  export let callButtonCallback: Function = (id, callback) => {}
+  export let fetchMessageCallback: Function = (id: number) => {}
   export let destroyCallback: Function = () => {}
   export let replyTo: any;
   export let short: bool = false;
@@ -271,7 +271,7 @@
       </div>
     {/if}
     {#if hasMedia }
-      <svelte:component this={mediaWidget} {chat} {message} {parentNavInstance} {registerCallButtonHandler} {refetchMessage}/>
+      <svelte:component this={mediaWidget} {chat} {message} {parentNavInstance} {callButtonCallback} {fetchMessageCallback}/>
     {/if}
     {#if message.message }
       <p>{@html DOMPurify.sanitize(message.message.length > 80 && short ? message.message.substring(0, 80) + '...&#13;<i style="font-size:12px;">(see more)</i>' : message.message)}</p>
