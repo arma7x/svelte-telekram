@@ -27212,7 +27212,7 @@ var app = (function () {
 	} // (18:6) {#if chat.isGroup && userId === chat.message._sender.id.value.toString()}
 
 
-	function create_if_block_3$1(ctx) {
+	function create_if_block_3$2(ctx) {
 	  var b;
 	  var br;
 	  var block = {
@@ -27235,7 +27235,7 @@ var app = (function () {
 	  };
 	  dispatch_dev("SvelteRegisterBlock", {
 	    block,
-	    id: create_if_block_3$1.name,
+	    id: create_if_block_3$2.name,
 	    type: "if",
 	    source: "(18:6) {#if chat.isGroup && userId === chat.message._sender.id.value.toString()}",
 	    ctx
@@ -27445,7 +27445,7 @@ var app = (function () {
 	    ctx[4] ===
 	    /*chat*/
 	    ctx[2].message._sender.id.value.toString());
-	    if (show_if) return create_if_block_3$1;
+	    if (show_if) return create_if_block_3$2;
 	    if (
 	    /*chat*/
 	    ctx[2].isGroup) return create_if_block_4$1;
@@ -29058,9 +29058,9 @@ var app = (function () {
 
 	function get_each_context$2(ctx, list, i) {
 	  var child_ctx = ctx.slice();
-	  child_ctx[62] = list[i];
+	  child_ctx[63] = list[i];
 	  return child_ctx;
-	} // (913:2) {:else}
+	} // (918:2) {:else}
 
 
 	function create_else_block_1(ctx) {
@@ -29072,7 +29072,7 @@ var app = (function () {
 	  ctx[5].length > 0 && create_if_block_2$2(ctx);
 	  var each_value =
 	  /*chatList*/
-	  ctx[8];
+	  ctx[9];
 	  validate_each_argument(each_value);
 	  var each_blocks = [];
 
@@ -29134,10 +29134,10 @@ var app = (function () {
 
 	      if (dirty[0] &
 	      /*user, chatList, getThumb, openRoom*/
-	      786816) {
+	      1573632) {
 	        each_value =
 	        /*chatList*/
-	        ctx[8];
+	        ctx[9];
 	        validate_each_argument(each_value);
 
 	        var _i3;
@@ -29200,11 +29200,11 @@ var app = (function () {
 	    block,
 	    id: create_else_block_1.name,
 	    type: "else",
-	    source: "(913:2) {:else}",
+	    source: "(918:2) {:else}",
 	    ctx
 	  });
 	  return block;
-	} // (883:2) {#if authStatus === false }
+	} // (888:2) {#if authStatus === false }
 
 
 	function create_if_block$c(ctx) {
@@ -29231,7 +29231,7 @@ var app = (function () {
 	      text: "Exit",
 	      onClick:
 	      /*func*/
-	      ctx[23],
+	      ctx[24],
 	      $$slots: {
 	        rightWidget: [create_rightWidget_slot],
 	        leftWidget: [create_leftWidget_slot]
@@ -29283,7 +29283,7 @@ var app = (function () {
 
 	      if (dirty[2] &
 	      /*$$scope*/
-	      8) {
+	      16) {
 	        button_changes.$$scope = {
 	          dirty,
 	          ctx
@@ -29313,11 +29313,11 @@ var app = (function () {
 	    block,
 	    id: create_if_block$c.name,
 	    type: "if",
-	    source: "(883:2) {#if authStatus === false }",
+	    source: "(888:2) {#if authStatus === false }",
 	    ctx
 	  });
 	  return block;
-	} // (914:2) {#if archivedChatList.length > 0 }
+	} // (919:2) {#if archivedChatList.length > 0 }
 
 
 	function create_if_block_2$2(ctx) {
@@ -29332,8 +29332,9 @@ var app = (function () {
 	      ctx[6].join(', ').substring(0, 50),
 	      onClick:
 	      /*openArchivedChatListMenu*/
-	      ctx[9],
+	      ctx[10],
 	      $$slots: {
+	        rightWidget: [create_rightWidget_slot_6],
 	        leftWidget: [create_leftWidget_slot_6]
 	      },
 	      $$scope: {
@@ -29358,9 +29359,11 @@ var app = (function () {
 	      /*archivedChatListName*/
 	      ctx[6].join(', ').substring(0, 50);
 
-	      if (dirty[2] &
+	      if (dirty[0] &
+	      /*archivedChatUnread*/
+	      128 | dirty[2] &
 	      /*$$scope*/
-	      8) {
+	      16) {
 	        listview_changes.$$scope = {
 	          dirty,
 	          ctx
@@ -29386,11 +29389,11 @@ var app = (function () {
 	    block,
 	    id: create_if_block_2$2.name,
 	    type: "if",
-	    source: "(914:2) {#if archivedChatList.length > 0 }",
+	    source: "(919:2) {#if archivedChatList.length > 0 }",
 	    ctx
 	  });
 	  return block;
-	} // (916:6) 
+	} // (921:6) 
 
 
 	function create_leftWidget_slot_6(ctx) {
@@ -29409,10 +29412,10 @@ var app = (function () {
 	      set_style(img, "border-radius", "50%");
 	      set_style(img, "border", "2px solid #fff");
 	      if (!src_url_equal(img.src, img_src_value = "/icons/archived.png")) attr_dev(img, "src", img_src_value);
-	      add_location(img, file$V, 915, 58, 36649);
+	      add_location(img, file$V, 920, 58, 36813);
 	      attr_dev(span, "slot", "leftWidget");
 	      set_style(span, "padding-right", "4px");
-	      add_location(span, file$V, 915, 6, 36597);
+	      add_location(span, file$V, 920, 6, 36761);
 	    },
 	    m: function mount(target, anchor) {
 	      insert_dev(target, span, anchor);
@@ -29426,11 +29429,114 @@ var app = (function () {
 	    block,
 	    id: create_leftWidget_slot_6.name,
 	    type: "slot",
-	    source: "(916:6) ",
+	    source: "(921:6) ",
 	    ctx
 	  });
 	  return block;
-	} // (919:2) {#each chatList as chat}
+	} // (923:8) {#if archivedChatUnread}
+
+
+	function create_if_block_3$1(ctx) {
+	  var span;
+	  var t;
+	  var block = {
+	    c: function create() {
+	      span = element("span");
+	      t = text(
+	      /*archivedChatUnread*/
+	      ctx[7]);
+	      attr_dev(span, "class", "badge");
+	      set_style(span, "background-color", "#c0c0c0");
+	      set_style(span, "color", "#fff");
+	      set_style(span, "font-weight", "bold");
+	      set_style(span, "border-radius", "5px");
+	      set_style(span, "padding", "0px 2px 1px 2px");
+	      add_location(span, file$V, 923, 8, 37150);
+	    },
+	    m: function mount(target, anchor) {
+	      insert_dev(target, span, anchor);
+	      append_dev(span, t);
+	    },
+	    p: function update(ctx, dirty) {
+	      if (dirty[0] &
+	      /*archivedChatUnread*/
+	      128) set_data_dev(t,
+	      /*archivedChatUnread*/
+	      ctx[7]);
+	    },
+	    d: function destroy(detaching) {
+	      if (detaching) detach_dev(span);
+	    }
+	  };
+	  dispatch_dev("SvelteRegisterBlock", {
+	    block,
+	    id: create_if_block_3$1.name,
+	    type: "if",
+	    source: "(923:8) {#if archivedChatUnread}",
+	    ctx
+	  });
+	  return block;
+	} // (922:6) 
+
+
+	function create_rightWidget_slot_6(ctx) {
+	  var span1;
+	  var t;
+	  var span0;
+	  var if_block =
+	  /*archivedChatUnread*/
+	  ctx[7] && create_if_block_3$1(ctx);
+	  var block = {
+	    c: function create() {
+	      span1 = element("span");
+	      if (if_block) if_block.c();
+	      t = space();
+	      span0 = element("span");
+	      attr_dev(span0, "class", "kai-icon-arrow");
+	      add_location(span0, file$V, 925, 8, 37324);
+	      attr_dev(span1, "slot", "rightWidget");
+	      set_style(span1, "display", "flex");
+	      set_style(span1, "flex-direction", "row");
+	      set_style(span1, "justify-content", "center");
+	      set_style(span1, "align-items", "center");
+	      add_location(span1, file$V, 921, 6, 37000);
+	    },
+	    m: function mount(target, anchor) {
+	      insert_dev(target, span1, anchor);
+	      if (if_block) if_block.m(span1, null);
+	      append_dev(span1, t);
+	      append_dev(span1, span0);
+	    },
+	    p: function update(ctx, dirty) {
+	      if (
+	      /*archivedChatUnread*/
+	      ctx[7]) {
+	        if (if_block) {
+	          if_block.p(ctx, dirty);
+	        } else {
+	          if_block = create_if_block_3$1(ctx);
+	          if_block.c();
+	          if_block.m(span1, t);
+	        }
+	      } else if (if_block) {
+	        if_block.d(1);
+	        if_block = null;
+	      }
+	    },
+	    d: function destroy(detaching) {
+	      if (detaching) detach_dev(span1);
+	      if (if_block) if_block.d();
+	    }
+	  };
+	  dispatch_dev("SvelteRegisterBlock", {
+	    block,
+	    id: create_rightWidget_slot_6.name,
+	    type: "slot",
+	    source: "(922:6) ",
+	    ctx
+	  });
+	  return block;
+	} // (930:2) {#each chatList as chat}
 
 
 	function create_each_block$2(ctx) {
@@ -29440,9 +29546,9 @@ var app = (function () {
 	  function func_1() {
 	    return (
 	      /*func_1*/
-	      ctx[24](
+	      ctx[25](
 	      /*chat*/
-	      ctx[62])
+	      ctx[63])
 	    );
 	  }
 
@@ -29450,18 +29556,18 @@ var app = (function () {
 	    props: {
 	      userId:
 	      /*user*/
-	      ctx[7].length > 0 ?
+	      ctx[8].length > 0 ?
 	      /*user*/
-	      ctx[7][0].id.value.toString() : null,
+	      ctx[8][0].id.value.toString() : null,
 	      chat:
 	      /*chat*/
-	      ctx[62],
+	      ctx[63],
 	      className: navClass$1,
 	      icon:
 	      /*getThumb*/
-	      ctx[19](
+	      ctx[20](
 	      /*chat*/
-	      ctx[62]),
+	      ctx[63]),
 	      onClick: func_1
 	    },
 	    $$inline: true
@@ -29479,26 +29585,26 @@ var app = (function () {
 	      var chatlistview_changes = {};
 	      if (dirty[0] &
 	      /*user*/
-	      128) chatlistview_changes.userId =
+	      256) chatlistview_changes.userId =
 	      /*user*/
-	      ctx[7].length > 0 ?
+	      ctx[8].length > 0 ?
 	      /*user*/
-	      ctx[7][0].id.value.toString() : null;
+	      ctx[8][0].id.value.toString() : null;
 	      if (dirty[0] &
 	      /*chatList*/
-	      256) chatlistview_changes.chat =
+	      512) chatlistview_changes.chat =
 	      /*chat*/
-	      ctx[62];
+	      ctx[63];
 	      if (dirty[0] &
 	      /*chatList*/
-	      256) chatlistview_changes.icon =
+	      512) chatlistview_changes.icon =
 	      /*getThumb*/
-	      ctx[19](
+	      ctx[20](
 	      /*chat*/
-	      ctx[62]);
+	      ctx[63]);
 	      if (dirty[0] &
 	      /*chatList*/
-	      256) chatlistview_changes.onClick = func_1;
+	      512) chatlistview_changes.onClick = func_1;
 	      chatlistview.$set(chatlistview_changes);
 	    },
 	    i: function intro(local) {
@@ -29518,11 +29624,11 @@ var app = (function () {
 	    block,
 	    id: create_each_block$2.name,
 	    type: "each",
-	    source: "(919:2) {#each chatList as chat}",
+	    source: "(930:2) {#each chatList as chat}",
 	    ctx
 	  });
 	  return block;
-	} // (894:2) {:else}
+	} // (899:2) {:else}
 
 
 	function create_else_block$3(ctx) {
@@ -29545,13 +29651,13 @@ var app = (function () {
 	      type: "tel",
 	      onInput:
 	      /*onInputPhoneCode*/
-	      ctx[11],
+	      ctx[12],
 	      onFocus:
 	      /*onFocus*/
-	      ctx[12],
+	      ctx[13],
 	      onBlur:
 	      /*onBlur*/
-	      ctx[13]
+	      ctx[14]
 	    },
 	    $$inline: true
 	  });
@@ -29576,7 +29682,7 @@ var app = (function () {
 	      text: "Sign In",
 	      onClick:
 	      /*signIn*/
-	      ctx[15],
+	      ctx[16],
 	      $$slots: {
 	        rightWidget: [create_rightWidget_slot_4],
 	        leftWidget: [create_leftWidget_slot_4]
@@ -29593,7 +29699,7 @@ var app = (function () {
 	      text: "Return",
 	      onClick:
 	      /*resetSignIn*/
-	      ctx[17],
+	      ctx[18],
 	      $$slots: {
 	        rightWidget: [create_rightWidget_slot_3],
 	        leftWidget: [create_leftWidget_slot_3]
@@ -29636,7 +29742,7 @@ var app = (function () {
 
 	      if (dirty[2] &
 	      /*$$scope*/
-	      8) {
+	      16) {
 	        button0_changes.$$scope = {
 	          dirty,
 	          ctx
@@ -29648,7 +29754,7 @@ var app = (function () {
 
 	      if (dirty[2] &
 	      /*$$scope*/
-	      8) {
+	      16) {
 	        button1_changes.$$scope = {
 	          dirty,
 	          ctx
@@ -29660,7 +29766,7 @@ var app = (function () {
 
 	      if (dirty[2] &
 	      /*$$scope*/
-	      8) {
+	      16) {
 	        button2_changes.$$scope = {
 	          dirty,
 	          ctx
@@ -29698,11 +29804,11 @@ var app = (function () {
 	    block,
 	    id: create_else_block$3.name,
 	    type: "else",
-	    source: "(894:2) {:else}",
+	    source: "(899:2) {:else}",
 	    ctx
 	  });
 	  return block;
-	} // (884:2) {#if phoneCodeHash === null}
+	} // (889:2) {#if phoneCodeHash === null}
 
 
 	function create_if_block_1$7(ctx) {
@@ -29725,13 +29831,13 @@ var app = (function () {
 	      type: "tel",
 	      onInput:
 	      /*onInputPhoneNumber*/
-	      ctx[10],
+	      ctx[11],
 	      onFocus:
 	      /*onFocus*/
-	      ctx[12],
+	      ctx[13],
 	      onBlur:
 	      /*onBlur*/
-	      ctx[13]
+	      ctx[14]
 	    },
 	    $$inline: true
 	  });
@@ -29741,7 +29847,7 @@ var app = (function () {
 	      text: "Send Code",
 	      onClick:
 	      /*sendCode*/
-	      ctx[14],
+	      ctx[15],
 	      $$slots: {
 	        rightWidget: [create_rightWidget_slot_2],
 	        leftWidget: [create_leftWidget_slot_2]
@@ -29758,7 +29864,7 @@ var app = (function () {
 	      text: "Log-In via QR Code",
 	      onClick:
 	      /*signInQR*/
-	      ctx[16],
+	      ctx[17],
 	      $$slots: {
 	        rightWidget: [create_rightWidget_slot_1],
 	        leftWidget: [create_leftWidget_slot_1]
@@ -29802,7 +29908,7 @@ var app = (function () {
 
 	      if (dirty[2] &
 	      /*$$scope*/
-	      8) {
+	      16) {
 	        button0_changes.$$scope = {
 	          dirty,
 	          ctx
@@ -29814,7 +29920,7 @@ var app = (function () {
 
 	      if (dirty[2] &
 	      /*$$scope*/
-	      8) {
+	      16) {
 	        button1_changes.$$scope = {
 	          dirty,
 	          ctx
@@ -29848,11 +29954,11 @@ var app = (function () {
 	    block,
 	    id: create_if_block_1$7.name,
 	    type: "if",
-	    source: "(884:2) {#if phoneCodeHash === null}",
+	    source: "(889:2) {#if phoneCodeHash === null}",
 	    ctx
 	  });
 	  return block;
-	} // (897:4) 
+	} // (902:4) 
 
 
 	function create_leftWidget_slot_5(ctx) {
@@ -29868,7 +29974,7 @@ var app = (function () {
 	      set_style(span, "-o-transform", "scale(-1, 1)");
 	      set_style(span, "-ms-transform", "scale(-1, 1)");
 	      set_style(span, "transform", "scale(-1, 1)");
-	      add_location(span, file$V, 896, 4, 34892);
+	      add_location(span, file$V, 901, 4, 35056);
 	    },
 	    m: function mount(target, anchor) {
 	      insert_dev(target, span, anchor);
@@ -29881,11 +29987,11 @@ var app = (function () {
 	    block,
 	    id: create_leftWidget_slot_5.name,
 	    type: "slot",
-	    source: "(897:4) ",
+	    source: "(902:4) ",
 	    ctx
 	  });
 	  return block;
-	} // (898:4) 
+	} // (903:4) 
 
 
 	function create_rightWidget_slot_5(ctx) {
@@ -29896,7 +30002,7 @@ var app = (function () {
 	      attr_dev(span, "slot", "rightWidget");
 	      attr_dev(span, "class", "kai-icon-arrow");
 	      set_style(span, "margin", "0px 5px");
-	      add_location(span, file$V, 897, 4, 35115);
+	      add_location(span, file$V, 902, 4, 35279);
 	    },
 	    m: function mount(target, anchor) {
 	      insert_dev(target, span, anchor);
@@ -29909,11 +30015,11 @@ var app = (function () {
 	    block,
 	    id: create_rightWidget_slot_5.name,
 	    type: "slot",
-	    source: "(898:4) ",
+	    source: "(903:4) ",
 	    ctx
 	  });
 	  return block;
-	} // (901:4) 
+	} // (906:4) 
 
 
 	function create_leftWidget_slot_4(ctx) {
@@ -29929,7 +30035,7 @@ var app = (function () {
 	      set_style(span, "-o-transform", "scale(-1, 1)");
 	      set_style(span, "-ms-transform", "scale(-1, 1)");
 	      set_style(span, "transform", "scale(-1, 1)");
-	      add_location(span, file$V, 900, 4, 35277);
+	      add_location(span, file$V, 905, 4, 35441);
 	    },
 	    m: function mount(target, anchor) {
 	      insert_dev(target, span, anchor);
@@ -29942,11 +30048,11 @@ var app = (function () {
 	    block,
 	    id: create_leftWidget_slot_4.name,
 	    type: "slot",
-	    source: "(901:4) ",
+	    source: "(906:4) ",
 	    ctx
 	  });
 	  return block;
-	} // (902:4) 
+	} // (907:4) 
 
 
 	function create_rightWidget_slot_4(ctx) {
@@ -29957,7 +30063,7 @@ var app = (function () {
 	      attr_dev(span, "slot", "rightWidget");
 	      attr_dev(span, "class", "kai-icon-arrow");
 	      set_style(span, "margin", "0px 5px");
-	      add_location(span, file$V, 901, 4, 35500);
+	      add_location(span, file$V, 906, 4, 35664);
 	    },
 	    m: function mount(target, anchor) {
 	      insert_dev(target, span, anchor);
@@ -29970,11 +30076,11 @@ var app = (function () {
 	    block,
 	    id: create_rightWidget_slot_4.name,
 	    type: "slot",
-	    source: "(902:4) ",
+	    source: "(907:4) ",
 	    ctx
 	  });
 	  return block;
-	} // (905:4) 
+	} // (910:4) 
 
 
 	function create_leftWidget_slot_3(ctx) {
@@ -29990,7 +30096,7 @@ var app = (function () {
 	      set_style(span, "-o-transform", "scale(-1, 1)");
 	      set_style(span, "-ms-transform", "scale(-1, 1)");
 	      set_style(span, "transform", "scale(-1, 1)");
-	      add_location(span, file$V, 904, 4, 35666);
+	      add_location(span, file$V, 909, 4, 35830);
 	    },
 	    m: function mount(target, anchor) {
 	      insert_dev(target, span, anchor);
@@ -30003,11 +30109,11 @@ var app = (function () {
 	    block,
 	    id: create_leftWidget_slot_3.name,
 	    type: "slot",
-	    source: "(905:4) ",
+	    source: "(910:4) ",
 	    ctx
 	  });
 	  return block;
-	} // (906:4) 
+	} // (911:4) 
 
 
 	function create_rightWidget_slot_3(ctx) {
@@ -30018,7 +30124,7 @@ var app = (function () {
 	      attr_dev(span, "slot", "rightWidget");
 	      attr_dev(span, "class", "kai-icon-arrow");
 	      set_style(span, "margin", "0px 5px");
-	      add_location(span, file$V, 905, 4, 35889);
+	      add_location(span, file$V, 910, 4, 36053);
 	    },
 	    m: function mount(target, anchor) {
 	      insert_dev(target, span, anchor);
@@ -30031,11 +30137,11 @@ var app = (function () {
 	    block,
 	    id: create_rightWidget_slot_3.name,
 	    type: "slot",
-	    source: "(906:4) ",
+	    source: "(911:4) ",
 	    ctx
 	  });
 	  return block;
-	} // (887:4) 
+	} // (892:4) 
 
 
 	function create_leftWidget_slot_2(ctx) {
@@ -30051,7 +30157,7 @@ var app = (function () {
 	      set_style(span, "-o-transform", "scale(-1, 1)");
 	      set_style(span, "-ms-transform", "scale(-1, 1)");
 	      set_style(span, "transform", "scale(-1, 1)");
-	      add_location(span, file$V, 886, 4, 33932);
+	      add_location(span, file$V, 891, 4, 34096);
 	    },
 	    m: function mount(target, anchor) {
 	      insert_dev(target, span, anchor);
@@ -30064,11 +30170,11 @@ var app = (function () {
 	    block,
 	    id: create_leftWidget_slot_2.name,
 	    type: "slot",
-	    source: "(887:4) ",
+	    source: "(892:4) ",
 	    ctx
 	  });
 	  return block;
-	} // (888:4) 
+	} // (893:4) 
 
 
 	function create_rightWidget_slot_2(ctx) {
@@ -30079,7 +30185,7 @@ var app = (function () {
 	      attr_dev(span, "slot", "rightWidget");
 	      attr_dev(span, "class", "kai-icon-arrow");
 	      set_style(span, "margin", "0px 5px");
-	      add_location(span, file$V, 887, 4, 34155);
+	      add_location(span, file$V, 892, 4, 34319);
 	    },
 	    m: function mount(target, anchor) {
 	      insert_dev(target, span, anchor);
@@ -30092,11 +30198,11 @@ var app = (function () {
 	    block,
 	    id: create_rightWidget_slot_2.name,
 	    type: "slot",
-	    source: "(888:4) ",
+	    source: "(893:4) ",
 	    ctx
 	  });
 	  return block;
-	} // (891:4) 
+	} // (896:4) 
 
 
 	function create_leftWidget_slot_1(ctx) {
@@ -30112,7 +30218,7 @@ var app = (function () {
 	      set_style(span, "-o-transform", "scale(-1, 1)");
 	      set_style(span, "-ms-transform", "scale(-1, 1)");
 	      set_style(span, "transform", "scale(-1, 1)");
-	      add_location(span, file$V, 890, 4, 34330);
+	      add_location(span, file$V, 895, 4, 34494);
 	    },
 	    m: function mount(target, anchor) {
 	      insert_dev(target, span, anchor);
@@ -30125,11 +30231,11 @@ var app = (function () {
 	    block,
 	    id: create_leftWidget_slot_1.name,
 	    type: "slot",
-	    source: "(891:4) ",
+	    source: "(896:4) ",
 	    ctx
 	  });
 	  return block;
-	} // (892:4) 
+	} // (897:4) 
 
 
 	function create_rightWidget_slot_1(ctx) {
@@ -30140,7 +30246,7 @@ var app = (function () {
 	      attr_dev(span, "slot", "rightWidget");
 	      attr_dev(span, "class", "kai-icon-arrow");
 	      set_style(span, "margin", "0px 5px");
-	      add_location(span, file$V, 891, 4, 34553);
+	      add_location(span, file$V, 896, 4, 34717);
 	    },
 	    m: function mount(target, anchor) {
 	      insert_dev(target, span, anchor);
@@ -30153,11 +30259,11 @@ var app = (function () {
 	    block,
 	    id: create_rightWidget_slot_1.name,
 	    type: "slot",
-	    source: "(892:4) ",
+	    source: "(897:4) ",
 	    ctx
 	  });
 	  return block;
-	} // (910:4) 
+	} // (915:4) 
 
 
 	function create_leftWidget_slot(ctx) {
@@ -30173,7 +30279,7 @@ var app = (function () {
 	      set_style(span, "-o-transform", "scale(-1, 1)");
 	      set_style(span, "-ms-transform", "scale(-1, 1)");
 	      set_style(span, "transform", "scale(-1, 1)");
-	      add_location(span, file$V, 909, 4, 36071);
+	      add_location(span, file$V, 914, 4, 36235);
 	    },
 	    m: function mount(target, anchor) {
 	      insert_dev(target, span, anchor);
@@ -30186,11 +30292,11 @@ var app = (function () {
 	    block,
 	    id: create_leftWidget_slot.name,
 	    type: "slot",
-	    source: "(910:4) ",
+	    source: "(915:4) ",
 	    ctx
 	  });
 	  return block;
-	} // (911:4) 
+	} // (916:4) 
 
 
 	function create_rightWidget_slot(ctx) {
@@ -30201,7 +30307,7 @@ var app = (function () {
 	      attr_dev(span, "slot", "rightWidget");
 	      attr_dev(span, "class", "kai-icon-arrow");
 	      set_style(span, "margin", "0px 5px");
-	      add_location(span, file$V, 910, 4, 36294);
+	      add_location(span, file$V, 915, 4, 36458);
 	    },
 	    m: function mount(target, anchor) {
 	      insert_dev(target, span, anchor);
@@ -30214,7 +30320,7 @@ var app = (function () {
 	    block,
 	    id: create_rightWidget_slot.name,
 	    type: "slot",
-	    source: "(911:4) ",
+	    source: "(916:4) ",
 	    ctx
 	  });
 	  return block;
@@ -30245,7 +30351,7 @@ var app = (function () {
 	      attr_dev(main, "data-pad-top", "28");
 	      attr_dev(main, "data-pad-bottom", "30");
 	      attr_dev(main, "class", "svelte-k2v3lx");
-	      add_location(main, file$V, 881, 0, 33521);
+	      add_location(main, file$V, 886, 0, 33685);
 	    },
 	    l: function claim(nodes) {
 	      throw new Error("options.hydrate only works if the component was compiled with the `hydratable: true` option");
@@ -30376,6 +30482,7 @@ var app = (function () {
 	  var authStatus = false;
 	  var archivedChatList = [];
 	  var archivedChatListName = [];
+	  var archivedChatUnread = 0;
 	  var user = [];
 	  var chatList = [];
 	  var thumbs = {};
@@ -30944,6 +31051,7 @@ var app = (function () {
 	    try {
 	      $$invalidate(6, archivedChatListName = []);
 	      $$invalidate(5, archivedChatList = []);
+	      $$invalidate(7, archivedChatUnread = 0);
 	      var tempChatList = [];
 	      chats.forEach((chat, index) => {
 	        if (chat.archived) {
@@ -30952,12 +31060,16 @@ var app = (function () {
 	            if (archivedChatListName.length === 2) archivedChatListName.push('more...');
 	          }
 
+	          if (chat.unreadCount > 0) {
+	            $$invalidate(7, archivedChatUnread++, archivedChatUnread);
+	          }
+
 	          archivedChatList.push(chat);
 	        } else {
 	          tempChatList.push(chat);
 	        }
 	      });
-	      $$invalidate(8, chatList = tempChatList);
+	      $$invalidate(9, chatList = tempChatList);
 
 	      if (window['HOME_LOADED'] == null) {
 	        setTimeout(() => {
@@ -31250,10 +31362,10 @@ var app = (function () {
 	    });
 	    uncachedThumbnails = cachedThumbnails.subscribe(data => {
 	      thumbs = data;
-	      $$invalidate(8, chatList = [...chatList]);
+	      $$invalidate(9, chatList = [...chatList]);
 	    });
 	    unauthorizedUser = authorizedUser.subscribe(data => {
-	      $$invalidate(7, user = data);
+	      $$invalidate(8, user = data);
 	    });
 	    dispatchMessageToClient.addListener('message', handleWebWorkerMessage);
 
@@ -31281,9 +31393,9 @@ var app = (function () {
 	  var func_1 = chat => openRoom(chat.name, chat);
 
 	  $$self.$$set = $$props => {
-	    if ('location' in $$props) $$invalidate(20, location = $$props.location);
-	    if ('navigate' in $$props) $$invalidate(21, navigate$1 = $$props.navigate);
-	    if ('getAppProp' in $$props) $$invalidate(22, getAppProp = $$props.getAppProp);
+	    if ('location' in $$props) $$invalidate(21, location = $$props.location);
+	    if ('navigate' in $$props) $$invalidate(22, navigate$1 = $$props.navigate);
+	    if ('getAppProp' in $$props) $$invalidate(23, getAppProp = $$props.getAppProp);
 	  };
 
 	  $$self.$capture_state = () => ({
@@ -31356,6 +31468,7 @@ var app = (function () {
 	    authStatus,
 	    archivedChatList,
 	    archivedChatListName,
+	    archivedChatUnread,
 	    user,
 	    chatList,
 	    thumbs,
@@ -31394,9 +31507,9 @@ var app = (function () {
 
 	  $$self.$inject_state = $$props => {
 	    if ('__awaiter' in $$props) __awaiter = $$props.__awaiter;
-	    if ('location' in $$props) $$invalidate(20, location = $$props.location);
-	    if ('navigate' in $$props) $$invalidate(21, navigate$1 = $$props.navigate);
-	    if ('getAppProp' in $$props) $$invalidate(22, getAppProp = $$props.getAppProp);
+	    if ('location' in $$props) $$invalidate(21, location = $$props.location);
+	    if ('navigate' in $$props) $$invalidate(22, navigate$1 = $$props.navigate);
+	    if ('getAppProp' in $$props) $$invalidate(23, getAppProp = $$props.getAppProp);
 	    if ('loadingBar' in $$props) loadingBar = $$props.loadingBar;
 	    if ('inputSoftwareKey' in $$props) inputSoftwareKey = $$props.inputSoftwareKey;
 	    if ('qrModal' in $$props) qrModal = $$props.qrModal;
@@ -31420,8 +31533,9 @@ var app = (function () {
 	    if ('authStatus' in $$props) $$invalidate(4, authStatus = $$props.authStatus);
 	    if ('archivedChatList' in $$props) $$invalidate(5, archivedChatList = $$props.archivedChatList);
 	    if ('archivedChatListName' in $$props) $$invalidate(6, archivedChatListName = $$props.archivedChatListName);
-	    if ('user' in $$props) $$invalidate(7, user = $$props.user);
-	    if ('chatList' in $$props) $$invalidate(8, chatList = $$props.chatList);
+	    if ('archivedChatUnread' in $$props) $$invalidate(7, archivedChatUnread = $$props.archivedChatUnread);
+	    if ('user' in $$props) $$invalidate(8, user = $$props.user);
+	    if ('chatList' in $$props) $$invalidate(9, chatList = $$props.chatList);
 	    if ('thumbs' in $$props) thumbs = $$props.thumbs;
 	    if ('navOptions' in $$props) navOptions = $$props.navOptions;
 	    if ('navInstance' in $$props) navInstance = $$props.navInstance;
@@ -31431,16 +31545,16 @@ var app = (function () {
 	    $$self.$inject_state($$props.$$inject);
 	  }
 
-	  return [webWorkerStatus, phoneNumber, phoneCode, phoneCodeHash, authStatus, archivedChatList, archivedChatListName, user, chatList, openArchivedChatListMenu, onInputPhoneNumber, onInputPhoneCode, onFocus, onBlur, sendCode, signIn, signInQR, resetSignIn, openRoom, getThumb, location, navigate$1, getAppProp, func, func_1];
+	  return [webWorkerStatus, phoneNumber, phoneCode, phoneCodeHash, authStatus, archivedChatList, archivedChatListName, archivedChatUnread, user, chatList, openArchivedChatListMenu, onInputPhoneNumber, onInputPhoneCode, onFocus, onBlur, sendCode, signIn, signInQR, resetSignIn, openRoom, getThumb, location, navigate$1, getAppProp, func, func_1];
 	}
 
 	class Home extends SvelteComponentDev {
 	  constructor(options) {
 	    super(options);
 	    init(this, options, instance$V, create_fragment$V, safe_not_equal, {
-	      location: 20,
-	      navigate: 21,
-	      getAppProp: 22
+	      location: 21,
+	      navigate: 22,
+	      getAppProp: 23
 	    }, null, [-1, -1, -1]);
 	    dispatch_dev("SvelteRegisterComponent", {
 	      component: this,
@@ -31453,19 +31567,19 @@ var app = (function () {
 
 	    if (
 	    /*location*/
-	    ctx[20] === undefined && !('location' in props)) {
+	    ctx[21] === undefined && !('location' in props)) {
 	      console_1$c.warn("<Home> was created without expected prop 'location'");
 	    }
 
 	    if (
 	    /*navigate*/
-	    ctx[21] === undefined && !('navigate' in props)) {
+	    ctx[22] === undefined && !('navigate' in props)) {
 	      console_1$c.warn("<Home> was created without expected prop 'navigate'");
 	    }
 
 	    if (
 	    /*getAppProp*/
-	    ctx[22] === undefined && !('getAppProp' in props)) {
+	    ctx[23] === undefined && !('getAppProp' in props)) {
 	      console_1$c.warn("<Home> was created without expected prop 'getAppProp'");
 	    }
 	  }

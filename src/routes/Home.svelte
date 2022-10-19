@@ -48,6 +48,7 @@
   let authStatus: boolean = false;
   let archivedChatList = [];
   let archivedChatListName = [];
+  let archivedChatUnread = 0;
   let user = [];
 
   let chatList = [];
@@ -605,6 +606,7 @@
     try {
       archivedChatListName = [];
       archivedChatList = [];
+      archivedChatUnread = 0;
       let tempChatList = [];
       chats.forEach((chat, index) => {
         if (chat.archived) {
@@ -612,6 +614,9 @@
             archivedChatListName.push(chat.name);
             if (archivedChatListName.length === 2)
               archivedChatListName.push('more...')
+          }
+          if (chat.unreadCount > 0) {
+            archivedChatUnread++;
           }
           archivedChatList.push(chat);
         } else {
@@ -923,6 +928,12 @@
   {#if archivedChatList.length > 0 }
     <ListView className="{navClass}" title="Archived Chats" subtitle="{archivedChatListName.join(', ').substring(0, 50)}" onClick={openArchivedChatListMenu}>
       <span slot="leftWidget" style="padding-right: 4px;"><img alt="icon" style="background-color:var(--themeColor);width:40px;height:40px;box-sizing:border-box;border-radius:50%;border: 2px solid #fff;" src="/icons/archived.png"/></span>
+      <span slot="rightWidget" style="display:flex;flex-direction:row;justify-content:center;align-items:center;">
+        {#if archivedChatUnread}
+        <span class="badge" style="background-color:#c0c0c0;color:#fff;font-weight:bold;border-radius:5px;padding:0px 2px 1px 2px;">{archivedChatUnread}</span>
+        {/if}
+        <span class="kai-icon-arrow"></span>
+      </span>
     </ListView>
   {/if}
   {#each chatList as chat}
