@@ -616,7 +616,7 @@
               archivedChatListName.push('more...')
           }
           if (chat.unreadCount > 0) {
-            archivedChatUnread++;
+            archivedChatUnread += chat.unreadCount;
           }
           archivedChatList.push(chat);
         } else {
