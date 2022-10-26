@@ -557,6 +557,8 @@
   }
 
   async function signOut() {
+    if (!confirm("Are you sure to logout ?"))
+      return
     try {
       let pushSubscription = await (await cachedDatabase).get('appPreferences', 'pushSubscription');
       if (pushSubscription != null) {
