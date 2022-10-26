@@ -282,13 +282,15 @@
           } else if (scope.selected.title === 'Link Device') {
             linkDevice();
           } else if (scope.selected.title === 'Subscribe Notification') {
-            manuallySubscribePushNotification(client)
-            .then(() => {
-              alert('Success');
-            })
-            .catch((err) => {
-              alert('Fail: ' + err.toString());
-            });
+            try {
+              manuallySubscribePushNotification(client)
+              .then(() => {
+                alert('Success');
+              })
+              .catch((err) => {
+                alert('Fail: ' + err.toString());
+              });
+            } catch (err) {}
           } else if (scope.selected.title  === 'Clear Cache') {
             clearCache();
           } else if (scope.selected.title === 'Logout') {
