@@ -62507,9 +62507,9 @@ var app = (function () {
 
 	function get_each_context(ctx, list, i) {
 	  var child_ctx = ctx.slice();
-	  child_ctx[53] = list[i];
+	  child_ctx[54] = list[i];
 	  return child_ctx;
-	} // (1399:2) {:else}
+	} // (1403:2) {:else}
 
 
 	function create_else_block(ctx) {
@@ -62519,7 +62519,7 @@ var app = (function () {
 	      div = element("div");
 	      div.textContent = "Loading";
 	      set_style(div, "margin-top", "45%");
-	      add_location(div, file$1, 1399, 4, 62879);
+	      add_location(div, file$1, 1403, 4, 62986);
 	    },
 	    m: function mount(target, anchor) {
 	      insert_dev(target, div, anchor);
@@ -62535,11 +62535,11 @@ var app = (function () {
 	    block,
 	    id: create_else_block.name,
 	    type: "else",
-	    source: "(1399:2) {:else}",
+	    source: "(1403:2) {:else}",
 	    ctx
 	  });
 	  return block;
-	} // (1393:2) {#if ready }
+	} // (1397:2) {#if ready }
 
 
 	function create_if_block(ctx) {
@@ -62640,11 +62640,11 @@ var app = (function () {
 	    block,
 	    id: create_if_block.name,
 	    type: "if",
-	    source: "(1393:2) {#if ready }",
+	    source: "(1397:2) {#if ready }",
 	    ctx
 	  });
 	  return block;
-	} // (1395:4) {#if message && message.id && messageMetadata[message.id.toString()] && messageMetadata[message.id.toString()].deleted === false}
+	} // (1399:4) {#if message && message.id && messageMetadata[message.id.toString()] && messageMetadata[message.id.toString()].deleted === false}
 
 
 	function create_if_block_1(ctx) {
@@ -62655,7 +62655,7 @@ var app = (function () {
 	  /*resolveMessageWidget*/
 	  ctx[5](
 	  /*message*/
-	  ctx[53]);
+	  ctx[54]);
 
 	  function switch_props(ctx) {
 	    return {
@@ -62663,7 +62663,7 @@ var app = (function () {
 	        className: "roomNav",
 	        message:
 	        /*message*/
-	        ctx[53],
+	        ctx[54],
 	        callButtonCallback:
 	        /*callButtonCallback*/
 	        ctx[6],
@@ -62677,7 +62677,7 @@ var app = (function () {
 	        /*getReplyHeader*/
 	        ctx[8](
 	        /*message*/
-	        ctx[53]),
+	        ctx[54]),
 	        chat:
 	        /*chat*/
 	        ctx[1],
@@ -62712,7 +62712,7 @@ var app = (function () {
 	      /*messages*/
 	      4) switch_instance_changes.message =
 	      /*message*/
-	      ctx[53];
+	      ctx[54];
 	      if (dirty[0] &
 	      /*navInstance*/
 	      16) switch_instance_changes.parentNavInstance =
@@ -62724,7 +62724,7 @@ var app = (function () {
 	      /*getReplyHeader*/
 	      ctx[8](
 	      /*message*/
-	      ctx[53]);
+	      ctx[54]);
 	      if (dirty[0] &
 	      /*chat*/
 	      2) switch_instance_changes.chat =
@@ -62735,7 +62735,7 @@ var app = (function () {
 	      /*resolveMessageWidget*/
 	      ctx[5](
 	      /*message*/
-	      ctx[53]))) {
+	      ctx[54]))) {
 	        if (switch_instance) {
 	          group_outros();
 	          var old_component = switch_instance;
@@ -62775,27 +62775,27 @@ var app = (function () {
 	    block,
 	    id: create_if_block_1.name,
 	    type: "if",
-	    source: "(1395:4) {#if message && message.id && messageMetadata[message.id.toString()] && messageMetadata[message.id.toString()].deleted === false}",
+	    source: "(1399:4) {#if message && message.id && messageMetadata[message.id.toString()] && messageMetadata[message.id.toString()].deleted === false}",
 	    ctx
 	  });
 	  return block;
-	} // (1394:2) {#each messages as message}
+	} // (1398:2) {#each messages as message}
 
 
 	function create_each_block(ctx) {
 	  var show_if =
 	  /*message*/
-	  ctx[53] &&
+	  ctx[54] &&
 	  /*message*/
-	  ctx[53].id &&
+	  ctx[54].id &&
 	  /*messageMetadata*/
 	  ctx[3][
 	  /*message*/
-	  ctx[53].id.toString()] &&
+	  ctx[54].id.toString()] &&
 	  /*messageMetadata*/
 	  ctx[3][
 	  /*message*/
-	  ctx[53].id.toString()].deleted === false;
+	  ctx[54].id.toString()].deleted === false;
 	  var if_block_anchor;
 	  var current;
 	  var if_block = show_if && create_if_block_1(ctx);
@@ -62814,17 +62814,17 @@ var app = (function () {
 	      /*messages, messageMetadata*/
 	      12) show_if =
 	      /*message*/
-	      ctx[53] &&
+	      ctx[54] &&
 	      /*message*/
-	      ctx[53].id &&
+	      ctx[54].id &&
 	      /*messageMetadata*/
 	      ctx[3][
 	      /*message*/
-	      ctx[53].id.toString()] &&
+	      ctx[54].id.toString()] &&
 	      /*messageMetadata*/
 	      ctx[3][
 	      /*message*/
-	      ctx[53].id.toString()].deleted === false;
+	      ctx[54].id.toString()].deleted === false;
 
 	      if (show_if) {
 	        if (if_block) {
@@ -62867,7 +62867,7 @@ var app = (function () {
 	    block,
 	    id: create_each_block.name,
 	    type: "each",
-	    source: "(1394:2) {#each messages as message}",
+	    source: "(1398:2) {#each messages as message}",
 	    ctx
 	  });
 	  return block;
@@ -62898,7 +62898,7 @@ var app = (function () {
 	      attr_dev(main, "data-pad-top", "50");
 	      attr_dev(main, "data-pad-bottom", "30");
 	      attr_dev(main, "class", "svelte-yfuvl7");
-	      add_location(main, file$1, 1391, 0, 62335);
+	      add_location(main, file$1, 1395, 0, 62442);
 	    },
 	    l: function claim(nodes) {
 	      throw new Error("options.hydrate only works if the component was compiled with the `hydratable: true` option");
@@ -63021,6 +63021,7 @@ var app = (function () {
 	  var pollMetadata = {};
 	  var replyIndex = {};
 	  var muteUntil = false;
+	  var allowAppend = false;
 	  var navOptions = {
 	    verticalNavClass: 'roomNav',
 
@@ -63142,6 +63143,7 @@ var app = (function () {
 	              $$invalidate(2, messages = yield buildIndex(temp));
 	            } else {
 	              alert('No new messages');
+	              allowAppend = true;
 	            }
 
 	            console.log(`Fetch newest: ${new Date().getTime() - start}ms`);
@@ -64241,6 +64243,7 @@ var app = (function () {
 	  }
 
 	  function pushMessageToMerge(msg) {
+	    if (!allowAppend) return;
 	    console.log('pushMessageToMerge', msg.id);
 	    var len = messagesToMerge.length;
 
@@ -64656,6 +64659,7 @@ var app = (function () {
 	    pollMetadata,
 	    replyIndex,
 	    muteUntil,
+	    allowAppend,
 	    navOptions,
 	    navInstance,
 	    updateScrollAt,
@@ -64712,6 +64716,7 @@ var app = (function () {
 	    if ('pollMetadata' in $$props) pollMetadata = $$props.pollMetadata;
 	    if ('replyIndex' in $$props) replyIndex = $$props.replyIndex;
 	    if ('muteUntil' in $$props) muteUntil = $$props.muteUntil;
+	    if ('allowAppend' in $$props) allowAppend = $$props.allowAppend;
 	    if ('navOptions' in $$props) navOptions = $$props.navOptions;
 	    if ('navInstance' in $$props) $$invalidate(4, navInstance = $$props.navInstance);
 	  };

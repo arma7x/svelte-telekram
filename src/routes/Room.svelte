@@ -42,6 +42,7 @@
   let pollMetadata: { [key: string]: any } = {};
   let replyIndex: { [key: string]: any; } = {};
   let muteUntil: number|bool = false;
+  let allowAppend: bool = false;
 
   let navOptions = {
     verticalNavClass: 'roomNav',
@@ -146,6 +147,7 @@
               messages = await buildIndex(temp);
             } else {
               alert('No new messages');
+              allowAppend = true;
             }
             console.log(`Fetch newest: ${new Date().getTime() - start}ms`);
           }
@@ -1030,6 +1032,8 @@
   }
 
   function pushMessageToMerge(msg) {
+    if (!allowAppend)
+      return
     console.log('pushMessageToMerge', msg.id);
     const len = messagesToMerge.length;
     if (len === 0) {
