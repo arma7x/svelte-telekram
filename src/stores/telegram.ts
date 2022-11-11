@@ -49,7 +49,7 @@ client.addEventHandler((evt) => {
       isUserAuthorized();
       break
     default:
-      console.log('client.addEventHandler:', evt);
+      // console.log('client.addEventHandler:', evt);
   }
   if (evt.state) {
     if (evt.state === 1)
@@ -106,7 +106,7 @@ export async function isUserAuthorized() {
             console.error(e.data.params);
             break;
           case 0:
-            console.log('Connected to authorizedWebWorker');
+            // console.log('Connected to authorizedWebWorker');
             break;
           case 1:
             // downloadedMediaEmitter.update(n => e.data);
@@ -231,7 +231,7 @@ export async function getDialogs() {
       });
     });
     dialogList.update(n => chats);
-    console.log(`getDialogs: ${new Date().getTime() - _start}ms`);
+    // console.log(`getDialogs: ${new Date().getTime() - _start}ms`);
     runTask(httpTasks, websocketTasks, chatPreferencesTask);
     return chats;
   } catch (err) {

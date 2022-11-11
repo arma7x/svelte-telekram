@@ -115,7 +115,7 @@
                   navInstance.navigateListNav(1);
                 }, 200);
               }
-              console.log(`Fetch previous: ${new Date().getTime() - start}ms`);
+              // console.log(`Fetch previous: ${new Date().getTime() - start}ms`);
             }
           }
         }
@@ -149,7 +149,7 @@
               alert('No new messages');
             }
             checkAllowAppend(messages[messages.length - 1].id);
-            console.log(`Fetch newest: ${new Date().getTime() - start}ms`);
+            // console.log(`Fetch newest: ${new Date().getTime() - start}ms`);
           }
         }
       } catch (err) {
@@ -289,7 +289,7 @@
                   pushMessageToMerge(tmessages[0]);
                 }
               }
-              console.log(`sendMessage: ${new Date().getTime() - _start}ms`);
+              // console.log(`sendMessage: ${new Date().getTime() - _start}ms`);
             }
           },
           onSoftkeyRight: (evt, value) => {
@@ -348,7 +348,6 @@
           softKeyCenterText: '',
           softKeyRightText: 'Yes',
           onSoftkeyLeft: (evt) => {
-            console.log('cancel');
             deleteMessageDialog.$destroy();
           },
           onSoftkeyRight: async (evt) => {
@@ -929,7 +928,7 @@
       } catch (err) {
         console.log('fetchReply:', err);
       }
-      console.log(`fetchReply: ${new Date().getTime() - _start}ms`);
+      // console.log(`fetchReply: ${new Date().getTime() - _start}ms`);
     }
 
     if (fetchForwardedUsers.length > 0) {
@@ -957,7 +956,7 @@
       } catch (err) {
         console.log('fetchForwardedUsers:', err);
       }
-      console.log(`fetchForwardedUsers: ${new Date().getTime() - _start}ms`);
+      // console.log(`fetchForwardedUsers: ${new Date().getTime() - _start}ms`);
     }
     forwardedUsersIndex.forEach(i => {
       try {
@@ -995,7 +994,7 @@
       } catch (err) {
         console.log('fetchForwardedChannels:', err);
       }
-      console.log(`fetchForwardedChannels: ${new Date().getTime() - _start}ms`);
+      // console.log(`fetchForwardedChannels: ${new Date().getTime() - _start}ms`);
     }
     forwardedChannelsIndex.forEach(i => {
       try {
@@ -1010,7 +1009,7 @@
     fetchForwardedChannels = [];
 
     runTask(httpTasks, websocketTasks); // non-blocking
-    console.log(`buildIndex: ${new Date().getTime() - _start_}ms`);
+    // console.log(`buildIndex: ${new Date().getTime() - _start_}ms`);
     return _messages;
   }
 
@@ -1034,7 +1033,7 @@
   function pushMessageToMerge(msg) {
     if (!allowAppend)
       return
-    console.log('pushMessageToMerge', msg.id);
+    // console.log('pushMessageToMerge', msg.id);
     const len = messagesToMerge.length;
     if (len === 0) {
       messagesToMerge.push(msg);
@@ -1078,7 +1077,7 @@
     if (chat.entity.__isSavedMessages)
       return;
     try {
-      console.log('Room :', location.state.entity.id.value.toString(), evt.className, evt);
+      // console.log('Room :', location.state.entity.id.value.toString(), evt.className, evt);
       switch (evt.className) {
         case "UpdateNotifySettings":
           const id = evt.peer.peer.channelId ? evt.peer.peer.channelId.value.toString() : evt.peer.peer.userId.value.toString();
@@ -1123,7 +1122,7 @@
                   if (users.length > 0) {
                     cachedForwardedUsers[users[0].id.toString()] = users[0];
                   }
-                  console.log(`fetchuncachedforwardsuser: ${new Date().getTime() - _start}ms`);
+                  // console.log(`fetchuncachedforwardsuser: ${new Date().getTime() - _start}ms`);
                 }
               }
               pushMessageToMerge(evt.message);
@@ -1197,7 +1196,7 @@
 
   async function fetchMessages(entity, _scrollAt) {
     const { softwareKey } = getAppProp();
-    console.log('%cSTART', 'background: #222; color: #bada55');
+    // console.log('%cSTART', 'background: #222; color: #bada55');
     const _start = new Date().getTime();
     try {
       const chats = await getDialogList();
@@ -1292,8 +1291,8 @@
     } catch (err) {
       console.log('fetchMessages:', err);
     }
-    console.log(`fetchMessages: ${new Date().getTime() - _start}ms`);
-    console.log('%cFINISH', 'background: #222; color: #bada55');
+    // console.log(`fetchMessages: ${new Date().getTime() - _start}ms`);
+    // console.log('%cFINISH', 'background: #222; color: #bada55');
   }
 
   afterUpdate(() => {

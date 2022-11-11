@@ -32,7 +32,7 @@
   function handleWebWorkerMessage(data: any) {
     switch (data.type) {
       case 5:
-        console.log('exportLoginToken:', data.params);
+        // console.log('exportLoginToken:', data.params);
         if (regenerate != null) {
           clearTimeout(regenerate);
           regenerate = null;

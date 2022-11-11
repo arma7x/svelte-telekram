@@ -11443,7 +11443,7 @@ var app = (function () {
 	    return stringify(data, base64Encoding, opts);
 	  }
 	};
-	var base64url$1 = {
+	var base64url = {
 	  parse: function parse$1(string, opts) {
 	    return parse(string, base64UrlEncoding, opts);
 	  },
@@ -11459,7 +11459,7 @@ var app = (function () {
 	var base32_1 = base32;
 	var base32hex_1 = base32hex;
 	var base64_1 = base64;
-	var base64url_1 = base64url$1;
+	var base64url_1 = base64url;
 	var codec_1 = codec;
 	var lib = /*#__PURE__*/Object.defineProperty({
 	  base16: base16_1,
@@ -11477,7 +11477,7 @@ var app = (function () {
 	lib.base32;
 	lib.base32hex;
 	lib.base64;
-	var base64url = lib.base64url;
+	lib.base64url;
 	lib.codec;
 
 	var byteLength_1 = byteLength;
@@ -13910,7 +13910,6 @@ var app = (function () {
 	}
 
 	document.addEventListener("visibilitychange", () => {
-	  console.log('visibilitychange', document.visibilityState);
 	  navigator.serviceWorker.controller.postMessage({
 	    type: 1,
 	    visibilityState: document.visibilityState
@@ -14454,8 +14453,6 @@ var app = (function () {
 	      isUserAuthorized();
 	      break;
 
-	    default:
-	      console.log('client.addEventHandler:', evt);
 	  }
 
 	  if (evt.state) {
@@ -14522,7 +14519,7 @@ var app = (function () {
 	                break;
 
 	              case 0:
-	                console.log('Connected to authorizedWebWorker');
+	                // console.log('Connected to authorizedWebWorker');
 	                break;
 
 	              case 1:
@@ -14678,8 +14675,8 @@ var app = (function () {
 	          return text[0];
 	        });
 	      });
-	      dialogList.update(n => chats);
-	      console.log(`getDialogs: ${new Date().getTime() - _start}ms`);
+	      dialogList.update(n => chats); // console.log(`getDialogs: ${new Date().getTime() - _start}ms`);
+
 	      runTask(httpTasks, websocketTasks, chatPreferencesTask);
 	      return chats;
 	    } catch (err) {
@@ -15422,15 +15419,15 @@ var app = (function () {
 	      div2 = element("div");
 	      div1 = element("div");
 	      attr_dev(div0, "class", "kai-dialog-header svelte-1bpnhjc");
-	      add_location(div0, file$_, 93, 4, 2801);
+	      add_location(div0, file$_, 93, 4, 2804);
 	      attr_dev(div1, "id", "qr-container");
-	      add_location(div1, file$_, 95, 6, 2886);
+	      add_location(div1, file$_, 95, 6, 2889);
 	      attr_dev(div2, "class", "kai-dialog-body svelte-1bpnhjc");
-	      add_location(div2, file$_, 94, 4, 2850);
+	      add_location(div2, file$_, 94, 4, 2853);
 	      attr_dev(div3, "class", "kai-dialog-content svelte-1bpnhjc");
-	      add_location(div3, file$_, 92, 2, 2764);
+	      add_location(div3, file$_, 92, 2, 2767);
 	      attr_dev(div4, "class", "kai-dialog svelte-1bpnhjc");
-	      add_location(div4, file$_, 91, 0, 2737);
+	      add_location(div4, file$_, 91, 0, 2740);
 	    },
 	    l: function claim(nodes) {
 	      throw new Error("options.hydrate only works if the component was compiled with the `hydratable: true` option");
@@ -15501,8 +15498,7 @@ var app = (function () {
 	  function handleWebWorkerMessage(data) {
 	    switch (data.type) {
 	      case 5:
-	        console.log('exportLoginToken:', data.params);
-
+	        // console.log('exportLoginToken:', data.params);
 	        if (regenerate != null) {
 	          clearTimeout(regenerate);
 	          regenerate = null;
@@ -29412,10 +29408,10 @@ var app = (function () {
 	      set_style(img, "border-radius", "50%");
 	      set_style(img, "border", "2px solid #fff");
 	      if (!src_url_equal(img.src, img_src_value = "/icons/archived.png")) attr_dev(img, "src", img_src_value);
-	      add_location(img, file$V, 925, 58, 37025);
+	      add_location(img, file$V, 925, 58, 37042);
 	      attr_dev(span, "slot", "leftWidget");
 	      set_style(span, "padding-right", "4px");
-	      add_location(span, file$V, 925, 6, 36973);
+	      add_location(span, file$V, 925, 6, 36990);
 	    },
 	    m: function mount(target, anchor) {
 	      insert_dev(target, span, anchor);
@@ -29451,7 +29447,7 @@ var app = (function () {
 	      set_style(span, "font-weight", "bold");
 	      set_style(span, "border-radius", "5px");
 	      set_style(span, "padding", "0px 2px 1px 2px");
-	      add_location(span, file$V, 928, 8, 37362);
+	      add_location(span, file$V, 928, 8, 37379);
 	    },
 	    m: function mount(target, anchor) {
 	      insert_dev(target, span, anchor);
@@ -29493,13 +29489,13 @@ var app = (function () {
 	      t = space();
 	      span0 = element("span");
 	      attr_dev(span0, "class", "kai-icon-arrow");
-	      add_location(span0, file$V, 930, 8, 37536);
+	      add_location(span0, file$V, 930, 8, 37553);
 	      attr_dev(span1, "slot", "rightWidget");
 	      set_style(span1, "display", "flex");
 	      set_style(span1, "flex-direction", "row");
 	      set_style(span1, "justify-content", "center");
 	      set_style(span1, "align-items", "center");
-	      add_location(span1, file$V, 926, 6, 37212);
+	      add_location(span1, file$V, 926, 6, 37229);
 	    },
 	    m: function mount(target, anchor) {
 	      insert_dev(target, span1, anchor);
@@ -29974,7 +29970,7 @@ var app = (function () {
 	      set_style(span, "-o-transform", "scale(-1, 1)");
 	      set_style(span, "-ms-transform", "scale(-1, 1)");
 	      set_style(span, "transform", "scale(-1, 1)");
-	      add_location(span, file$V, 906, 4, 35268);
+	      add_location(span, file$V, 906, 4, 35285);
 	    },
 	    m: function mount(target, anchor) {
 	      insert_dev(target, span, anchor);
@@ -30002,7 +29998,7 @@ var app = (function () {
 	      attr_dev(span, "slot", "rightWidget");
 	      attr_dev(span, "class", "kai-icon-arrow");
 	      set_style(span, "margin", "0px 5px");
-	      add_location(span, file$V, 907, 4, 35491);
+	      add_location(span, file$V, 907, 4, 35508);
 	    },
 	    m: function mount(target, anchor) {
 	      insert_dev(target, span, anchor);
@@ -30035,7 +30031,7 @@ var app = (function () {
 	      set_style(span, "-o-transform", "scale(-1, 1)");
 	      set_style(span, "-ms-transform", "scale(-1, 1)");
 	      set_style(span, "transform", "scale(-1, 1)");
-	      add_location(span, file$V, 910, 4, 35653);
+	      add_location(span, file$V, 910, 4, 35670);
 	    },
 	    m: function mount(target, anchor) {
 	      insert_dev(target, span, anchor);
@@ -30063,7 +30059,7 @@ var app = (function () {
 	      attr_dev(span, "slot", "rightWidget");
 	      attr_dev(span, "class", "kai-icon-arrow");
 	      set_style(span, "margin", "0px 5px");
-	      add_location(span, file$V, 911, 4, 35876);
+	      add_location(span, file$V, 911, 4, 35893);
 	    },
 	    m: function mount(target, anchor) {
 	      insert_dev(target, span, anchor);
@@ -30096,7 +30092,7 @@ var app = (function () {
 	      set_style(span, "-o-transform", "scale(-1, 1)");
 	      set_style(span, "-ms-transform", "scale(-1, 1)");
 	      set_style(span, "transform", "scale(-1, 1)");
-	      add_location(span, file$V, 914, 4, 36042);
+	      add_location(span, file$V, 914, 4, 36059);
 	    },
 	    m: function mount(target, anchor) {
 	      insert_dev(target, span, anchor);
@@ -30124,7 +30120,7 @@ var app = (function () {
 	      attr_dev(span, "slot", "rightWidget");
 	      attr_dev(span, "class", "kai-icon-arrow");
 	      set_style(span, "margin", "0px 5px");
-	      add_location(span, file$V, 915, 4, 36265);
+	      add_location(span, file$V, 915, 4, 36282);
 	    },
 	    m: function mount(target, anchor) {
 	      insert_dev(target, span, anchor);
@@ -30157,7 +30153,7 @@ var app = (function () {
 	      set_style(span, "-o-transform", "scale(-1, 1)");
 	      set_style(span, "-ms-transform", "scale(-1, 1)");
 	      set_style(span, "transform", "scale(-1, 1)");
-	      add_location(span, file$V, 896, 4, 34308);
+	      add_location(span, file$V, 896, 4, 34325);
 	    },
 	    m: function mount(target, anchor) {
 	      insert_dev(target, span, anchor);
@@ -30185,7 +30181,7 @@ var app = (function () {
 	      attr_dev(span, "slot", "rightWidget");
 	      attr_dev(span, "class", "kai-icon-arrow");
 	      set_style(span, "margin", "0px 5px");
-	      add_location(span, file$V, 897, 4, 34531);
+	      add_location(span, file$V, 897, 4, 34548);
 	    },
 	    m: function mount(target, anchor) {
 	      insert_dev(target, span, anchor);
@@ -30218,7 +30214,7 @@ var app = (function () {
 	      set_style(span, "-o-transform", "scale(-1, 1)");
 	      set_style(span, "-ms-transform", "scale(-1, 1)");
 	      set_style(span, "transform", "scale(-1, 1)");
-	      add_location(span, file$V, 900, 4, 34706);
+	      add_location(span, file$V, 900, 4, 34723);
 	    },
 	    m: function mount(target, anchor) {
 	      insert_dev(target, span, anchor);
@@ -30246,7 +30242,7 @@ var app = (function () {
 	      attr_dev(span, "slot", "rightWidget");
 	      attr_dev(span, "class", "kai-icon-arrow");
 	      set_style(span, "margin", "0px 5px");
-	      add_location(span, file$V, 901, 4, 34929);
+	      add_location(span, file$V, 901, 4, 34946);
 	    },
 	    m: function mount(target, anchor) {
 	      insert_dev(target, span, anchor);
@@ -30279,7 +30275,7 @@ var app = (function () {
 	      set_style(span, "-o-transform", "scale(-1, 1)");
 	      set_style(span, "-ms-transform", "scale(-1, 1)");
 	      set_style(span, "transform", "scale(-1, 1)");
-	      add_location(span, file$V, 919, 4, 36447);
+	      add_location(span, file$V, 919, 4, 36464);
 	    },
 	    m: function mount(target, anchor) {
 	      insert_dev(target, span, anchor);
@@ -30307,7 +30303,7 @@ var app = (function () {
 	      attr_dev(span, "slot", "rightWidget");
 	      attr_dev(span, "class", "kai-icon-arrow");
 	      set_style(span, "margin", "0px 5px");
-	      add_location(span, file$V, 920, 4, 36670);
+	      add_location(span, file$V, 920, 4, 36687);
 	    },
 	    m: function mount(target, anchor) {
 	      insert_dev(target, span, anchor);
@@ -30351,7 +30347,7 @@ var app = (function () {
 	      attr_dev(main, "data-pad-top", "28");
 	      attr_dev(main, "data-pad-bottom", "30");
 	      attr_dev(main, "class", "svelte-k2v3lx");
-	      add_location(main, file$V, 891, 0, 33897);
+	      add_location(main, file$V, 891, 0, 33914);
 	    },
 	    l: function claim(nodes) {
 	      throw new Error("options.hydrate only works if the component was compiled with the `hydratable: true` option");
@@ -30980,15 +30976,15 @@ var app = (function () {
 	  function acceptLoginToken(token) {
 	    return __awaiter(this, void 0, void 0, function* () {
 	      try {
-	        console.log(0, token);
-	        token = token.padRight(token.length + (4 - token.length % 4) % 4, '=');
-	        console.log(1, token);
-	        console.log(2, base64url.parse(token), buffer.Buffer.from(token, "base64")); //return; // TODO DEBUG
+	        // console.log(0, token);
+	        token = token.padRight(token.length + (4 - token.length % 4) % 4, '='); // console.log(1, token);
+	        // console.log(2, base64url.parse(token), Buffer.from(token, "base64"));
+	        //return; // TODO DEBUG
 
 	        var result = yield client.invoke(new Api.auth.AcceptLoginToken({
 	          token: buffer.Buffer.from(token, "base64")
-	        }));
-	        console.log(result);
+	        })); // console.log(result);
+
 	        toastMessage('Success');
 	      } catch (err) {
 	        console.log(err);
@@ -31129,11 +31125,11 @@ var app = (function () {
 	        // console.log('dispatchMessageToClient:', data.type);
 	        switch (data.type) {
 	          case -1:
-	            console.error('Error', data.params);
+	            // console.error('Error', data.params);
 	            break;
 
 	          case 0:
-	            console.log('Connected to authenticationWebWorker');
+	            // console.log('Connected to authenticationWebWorker');
 	            break;
 
 	          case 1:
@@ -31151,8 +31147,8 @@ var app = (function () {
 	            break;
 
 	          case 2:
-	            if (loadingBar) loadingBar.$destroy();
-	            console.log('sendCode:', data.params.phoneCodeHash);
+	            if (loadingBar) loadingBar.$destroy(); // console.log('sendCode:', data.params.phoneCodeHash);
+
 	            $$invalidate(3, phoneCodeHash = data.params.phoneCodeHash);
 	            resetCursor();
 	            break;
@@ -31164,8 +31160,8 @@ var app = (function () {
 	            break;
 
 	          case 3:
-	            if (loadingBar) loadingBar.$destroy();
-	            console.log('signIn:', data.params.session.authKey, data.params.session.dcId);
+	            if (loadingBar) loadingBar.$destroy(); // console.log('signIn:', data.params.session.authKey, data.params.session.dcId);
+
 	            resetCursor();
 	            $$invalidate(3, phoneCodeHash = null);
 
@@ -31198,8 +31194,7 @@ var app = (function () {
 	            break;
 
 	          case 4:
-	            if (loadingBar) loadingBar.$destroy();
-	            console.log('signIn2FA:', data.params);
+	            if (loadingBar) loadingBar.$destroy(); // console.log('signIn2FA:', data.params);
 
 	            if (password2FA) {
 	              password2FA.$destroy();
@@ -31235,8 +31230,7 @@ var app = (function () {
 	            break;
 
 	          case 6:
-	            if (loadingBar) loadingBar.$destroy();
-	            console.log('exportLoginToken:', data.params);
+	            if (loadingBar) loadingBar.$destroy(); // console.log('exportLoginToken:', data.params);
 
 	            if (data.params.result.className.toLocaleLowerCase() === 'auth.LoginTokenSuccess'.toLocaleLowerCase()) {
 	              resetCursor();
@@ -31269,8 +31263,7 @@ var app = (function () {
 	            break;
 
 	          case -6:
-	            if (loadingBar) loadingBar.$destroy();
-	            console.log('exportLoginToken:', data.params);
+	            if (loadingBar) loadingBar.$destroy(); // console.log('exportLoginToken:', data.params);
 
 	            if (data.params !== 'SESSION_PASSWORD_NEEDED') {
 	              console.error('exportLoginToken:', data.params);
@@ -31283,7 +31276,7 @@ var app = (function () {
 	            break;
 
 	          case 7:
-	            console.log('importLoginToken:', data.params);
+	            // console.log('importLoginToken:', data.params);
 	            resetCursor();
 	            $$invalidate(3, phoneCodeHash = null);
 
@@ -31419,7 +31412,6 @@ var app = (function () {
 	    MultiSelector,
 	    onMount,
 	    onDestroy,
-	    base64url,
 	    Buffer: buffer.Buffer,
 	    TelegramKeyHash,
 	    Api,
@@ -52284,7 +52276,7 @@ var app = (function () {
 	      h5 = element("h5");
 	      t = text(t_value);
 	      attr_dev(h5, "class", "site-name svelte-1tifo30");
-	      add_location(h5, file$E, 166, 4, 6993);
+	      add_location(h5, file$E, 166, 4, 6996);
 	    },
 	    m: function mount(target, anchor) {
 	      insert_dev(target, h5, anchor);
@@ -52327,7 +52319,7 @@ var app = (function () {
 	      p = element("p");
 	      t = text(t_value);
 	      attr_dev(p, "class", "title svelte-1tifo30");
-	      add_location(p, file$E, 169, 4, 7105);
+	      add_location(p, file$E, 169, 4, 7108);
 	    },
 	    m: function mount(target, anchor) {
 	      insert_dev(target, p, anchor);
@@ -52374,7 +52366,7 @@ var app = (function () {
 	      p = element("p");
 	      t = text(t_value);
 	      attr_dev(p, "class", "description svelte-1tifo30");
-	      add_location(p, file$E, 172, 4, 7311);
+	      add_location(p, file$E, 172, 4, 7314);
 	    },
 	    m: function mount(target, anchor) {
 	      insert_dev(target, p, anchor);
@@ -52429,9 +52421,9 @@ var app = (function () {
 	      t1 = space();
 	      if (if_block2) if_block2.c();
 	      attr_dev(div0, "class", "quote svelte-1tifo30");
-	      add_location(div0, file$E, 164, 2, 6928);
+	      add_location(div0, file$E, 164, 2, 6931);
 	      attr_dev(div1, "class", "media-container svelte-1tifo30");
-	      add_location(div1, file$E, 163, 0, 6896);
+	      add_location(div1, file$E, 163, 0, 6899);
 	    },
 	    l: function claim(nodes) {
 	      throw new Error("options.hydrate only works if the component was compiled with the `hydratable: true` option");
@@ -52694,7 +52686,7 @@ var app = (function () {
 	              if (loadingBar) loadingBar.$destroy();
 	            }
 	          } else if (xhttp.readyState == 4 && xhttp.status != 200) {
-	            console.log(xhttp.status);
+	            // console.log(xhttp.status);
 	            if (loadingBar) loadingBar.$destroy();
 	          }
 	        });
@@ -62509,7 +62501,7 @@ var app = (function () {
 	  var child_ctx = ctx.slice();
 	  child_ctx[55] = list[i];
 	  return child_ctx;
-	} // (1417:2) {:else}
+	} // (1416:2) {:else}
 
 
 	function create_else_block(ctx) {
@@ -62519,7 +62511,7 @@ var app = (function () {
 	      div = element("div");
 	      div.textContent = "Loading";
 	      set_style(div, "margin-top", "45%");
-	      add_location(div, file$1, 1417, 4, 63383);
+	      add_location(div, file$1, 1416, 4, 63379);
 	    },
 	    m: function mount(target, anchor) {
 	      insert_dev(target, div, anchor);
@@ -62535,11 +62527,11 @@ var app = (function () {
 	    block,
 	    id: create_else_block.name,
 	    type: "else",
-	    source: "(1417:2) {:else}",
+	    source: "(1416:2) {:else}",
 	    ctx
 	  });
 	  return block;
-	} // (1411:2) {#if ready }
+	} // (1410:2) {#if ready }
 
 
 	function create_if_block(ctx) {
@@ -62640,11 +62632,11 @@ var app = (function () {
 	    block,
 	    id: create_if_block.name,
 	    type: "if",
-	    source: "(1411:2) {#if ready }",
+	    source: "(1410:2) {#if ready }",
 	    ctx
 	  });
 	  return block;
-	} // (1413:4) {#if message && message.id && messageMetadata[message.id.toString()] && messageMetadata[message.id.toString()].deleted === false}
+	} // (1412:4) {#if message && message.id && messageMetadata[message.id.toString()] && messageMetadata[message.id.toString()].deleted === false}
 
 
 	function create_if_block_1(ctx) {
@@ -62775,11 +62767,11 @@ var app = (function () {
 	    block,
 	    id: create_if_block_1.name,
 	    type: "if",
-	    source: "(1413:4) {#if message && message.id && messageMetadata[message.id.toString()] && messageMetadata[message.id.toString()].deleted === false}",
+	    source: "(1412:4) {#if message && message.id && messageMetadata[message.id.toString()] && messageMetadata[message.id.toString()].deleted === false}",
 	    ctx
 	  });
 	  return block;
-	} // (1412:2) {#each messages as message}
+	} // (1411:2) {#each messages as message}
 
 
 	function create_each_block(ctx) {
@@ -62867,7 +62859,7 @@ var app = (function () {
 	    block,
 	    id: create_each_block.name,
 	    type: "each",
-	    source: "(1412:2) {#each messages as message}",
+	    source: "(1411:2) {#each messages as message}",
 	    ctx
 	  });
 	  return block;
@@ -62898,7 +62890,7 @@ var app = (function () {
 	      attr_dev(main, "data-pad-top", "50");
 	      attr_dev(main, "data-pad-bottom", "30");
 	      attr_dev(main, "class", "svelte-yfuvl7");
-	      add_location(main, file$1, 1409, 0, 62839);
+	      add_location(main, file$1, 1408, 0, 62835);
 	    },
 	    l: function claim(nodes) {
 	      throw new Error("options.hydrate only works if the component was compiled with the `hydratable: true` option");
@@ -63107,9 +63099,8 @@ var app = (function () {
 	                  navInstance.navigateListNav(1);
 	                }, 200);
 	              }
+	            } // console.log(`Fetch previous: ${new Date().getTime() - start}ms`);
 
-	              console.log(`Fetch previous: ${new Date().getTime() - start}ms`);
-	            }
 	          }
 	        }
 	      } catch (err) {
@@ -63146,8 +63137,8 @@ var app = (function () {
 	            }
 
 	            checkAllowAppend(messages[messages.length - 1].id);
-	            console.log(`Fetch newest: ${new Date().getTime() - start}ms`);
-	          }
+	          } // console.log(`Fetch newest: ${new Date().getTime() - start}ms`);
+
 	        }
 	      } catch (err) {
 	        console.log('arrowDownListener:', err);
@@ -63373,9 +63364,8 @@ var app = (function () {
 	                  pushMessageToMerge(tmessages[0]);
 	                }
 	              }
+	            } // console.log(`sendMessage: ${new Date().getTime() - _start}ms`);
 
-	              console.log(`sendMessage: ${new Date().getTime() - _start}ms`);
-	            }
 	          }),
 	          onSoftkeyRight: (evt, value) => {
 	            sendMessageDialog.$destroy();
@@ -63434,7 +63424,6 @@ var app = (function () {
 	          softKeyCenterText: '',
 	          softKeyRightText: 'Yes',
 	          onSoftkeyLeft: evt => {
-	            console.log('cancel');
 	            deleteMessageDialog.$destroy();
 	          },
 	          onSoftkeyRight: evt => __awaiter(this, void 0, void 0, function* () {
@@ -64015,7 +64004,7 @@ var app = (function () {
 
 	  function buildIndex(_messages) {
 	    return __awaiter(this, void 0, void 0, function* () {
-	      var _start_ = new Date().getTime();
+	      new Date().getTime();
 
 	      forwardedUsersIndex = [];
 	      forwardedChannelsIndex = [];
@@ -64114,7 +64103,7 @@ var app = (function () {
 	      });
 
 	      if (fetchReply.length > 0) {
-	        var _start = new Date().getTime();
+	        new Date().getTime();
 
 	        try {
 	          var fmessages = yield client.getMessages(chat, {
@@ -64126,12 +64115,11 @@ var app = (function () {
 	        } catch (err) {
 	          console.log('fetchReply:', err);
 	        }
+	      } // console.log(`fetchReply: ${new Date().getTime() - _start}ms`);
 
-	        console.log(`fetchReply: ${new Date().getTime() - _start}ms`);
-	      }
 
 	      if (fetchForwardedUsers.length > 0) {
-	        var _start2 = new Date().getTime();
+	        new Date().getTime();
 
 	        try {
 	          var users = yield client.invoke(new Api.users.GetUsers({
@@ -64157,9 +64145,8 @@ var app = (function () {
 	        } catch (err) {
 	          console.log('fetchForwardedUsers:', err);
 	        }
+	      } // console.log(`fetchForwardedUsers: ${new Date().getTime() - _start}ms`);
 
-	        console.log(`fetchForwardedUsers: ${new Date().getTime() - _start2}ms`);
-	      }
 
 	      forwardedUsersIndex.forEach(i => {
 	        try {
@@ -64175,7 +64162,7 @@ var app = (function () {
 	      fetchForwardedUsers = [];
 
 	      if (fetchForwardedChannels.length > 0) {
-	        var _start3 = new Date().getTime();
+	        new Date().getTime();
 
 	        try {
 	          var channels = yield client.invoke(new Api.channels.GetChannels({
@@ -64200,9 +64187,8 @@ var app = (function () {
 	        } catch (err) {
 	          console.log('fetchForwardedChannels:', err);
 	        }
+	      } // console.log(`fetchForwardedChannels: ${new Date().getTime() - _start}ms`);
 
-	        console.log(`fetchForwardedChannels: ${new Date().getTime() - _start3}ms`);
-	      }
 
 	      forwardedChannelsIndex.forEach(i => {
 	        try {
@@ -64217,8 +64203,8 @@ var app = (function () {
 	      });
 	      fetchForwardedChannels = [];
 	      runTask(httpTasks, websocketTasks); // non-blocking
+	      // console.log(`buildIndex: ${new Date().getTime() - _start_}ms`);
 
-	      console.log(`buildIndex: ${new Date().getTime() - _start_}ms`);
 	      return _messages;
 	    });
 	  }
@@ -64243,8 +64229,8 @@ var app = (function () {
 	  }
 
 	  function pushMessageToMerge(msg) {
-	    if (!allowAppend) return;
-	    console.log('pushMessageToMerge', msg.id);
+	    if (!allowAppend) return; // console.log('pushMessageToMerge', msg.id);
+
 	    var len = messagesToMerge.length;
 
 	    if (len === 0) {
@@ -64303,8 +64289,7 @@ var app = (function () {
 	      if (chat.entity.__isSavedMessages) return;
 
 	      try {
-	        console.log('Room :', location.state.entity.id.value.toString(), evt.className, evt);
-
+	        // console.log('Room :', location.state.entity.id.value.toString(), evt.className, evt);
 	        switch (evt.className) {
 	          case "UpdateNotifySettings":
 	            var id = evt.peer.peer.channelId ? evt.peer.peer.channelId.value.toString() : evt.peer.peer.userId.value.toString();
@@ -64368,9 +64353,8 @@ var app = (function () {
 	                    if (users.length > 0) {
 	                      cachedForwardedUsers[users[0].id.toString()] = users[0];
 	                    }
+	                  } // console.log(`fetchuncachedforwardsuser: ${new Date().getTime() - _start}ms`);
 
-	                    console.log(`fetchuncachedforwardsuser: ${new Date().getTime() - _start}ms`);
-	                  }
 	                }
 
 	                pushMessageToMerge(evt.message);
@@ -64453,11 +64437,10 @@ var app = (function () {
 	  function fetchMessages(entity, _scrollAt) {
 	    return __awaiter(this, void 0, void 0, function* () {
 	      var _getAppProp5 = getAppProp(),
-	          softwareKey = _getAppProp5.softwareKey;
+	          softwareKey = _getAppProp5.softwareKey; // console.log('%cSTART', 'background: #222; color: #bada55');
 
-	      console.log('%cSTART', 'background: #222; color: #bada55');
 
-	      var _start = new Date().getTime();
+	      new Date().getTime();
 
 	      try {
 	        var chats = yield getDialogList();
@@ -64599,10 +64582,8 @@ var app = (function () {
 	      } catch (err) {
 	        console.log('fetchMessages:', err);
 	      }
-
-	      console.log(`fetchMessages: ${new Date().getTime() - _start}ms`);
-	      console.log('%cFINISH', 'background: #222; color: #bada55');
-	    });
+	    }); // console.log(`fetchMessages: ${new Date().getTime() - _start}ms`);
+	    // console.log('%cFINISH', 'background: #222; color: #bada55');
 	  }
 
 	  afterUpdate(() => {

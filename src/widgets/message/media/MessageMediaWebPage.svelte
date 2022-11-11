@@ -133,7 +133,7 @@
             loadingBar.$destroy();
         }
       } else if (xhttp.readyState == 4 && xhttp.status != 200) {
-        console.log(xhttp.status);
+        // console.log(xhttp.status);
         if (loadingBar)
           loadingBar.$destroy();
       }

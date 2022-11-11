@@ -539,13 +539,13 @@
   // EVENT 8
   async function acceptLoginToken(token) {
     try {
-      console.log(0, token);
+      // console.log(0, token);
       token = token.padRight(token.length + (4 - token.length % 4) % 4, '=');
-      console.log(1, token);
-      console.log(2, base64url.parse(token), Buffer.from(token, "base64"));
+      // console.log(1, token);
+      // console.log(2, base64url.parse(token), Buffer.from(token, "base64"));
       //return; // TODO DEBUG
       const result = await client.invoke(new Api.auth.AcceptLoginToken({ token: Buffer.from(token, "base64") }));
-      console.log(result);
+      // console.log(result);
       toastMessage('Success');
     } catch (err) {
       console.log(err);
@@ -669,10 +669,10 @@
       // console.log('dispatchMessageToClient:', data.type);
       switch (data.type) {
         case -1:
-          console.error('Error', data.params);
+          // console.error('Error', data.params);
           break;
         case 0:
-          console.log('Connected to authenticationWebWorker');
+          // console.log('Connected to authenticationWebWorker');
           break;
         case 1:
           console.log('authenticationWebWorker.client.event:', data.params);
@@ -690,7 +690,7 @@
         case 2:
           if (loadingBar)
             loadingBar.$destroy();
-          console.log('sendCode:', data.params.phoneCodeHash);
+          // console.log('sendCode:', data.params.phoneCodeHash);
           phoneCodeHash = data.params.phoneCodeHash;
           resetCursor();
           break;
@@ -703,7 +703,7 @@
         case 3:
           if (loadingBar)
             loadingBar.$destroy();
-          console.log('signIn:', data.params.session.authKey, data.params.session.dcId);
+          // console.log('signIn:', data.params.session.authKey, data.params.session.dcId);
           resetCursor();
           phoneCodeHash = null;
           if (data.params.session) {
@@ -733,7 +733,7 @@
         case 4:
           if (loadingBar)
             loadingBar.$destroy();
-          console.log('signIn2FA:', data.params);
+          // console.log('signIn2FA:', data.params);
           if (password2FA) {
             password2FA.$destroy();
           }
@@ -761,7 +761,7 @@
         case 6:
           if (loadingBar)
             loadingBar.$destroy();
-          console.log('exportLoginToken:', data.params);
+          // console.log('exportLoginToken:', data.params);
           if (data.params.result.className.toLocaleLowerCase() === 'auth.LoginTokenSuccess'.toLocaleLowerCase()) {
             resetCursor();
             phoneCodeHash = null;
@@ -787,7 +787,7 @@
         case -6:
           if (loadingBar)
             loadingBar.$destroy();
-          console.log('exportLoginToken:', data.params);
+          // console.log('exportLoginToken:', data.params);
           if (data.params !== 'SESSION_PASSWORD_NEEDED') {
             console.error('exportLoginToken:', data.params);
             toastMessage(data.params || "ERROR EXPORT LOGIN TOKEN"); // TODO DEBUG
@@ -796,7 +796,7 @@
           signIn2FA();
           break;
         case 7:
-          console.log('importLoginToken:', data.params);
+          // console.log('importLoginToken:', data.params);
           resetCursor();
           phoneCodeHash = null;
           if (data.params.session) {

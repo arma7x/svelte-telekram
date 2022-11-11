@@ -92,6 +92,5 @@ if ('mozSetMessageHandler' in navigator) {
 }
 
 document.addEventListener("visibilitychange", () => {
-  console.log('visibilitychange', document.visibilityState);
   navigator.serviceWorker.controller.postMessage({ type: 1, visibilityState: document.visibilityState });
 });
