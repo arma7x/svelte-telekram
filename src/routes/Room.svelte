@@ -147,8 +147,8 @@
               messages = await buildIndex(temp);
             } else {
               alert('No new messages');
-              allowAppend = true;
             }
+            checkAllowAppend(messages[messages.length - 1].id);
             console.log(`Fetch newest: ${new Date().getTime() - start}ms`);
           }
         }
@@ -1049,6 +1049,16 @@
       merging();
   }
 
+  async function checkAllowAppend(id: number) {
+    const query = { limit: 1, minId: id, reverse: true };
+    const nextMessages = await client.getMessages(chat, query);
+    if (nextMessages.length == 0) {
+      allowAppend = true;
+    } else {
+      allowAppend = false;
+    }
+  }
+
   async function fetchMessageCallback(id: number) {
     try {
       id = id.toString();
@@ -1220,8 +1230,6 @@
           }
         }
       }
-      // console.log('isChannel:', chat.isChannel, ', isGroup:', chat.isGroup, ', isUser:', chat.isUser, chat, location.state.entity);
-      // console.log('muteUntil:', muteUntil);
       if (chat.entity == null)
         chat.entity = entity;
       if (chat.entity)
@@ -1242,6 +1250,10 @@
 
       latestMessages.reverse();
       messages = await buildIndex(latestMessages);
+
+      if (messages.length > 0 ) {
+        checkAllowAppend(messages[messages.length - 1].id);
+      }
 
       if (location.state.entity.className === 'Channel' && !location.state.entity.megagroup) { // Channel
         if (location.state.entity.creator) {
@@ -1293,6 +1305,7 @@
     const { appBar, softwareKey } = getAppProp();
     appBar.setTitleText(location.state.name || name);
     fetchMessages(location.state.entity, location.state.scrollAt);
+    // console.log('location.state.scrollAt', location.state.scrollAt);
     navInstance.attachListener();
     client.addEventHandler(clientListener);
     ready = true;
