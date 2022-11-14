@@ -4,7 +4,6 @@ declare var window:any;
 declare var navigator:any;
 
 import { parseUserAgent } from './misc';
-import TelegramKeyHash from '../telegram_key';
 
 const APP_VERSION = "1.1.0";
 const UA = parseUserAgent(navigator.userAgent);
@@ -19,7 +18,7 @@ if (current == null || current !== APP_VERSION) {
 const { Api, TelegramClient, AuthKey } = telegram;
 const { StoreSession } = telegram.sessions;
 const session = new StoreSession("gramjs");
-const client: typeof TelegramClient = new TelegramClient(session, TelegramKeyHash.api_id, TelegramKeyHash.api_hash, {
+const client: typeof TelegramClient = new TelegramClient(session, parseInt(process.env.APP_ID), process.env.APP_HASH, {
   maxConcurrentDownloads: 1,
   deviceModel: UA.deviceModel,
   systemVersion: UA.systemVersion,
@@ -44,7 +43,6 @@ export {
   AuthKey,
   TelegramClient,
   client,
-  TelegramKeyHash,
   session,
   cachedDatabase
 }

@@ -10,8 +10,14 @@ import css from 'rollup-plugin-css-only';
 import babel from 'rollup-plugin-babel';
 import replace from '@rollup/plugin-replace';
 import json from '@rollup/plugin-json';
+import { config } from 'dotenv';
 
 const production = !process.env.ROLLUP_WATCH;
+
+const configToReplace = {};
+for (const [key, v] of Object.entries(config().parsed)) {
+  configToReplace[`process.env.${key}`] = `'${v}'`;
+}
 
 function serve() {
   let server;
@@ -112,6 +118,7 @@ export default [
       replace({
         preventAssignment: true,
         'process.env.NODE_ENV': !production ? "'development'" : "'production'",
+        values: configToReplace,
       }),
 
       json(),

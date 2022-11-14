@@ -3,7 +3,7 @@
   import { onMount, onDestroy } from 'svelte';
   import { createKaiNavigator } from '../utils/navigation';
   import { SoftwareKey, Separator } from '../components';
-  import { TelegramKeyHash, Api, client } from '../utils/bootstrap';
+  import { Api, client } from '../utils/bootstrap';
   import jsQR from "jsqr";
 
   export let title: string = 'Link Device';

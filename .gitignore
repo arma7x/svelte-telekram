@@ -3,3 +3,4 @@
 /src/telegram_key.ts
 
 .DS_Store
+.env

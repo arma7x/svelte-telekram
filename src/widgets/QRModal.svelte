@@ -5,7 +5,7 @@
   import { onMount, onDestroy } from 'svelte';
   import { createKaiNavigator } from '../utils/navigation';
   import { SoftwareKey, Separator } from '../components';
-  import { TelegramKeyHash, Api, client } from '../utils/bootstrap';
+  import { Api, client } from '../utils/bootstrap';
 
   import { dispatchMessageToClient, dispatchMessageToWorker } from '../stores/telegram';
 
@@ -65,8 +65,8 @@
     const params = {
       type: 5,
       params: {
-        apiId: TelegramKeyHash.api_id,
-        apiHash: TelegramKeyHash.api_hash,
+        apiId: parseInt(process.env.APP_ID),
+        apiHash: process.env.APP_HASH,
         exceptIds: [],
       }
     }

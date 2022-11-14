@@ -7,7 +7,7 @@
 
   import { base64url } from "rfc4648";
   import { Buffer } from 'buffer';
-  import { TelegramKeyHash, Api, AuthKey, client, session, cachedDatabase } from '../utils/bootstrap';
+  import { Api, AuthKey, client, session, cachedDatabase } from '../utils/bootstrap';
 
   import QRModal from '../widgets/QRModal.svelte';
   import QRScanner from '../widgets/QRScanner.svelte';
@@ -403,8 +403,8 @@
       type: 2,
       params: {
         phoneNumber: phoneNumber,
-        apiId: TelegramKeyHash.api_id,
-        apiHash: TelegramKeyHash.api_hash,
+        apiId: parseInt(process.env.APP_ID),
+        apiHash: process.env.APP_HASH,
         settings: {
           allowFlashcall: true,
           currentNumber: true,
@@ -455,8 +455,8 @@
           const params = {
             type: 4,
             params: {
-              apiId: TelegramKeyHash.api_id,
-              apiHash: TelegramKeyHash.api_hash,
+              apiId: parseInt(process.env.APP_ID),
+              apiHash: process.env.APP_HASH,
               password: password
             }
           }
@@ -511,8 +511,8 @@
     const params = {
       type: 6,
       params: {
-        apiId: TelegramKeyHash.api_id,
-        apiHash: TelegramKeyHash.api_hash,
+        apiId: parseInt(process.env.APP_ID),
+        apiHash: process.env.APP_HASH,
         exceptIds: []
       }
     }

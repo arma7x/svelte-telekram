@@ -3,7 +3,7 @@ declare var window:any;
 
 import { get, writable } from 'svelte/store';
 import EventEmitter from 'events';
-import { UA, TelegramKeyHash, Api, client, session, cachedDatabase } from '../utils/bootstrap';
+import { UA, Api, client, session, cachedDatabase } from '../utils/bootstrap';
 
 export const shouldGetDialogs = writable(false);
 export const connectionStatus = writable(false);
@@ -529,7 +529,7 @@ function authorizedWebWorker() {
             if (e.data.params.authKey)
               session.setAuthKey(new telegram.AuthKey(e.data.params.authKey._key, e.data.params.authKey._hash), e.data.params.dcId);
           }
-          client = new telegram.TelegramClient(session, ${TelegramKeyHash.api_id}, '${TelegramKeyHash.api_hash}', {
+          client = new telegram.TelegramClient(session, ${parseInt(process.env.APP_ID)}, '${process.env.APP_HASH}', {
             maxConcurrentDownloads: 1,
             deviceModel: UA.deviceModel,
             systemVersion: UA.systemVersion,
@@ -621,7 +621,7 @@ function authenticationWebWorker() {
             if (e.data.params.authKey)
               session.setAuthKey(new telegram.AuthKey(e.data.params.authKey._key, e.data.params.authKey._hash), e.data.params.dcId);
           }
-          client = new telegram.TelegramClient(session, ${TelegramKeyHash.api_id}, '${TelegramKeyHash.api_hash}', {
+          client = new telegram.TelegramClient(session, ${parseInt(process.env.APP_ID)}, '${process.env.APP_HASH}', {
             maxConcurrentDownloads: 1,
             deviceModel: UA.deviceModel,
             systemVersion: UA.systemVersion,

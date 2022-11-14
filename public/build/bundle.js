@@ -13826,11 +13826,6 @@ var app = (function () {
 	  };
 	}
 
-	var TelegramKeyHash = {
-	  api_id: 1403915,
-	  api_hash: '1291d66d65b509ed6d5fce437185a8cc'
-	};
-
 	var APP_VERSION = "1.1.0";
 	var UA = parseUserAgent(navigator.userAgent);
 	UA['appVersion'] = APP_VERSION;
@@ -13847,7 +13842,7 @@ var app = (function () {
 	    AuthKey = _telegram.AuthKey;
 	var StoreSession = telegram.sessions.StoreSession;
 	var session = new StoreSession("gramjs");
-	var client = new TelegramClient(session, TelegramKeyHash.api_id, TelegramKeyHash.api_hash, {
+	var client = new TelegramClient(session, parseInt('1403915'), '1291d66d65b509ed6d5fce437185a8cc', {
 	  maxConcurrentDownloads: 1,
 	  deviceModel: UA.deviceModel,
 	  systemVersion: UA.systemVersion,
@@ -15023,7 +15018,7 @@ var app = (function () {
             if (e.data.params.authKey)
               session.setAuthKey(new telegram.AuthKey(e.data.params.authKey._key, e.data.params.authKey._hash), e.data.params.dcId);
           }
-          client = new telegram.TelegramClient(session, ${TelegramKeyHash.api_id}, '${TelegramKeyHash.api_hash}', {
+          client = new telegram.TelegramClient(session, ${parseInt('1403915')}, '${'1291d66d65b509ed6d5fce437185a8cc'}', {
             maxConcurrentDownloads: 1,
             deviceModel: UA.deviceModel,
             systemVersion: UA.systemVersion,
@@ -15116,7 +15111,7 @@ var app = (function () {
             if (e.data.params.authKey)
               session.setAuthKey(new telegram.AuthKey(e.data.params.authKey._key, e.data.params.authKey._hash), e.data.params.dcId);
           }
-          client = new telegram.TelegramClient(session, ${TelegramKeyHash.api_id}, '${TelegramKeyHash.api_hash}', {
+          client = new telegram.TelegramClient(session, ${parseInt('1403915')}, '${'1291d66d65b509ed6d5fce437185a8cc'}', {
             maxConcurrentDownloads: 1,
             deviceModel: UA.deviceModel,
             systemVersion: UA.systemVersion,
@@ -15419,15 +15414,15 @@ var app = (function () {
 	      div2 = element("div");
 	      div1 = element("div");
 	      attr_dev(div0, "class", "kai-dialog-header svelte-1bpnhjc");
-	      add_location(div0, file$_, 93, 4, 2804);
+	      add_location(div0, file$_, 93, 4, 2786);
 	      attr_dev(div1, "id", "qr-container");
-	      add_location(div1, file$_, 95, 6, 2889);
+	      add_location(div1, file$_, 95, 6, 2871);
 	      attr_dev(div2, "class", "kai-dialog-body svelte-1bpnhjc");
-	      add_location(div2, file$_, 94, 4, 2853);
+	      add_location(div2, file$_, 94, 4, 2835);
 	      attr_dev(div3, "class", "kai-dialog-content svelte-1bpnhjc");
-	      add_location(div3, file$_, 92, 2, 2767);
+	      add_location(div3, file$_, 92, 2, 2749);
 	      attr_dev(div4, "class", "kai-dialog svelte-1bpnhjc");
-	      add_location(div4, file$_, 91, 0, 2740);
+	      add_location(div4, file$_, 91, 0, 2722);
 	    },
 	    l: function claim(nodes) {
 	      throw new Error("options.hydrate only works if the component was compiled with the `hydratable: true` option");
@@ -15534,8 +15529,8 @@ var app = (function () {
 	    var params = {
 	      type: 5,
 	      params: {
-	        apiId: TelegramKeyHash.api_id,
-	        apiHash: TelegramKeyHash.api_hash,
+	        apiId: parseInt("1403915"),
+	        apiHash: "1291d66d65b509ed6d5fce437185a8cc",
 	        exceptIds: []
 	      }
 	    };
@@ -15584,7 +15579,6 @@ var app = (function () {
 	    onDestroy,
 	    createKaiNavigator,
 	    SoftwareKey,
-	    TelegramKeyHash,
 	    dispatchMessageToClient,
 	    dispatchMessageToWorker,
 	    title,
@@ -29408,10 +29402,10 @@ var app = (function () {
 	      set_style(img, "border-radius", "50%");
 	      set_style(img, "border", "2px solid #fff");
 	      if (!src_url_equal(img.src, img_src_value = "/icons/archived.png")) attr_dev(img, "src", img_src_value);
-	      add_location(img, file$V, 925, 58, 37042);
+	      add_location(img, file$V, 925, 58, 37046);
 	      attr_dev(span, "slot", "leftWidget");
 	      set_style(span, "padding-right", "4px");
-	      add_location(span, file$V, 925, 6, 36990);
+	      add_location(span, file$V, 925, 6, 36994);
 	    },
 	    m: function mount(target, anchor) {
 	      insert_dev(target, span, anchor);
@@ -29447,7 +29441,7 @@ var app = (function () {
 	      set_style(span, "font-weight", "bold");
 	      set_style(span, "border-radius", "5px");
 	      set_style(span, "padding", "0px 2px 1px 2px");
-	      add_location(span, file$V, 928, 8, 37379);
+	      add_location(span, file$V, 928, 8, 37383);
 	    },
 	    m: function mount(target, anchor) {
 	      insert_dev(target, span, anchor);
@@ -29489,13 +29483,13 @@ var app = (function () {
 	      t = space();
 	      span0 = element("span");
 	      attr_dev(span0, "class", "kai-icon-arrow");
-	      add_location(span0, file$V, 930, 8, 37553);
+	      add_location(span0, file$V, 930, 8, 37557);
 	      attr_dev(span1, "slot", "rightWidget");
 	      set_style(span1, "display", "flex");
 	      set_style(span1, "flex-direction", "row");
 	      set_style(span1, "justify-content", "center");
 	      set_style(span1, "align-items", "center");
-	      add_location(span1, file$V, 926, 6, 37229);
+	      add_location(span1, file$V, 926, 6, 37233);
 	    },
 	    m: function mount(target, anchor) {
 	      insert_dev(target, span1, anchor);
@@ -29970,7 +29964,7 @@ var app = (function () {
 	      set_style(span, "-o-transform", "scale(-1, 1)");
 	      set_style(span, "-ms-transform", "scale(-1, 1)");
 	      set_style(span, "transform", "scale(-1, 1)");
-	      add_location(span, file$V, 906, 4, 35285);
+	      add_location(span, file$V, 906, 4, 35289);
 	    },
 	    m: function mount(target, anchor) {
 	      insert_dev(target, span, anchor);
@@ -29998,7 +29992,7 @@ var app = (function () {
 	      attr_dev(span, "slot", "rightWidget");
 	      attr_dev(span, "class", "kai-icon-arrow");
 	      set_style(span, "margin", "0px 5px");
-	      add_location(span, file$V, 907, 4, 35508);
+	      add_location(span, file$V, 907, 4, 35512);
 	    },
 	    m: function mount(target, anchor) {
 	      insert_dev(target, span, anchor);
@@ -30031,7 +30025,7 @@ var app = (function () {
 	      set_style(span, "-o-transform", "scale(-1, 1)");
 	      set_style(span, "-ms-transform", "scale(-1, 1)");
 	      set_style(span, "transform", "scale(-1, 1)");
-	      add_location(span, file$V, 910, 4, 35670);
+	      add_location(span, file$V, 910, 4, 35674);
 	    },
 	    m: function mount(target, anchor) {
 	      insert_dev(target, span, anchor);
@@ -30059,7 +30053,7 @@ var app = (function () {
 	      attr_dev(span, "slot", "rightWidget");
 	      attr_dev(span, "class", "kai-icon-arrow");
 	      set_style(span, "margin", "0px 5px");
-	      add_location(span, file$V, 911, 4, 35893);
+	      add_location(span, file$V, 911, 4, 35897);
 	    },
 	    m: function mount(target, anchor) {
 	      insert_dev(target, span, anchor);
@@ -30092,7 +30086,7 @@ var app = (function () {
 	      set_style(span, "-o-transform", "scale(-1, 1)");
 	      set_style(span, "-ms-transform", "scale(-1, 1)");
 	      set_style(span, "transform", "scale(-1, 1)");
-	      add_location(span, file$V, 914, 4, 36059);
+	      add_location(span, file$V, 914, 4, 36063);
 	    },
 	    m: function mount(target, anchor) {
 	      insert_dev(target, span, anchor);
@@ -30120,7 +30114,7 @@ var app = (function () {
 	      attr_dev(span, "slot", "rightWidget");
 	      attr_dev(span, "class", "kai-icon-arrow");
 	      set_style(span, "margin", "0px 5px");
-	      add_location(span, file$V, 915, 4, 36282);
+	      add_location(span, file$V, 915, 4, 36286);
 	    },
 	    m: function mount(target, anchor) {
 	      insert_dev(target, span, anchor);
@@ -30153,7 +30147,7 @@ var app = (function () {
 	      set_style(span, "-o-transform", "scale(-1, 1)");
 	      set_style(span, "-ms-transform", "scale(-1, 1)");
 	      set_style(span, "transform", "scale(-1, 1)");
-	      add_location(span, file$V, 896, 4, 34325);
+	      add_location(span, file$V, 896, 4, 34329);
 	    },
 	    m: function mount(target, anchor) {
 	      insert_dev(target, span, anchor);
@@ -30181,7 +30175,7 @@ var app = (function () {
 	      attr_dev(span, "slot", "rightWidget");
 	      attr_dev(span, "class", "kai-icon-arrow");
 	      set_style(span, "margin", "0px 5px");
-	      add_location(span, file$V, 897, 4, 34548);
+	      add_location(span, file$V, 897, 4, 34552);
 	    },
 	    m: function mount(target, anchor) {
 	      insert_dev(target, span, anchor);
@@ -30214,7 +30208,7 @@ var app = (function () {
 	      set_style(span, "-o-transform", "scale(-1, 1)");
 	      set_style(span, "-ms-transform", "scale(-1, 1)");
 	      set_style(span, "transform", "scale(-1, 1)");
-	      add_location(span, file$V, 900, 4, 34723);
+	      add_location(span, file$V, 900, 4, 34727);
 	    },
 	    m: function mount(target, anchor) {
 	      insert_dev(target, span, anchor);
@@ -30242,7 +30236,7 @@ var app = (function () {
 	      attr_dev(span, "slot", "rightWidget");
 	      attr_dev(span, "class", "kai-icon-arrow");
 	      set_style(span, "margin", "0px 5px");
-	      add_location(span, file$V, 901, 4, 34946);
+	      add_location(span, file$V, 901, 4, 34950);
 	    },
 	    m: function mount(target, anchor) {
 	      insert_dev(target, span, anchor);
@@ -30275,7 +30269,7 @@ var app = (function () {
 	      set_style(span, "-o-transform", "scale(-1, 1)");
 	      set_style(span, "-ms-transform", "scale(-1, 1)");
 	      set_style(span, "transform", "scale(-1, 1)");
-	      add_location(span, file$V, 919, 4, 36464);
+	      add_location(span, file$V, 919, 4, 36468);
 	    },
 	    m: function mount(target, anchor) {
 	      insert_dev(target, span, anchor);
@@ -30303,7 +30297,7 @@ var app = (function () {
 	      attr_dev(span, "slot", "rightWidget");
 	      attr_dev(span, "class", "kai-icon-arrow");
 	      set_style(span, "margin", "0px 5px");
-	      add_location(span, file$V, 920, 4, 36687);
+	      add_location(span, file$V, 920, 4, 36691);
 	    },
 	    m: function mount(target, anchor) {
 	      insert_dev(target, span, anchor);
@@ -30347,7 +30341,7 @@ var app = (function () {
 	      attr_dev(main, "data-pad-top", "28");
 	      attr_dev(main, "data-pad-bottom", "30");
 	      attr_dev(main, "class", "svelte-k2v3lx");
-	      add_location(main, file$V, 891, 0, 33914);
+	      add_location(main, file$V, 891, 0, 33918);
 	    },
 	    l: function claim(nodes) {
 	      throw new Error("options.hydrate only works if the component was compiled with the `hydratable: true` option");
@@ -30849,8 +30843,8 @@ var app = (function () {
 	      type: 2,
 	      params: {
 	        phoneNumber,
-	        apiId: TelegramKeyHash.api_id,
-	        apiHash: TelegramKeyHash.api_hash,
+	        apiId: parseInt("1403915"),
+	        apiHash: "1291d66d65b509ed6d5fce437185a8cc",
 	        settings: {
 	          allowFlashcall: true,
 	          currentNumber: true,
@@ -30897,8 +30891,8 @@ var app = (function () {
 	          var params = {
 	            type: 4,
 	            params: {
-	              apiId: TelegramKeyHash.api_id,
-	              apiHash: TelegramKeyHash.api_hash,
+	              apiId: parseInt("1403915"),
+	              apiHash: "1291d66d65b509ed6d5fce437185a8cc",
 	              password
 	            }
 	          };
@@ -30950,8 +30944,8 @@ var app = (function () {
 	    var params = {
 	      type: 6,
 	      params: {
-	        apiId: TelegramKeyHash.api_id,
-	        apiHash: TelegramKeyHash.api_hash,
+	        apiId: parseInt("1403915"),
+	        apiHash: "1291d66d65b509ed6d5fce437185a8cc",
 	        exceptIds: []
 	      }
 	    };
@@ -31413,7 +31407,6 @@ var app = (function () {
 	    onMount,
 	    onDestroy,
 	    Buffer: buffer.Buffer,
-	    TelegramKeyHash,
 	    Api,
 	    AuthKey,
 	    client,
@@ -43147,10 +43140,10 @@ var app = (function () {
 	  }
 	});
 
-	var Mime = /*#__PURE__*/Object.freeze(/*#__PURE__*/_mergeNamespaces({
+	var Mime = /*#__PURE__*/_mergeNamespaces({
 		__proto__: null,
 		'default': mimeTypes
-	}, [mimeTypes]));
+	}, [mimeTypes]);
 
 	function openFile(_x, _x2) {
 	  return _openFile.apply(this, arguments);
