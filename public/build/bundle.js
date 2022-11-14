@@ -15392,7 +15392,7 @@ var app = (function () {
 	}
 
 	var console_1$e = globals.console;
-	var file$_ = "src/widgets/QRModal.svelte";
+	var file$_ = "src/widgets/QRPrinter.svelte";
 
 	function create_fragment$_(ctx) {
 	  var div4;
@@ -15466,7 +15466,7 @@ var app = (function () {
 	  var _$$props$$$slots = $$props.$$slots,
 	      slots = _$$props$$$slots === void 0 ? {} : _$$props$$$slots;
 	      $$props.$$scope;
-	  validate_slots('QRModal', slots, []);
+	  validate_slots('QRPrinter', slots, []);
 	  var _$$props$title = $$props.title,
 	      title = _$$props$title === void 0 ? 'Log-In via QR Code' : _$$props$title;
 	  var _$$props$onBackspace = $$props.onBackspace,
@@ -15564,7 +15564,7 @@ var app = (function () {
 	  });
 	  var writable_props = ['title', 'onBackspace', 'onOpened', 'onClosed'];
 	  Object.keys($$props).forEach(key => {
-	    if (!~writable_props.indexOf(key) && key.slice(0, 2) !== '$$' && key !== 'slot') console_1$e.warn(`<QRModal> was created with unknown prop '${key}'`);
+	    if (!~writable_props.indexOf(key) && key.slice(0, 2) !== '$$' && key !== 'slot') console_1$e.warn(`<QRPrinter> was created with unknown prop '${key}'`);
 	  });
 
 	  $$self.$$set = $$props => {
@@ -15613,7 +15613,7 @@ var app = (function () {
 	  return [title, onBackspace, onOpened, onClosed];
 	}
 
-	class QRModal extends SvelteComponentDev {
+	class QRPrinter extends SvelteComponentDev {
 	  constructor(options) {
 	    super(options);
 	    init(this, options, instance$_, create_fragment$_, safe_not_equal, {
@@ -15624,7 +15624,7 @@ var app = (function () {
 	    });
 	    dispatch_dev("SvelteRegisterComponent", {
 	      component: this,
-	      tagName: "QRModal",
+	      tagName: "QRPrinter",
 	      options,
 	      id: create_fragment$_.name
 	    });
@@ -29402,10 +29402,10 @@ var app = (function () {
 	      set_style(img, "border-radius", "50%");
 	      set_style(img, "border", "2px solid #fff");
 	      if (!src_url_equal(img.src, img_src_value = "/icons/archived.png")) attr_dev(img, "src", img_src_value);
-	      add_location(img, file$V, 925, 58, 37046);
+	      add_location(img, file$V, 925, 58, 37052);
 	      attr_dev(span, "slot", "leftWidget");
 	      set_style(span, "padding-right", "4px");
-	      add_location(span, file$V, 925, 6, 36994);
+	      add_location(span, file$V, 925, 6, 37000);
 	    },
 	    m: function mount(target, anchor) {
 	      insert_dev(target, span, anchor);
@@ -29441,7 +29441,7 @@ var app = (function () {
 	      set_style(span, "font-weight", "bold");
 	      set_style(span, "border-radius", "5px");
 	      set_style(span, "padding", "0px 2px 1px 2px");
-	      add_location(span, file$V, 928, 8, 37383);
+	      add_location(span, file$V, 928, 8, 37389);
 	    },
 	    m: function mount(target, anchor) {
 	      insert_dev(target, span, anchor);
@@ -29483,13 +29483,13 @@ var app = (function () {
 	      t = space();
 	      span0 = element("span");
 	      attr_dev(span0, "class", "kai-icon-arrow");
-	      add_location(span0, file$V, 930, 8, 37557);
+	      add_location(span0, file$V, 930, 8, 37563);
 	      attr_dev(span1, "slot", "rightWidget");
 	      set_style(span1, "display", "flex");
 	      set_style(span1, "flex-direction", "row");
 	      set_style(span1, "justify-content", "center");
 	      set_style(span1, "align-items", "center");
-	      add_location(span1, file$V, 926, 6, 37233);
+	      add_location(span1, file$V, 926, 6, 37239);
 	    },
 	    m: function mount(target, anchor) {
 	      insert_dev(target, span1, anchor);
@@ -29964,7 +29964,7 @@ var app = (function () {
 	      set_style(span, "-o-transform", "scale(-1, 1)");
 	      set_style(span, "-ms-transform", "scale(-1, 1)");
 	      set_style(span, "transform", "scale(-1, 1)");
-	      add_location(span, file$V, 906, 4, 35289);
+	      add_location(span, file$V, 906, 4, 35295);
 	    },
 	    m: function mount(target, anchor) {
 	      insert_dev(target, span, anchor);
@@ -29992,7 +29992,7 @@ var app = (function () {
 	      attr_dev(span, "slot", "rightWidget");
 	      attr_dev(span, "class", "kai-icon-arrow");
 	      set_style(span, "margin", "0px 5px");
-	      add_location(span, file$V, 907, 4, 35512);
+	      add_location(span, file$V, 907, 4, 35518);
 	    },
 	    m: function mount(target, anchor) {
 	      insert_dev(target, span, anchor);
@@ -30025,7 +30025,7 @@ var app = (function () {
 	      set_style(span, "-o-transform", "scale(-1, 1)");
 	      set_style(span, "-ms-transform", "scale(-1, 1)");
 	      set_style(span, "transform", "scale(-1, 1)");
-	      add_location(span, file$V, 910, 4, 35674);
+	      add_location(span, file$V, 910, 4, 35680);
 	    },
 	    m: function mount(target, anchor) {
 	      insert_dev(target, span, anchor);
@@ -30053,7 +30053,7 @@ var app = (function () {
 	      attr_dev(span, "slot", "rightWidget");
 	      attr_dev(span, "class", "kai-icon-arrow");
 	      set_style(span, "margin", "0px 5px");
-	      add_location(span, file$V, 911, 4, 35897);
+	      add_location(span, file$V, 911, 4, 35903);
 	    },
 	    m: function mount(target, anchor) {
 	      insert_dev(target, span, anchor);
@@ -30086,7 +30086,7 @@ var app = (function () {
 	      set_style(span, "-o-transform", "scale(-1, 1)");
 	      set_style(span, "-ms-transform", "scale(-1, 1)");
 	      set_style(span, "transform", "scale(-1, 1)");
-	      add_location(span, file$V, 914, 4, 36063);
+	      add_location(span, file$V, 914, 4, 36069);
 	    },
 	    m: function mount(target, anchor) {
 	      insert_dev(target, span, anchor);
@@ -30114,7 +30114,7 @@ var app = (function () {
 	      attr_dev(span, "slot", "rightWidget");
 	      attr_dev(span, "class", "kai-icon-arrow");
 	      set_style(span, "margin", "0px 5px");
-	      add_location(span, file$V, 915, 4, 36286);
+	      add_location(span, file$V, 915, 4, 36292);
 	    },
 	    m: function mount(target, anchor) {
 	      insert_dev(target, span, anchor);
@@ -30147,7 +30147,7 @@ var app = (function () {
 	      set_style(span, "-o-transform", "scale(-1, 1)");
 	      set_style(span, "-ms-transform", "scale(-1, 1)");
 	      set_style(span, "transform", "scale(-1, 1)");
-	      add_location(span, file$V, 896, 4, 34329);
+	      add_location(span, file$V, 896, 4, 34335);
 	    },
 	    m: function mount(target, anchor) {
 	      insert_dev(target, span, anchor);
@@ -30175,7 +30175,7 @@ var app = (function () {
 	      attr_dev(span, "slot", "rightWidget");
 	      attr_dev(span, "class", "kai-icon-arrow");
 	      set_style(span, "margin", "0px 5px");
-	      add_location(span, file$V, 897, 4, 34552);
+	      add_location(span, file$V, 897, 4, 34558);
 	    },
 	    m: function mount(target, anchor) {
 	      insert_dev(target, span, anchor);
@@ -30208,7 +30208,7 @@ var app = (function () {
 	      set_style(span, "-o-transform", "scale(-1, 1)");
 	      set_style(span, "-ms-transform", "scale(-1, 1)");
 	      set_style(span, "transform", "scale(-1, 1)");
-	      add_location(span, file$V, 900, 4, 34727);
+	      add_location(span, file$V, 900, 4, 34733);
 	    },
 	    m: function mount(target, anchor) {
 	      insert_dev(target, span, anchor);
@@ -30236,7 +30236,7 @@ var app = (function () {
 	      attr_dev(span, "slot", "rightWidget");
 	      attr_dev(span, "class", "kai-icon-arrow");
 	      set_style(span, "margin", "0px 5px");
-	      add_location(span, file$V, 901, 4, 34950);
+	      add_location(span, file$V, 901, 4, 34956);
 	    },
 	    m: function mount(target, anchor) {
 	      insert_dev(target, span, anchor);
@@ -30269,7 +30269,7 @@ var app = (function () {
 	      set_style(span, "-o-transform", "scale(-1, 1)");
 	      set_style(span, "-ms-transform", "scale(-1, 1)");
 	      set_style(span, "transform", "scale(-1, 1)");
-	      add_location(span, file$V, 919, 4, 36468);
+	      add_location(span, file$V, 919, 4, 36474);
 	    },
 	    m: function mount(target, anchor) {
 	      insert_dev(target, span, anchor);
@@ -30297,7 +30297,7 @@ var app = (function () {
 	      attr_dev(span, "slot", "rightWidget");
 	      attr_dev(span, "class", "kai-icon-arrow");
 	      set_style(span, "margin", "0px 5px");
-	      add_location(span, file$V, 920, 4, 36691);
+	      add_location(span, file$V, 920, 4, 36697);
 	    },
 	    m: function mount(target, anchor) {
 	      insert_dev(target, span, anchor);
@@ -30341,7 +30341,7 @@ var app = (function () {
 	      attr_dev(main, "data-pad-top", "28");
 	      attr_dev(main, "data-pad-bottom", "30");
 	      attr_dev(main, "class", "svelte-k2v3lx");
-	      add_location(main, file$V, 891, 0, 33918);
+	      add_location(main, file$V, 891, 0, 33924);
 	    },
 	    l: function claim(nodes) {
 	      throw new Error("options.hydrate only works if the component was compiled with the `hydratable: true` option");
@@ -30917,7 +30917,7 @@ var app = (function () {
 	  function signInQR() {
 	    if (!webWorkerStatus) return;
 	    setTimeout(() => {
-	      qrModal = new QRModal({
+	      qrModal = new QRPrinter({
 	        target: document.body,
 	        props: {
 	          title: 'Log-In via QR Code',
@@ -31412,7 +31412,7 @@ var app = (function () {
 	    client,
 	    session,
 	    cachedDatabase,
-	    QRModal,
+	    QRPrinter,
 	    QRScanner,
 	    ChatListView,
 	    ArchivedChats,

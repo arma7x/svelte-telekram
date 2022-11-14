@@ -9,7 +9,7 @@
   import { Buffer } from 'buffer';
   import { Api, AuthKey, client, session, cachedDatabase } from '../utils/bootstrap';
 
-  import QRModal from '../widgets/QRModal.svelte';
+  import QRPrinter from '../widgets/QRPrinter.svelte';
   import QRScanner from '../widgets/QRScanner.svelte';
   import ChatListView from '../widgets/ChatListView.svelte';
   import ArchivedChats from '../widgets/ArchivedChats.svelte';
@@ -25,7 +25,7 @@
 
   let loadingBar: LoadingBar;
   let inputSoftwareKey: SoftwareKey;
-  let qrModal: QRModal;
+  let qrModal: QRPrinter;
   let qrScanner: QRScanner;
   let password2FA: TextInputDialog;
   let authorizedMenu: OptionMenu;
@@ -483,7 +483,7 @@
     if (!webWorkerStatus)
       return;
     setTimeout(() => {
-      qrModal = new QRModal({
+      qrModal = new QRPrinter({
         target: document.body,
         props: {
           title: 'Log-In via QR Code',
