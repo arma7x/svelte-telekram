@@ -440,7 +440,10 @@
               } else if ((result.className && result.className === "messages.BotCallbackAnswer" && result.url) || typeof result === 'string') {
                 handleTelegramLink(result.url || result);
               } else if (result.className && result.className === "Message") {
-                pushMessageToMerge(result);
+                const tmessages = await client.getMessages(chat, { limit: 1, ids: result.id });
+                if (tmessages.length > 0) {
+                  pushMessageToMerge(tmessages[0]);
+                }
               }
             }
           },
@@ -1125,7 +1128,10 @@
                   // console.log(`fetchuncachedforwardsuser: ${new Date().getTime() - _start}ms`);
                 }
               }
-              pushMessageToMerge(evt.message);
+              const tmessages = await client.getMessages(chat, { limit: 1, ids: evt.message.id });
+              if (tmessages.length > 0) {
+                pushMessageToMerge(tmessages[0]);
+              }
               break;
             }
           }
