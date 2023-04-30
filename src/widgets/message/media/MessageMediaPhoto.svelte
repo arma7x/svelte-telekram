@@ -5,7 +5,7 @@
   import * as Mime from 'mime-types';
   import { createKaiNavigator, KaiNavigator } from '../../../utils/navigation';
   import { openFile, strippedPhotoToJpg, humanFileSize, isMediaCached, getCachedMedia, removeCachedMedia } from './common';
-  import { downloadedMediaEmitter } from '../../../stores/telegram';
+  import { downloadedMediaEmitter } from '../../../telegram';
   import { OptionMenu } from '../../../components';
 
   export let chat: any = {};

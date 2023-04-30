@@ -5,7 +5,7 @@
 
   import DOMPurify from 'dompurify';
   import { Api, client } from '../../utils/bootstrap';
-  import { cachedThumbnails, getAuthorizedUser } from '../../stores/telegram';
+  import { cachedThumbnails, getAuthorizedUser } from '../../telegram';
 
   export let key: any = '';
   export let chat: any = {};

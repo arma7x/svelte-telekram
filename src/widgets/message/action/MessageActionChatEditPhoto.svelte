@@ -1,7 +1,7 @@
 <script lang="ts">
 
   import { onMount, onDestroy } from 'svelte';
-  import { getCachedThumbnails } from '../../../stores/telegram';
+  import { getCachedThumbnails } from '../../../telegram';
   import { createKaiNavigator, KaiNavigator } from '../../../utils/navigation';
 
   export let chat: any = {};

@@ -7,7 +7,7 @@
   import { SoftwareKey, Separator } from '../components';
   import { Api, client } from '../utils/bootstrap';
 
-  import { dispatchMessageToClient, dispatchMessageToWorker } from '../stores/telegram';
+  import { dispatchMessageToClient, dispatchMessageToWorker } from '../telegram';
 
   export let title: string = 'Log-In via QR Code';
   export let onBackspace: Function = (evt) => {};

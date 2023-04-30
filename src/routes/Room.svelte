@@ -5,7 +5,7 @@
 
   import { Api, client, cachedDatabase } from '../utils/bootstrap';
 
-  import { shouldGetDialogs, getDialogList, runTask, getAuthorizedUser } from '../stores/telegram';
+  import { shouldGetDialogs, getDialogList, runTask, getAuthorizedUser } from '../telegram';
 
   import * as Message from '../widgets/message';
   import { TextAreaDialog, OptionMenu, Dialog } from '../components';

@@ -15,7 +15,7 @@
   import ArchivedChats from '../widgets/ArchivedChats.svelte';
   import ContactList from '../widgets/ContactList.svelte';
 
-  import { connect, connectionStatus, authorizationStatus, isUserAuthorized, getDialogs, shouldGetDialogs, authorizedUser, dialogList, cachedThumbnails, dispatchMessageToClient, dispatchMessageToWorker, unsubscribePush, unregisterDevice, manuallySubscribePushNotification } from '../stores/telegram';
+  import { connect, connectionStatus, authorizationStatus, isUserAuthorized, getDialogs, shouldGetDialogs, authorizedUser, dialogList, cachedThumbnails, dispatchMessageToClient, dispatchMessageToWorker, unsubscribePush, unregisterDevice, manuallySubscribePushNotification } from '../telegram';
 
   const navClass: string = 'homeNav';
 
