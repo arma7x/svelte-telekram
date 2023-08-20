@@ -212,14 +212,14 @@ export async function getDialogs() {
       chatPreferencesTask[chat.entity.id.value.toString()]['muted'] = chat.dialog.notifySettings.muteUntil || false;
       chatPreferencesTask[chat.entity.id.value.toString()]['scrollAt'] = chat.message.id;
       chat.iconRef = chat.id.toString();
-      if (!(chat.entity.username == null && chat.entity.phone == null) && chat.entity.photo != null && chat.entity.photo.className !== 'ChatPhotoEmpty') {
+      if (!(chat.entity.username == null && chat.entity.phone == null) && chat.entity.photo != null && chat.entity.photo.photoId != null && chat.entity.photo.className !== 'ChatPhotoEmpty') {
         chat.iconRef = chat.entity.photo.photoId.toString();
         httpTasks.push({
           url: `https://api.codetabs.com/v1/proxy/?quest=https://t.me/${chat.entity.phone === "42777" ? 'telegram' : chat.entity.username}`,
           photoId: chat.entity.photo.photoId.toString(),
           chat: chat
         });
-      } else if (chat.entity.photo != null && chat.entity.photo.className !== 'ChatPhotoEmpty') {
+      } else if (chat.entity.photo != null && chat.entity.photo.photoId != null && chat.entity.photo.className !== 'ChatPhotoEmpty') {
         chat.iconRef = chat.entity.photo.photoId.toString();
         websocketTasks.push({
           photoId: chat.entity.photo.photoId.toString(),
